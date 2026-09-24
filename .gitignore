@@ -1,0 +1,14 @@
+# secrets
+.env
+.env.*
+!.env.example
+# python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+# runtime artifacts
+.argus/runs/
+.argus/llm_cache/
+*.log
+node_modules/

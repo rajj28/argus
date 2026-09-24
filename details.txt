@@ -1,0 +1,114 @@
+The Tireless Hand Challenge
+​AI can write the feature.
+
+​But once it is built, someone still has to open the browser, click through the same flows, and check if anything broke.
+
+​That is the bottleneck.
+
+​On 19th September, we’re bringing together software engineers, QA automation experts, AI/LLM builders, researchers, and students for a full day to work on one problem:
+
+​Can we build an autonomous UI testing agent that can test an application like a real user, adapt when the product changes, and reliably tell the difference between a bug and an intended feature update?
+
+​And no, this isn’t about getting an agent to successfully click through one happy-path demo.
+
+​We want to know what happens on the 10th run, when the selector changes, the UI moves, the flow gets reordered, the product behaves differently, and every extra model call costs money.
+
+​The Challenge
+​End-to-end UI testing is still one of the missing pieces in a true software factory.
+
+​Your system should be able to:
+
+​Test like a real user across complete browser flows, not just isolated actions.
+
+​Self-heal when the UI changes, instead of breaking every time a selector, layout, or flow moves.
+
+​Understand business context and decide whether something is actually broken or intentionally changed.
+
+​Remember the application so it does not rediscover the same pages, controls, and flows on every run.
+
+​Generate and maintain tests automatically as the product evolves.
+
+​Stay cost-efficient at scale, without sending every browser action through an expensive model.
+
+​The goal is simple:
+
+​Build a tireless hand in the browser that can test continuously, adapt on its own, and remain reliable enough to trust.
+
+​What You’ll Spend the Day Doing
+​We’re not dropping a browser automation problem at 9 AM and asking you to build another wrapper around Playwright.
+
+​The morning starts with a state-of-the-art session on autonomous browser testing, agentic workflows, and AI-native software development, along with demos and experiments from the FlytBase team.
+
+​Then we build.
+
+​You might experiment with DOM parsing, visual understanding, structured memory, deterministic execution, LLM reasoning, test generation, browser agents, or a hybrid architecture.
+
+​You might use Playwright, Selenium, Cypress, MCP, browser-use, an AI-native testing framework, or build something entirely different.
+
+​The approach is open.
+
+​The challenge is making it reliable enough to trust and cheap enough to run repeatedly.
+
+​What You’ll Get
+​A state-of-the-art deep dive into where browser agents and autonomous testing stand today.
+
+​Real examples and demos from teams experimenting with AI-native software workflows.
+
+​A genuinely difficult engineering problem involving browser automation, agent reasoning, memory, context, and cost optimization.
+
+​A full day to build and experiment, instead of just listening to people talk about what AI agents might eventually do.
+
+​A room full of engineers and AI builders working on the same problem, comparing architectures, testing approaches, breaking things, and figuring out what actually works.
+
+​The freedom to try your own architecture, whether that is DOM-first, vision-first, agentic, deterministic, or something completely different.
+
+​What We’ll Evaluate
+​What We’ll Evaluate
+​Reliability & Self Healing: Does the system keep working when selectors change, layouts move, or flows get reordered? Can it recover without manual fixes?
+
+​Context & Decision Making: Can it understand how the product is expected to behave and distinguish between an actual bug and an intentional feature change?
+
+​Cost & Efficiency: Can it avoid expensive model calls for every browser action and still run reliably across large regression suites?
+
+​State Memory & Self-Improvement: Does it remember what it has already learned about the application instead of rediscovering everything on every run?
+
+​Test Generation & Maintenance: Can it generate tests for an application that has none, and automatically update or retire those tests as the product evolves?
+
+​Who Should Join?
+​This is for you if you’re working with, learning, or seriously curious about:
+
+​Software Engineering · QA Automation · AI Agents · Browser Automation · MCP · Playwright · Selenium · Cypress · Agent Memory · Computer Use · Test Generation · LLM Tool Use
+
+​Software engineers, QA engineers, AI/LLM builders, researchers, and students are all welcome.
+
+​You don’t need to walk in knowing the answer.
+
+​You should walk in ready to code, test assumptions, break your architecture a few times, and keep improving it.
+
+​One important thing:
+​Arrive with your coding setup and model/API access already tested.
+
+​If you plan to use Playwright, Selenium, Cypress, MCP, browser-use, or any other testing or agent framework, have it installed and ready before you arrive.
+
+​We’d rather spend the day solving the actual problem than debugging your environment.
+
+​The Day
+​9:00 AM to 9:30 AM
+Breakfast + meet the people you’ll be building alongside
+
+​9:30 AM to 10:30 AM
+State of the Art + FlytBase demos + challenge discussion + Q&A
+
+​10:30 AM to 6:00 PM
+Build, test, break things, fix them, run again
+
+​6:00 PM to 7:00 PM
+Selected demos + results
+
+​Date: 26th September 2026
+Time: 9:00 AM to 7:00 PM
+Venue: FlytBase Labs, Pune + Online
+
+​If agents are going to write more of our software, someone needs to build the agent that makes sure it actually works.
+
+​Come build the tireless hand in the browser with the AI Hackers Collective.
