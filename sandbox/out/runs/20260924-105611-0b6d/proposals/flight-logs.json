@@ -1,0 +1,34 @@
+{
+  "id": "flight-logs",
+  "name": "Filter flight logs by drone",
+  "goal": "An ops manager filters the flight history for one drone",
+  "tags": [
+    "reporting"
+  ],
+  "start_url": "/logs",
+  "steps": [],
+  "oracles": [
+    {
+      "kind": "text_visible",
+      "params": {
+        "text": "Falcon-1"
+      },
+      "description": "Falcon-1 flights are listed",
+      "rule_ref": null
+    }
+  ],
+  "version": 1,
+  "status": "active",
+  "origin": "manual",
+  "history": [
+    {
+      "version": 1,
+      "at": "2026-09-24T10:55:06+00:00",
+      "kind": "created",
+      "summary": "Authored (manual); baseline recorded",
+      "diff": "",
+      "verdict_ref": null
+    }
+  ],
+  "requires_login": true
+}

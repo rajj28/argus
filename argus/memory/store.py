@@ -58,6 +58,10 @@ def _changed_map(old: Fingerprint, new: Fingerprint) -> dict[str, bool]:
     return changed_attributes(old, new)
 
 
+def _safe(name: str) -> str:
+    return "".join(c if c.isalnum() or c in "._-" else "_" for c in name)[:64] or "default"
+
+
 class Memory:
     """JSON files under `home` (`.argus` by default)."""
 
@@ -65,6 +69,8 @@ class Memory:
         self.home = Path(home)
         self.tests_dir = self.home / "tests"
         self.history_dir = self.tests_dir / "_history"
+        self.intent_dir = self.tests_dir / "_intent"      # immutable golden intent per test
+        self.plans_dir = self.tests_dir / "_plans"        # compiled plan per build: _plans/<build>/<id>.json
         self._knowledge = self._load_json(self.home / "knowledge.json", {})
         self._knowledge.setdefault("stability", {})
         self._knowledge.setdefault("decisions", {})
@@ -83,28 +89,56 @@ class Memory:
         _atomic_write_json(self.home / "knowledge.json", self._knowledge)
 
     # ------------------------------------------------------------------ tests
-    def list_tests(self, status: str | None = "active") -> list[TestSpec]:
+    # Intent vs compiled plan: the intent (name, goal, business oracles, tags) is frozen when a test is
+    # created and can never be rewritten by healing or adaptation. What changes is the compiled plan
+    # (locators, step order, expectations), and plans are versioned per build, so evidence from a new
+    # build is always compared with a trusted baseline instead of a plan the previous release mutated.
+    INTENT_FIELDS = ("name", "goal", "oracles", "tags", "requires_login")
+
+    def _plan_path(self, test_id: str, build: str) -> Path:
+        return self.plans_dir / _safe(build) / f"{test_id}.json"
+
+    def load_intent(self, test_id: str) -> TestSpec | None:
+        path = self.intent_dir / f"{test_id}.json"
+        return TestSpec.model_validate_json(path.read_text(encoding="utf-8")) if path.exists() else None
+
+    def _with_intent(self, test: TestSpec) -> TestSpec:
+        intent = self.load_intent(test.id)
+        if intent is None:
+            return test
+        return test.model_copy(update={f: getattr(intent, f) for f in self.INTENT_FIELDS})
+
+    def list_tests(self, status: str | None = "active", build: str = "") -> list[TestSpec]:
         if not self.tests_dir.exists():
             return []
         tests: list[TestSpec] = []
         for path in sorted(self.tests_dir.glob("*.json")):
             try:
-                test = TestSpec.model_validate_json(path.read_text(encoding="utf-8"))
+                test = self.load_test(path.stem, build)
             except (OSError, ValueError):
                 continue
             if status is None or test.status == status:
                 tests.append(test)
         return tests
 
-    def load_test(self, test_id: str) -> TestSpec:
-        path = self.tests_dir / f"{test_id}.json"
-        return TestSpec.model_validate_json(path.read_text(encoding="utf-8"))
+    def load_test(self, test_id: str, build: str = "") -> TestSpec:
+        """The plan compiled for `build` if one exists, else the latest plan."""
+        path = self._plan_path(test_id, build) if build else None
+        if path is None or not path.exists():
+            path = self.tests_dir / f"{test_id}.json"
+        return self._with_intent(TestSpec.model_validate_json(path.read_text(encoding="utf-8")))
 
-    def save_test(self, test: TestSpec, change: TestChange | None = None) -> TestSpec:
-        """Save a test; with a `change`, archive the previous version and bump version."""
+    def save_test(self, test: TestSpec, change: TestChange | None = None, build: str = "") -> TestSpec:
+        """Save a compiled plan. First save freezes the intent; later saves can never alter it."""
         path = self.tests_dir / f"{test.id}.json"
+        intent_path = self.intent_dir / f"{test.id}.json"
+        if not intent_path.exists():
+            _atomic_write_json(intent_path, test.model_dump(mode="json"))
+        test = self._with_intent(test)
         if change is None:
             _atomic_write_json(path, test.model_dump(mode="json"))
+            if build:
+                _atomic_write_json(self._plan_path(test.id, build), test.model_dump(mode="json"))
             return test
         try:
             old = self.load_test(test.id)
@@ -121,6 +155,8 @@ class Memory:
         history.append(change)
         test = test.model_copy(update={"version": new_version, "history": history})
         _atomic_write_json(path, test.model_dump(mode="json"))
+        if build:
+            _atomic_write_json(self._plan_path(test.id, build), test.model_dump(mode="json"))
         return test
 
     # ------------------------------------------------------------ stability

@@ -61,6 +61,7 @@ class Settings(BaseModel):
     max_llm_calls_per_run: int = 30
     thresholds: Thresholds = Field(default_factory=Thresholds)
     viewport: dict[str, int] = Field(default_factory=lambda: {"width": 1280, "height": 800})
+    build: str = Field(default="", exclude=True)            # label of the build under test (plan versioning)
     pending_change: str = Field(default="", exclude=True)   # intent of an unreleased change (PR / agent)
 
     def product_context(self) -> str:

@@ -1,0 +1,2720 @@
+{
+  "run_id": "20260924-105713-715e",
+  "started_at": "2026-09-24T10:57:13+00:00",
+  "app_url": "http://skyops:8000",
+  "label": "gauntlet mutation seed=101",
+  "results": [
+    {
+      "test_id": "login",
+      "test_name": "Pilot signs in",
+      "test_version": 2,
+      "status": "passed",
+      "verdict": {
+        "category": "COSMETIC_DRIFT",
+        "confidence": 0.88,
+        "rationale": "3 element(s) moved/renamed and were re-identified (tiers [1]); all expectations and business oracles still hold.",
+        "evidence_refs": [],
+        "changelog_refs": [],
+        "decided_by": "rules",
+        "action": "test_healed"
+      },
+      "steps": [
+        {
+          "step_id": "s1",
+          "intent": "Enter the pilot email",
+          "status": "healed",
+          "tier": 1,
+          "score": 0.891,
+          "duration_ms": 744,
+          "screenshot": "screenshots/login_01.jpg",
+          "observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s1",
+              "detail": "textbox \"Email address\" (in: Drone Operations Console) -> [e0] textbox \"Email address\" (in: Drone Operations Console) via similarity (score 0.89, margin 0.35)",
+              "evidence": {
+                "candidates": [
+                  {
+                    "ref": "e0",
+                    "desc": "[e0] textbox \"Email address\" (in: Drone Operations Console)",
+                    "score": 0.891,
+                    "breakdown": {
+                      "testid": 0.0,
+                      "name": 1.0,
+                      "id": 0.0,
+                      "name_attr": 1.0,
+                      "role": 1.0,
+                      "label": 1.0,
+                      "context": 1.0,
+                      "tag": 1.0,
+                      "type": 1.0,
+                      "placeholder": 1.0,
+                      "neighbor_text": 0.92,
+                      "xpath": 0.89,
+                      "css": 0.28,
+                      "position": 0.99,
+                      "size": 1.0,
+                      "full_score": 0.72,
+                      "semantic_score": 0.99
+                    }
+                  },
+                  {
+                    "ref": "e1",
+                    "desc": "[e1] textbox \"Password\" (in: Drone Operations Console)",
+                    "score": 0.542,
+                    "breakdown": {
+                      "testid": 0.0,
+                      "name": 0.29,
+                      "id": 0.0,
+                      "name_attr": 0.0,
+                      "role": 1.0,
+                      "label": 0.29,
+                      "context": 1.0,
+                      "tag": 1.0,
+                      "type": 0.0,
+                      "placeholder": 0.0,
+                      "neighbor_text": 0.92,
+                      "xpath": 0.89,
+                      "css": 0.28,
+                      "position": 0.86,
+                      "size": 1.0,
+                      "full_score": 0.37,
+                      "semantic_score": 0.6
+                    }
+                  }
+                ],
+                "reason": "multi-attribute match 0.89 (runner-up 0.54)"
+              },
+              "tier": 1,
+              "confidence": 0.891
+            }
+          ],
+          "effects": {
+            "url_before": "http://skyops:8000/login",
+            "url_after": "http://skyops:8000/login",
+            "url_changed": false,
+            "title_after": "SkyOps — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s2",
+          "intent": "Enter the password",
+          "status": "healed",
+          "tier": 1,
+          "score": 0.889,
+          "duration_ms": 709,
+          "screenshot": "screenshots/login_02.jpg",
+          "observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s2",
+              "detail": "textbox \"Password\" (in: Drone Operations Console) -> [e1] textbox \"Password\" (in: Drone Operations Console) via similarity (score 0.89, margin 0.27)",
+              "evidence": {
+                "candidates": [
+                  {
+                    "ref": "e1",
+                    "desc": "[e1] textbox \"Password\" (in: Drone Operations Console)",
+                    "score": 0.889,
+                    "breakdown": {
+                      "testid": 0.0,
+                      "name": 1.0,
+                      "id": 0.0,
+                      "name_attr": 1.0,
+                      "role": 1.0,
+                      "label": 1.0,
+                      "context": 1.0,
+                      "tag": 1.0,
+                      "type": 1.0,
+                      "neighbor_text": 0.92,
+                      "xpath": 0.89,
+                      "css": 0.31,
+                      "position": 0.99,
+                      "size": 1.0,
+                      "full_score": 0.7,
+                      "semantic_score": 0.99
+                    }
+                  },
+                  {
+                    "ref": "e0",
+                    "desc": "[e0] textbox \"Email address\" (in: Drone Operations Console)",
+                    "score": 0.623,
+                    "breakdown": {
+                      "testid": 0.0,
+                      "name": 0.29,
+                      "id": 0.0,
+                      "name_attr": 0.0,
+                      "role": 1.0,
+                      "label": 0.29,
+                      "context": 1.0,
+                      "tag": 1.0,
+                      "type": 0.0,
+                      "neighbor_text": 0.92,
+                      "xpath": 0.87,
+                      "css": 0.31,
+                      "position": 0.89,
+                      "size": 1.0,
+                      "full_score": 0.4,
+                      "semantic_score": 0.69
+                    }
+                  }
+                ],
+                "reason": "multi-attribute match 0.89 (runner-up 0.62)"
+              },
+              "tier": 1,
+              "confidence": 0.889
+            }
+          ],
+          "effects": {
+            "url_before": "http://skyops:8000/login",
+            "url_after": "http://skyops:8000/login",
+            "url_changed": false,
+            "title_after": "SkyOps — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s3",
+          "intent": "Submit the sign-in form",
+          "status": "healed",
+          "tier": 1,
+          "score": 0.876,
+          "duration_ms": 768,
+          "screenshot": "screenshots/login_03.jpg",
+          "observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s3",
+              "detail": "button \"Sign in\" (in: Drone Operations Console) -> [e2] button \"Sign in\" (in: Drone Operations Console) via similarity (score 0.88, margin 0.48)",
+              "evidence": {
+                "candidates": [
+                  {
+                    "ref": "e2",
+                    "desc": "[e2] button \"Sign in\" (in: Drone Operations Console)",
+                    "score": 0.876,
+                    "breakdown": {
+                      "testid": 0.0,
+                      "name": 1.0,
+                      "id": 0.0,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 1.0,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.85,
+                      "class": 0.2,
+                      "xpath": 0.93,
+                      "css": 0.28,
+                      "position": 1.0,
+                      "size": 0.58,
+                      "full_score": 0.52,
+                      "semantic_score": 0.97
+                    }
+                  },
+                  {
+                    "ref": "e0",
+                    "desc": "[e0] textbox \"Email address\" (in: Drone Operations Console)",
+                    "score": 0.398,
+                    "breakdown": {
+                      "testid": 0.0,
+                      "name": 0.2,
+                      "id": 0.0,
+                      "role": 0.0,
+                      "context": 1.0,
+                      "text": 0.0,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.93,
+                      "class": 0.0,
+                      "xpath": 0.76,
+                      "css": 0.28,
+                      "position": 0.8,
+                      "size": 0.94,
+                      "full_score": 0.27,
+                      "semantic_score": 0.44
+                    }
+                  },
+                  {
+                    "ref": "e1",
+                    "desc": "[e1] textbox \"Password\" (in: Drone Operations Console)",
+                    "score": 0.385,
+                    "breakdown": {
+                      "testid": 0.0,
+                      "name": 0.13,
+                      "id": 0.0,
+                      "role": 0.0,
+                      "context": 1.0,
+                      "text": 0.0,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.93,
+                      "class": 0.0,
+                      "xpath": 0.76,
+                      "css": 0.28,
+                      "position": 0.92,
+                      "size": 0.94,
+                      "full_score": 0.27,
+                      "semantic_score": 0.43
+                    }
+                  }
+                ],
+                "reason": "multi-attribute match 0.88 (runner-up 0.40)"
+              },
+              "tier": 1,
+              "confidence": 0.876
+            }
+          ],
+          "effects": {
+            "url_before": "http://skyops:8000/login",
+            "url_after": "http://skyops:8000/dashboard",
+            "url_changed": true,
+            "title_after": "Dashboard — Drone Operations Console",
+            "new_headings": [
+              "Fleet overview"
+            ],
+            "new_alerts": [],
+            "network": [
+              {
+                "method": "POST",
+                "path": "/api/login",
+                "status": 200,
+                "resource_type": "fetch"
+              },
+              {
+                "method": "GET",
+                "path": "/dashboard",
+                "status": 200,
+                "resource_type": "document"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        }
+      ],
+      "observations": [],
+      "duration_ms": 2947,
+      "llm_calls": [],
+      "updated_to_version": null,
+      "bug_report": null
+    },
+    {
+      "test_id": "create-mission",
+      "test_name": "Plan and launch a survey mission",
+      "test_version": 2,
+      "status": "passed",
+      "verdict": {
+        "category": "COSMETIC_DRIFT",
+        "confidence": 0.8,
+        "rationale": "5 element(s) moved/renamed and were re-identified (tiers [1]); all expectations and business oracles still hold.",
+        "evidence_refs": [],
+        "changelog_refs": [],
+        "decided_by": "rules",
+        "action": "test_healed"
+      },
+      "steps": [
+        {
+          "step_id": "s1",
+          "intent": "Name the mission",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.951,
+          "duration_ms": 767,
+          "screenshot": "screenshots/create-mission_01.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://skyops:8000/missions/new#step-details",
+            "url_after": "http://skyops:8000/missions/new#step-details",
+            "url_changed": false,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s2",
+          "intent": "Choose mission type Survey",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.985,
+          "duration_ms": 703,
+          "screenshot": "screenshots/create-mission_02.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://skyops:8000/missions/new#step-details",
+            "url_after": "http://skyops:8000/missions/new#step-details",
+            "url_changed": false,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s3",
+          "intent": "Choose the Pune Depot site",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.98,
+          "duration_ms": 705,
+          "screenshot": "screenshots/create-mission_03.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://skyops:8000/missions/new#step-details",
+            "url_after": "http://skyops:8000/missions/new#step-details",
+            "url_changed": false,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s4",
+          "intent": "Continue from mission details",
+          "status": "healed",
+          "tier": 1,
+          "score": 0.802,
+          "duration_ms": 736,
+          "screenshot": "screenshots/create-mission_04.jpg",
+          "observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s4",
+              "detail": "button \"Continue\" (in: Mission details) -> [e10] button \"Proceed\" (in: Mission details) via similarity (score 0.80, margin 0.34)",
+              "evidence": {
+                "candidates": [
+                  {
+                    "ref": "e10",
+                    "desc": "[e10] button \"Proceed\" (in: Mission details)",
+                    "score": 0.802,
+                    "breakdown": {
+                      "name": 0.85,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 0.85,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.67,
+                      "class": 0.2,
+                      "xpath": 0.97,
+                      "css": 0.98,
+                      "position": 0.59,
+                      "size": 0.34,
+                      "full_score": 0.72,
+                      "semantic_score": 0.89
+                    }
+                  },
+                  {
+                    "ref": "e8",
+                    "desc": "[e8] combobox \"Mission type *\" (in: Mission details)",
+                    "score": 0.457,
+                    "breakdown": {
+                      "name": 0.4,
+                      "role": 0.0,
+                      "context": 1.0,
+                      "text": 0.23,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.91,
+                      "class": 0.0,
+                      "xpath": 0.79,
+                      "css": 0.26,
+                      "position": 0.43,
+                      "size": 0.08,
+                      "full_score": 0.41,
+                      "semantic_score": 0.51
+                    }
+                  },
+                  {
+                    "ref": "e5",
+                    "desc": "[e5] button \"Log out\" (in: header)",
+                    "score": 0.415,
+                    "breakdown": {
+                      "name": 0.27,
+                      "role": 1.0,
+                      "context": 0.19,
+                      "text": 0.27,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.4,
+                      "class": 0.25,
+                      "xpath": 0.81,
+                      "css": 0.38,
+                      "position": 0.0,
+                      "size": 0.52,
+                      "full_score": 0.38,
+                      "semantic_score": 0.46
+                    }
+                  },
+                  {
+                    "ref": "e4",
+                    "desc": "[e4] link \"Settings\" (in: Main navigation)",
+                    "score": 0.404,
+                    "breakdown": {
+                      "name": 0.38,
+                      "role": 0.5,
+                      "context": 0.47,
+                      "text": 0.38,
+                      "tag": 1.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.31,
+                      "class": 0.0,
+                      "xpath": 0.73,
+                      "css": 0.48,
+                      "position": 0.09,
+                      "size": 0.76,
+                      "full_score": 0.4,
+                      "semantic_score": 0.42
+                    }
+                  },
+                  {
+                    "ref": "e9",
+                    "desc": "[e9] combobox \"Site *\" (in: Mission details)",
+                    "score": 0.391,
+                    "breakdown": {
+                      "name": 0.33,
+                      "role": 0.0,
+                      "context": 1.0,
+                      "text": 0.16,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.62,
+                      "class": 0.0,
+                      "xpath": 0.8,
+                      "css": 0.22,
+                      "position": 0.46,
+                      "size": 0.08,
+                      "full_score": 0.36,
+                      "semantic_score": 0.43
+                    }
+                  }
+                ],
+                "reason": "multi-attribute match 0.80 (runner-up 0.46)"
+              },
+              "tier": 1,
+              "confidence": 0.802
+            }
+          ],
+          "effects": {
+            "url_before": "http://skyops:8000/missions/new#step-details",
+            "url_after": "http://skyops:8000/missions/new#step-drone",
+            "url_changed": true,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [
+              "Select drone"
+            ],
+            "new_alerts": [
+              "Currently Charging",
+              "Currently In mission",
+              "Currently Maintenance"
+            ],
+            "network": [
+              {
+                "method": "POST",
+                "path": "/api/missions/validate",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s5",
+          "intent": "Assign drone Falcon-1",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.982,
+          "duration_ms": 718,
+          "screenshot": "screenshots/create-mission_05.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://skyops:8000/missions/new#step-drone",
+            "url_after": "http://skyops:8000/missions/new#step-drone",
+            "url_changed": false,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s6",
+          "intent": "Continue from drone selection",
+          "status": "healed",
+          "tier": 1,
+          "score": 0.855,
+          "duration_ms": 719,
+          "screenshot": "screenshots/create-mission_06.jpg",
+          "observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s6",
+              "detail": "button \"Continue\" (in: Select drone) -> [e14] button \"Proceed\" (in: Select drone) via similarity (score 0.85, margin 0.22)",
+              "evidence": {
+                "candidates": [
+                  {
+                    "ref": "e14",
+                    "desc": "[e14] button \"Proceed\" (in: Select drone)",
+                    "score": 0.855,
+                    "breakdown": {
+                      "name": 0.85,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 0.85,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 1.0,
+                      "class": 0.2,
+                      "xpath": 0.97,
+                      "css": 0.98,
+                      "position": 0.54,
+                      "size": 0.34,
+                      "full_score": 0.76,
+                      "semantic_score": 0.95
+                    }
+                  },
+                  {
+                    "ref": "e13",
+                    "desc": "[e13] button \"Back\" (in: Select drone)",
+                    "score": 0.637,
+                    "breakdown": {
+                      "name": 0.17,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 0.17,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.91,
+                      "class": 0.2,
+                      "xpath": 0.95,
+                      "css": 0.97,
+                      "position": 0.45,
+                      "size": 0.2,
+                      "full_score": 0.58,
+                      "semantic_score": 0.71
+                    }
+                  },
+                  {
+                    "ref": "e5",
+                    "desc": "[e5] button \"Log out\" (in: header)",
+                    "score": 0.427,
+                    "breakdown": {
+                      "name": 0.27,
+                      "role": 1.0,
+                      "context": 0.22,
+                      "text": 0.27,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.43,
+                      "class": 0.25,
+                      "xpath": 0.77,
+                      "css": 0.33,
+                      "position": 0.0,
+                      "size": 0.52,
+                      "full_score": 0.39,
+                      "semantic_score": 0.47
+                    }
+                  },
+                  {
+                    "ref": "e7",
+                    "desc": "[e7] radio \"Falcon-1\" (in: Select drone) {label='Falcon-1 DJI M350 92%'}",
+                    "score": 0.378,
+                    "breakdown": {
+                      "name": 0.43,
+                      "role": 0.0,
+                      "context": 1.0,
+                      "text": 0.0,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.53,
+                      "class": 0.0,
+                      "xpath": 0.72,
+                      "css": 0.12,
+                      "position": 0.5,
+                      "size": 0.05,
+                      "full_score": 0.34,
+                      "semantic_score": 0.42
+                    }
+                  },
+                  {
+                    "ref": "e8",
+                    "desc": "[e8] radio \"Falcon-2\" (in: Select drone) {label='Falcon-2 DJI M350 88%'}",
+                    "score": 0.369,
+                    "breakdown": {
+                      "name": 0.43,
+                      "role": 0.0,
+                      "context": 1.0,
+                      "text": 0.0,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.48,
+                      "class": 0.0,
+                      "xpath": 0.73,
+                      "css": 0.13,
+                      "position": 0.53,
+                      "size": 0.05,
+                      "full_score": 0.34,
+                      "semantic_score": 0.41
+                    }
+                  }
+                ],
+                "reason": "multi-attribute match 0.86 (runner-up 0.64)"
+              },
+              "tier": 1,
+              "confidence": 0.855
+            }
+          ],
+          "effects": {
+            "url_before": "http://skyops:8000/missions/new#step-drone",
+            "url_after": "http://skyops:8000/missions/new#step-params",
+            "url_changed": true,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [
+              "Flight parameters"
+            ],
+            "new_alerts": [],
+            "network": [
+              {
+                "method": "POST",
+                "path": "/api/missions/validate",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s7",
+          "intent": "Set altitude to 80 m",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.985,
+          "duration_ms": 704,
+          "screenshot": "screenshots/create-mission_07.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://skyops:8000/missions/new#step-params",
+            "url_after": "http://skyops:8000/missions/new#step-params",
+            "url_changed": false,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s8",
+          "intent": "Set speed to 8 m/s",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.985,
+          "duration_ms": 708,
+          "screenshot": "screenshots/create-mission_08.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://skyops:8000/missions/new#step-params",
+            "url_after": "http://skyops:8000/missions/new#step-params",
+            "url_changed": false,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s9",
+          "intent": "Continue from flight parameters",
+          "status": "healed",
+          "tier": 1,
+          "score": 0.855,
+          "duration_ms": 767,
+          "screenshot": "screenshots/create-mission_09.jpg",
+          "observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s9",
+              "detail": "button \"Continue\" (in: Flight parameters) -> [e11] button \"Proceed\" (in: Flight parameters) via similarity (score 0.85, margin 0.22)",
+              "evidence": {
+                "candidates": [
+                  {
+                    "ref": "e11",
+                    "desc": "[e11] button \"Proceed\" (in: Flight parameters)",
+                    "score": 0.855,
+                    "breakdown": {
+                      "name": 0.85,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 0.85,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 1.0,
+                      "class": 0.2,
+                      "xpath": 0.97,
+                      "css": 0.98,
+                      "position": 0.54,
+                      "size": 0.34,
+                      "full_score": 0.76,
+                      "semantic_score": 0.95
+                    }
+                  },
+                  {
+                    "ref": "e10",
+                    "desc": "[e10] button \"Back\" (in: Flight parameters)",
+                    "score": 0.639,
+                    "breakdown": {
+                      "name": 0.17,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 0.17,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.92,
+                      "class": 0.2,
+                      "xpath": 0.95,
+                      "css": 0.97,
+                      "position": 0.45,
+                      "size": 0.2,
+                      "full_score": 0.58,
+                      "semantic_score": 0.71
+                    }
+                  },
+                  {
+                    "ref": "e5",
+                    "desc": "[e5] button \"Log out\" (in: header)",
+                    "score": 0.45,
+                    "breakdown": {
+                      "name": 0.27,
+                      "role": 1.0,
+                      "context": 0.35,
+                      "text": 0.27,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.41,
+                      "class": 0.25,
+                      "xpath": 0.77,
+                      "css": 0.33,
+                      "position": 0.0,
+                      "size": 0.52,
+                      "full_score": 0.41,
+                      "semantic_score": 0.5
+                    }
+                  },
+                  {
+                    "ref": "e7",
+                    "desc": "[e7] spinbutton \"Altitude (m) *\" (in: Flight parameters)",
+                    "score": 0.434,
+                    "breakdown": {
+                      "name": 0.44,
+                      "role": 0.0,
+                      "context": 1.0,
+                      "text": 0.0,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.86,
+                      "class": 0.0,
+                      "xpath": 0.78,
+                      "css": 0.18,
+                      "position": 0.47,
+                      "size": 0.08,
+                      "full_score": 0.39,
+                      "semantic_score": 0.48
+                    }
+                  },
+                  {
+                    "ref": "e4",
+                    "desc": "[e4] link \"Settings\" (in: Main navigation)",
+                    "score": 0.388,
+                    "breakdown": {
+                      "name": 0.38,
+                      "role": 0.5,
+                      "context": 0.31,
+                      "text": 0.38,
+                      "tag": 1.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.38,
+                      "class": 0.0,
+                      "xpath": 0.71,
+                      "css": 0.49,
+                      "position": 0.11,
+                      "size": 0.76,
+                      "full_score": 0.39,
+                      "semantic_score": 0.39
+                    }
+                  }
+                ],
+                "reason": "multi-attribute match 0.86 (runner-up 0.64)"
+              },
+              "tier": 1,
+              "confidence": 0.855
+            }
+          ],
+          "effects": {
+            "url_before": "http://skyops:8000/missions/new#step-params",
+            "url_after": "http://skyops:8000/missions/new#step-review",
+            "url_changed": true,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [
+              "Review & launch"
+            ],
+            "new_alerts": [],
+            "network": [
+              {
+                "method": "POST",
+                "path": "/api/missions/validate",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s10",
+          "intent": "Launch the mission",
+          "status": "healed",
+          "tier": 1,
+          "score": 0.9,
+          "duration_ms": 713,
+          "screenshot": "screenshots/create-mission_10.jpg",
+          "observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s10",
+              "detail": "button \"Launch\" (in: Review & launch) -> [e8] button \"Launch\" (in: Review & launch) via similarity (score 0.90, margin 0.19)",
+              "evidence": {
+                "candidates": [
+                  {
+                    "ref": "e8",
+                    "desc": "[e8] button \"Launch\" (in: Review & launch)",
+                    "score": 0.9,
+                    "breakdown": {
+                      "name": 1.0,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 1.0,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 1.0,
+                      "class": 0.2,
+                      "xpath": 0.97,
+                      "css": 0.98,
+                      "position": 0.54,
+                      "size": 0.34,
+                      "full_score": 0.79,
+                      "semantic_score": 1.0
+                    }
+                  },
+                  {
+                    "ref": "e7",
+                    "desc": "[e7] button \"Back\" (in: Review & launch)",
+                    "score": 0.714,
+                    "breakdown": {
+                      "name": 0.4,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 0.4,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.96,
+                      "class": 0.2,
+                      "xpath": 0.95,
+                      "css": 0.96,
+                      "position": 0.46,
+                      "size": 0.23,
+                      "full_score": 0.64,
+                      "semantic_score": 0.79
+                    }
+                  },
+                  {
+                    "ref": "e5",
+                    "desc": "[e5] button \"Log out\" (in: header)",
+                    "score": 0.495,
+                    "breakdown": {
+                      "name": 0.42,
+                      "role": 1.0,
+                      "context": 0.32,
+                      "text": 0.42,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.44,
+                      "class": 0.25,
+                      "xpath": 0.79,
+                      "css": 0.38,
+                      "position": 0.0,
+                      "size": 0.58,
+                      "full_score": 0.44,
+                      "semantic_score": 0.55
+                    }
+                  },
+                  {
+                    "ref": "e2",
+                    "desc": "[e2] link \"Dashboard\" (in: Main navigation)",
+                    "score": 0.38,
+                    "breakdown": {
+                      "name": 0.27,
+                      "role": 0.5,
+                      "context": 0.36,
+                      "text": 0.27,
+                      "tag": 1.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.39,
+                      "class": 0.0,
+                      "xpath": 0.75,
+                      "css": 0.56,
+                      "position": 0.1,
+                      "size": 0.94,
+                      "full_score": 0.38,
+                      "semantic_score": 0.37
+                    }
+                  },
+                  {
+                    "ref": "e1",
+                    "desc": "[e1] link \"Flight logs\" (in: Main navigation)",
+                    "score": 0.372,
+                    "breakdown": {
+                      "name": 0.26,
+                      "role": 0.5,
+                      "context": 0.36,
+                      "text": 0.26,
+                      "tag": 1.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.36,
+                      "class": 0.0,
+                      "xpath": 0.73,
+                      "css": 0.55,
+                      "position": 0.05,
+                      "size": 0.99,
+                      "full_score": 0.37,
+                      "semantic_score": 0.36
+                    }
+                  }
+                ],
+                "reason": "multi-attribute match 0.90 (runner-up 0.71)"
+              },
+              "tier": 1,
+              "confidence": 0.9
+            }
+          ],
+          "effects": {
+            "url_before": "http://skyops:8000/missions/new#step-review",
+            "url_after": "http://skyops:8000/missions/m4",
+            "url_changed": true,
+            "title_after": "Survey 715e1 — Drone Operations Console",
+            "new_headings": [
+              "Survey 715e1"
+            ],
+            "new_alerts": [
+              "🚀 Mission launched successfully!",
+              "Mission launched"
+            ],
+            "network": [
+              {
+                "method": "POST",
+                "path": "/api/missions",
+                "status": 201,
+                "resource_type": "fetch"
+              },
+              {
+                "method": "GET",
+                "path": "/missions/:id",
+                "status": 200,
+                "resource_type": "document"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s11",
+          "intent": "Open the Missions list",
+          "status": "healed",
+          "tier": 1,
+          "score": 0.838,
+          "duration_ms": 764,
+          "screenshot": "screenshots/create-mission_11.jpg",
+          "observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s11",
+              "detail": "link \"⚡ Missions\" (in: nav) -> [e3] link \"Missions\" (in: Main navigation) via similarity (score 0.84, margin 0.20)",
+              "evidence": {
+                "candidates": [
+                  {
+                    "ref": "e3",
+                    "desc": "[e3] link \"Missions\" (in: Main navigation)",
+                    "score": 0.838,
+                    "breakdown": {
+                      "name": 1.0,
+                      "role": 1.0,
+                      "context": 0.33,
+                      "text": 1.0,
+                      "tag": 1.0,
+                      "href": 1.0,
+                      "neighbor_text": 1.0,
+                      "class": 1.0,
+                      "xpath": 0.92,
+                      "css": 0.94,
+                      "position": 0.58,
+                      "size": 0.34,
+                      "full_score": 0.84,
+                      "semantic_score": 0.84
+                    }
+                  },
+                  {
+                    "ref": "e6",
+                    "desc": "[e6] link \"← Missions\" (in: main)",
+                    "score": 0.636,
+                    "breakdown": {
+                      "name": 1.0,
+                      "role": 1.0,
+                      "context": 0.29,
+                      "text": 1.0,
+                      "tag": 1.0,
+                      "href": 1.0,
+                      "neighbor_text": 0.28,
+                      "class": 0.0,
+                      "xpath": 0.9,
+                      "css": 0.54,
+                      "position": 0.0,
+                      "size": 0.2,
+                      "full_score": 0.64,
+                      "semantic_score": 0.7
+                    }
+                  },
+                  {
+                    "ref": "e4",
+                    "desc": "[e4] link \"Settings\" (in: Main navigation)",
+                    "score": 0.614,
+                    "breakdown": {
+                      "name": 0.5,
+                      "role": 1.0,
+                      "context": 0.33,
+                      "text": 0.5,
+                      "tag": 1.0,
+                      "href": 0.5,
+                      "neighbor_text": 0.87,
+                      "class": 0.0,
+                      "xpath": 0.92,
+                      "css": 0.94,
+                      "position": 0.45,
+                      "size": 0.33,
+                      "full_score": 0.61,
+                      "semantic_score": 0.65
+                    }
+                  },
+                  {
+                    "ref": "e1",
+                    "desc": "[e1] link \"Flight logs\" (in: Main navigation)",
+                    "score": 0.58,
+                    "breakdown": {
+                      "name": 0.32,
+                      "role": 1.0,
+                      "context": 0.33,
+                      "text": 0.32,
+                      "tag": 1.0,
+                      "href": 0.33,
+                      "neighbor_text": 0.79,
+                      "class": 0.0,
+                      "xpath": 0.94,
+                      "css": 0.96,
+                      "position": 0.85,
+                      "size": 0.39,
+                      "full_score": 0.58,
+                      "semantic_score": 0.58
+                    }
+                  },
+                  {
+                    "ref": "e0",
+                    "desc": "[e0] link \"🛸 SkyOps\" (in: header)",
+                    "score": 0.576,
+                    "breakdown": {
+                      "name": 0.43,
+                      "role": 1.0,
+                      "context": 0.22,
+                      "text": 0.43,
+                      "tag": 1.0,
+                      "href": 0.24,
+                      "neighbor_text": 0.79,
+                      "class": 0.0,
+                      "xpath": 0.85,
+                      "css": 0.73,
+                      "position": 0.87,
+                      "size": 0.31,
+                      "full_score": 0.58,
+                      "semantic_score": 0.59
+                    }
+                  }
+                ],
+                "reason": "multi-attribute match 0.84 (runner-up 0.64)"
+              },
+              "tier": 1,
+              "confidence": 0.838
+            }
+          ],
+          "effects": {
+            "url_before": "http://skyops:8000/missions/m4",
+            "url_after": "http://skyops:8000/missions",
+            "url_changed": true,
+            "title_after": "Missions — Drone Operations Console",
+            "new_headings": [
+              "Missions"
+            ],
+            "new_alerts": [],
+            "network": [
+              {
+                "method": "GET",
+                "path": "/missions",
+                "status": 200,
+                "resource_type": "document"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        }
+      ],
+      "observations": [],
+      "duration_ms": 8889,
+      "llm_calls": [],
+      "updated_to_version": null,
+      "bug_report": null
+    },
+    {
+      "test_id": "drone-detail",
+      "test_name": "Inspect a drone from the fleet table",
+      "test_version": 2,
+      "status": "passed",
+      "verdict": {
+        "category": "COSMETIC_DRIFT",
+        "confidence": 0.9,
+        "rationale": "1 element(s) moved/renamed and were re-identified (tiers [1]); all expectations and business oracles still hold.",
+        "evidence_refs": [],
+        "changelog_refs": [],
+        "decided_by": "rules",
+        "action": "test_healed"
+      },
+      "steps": [
+        {
+          "step_id": "s1",
+          "intent": "Open Kite-5 details",
+          "status": "healed",
+          "tier": 1,
+          "score": 0.9,
+          "duration_ms": 769,
+          "screenshot": "screenshots/drone-detail_01.jpg",
+          "observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s1",
+              "detail": "button \"View Kite-5\" (in: Kite-5 Parrot ANAFI 45% Idle Dock-B) -> [e10] button \"View Kite-5\" (in: Kite-5 Parrot ANAFI 45% Idle Dock-B) via similarity (score 0.90, margin 0.28)",
+              "evidence": {
+                "candidates": [
+                  {
+                    "ref": "e10",
+                    "desc": "[e10] button \"View Kite-5\" (in: Kite-5 Parrot ANAFI 45% Idle Dock-B)",
+                    "score": 0.9,
+                    "breakdown": {
+                      "name": 1.0,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 1.0,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 1.0,
+                      "class": 0.12,
+                      "xpath": 0.98,
+                      "css": 0.98,
+                      "position": 0.94,
+                      "size": 0.44,
+                      "full_score": 0.82,
+                      "semantic_score": 1.0
+                    }
+                  },
+                  {
+                    "ref": "e8",
+                    "desc": "[e8] button \"View Hawk-7\" (in: Hawk-7 Autel EVO II 12% Charging Dock-B)",
+                    "score": 0.617,
+                    "breakdown": {
+                      "name": 0.67,
+                      "role": 1.0,
+                      "context": 0.46,
+                      "text": 1.0,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.35,
+                      "class": 0.12,
+                      "xpath": 0.96,
+                      "css": 0.97,
+                      "position": 0.9,
+                      "size": 0.44,
+                      "full_score": 0.59,
+                      "semantic_score": 0.69
+                    }
+                  },
+                  {
+                    "ref": "e9",
+                    "desc": "[e9] button \"View Osprey-3\" (in: Osprey-3 DJI M300 64% In mission Dock-C)",
+                    "score": 0.608,
+                    "breakdown": {
+                      "name": 0.61,
+                      "role": 1.0,
+                      "context": 0.46,
+                      "text": 1.0,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.36,
+                      "class": 0.12,
+                      "xpath": 0.96,
+                      "css": 0.97,
+                      "position": 0.97,
+                      "size": 0.44,
+                      "full_score": 0.59,
+                      "semantic_score": 0.68
+                    }
+                  },
+                  {
+                    "ref": "e11",
+                    "desc": "[e11] button \"View Raven-9\" (in: Raven-9 DJI M350 100% Maintenance Dock-D)",
+                    "score": 0.599,
+                    "breakdown": {
+                      "name": 0.63,
+                      "role": 1.0,
+                      "context": 0.43,
+                      "text": 1.0,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.32,
+                      "class": 0.12,
+                      "xpath": 0.96,
+                      "css": 0.97,
+                      "position": 0.86,
+                      "size": 0.44,
+                      "full_score": 0.58,
+                      "semantic_score": 0.67
+                    }
+                  },
+                  {
+                    "ref": "e6",
+                    "desc": "[e6] button \"View Falcon-1\" (in: Falcon-1 DJI M350 92% Idle Dock-A)",
+                    "score": 0.59,
+                    "breakdown": {
+                      "name": 0.56,
+                      "role": 1.0,
+                      "context": 0.49,
+                      "text": 1.0,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.27,
+                      "class": 0.12,
+                      "xpath": 0.96,
+                      "css": 0.97,
+                      "position": 0.74,
+                      "size": 0.44,
+                      "full_score": 0.56,
+                      "semantic_score": 0.66
+                    }
+                  }
+                ],
+                "reason": "multi-attribute match 0.90 (runner-up 0.62)"
+              },
+              "tier": 1,
+              "confidence": 0.9
+            }
+          ],
+          "effects": {
+            "url_before": "http://skyops:8000/dashboard",
+            "url_after": "http://skyops:8000/drones/d5",
+            "url_changed": true,
+            "title_after": "Kite-5 — Drone Operations Console",
+            "new_headings": [
+              "Kite-5"
+            ],
+            "new_alerts": [],
+            "network": [
+              {
+                "method": "GET",
+                "path": "/drones/:id",
+                "status": 200,
+                "resource_type": "document"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        }
+      ],
+      "observations": [],
+      "duration_ms": 1525,
+      "llm_calls": [],
+      "updated_to_version": null,
+      "bug_report": null
+    },
+    {
+      "test_id": "flight-logs",
+      "test_name": "Filter flight logs by drone",
+      "test_version": 1,
+      "status": "passed",
+      "verdict": {
+        "category": "PASS",
+        "confidence": 1.0,
+        "rationale": "Replayed exactly; every step and oracle held.",
+        "evidence_refs": [],
+        "changelog_refs": [],
+        "decided_by": "rules",
+        "action": "none"
+      },
+      "steps": [
+        {
+          "step_id": "s1",
+          "intent": "Filter logs to drone Falcon-1",
+          "status": "passed",
+          "tier": 0,
+          "score": 1.0,
+          "duration_ms": 738,
+          "screenshot": "screenshots/flight-logs_01.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://skyops:8000/logs",
+            "url_after": "http://skyops:8000/logs",
+            "url_changed": false,
+            "title_after": "Flight logs — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [
+              {
+                "method": "GET",
+                "path": "/api/logs",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        }
+      ],
+      "observations": [],
+      "duration_ms": 1456,
+      "llm_calls": [],
+      "updated_to_version": null,
+      "bug_report": null
+    },
+    {
+      "test_id": "logout",
+      "test_name": "Pilot signs out",
+      "test_version": 2,
+      "status": "failed",
+      "verdict": {
+        "category": "NEEDS_REVIEW",
+        "confidence": 0.5,
+        "rationale": "No LLM available to judge a behavioural change; needs a human.",
+        "evidence_refs": [],
+        "changelog_refs": [],
+        "decided_by": "rules",
+        "action": "review_requested"
+      },
+      "steps": [],
+      "observations": [
+        {
+          "kind": "goal_unreachable",
+          "step_id": "s1",
+          "detail": "cannot find 'Sign out' (best candidate 0.63 below thresholds); page /dashboard headings ['Fleet overview'] alerts []",
+          "evidence": {
+            "candidates": [
+              {
+                "ref": "e5",
+                "desc": "[e5] button \"Log out\" (in: header)",
+                "score": 0.633,
+                "breakdown": {
+                  "name": 1.0,
+                  "role": 1.0,
+                  "context": 0.1,
+                  "text": 1.0,
+                  "tag": 0.0,
+                  "href": 0.0,
+                  "neighbor_text": 0.52,
+                  "class": 0.25,
+                  "xpath": 0.9,
+                  "css": 0.85,
+                  "position": 0.0,
+                  "size": 0.22,
+                  "full_score": 0.55,
+                  "semantic_score": 0.7
+                }
+              },
+              {
+                "ref": "e1",
+                "desc": "[e1] link \"Flight logs\" (in: Main navigation)",
+                "score": 0.504,
+                "breakdown": {
+                  "name": 0.44,
+                  "role": 0.5,
+                  "context": 1.0,
+                  "text": 0.44,
+                  "tag": 1.0,
+                  "href": 0.0,
+                  "neighbor_text": 0.29,
+                  "class": 0.0,
+                  "xpath": 0.9,
+                  "css": 0.67,
+                  "position": 0.0,
+                  "size": 0.38,
+                  "full_score": 0.49,
+                  "semantic_score": 0.56
+                }
+              },
+              {
+                "ref": "e2",
+                "desc": "[e2] link \"Dashboard\" (in: Main navigation)",
+                "score": 0.425,
+                "breakdown": {
+                  "name": 0.12,
+                  "role": 0.5,
+                  "context": 1.0,
+                  "text": 0.12,
+                  "tag": 1.0,
+                  "href": 0.0,
+                  "neighbor_text": 0.35,
+                  "class": 0.0,
+                  "xpath": 0.88,
+                  "css": 0.67,
+                  "position": 0.0,
+                  "size": 0.4,
+                  "full_score": 0.42,
+                  "semantic_score": 0.47
+                }
+              },
+              {
+                "ref": "e4",
+                "desc": "[e4] link \"Settings\" (in: Main navigation)",
+                "score": 0.423,
+                "breakdown": {
+                  "name": 0.13,
+                  "role": 0.5,
+                  "context": 1.0,
+                  "text": 0.13,
+                  "tag": 1.0,
+                  "href": 0.0,
+                  "neighbor_text": 0.35,
+                  "class": 0.0,
+                  "xpath": 0.88,
+                  "css": 0.67,
+                  "position": 0.0,
+                  "size": 0.32,
+                  "full_score": 0.42,
+                  "semantic_score": 0.47
+                }
+              },
+              {
+                "ref": "e3",
+                "desc": "[e3] link \"Missions\" (in: Main navigation)",
+                "score": 0.419,
+                "breakdown": {
+                  "name": 0.13,
+                  "role": 0.5,
+                  "context": 1.0,
+                  "text": 0.13,
+                  "tag": 1.0,
+                  "href": 0.0,
+                  "neighbor_text": 0.31,
+                  "class": 0.0,
+                  "xpath": 0.88,
+                  "css": 0.67,
+                  "position": 0.0,
+                  "size": 0.33,
+                  "full_score": 0.42,
+                  "semantic_score": 0.46
+                }
+              }
+            ]
+          },
+          "tier": null,
+          "confidence": null
+        },
+        {
+          "kind": "assertion_failed",
+          "step_id": null,
+          "detail": "Pilot is back on the login page: url /dashboard does not match //login/",
+          "evidence": {
+            "oracle_index": 0,
+            "rule_ref": "R5",
+            "assertion": {
+              "kind": "url_matches",
+              "params": {
+                "pattern": "/login"
+              },
+              "description": "Pilot is back on the login page",
+              "rule_ref": "R5"
+            },
+            "screenshot": "screenshots/logout_final.jpg"
+          },
+          "tier": null,
+          "confidence": null
+        }
+      ],
+      "duration_ms": 818,
+      "llm_calls": [],
+      "updated_to_version": null,
+      "bug_report": null
+    },
+    {
+      "test_id": "save-settings",
+      "test_name": "Pilot updates display name",
+      "test_version": 2,
+      "status": "passed",
+      "verdict": {
+        "category": "COSMETIC_DRIFT",
+        "confidence": 0.9,
+        "rationale": "1 element(s) moved/renamed and were re-identified (tiers [1]); all expectations and business oracles still hold.",
+        "evidence_refs": [],
+        "changelog_refs": [],
+        "decided_by": "rules",
+        "action": "test_healed"
+      },
+      "steps": [
+        {
+          "step_id": "s1",
+          "intent": "Change the display name",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.982,
+          "duration_ms": 759,
+          "screenshot": "screenshots/save-settings_01.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://skyops:8000/settings",
+            "url_after": "http://skyops:8000/settings",
+            "url_changed": false,
+            "title_after": "Settings — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s2",
+          "intent": "Save the settings",
+          "status": "healed",
+          "tier": 1,
+          "score": 0.9,
+          "duration_ms": 736,
+          "screenshot": "screenshots/save-settings_02.jpg",
+          "observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s2",
+              "detail": "button \"Save changes\" (in: form) -> [e11] button \"Save changes\" (in: form) via similarity (score 0.90, margin 0.47)",
+              "evidence": {
+                "candidates": [
+                  {
+                    "ref": "e11",
+                    "desc": "[e11] button \"Save changes\" (in: form)",
+                    "score": 0.9,
+                    "breakdown": {
+                      "name": 1.0,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 1.0,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 1.0,
+                      "class": 0.2,
+                      "xpath": 0.97,
+                      "css": 0.97,
+                      "position": 0.6,
+                      "size": 0.42,
+                      "full_score": 0.8,
+                      "semantic_score": 1.0
+                    }
+                  },
+                  {
+                    "ref": "e6",
+                    "desc": "[e6] textbox \"Display name\" (in: form)",
+                    "score": 0.43,
+                    "breakdown": {
+                      "name": 0.33,
+                      "role": 0.0,
+                      "context": 1.0,
+                      "text": 0.0,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.97,
+                      "class": 0.0,
+                      "xpath": 0.79,
+                      "css": 0.23,
+                      "position": 0.61,
+                      "size": 0.25,
+                      "full_score": 0.4,
+                      "semantic_score": 0.48
+                    }
+                  },
+                  {
+                    "ref": "e7",
+                    "desc": "[e7] textbox \"Email address (read-only)\" (in: form) {label='Email'}",
+                    "score": 0.417,
+                    "breakdown": {
+                      "name": 0.34,
+                      "role": 0.0,
+                      "context": 1.0,
+                      "text": 0.0,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.88,
+                      "class": 0.0,
+                      "xpath": 0.81,
+                      "css": 0.22,
+                      "position": 0.75,
+                      "size": 0.25,
+                      "full_score": 0.4,
+                      "semantic_score": 0.46
+                    }
+                  },
+                  {
+                    "ref": "e10",
+                    "desc": "[e10] checkbox \"Email me flight reports\" (in: form)",
+                    "score": 0.399,
+                    "breakdown": {
+                      "name": 0.29,
+                      "role": 0.0,
+                      "context": 1.0,
+                      "text": 0.0,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.83,
+                      "class": 0.0,
+                      "xpath": 0.79,
+                      "css": 0.25,
+                      "position": 0.54,
+                      "size": 0.04,
+                      "full_score": 0.37,
+                      "semantic_score": 0.44
+                    }
+                  },
+                  {
+                    "ref": "e5",
+                    "desc": "[e5] button \"Log out\" (in: header)",
+                    "score": 0.389,
+                    "breakdown": {
+                      "name": 0.21,
+                      "role": 1.0,
+                      "context": 0.2,
+                      "text": 0.21,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.33,
+                      "class": 0.25,
+                      "xpath": 0.8,
+                      "css": 0.41,
+                      "position": 0.0,
+                      "size": 0.38,
+                      "full_score": 0.35,
+                      "semantic_score": 0.43
+                    }
+                  }
+                ],
+                "reason": "multi-attribute match 0.90 (runner-up 0.43)"
+              },
+              "tier": 1,
+              "confidence": 0.9
+            }
+          ],
+          "effects": {
+            "url_before": "http://skyops:8000/settings",
+            "url_after": "http://skyops:8000/settings",
+            "url_changed": false,
+            "title_after": "Settings — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [
+              "Settings saved"
+            ],
+            "network": [
+              {
+                "method": "PUT",
+                "path": "/api/settings",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        }
+      ],
+      "observations": [],
+      "duration_ms": 2248,
+      "llm_calls": [],
+      "updated_to_version": null,
+      "bug_report": null
+    },
+    {
+      "test_id": "altitude-limit",
+      "test_name": "Altitude above 120 m is rejected",
+      "test_version": 2,
+      "status": "passed",
+      "verdict": {
+        "category": "COSMETIC_DRIFT",
+        "confidence": 0.8,
+        "rationale": "3 element(s) moved/renamed and were re-identified (tiers [1]); all expectations and business oracles still hold.",
+        "evidence_refs": [],
+        "changelog_refs": [],
+        "decided_by": "rules",
+        "action": "test_healed"
+      },
+      "steps": [
+        {
+          "step_id": "s1",
+          "intent": "Name the mission",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.951,
+          "duration_ms": 758,
+          "screenshot": "screenshots/altitude-limit_01.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://skyops:8000/missions/new#step-details",
+            "url_after": "http://skyops:8000/missions/new#step-details",
+            "url_changed": false,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s2",
+          "intent": "Choose mission type Inspection",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.985,
+          "duration_ms": 705,
+          "screenshot": "screenshots/altitude-limit_02.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://skyops:8000/missions/new#step-details",
+            "url_after": "http://skyops:8000/missions/new#step-details",
+            "url_changed": false,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s3",
+          "intent": "Choose the Mumbai Port site",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.98,
+          "duration_ms": 701,
+          "screenshot": "screenshots/altitude-limit_03.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://skyops:8000/missions/new#step-details",
+            "url_after": "http://skyops:8000/missions/new#step-details",
+            "url_changed": false,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s4",
+          "intent": "Continue from mission details",
+          "status": "healed",
+          "tier": 1,
+          "score": 0.802,
+          "duration_ms": 738,
+          "screenshot": "screenshots/altitude-limit_04.jpg",
+          "observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s4",
+              "detail": "button \"Continue\" (in: Mission details) -> [e10] button \"Proceed\" (in: Mission details) via similarity (score 0.80, margin 0.34)",
+              "evidence": {
+                "candidates": [
+                  {
+                    "ref": "e10",
+                    "desc": "[e10] button \"Proceed\" (in: Mission details)",
+                    "score": 0.802,
+                    "breakdown": {
+                      "name": 0.85,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 0.85,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.67,
+                      "class": 0.2,
+                      "xpath": 0.97,
+                      "css": 0.98,
+                      "position": 0.59,
+                      "size": 0.34,
+                      "full_score": 0.72,
+                      "semantic_score": 0.89
+                    }
+                  },
+                  {
+                    "ref": "e8",
+                    "desc": "[e8] combobox \"Mission type *\" (in: Mission details)",
+                    "score": 0.457,
+                    "breakdown": {
+                      "name": 0.4,
+                      "role": 0.0,
+                      "context": 1.0,
+                      "text": 0.23,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.91,
+                      "class": 0.0,
+                      "xpath": 0.79,
+                      "css": 0.26,
+                      "position": 0.43,
+                      "size": 0.08,
+                      "full_score": 0.41,
+                      "semantic_score": 0.51
+                    }
+                  },
+                  {
+                    "ref": "e5",
+                    "desc": "[e5] button \"Log out\" (in: header)",
+                    "score": 0.415,
+                    "breakdown": {
+                      "name": 0.27,
+                      "role": 1.0,
+                      "context": 0.19,
+                      "text": 0.27,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.4,
+                      "class": 0.25,
+                      "xpath": 0.81,
+                      "css": 0.38,
+                      "position": 0.0,
+                      "size": 0.52,
+                      "full_score": 0.38,
+                      "semantic_score": 0.46
+                    }
+                  },
+                  {
+                    "ref": "e4",
+                    "desc": "[e4] link \"Settings\" (in: Main navigation)",
+                    "score": 0.404,
+                    "breakdown": {
+                      "name": 0.38,
+                      "role": 0.5,
+                      "context": 0.47,
+                      "text": 0.38,
+                      "tag": 1.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.31,
+                      "class": 0.0,
+                      "xpath": 0.73,
+                      "css": 0.48,
+                      "position": 0.09,
+                      "size": 0.76,
+                      "full_score": 0.4,
+                      "semantic_score": 0.42
+                    }
+                  },
+                  {
+                    "ref": "e9",
+                    "desc": "[e9] combobox \"Site *\" (in: Mission details)",
+                    "score": 0.391,
+                    "breakdown": {
+                      "name": 0.33,
+                      "role": 0.0,
+                      "context": 1.0,
+                      "text": 0.16,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.62,
+                      "class": 0.0,
+                      "xpath": 0.8,
+                      "css": 0.22,
+                      "position": 0.46,
+                      "size": 0.08,
+                      "full_score": 0.36,
+                      "semantic_score": 0.43
+                    }
+                  }
+                ],
+                "reason": "multi-attribute match 0.80 (runner-up 0.46)"
+              },
+              "tier": 1,
+              "confidence": 0.802
+            }
+          ],
+          "effects": {
+            "url_before": "http://skyops:8000/missions/new#step-details",
+            "url_after": "http://skyops:8000/missions/new#step-drone",
+            "url_changed": true,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [
+              "Select drone"
+            ],
+            "new_alerts": [
+              "Currently Charging",
+              "Currently In mission",
+              "Currently Maintenance"
+            ],
+            "network": [
+              {
+                "method": "POST",
+                "path": "/api/missions/validate",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s5",
+          "intent": "Assign drone Falcon-2",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.982,
+          "duration_ms": 736,
+          "screenshot": "screenshots/altitude-limit_05.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://skyops:8000/missions/new#step-drone",
+            "url_after": "http://skyops:8000/missions/new#step-drone",
+            "url_changed": false,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s6",
+          "intent": "Continue from drone selection",
+          "status": "healed",
+          "tier": 1,
+          "score": 0.855,
+          "duration_ms": 734,
+          "screenshot": "screenshots/altitude-limit_06.jpg",
+          "observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s6",
+              "detail": "button \"Continue\" (in: Select drone) -> [e14] button \"Proceed\" (in: Select drone) via similarity (score 0.85, margin 0.22)",
+              "evidence": {
+                "candidates": [
+                  {
+                    "ref": "e14",
+                    "desc": "[e14] button \"Proceed\" (in: Select drone)",
+                    "score": 0.855,
+                    "breakdown": {
+                      "name": 0.85,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 0.85,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 1.0,
+                      "class": 0.2,
+                      "xpath": 0.97,
+                      "css": 0.98,
+                      "position": 0.54,
+                      "size": 0.34,
+                      "full_score": 0.76,
+                      "semantic_score": 0.95
+                    }
+                  },
+                  {
+                    "ref": "e13",
+                    "desc": "[e13] button \"Back\" (in: Select drone)",
+                    "score": 0.637,
+                    "breakdown": {
+                      "name": 0.17,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 0.17,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.91,
+                      "class": 0.2,
+                      "xpath": 0.95,
+                      "css": 0.97,
+                      "position": 0.45,
+                      "size": 0.2,
+                      "full_score": 0.58,
+                      "semantic_score": 0.71
+                    }
+                  },
+                  {
+                    "ref": "e5",
+                    "desc": "[e5] button \"Log out\" (in: header)",
+                    "score": 0.427,
+                    "breakdown": {
+                      "name": 0.27,
+                      "role": 1.0,
+                      "context": 0.22,
+                      "text": 0.27,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.43,
+                      "class": 0.25,
+                      "xpath": 0.77,
+                      "css": 0.33,
+                      "position": 0.0,
+                      "size": 0.52,
+                      "full_score": 0.39,
+                      "semantic_score": 0.47
+                    }
+                  },
+                  {
+                    "ref": "e7",
+                    "desc": "[e7] radio \"Falcon-1\" (in: Select drone) {label='Falcon-1 DJI M350 92%'}",
+                    "score": 0.378,
+                    "breakdown": {
+                      "name": 0.43,
+                      "role": 0.0,
+                      "context": 1.0,
+                      "text": 0.0,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.53,
+                      "class": 0.0,
+                      "xpath": 0.72,
+                      "css": 0.12,
+                      "position": 0.5,
+                      "size": 0.05,
+                      "full_score": 0.34,
+                      "semantic_score": 0.42
+                    }
+                  },
+                  {
+                    "ref": "e8",
+                    "desc": "[e8] radio \"Falcon-2\" (in: Select drone) {label='Falcon-2 DJI M350 88%'}",
+                    "score": 0.369,
+                    "breakdown": {
+                      "name": 0.43,
+                      "role": 0.0,
+                      "context": 1.0,
+                      "text": 0.0,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.48,
+                      "class": 0.0,
+                      "xpath": 0.73,
+                      "css": 0.13,
+                      "position": 0.53,
+                      "size": 0.05,
+                      "full_score": 0.34,
+                      "semantic_score": 0.41
+                    }
+                  }
+                ],
+                "reason": "multi-attribute match 0.86 (runner-up 0.64)"
+              },
+              "tier": 1,
+              "confidence": 0.855
+            }
+          ],
+          "effects": {
+            "url_before": "http://skyops:8000/missions/new#step-drone",
+            "url_after": "http://skyops:8000/missions/new#step-params",
+            "url_changed": true,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [
+              "Flight parameters"
+            ],
+            "new_alerts": [],
+            "network": [
+              {
+                "method": "POST",
+                "path": "/api/missions/validate",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s7",
+          "intent": "Enter an illegal altitude of 500 m",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.985,
+          "duration_ms": 720,
+          "screenshot": "screenshots/altitude-limit_07.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://skyops:8000/missions/new#step-params",
+            "url_after": "http://skyops:8000/missions/new#step-params",
+            "url_changed": false,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s8",
+          "intent": "Set speed to 8 m/s",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.985,
+          "duration_ms": 722,
+          "screenshot": "screenshots/altitude-limit_08.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://skyops:8000/missions/new#step-params",
+            "url_after": "http://skyops:8000/missions/new#step-params",
+            "url_changed": false,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s9",
+          "intent": "Try to continue from flight parameters",
+          "status": "healed",
+          "tier": 1,
+          "score": 0.855,
+          "duration_ms": 734,
+          "screenshot": "screenshots/altitude-limit_09.jpg",
+          "observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s9",
+              "detail": "button \"Continue\" (in: Flight parameters) -> [e11] button \"Proceed\" (in: Flight parameters) via similarity (score 0.85, margin 0.22)",
+              "evidence": {
+                "candidates": [
+                  {
+                    "ref": "e11",
+                    "desc": "[e11] button \"Proceed\" (in: Flight parameters)",
+                    "score": 0.855,
+                    "breakdown": {
+                      "name": 0.85,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 0.85,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 1.0,
+                      "class": 0.2,
+                      "xpath": 0.97,
+                      "css": 0.98,
+                      "position": 0.54,
+                      "size": 0.34,
+                      "full_score": 0.76,
+                      "semantic_score": 0.95
+                    }
+                  },
+                  {
+                    "ref": "e10",
+                    "desc": "[e10] button \"Back\" (in: Flight parameters)",
+                    "score": 0.639,
+                    "breakdown": {
+                      "name": 0.17,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 0.17,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.92,
+                      "class": 0.2,
+                      "xpath": 0.95,
+                      "css": 0.97,
+                      "position": 0.45,
+                      "size": 0.2,
+                      "full_score": 0.58,
+                      "semantic_score": 0.71
+                    }
+                  },
+                  {
+                    "ref": "e5",
+                    "desc": "[e5] button \"Log out\" (in: header)",
+                    "score": 0.45,
+                    "breakdown": {
+                      "name": 0.27,
+                      "role": 1.0,
+                      "context": 0.35,
+                      "text": 0.27,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.41,
+                      "class": 0.25,
+                      "xpath": 0.77,
+                      "css": 0.33,
+                      "position": 0.0,
+                      "size": 0.52,
+                      "full_score": 0.41,
+                      "semantic_score": 0.5
+                    }
+                  },
+                  {
+                    "ref": "e7",
+                    "desc": "[e7] spinbutton \"Altitude (m) *\" (in: Flight parameters)",
+                    "score": 0.434,
+                    "breakdown": {
+                      "name": 0.44,
+                      "role": 0.0,
+                      "context": 1.0,
+                      "text": 0.0,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.86,
+                      "class": 0.0,
+                      "xpath": 0.78,
+                      "css": 0.18,
+                      "position": 0.47,
+                      "size": 0.08,
+                      "full_score": 0.39,
+                      "semantic_score": 0.48
+                    }
+                  },
+                  {
+                    "ref": "e4",
+                    "desc": "[e4] link \"Settings\" (in: Main navigation)",
+                    "score": 0.388,
+                    "breakdown": {
+                      "name": 0.38,
+                      "role": 0.5,
+                      "context": 0.31,
+                      "text": 0.38,
+                      "tag": 1.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.38,
+                      "class": 0.0,
+                      "xpath": 0.71,
+                      "css": 0.49,
+                      "position": 0.11,
+                      "size": 0.76,
+                      "full_score": 0.39,
+                      "semantic_score": 0.39
+                    }
+                  }
+                ],
+                "reason": "multi-attribute match 0.86 (runner-up 0.64)"
+              },
+              "tier": 1,
+              "confidence": 0.855
+            }
+          ],
+          "effects": {
+            "url_before": "http://skyops:8000/missions/new#step-params",
+            "url_after": "http://skyops:8000/missions/new#step-params",
+            "url_changed": false,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [
+              "Altitude must be at most 120 m (DGCA limit)",
+              "Altitude must be at most 120 m (DGCA limit)"
+            ],
+            "network": [
+              {
+                "method": "POST",
+                "path": "/api/missions/validate",
+                "status": 422,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [
+              "Failed to load resource: the server responded with a status of 422 (Unprocessable Entity)"
+            ],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        }
+      ],
+      "observations": [],
+      "duration_ms": 7403,
+      "llm_calls": [],
+      "updated_to_version": null,
+      "bug_report": null
+    },
+    {
+      "test_id": "low-battery-drone",
+      "test_name": "Low-battery drone cannot be assigned",
+      "test_version": 2,
+      "status": "passed",
+      "verdict": {
+        "category": "COSMETIC_DRIFT",
+        "confidence": 0.8,
+        "rationale": "1 element(s) moved/renamed and were re-identified (tiers [1]); all expectations and business oracles still hold.",
+        "evidence_refs": [],
+        "changelog_refs": [],
+        "decided_by": "rules",
+        "action": "test_healed"
+      },
+      "steps": [
+        {
+          "step_id": "s1",
+          "intent": "Name the mission",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.951,
+          "duration_ms": 746,
+          "screenshot": "screenshots/low-battery-drone_01.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://skyops:8000/missions/new#step-details",
+            "url_after": "http://skyops:8000/missions/new#step-details",
+            "url_changed": false,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s2",
+          "intent": "Choose mission type Patrol",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.985,
+          "duration_ms": 719,
+          "screenshot": "screenshots/low-battery-drone_02.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://skyops:8000/missions/new#step-details",
+            "url_after": "http://skyops:8000/missions/new#step-details",
+            "url_changed": false,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s3",
+          "intent": "Choose the Pune Depot site",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.98,
+          "duration_ms": 705,
+          "screenshot": "screenshots/low-battery-drone_03.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://skyops:8000/missions/new#step-details",
+            "url_after": "http://skyops:8000/missions/new#step-details",
+            "url_changed": false,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s4",
+          "intent": "Continue from mission details",
+          "status": "healed",
+          "tier": 1,
+          "score": 0.802,
+          "duration_ms": 737,
+          "screenshot": "screenshots/low-battery-drone_04.jpg",
+          "observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s4",
+              "detail": "button \"Continue\" (in: Mission details) -> [e10] button \"Proceed\" (in: Mission details) via similarity (score 0.80, margin 0.34)",
+              "evidence": {
+                "candidates": [
+                  {
+                    "ref": "e10",
+                    "desc": "[e10] button \"Proceed\" (in: Mission details)",
+                    "score": 0.802,
+                    "breakdown": {
+                      "name": 0.85,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 0.85,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.67,
+                      "class": 0.2,
+                      "xpath": 0.97,
+                      "css": 0.98,
+                      "position": 0.59,
+                      "size": 0.34,
+                      "full_score": 0.72,
+                      "semantic_score": 0.89
+                    }
+                  },
+                  {
+                    "ref": "e8",
+                    "desc": "[e8] combobox \"Mission type *\" (in: Mission details)",
+                    "score": 0.457,
+                    "breakdown": {
+                      "name": 0.4,
+                      "role": 0.0,
+                      "context": 1.0,
+                      "text": 0.23,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.91,
+                      "class": 0.0,
+                      "xpath": 0.79,
+                      "css": 0.26,
+                      "position": 0.43,
+                      "size": 0.08,
+                      "full_score": 0.41,
+                      "semantic_score": 0.51
+                    }
+                  },
+                  {
+                    "ref": "e5",
+                    "desc": "[e5] button \"Log out\" (in: header)",
+                    "score": 0.415,
+                    "breakdown": {
+                      "name": 0.27,
+                      "role": 1.0,
+                      "context": 0.19,
+                      "text": 0.27,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.4,
+                      "class": 0.25,
+                      "xpath": 0.81,
+                      "css": 0.38,
+                      "position": 0.0,
+                      "size": 0.52,
+                      "full_score": 0.38,
+                      "semantic_score": 0.46
+                    }
+                  },
+                  {
+                    "ref": "e4",
+                    "desc": "[e4] link \"Settings\" (in: Main navigation)",
+                    "score": 0.404,
+                    "breakdown": {
+                      "name": 0.38,
+                      "role": 0.5,
+                      "context": 0.47,
+                      "text": 0.38,
+                      "tag": 1.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.31,
+                      "class": 0.0,
+                      "xpath": 0.73,
+                      "css": 0.48,
+                      "position": 0.09,
+                      "size": 0.76,
+                      "full_score": 0.4,
+                      "semantic_score": 0.42
+                    }
+                  },
+                  {
+                    "ref": "e9",
+                    "desc": "[e9] combobox \"Site *\" (in: Mission details)",
+                    "score": 0.391,
+                    "breakdown": {
+                      "name": 0.33,
+                      "role": 0.0,
+                      "context": 1.0,
+                      "text": 0.16,
+                      "tag": 0.0,
+                      "href": 0.0,
+                      "neighbor_text": 0.62,
+                      "class": 0.0,
+                      "xpath": 0.8,
+                      "css": 0.22,
+                      "position": 0.46,
+                      "size": 0.08,
+                      "full_score": 0.36,
+                      "semantic_score": 0.43
+                    }
+                  }
+                ],
+                "reason": "multi-attribute match 0.80 (runner-up 0.46)"
+              },
+              "tier": 1,
+              "confidence": 0.802
+            }
+          ],
+          "effects": {
+            "url_before": "http://skyops:8000/missions/new#step-details",
+            "url_after": "http://skyops:8000/missions/new#step-drone",
+            "url_changed": true,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [
+              "Select drone"
+            ],
+            "new_alerts": [
+              "Currently Charging",
+              "Currently In mission",
+              "Currently Maintenance"
+            ],
+            "network": [
+              {
+                "method": "POST",
+                "path": "/api/missions/validate",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        }
+      ],
+      "observations": [],
+      "duration_ms": 3698,
+      "llm_calls": [],
+      "updated_to_version": null,
+      "bug_report": null
+    }
+  ],
+  "totals": {
+    "tests": 8,
+    "passed": 7,
+    "failed": 1,
+    "healed_steps": 14,
+    "replayed_steps": 17,
+    "llm_calls": 0,
+    "llm_calls_cached": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": 0.0,
+    "list_cost_usd": 0.0,
+    "naive_tokens_estimate": 17747,
+    "verdicts": {
+      "COSMETIC_DRIFT": 6,
+      "PASS": 1,
+      "NEEDS_REVIEW": 1
+    },
+    "tiers": {
+      "1": 14,
+      "0": 17
+    },
+    "duration_ms": 28984
+  },
+  "learned": {
+    "stability": {
+      "id": 0.867,
+      "name_attr": 0.933,
+      "testid": 0.933,
+      "class": 0.867,
+      "text": 0.133,
+      "name": 0.2,
+      "label": 0.933,
+      "xpath": 0.067,
+      "css": 0.067,
+      "role": 0.933,
+      "tag": 0.133,
+      "context": 0.8,
+      "placeholder": 0.933,
+      "href": 0.133
+    }
+  }
+}

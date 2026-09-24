@@ -226,11 +226,15 @@ async def _execute(ctx: RunContext, page: Any, rec: EffectRecorder, st: _Exec, s
     elif origin == "reordered":
         obs.append(Observation(kind="step_reordered", step_id=step.id, tier=2, confidence=res.score,
                                detail=f"'{step.intent}' executed out of order (flow reordered); matched "
-                                      f"{describe(el)} score {res.score:.2f}"))
+                                      f"{describe(el)} score {res.score:.2f}",
+                               evidence={"label": el.label or el.name, "context": el.context,
+                                         "action": step.action}))
     elif origin == "added":
         obs.append(Observation(kind="step_added", step_id=step.id, tier=4,
                                detail=f"new step: {step.intent} -> {describe(el)}"
-                                      + (f" = {value!r}" if value else "")))
+                                      + (f" = {value!r}" if value else ""),
+                               evidence={"label": el.label or el.name, "context": el.context,
+                                         "action": step.action, "method": res.method}))
     if error:
         obs.append(Observation(kind="timeout", step_id=step.id, detail=f"action failed: {error}"))
     if origin != "added":
@@ -250,6 +254,100 @@ async def _execute(ctx: RunContext, page: Any, rec: EffectRecorder, st: _Exec, s
     st.trace.append((step.model_copy(update={"target": new_fp, "expect": expect_from_effects(eff, ctx.vars)}), origin))
     st.done.append(f"{len(st.done) + 1}. {step.intent}" + (f" = {value!r}" if value and step.action != "press" else ""))
     return sr
+
+
+_PROGRESS = re.compile(r"\b(next|continue|proceed|save|submit|apply|confirm)\b", re.I)
+
+
+def _blocking_fields(snap: Any) -> list:
+    """Visible, enabled, empty fields that the page marks as required (attribute, '*', or an alert)."""
+    alerts = " ".join(snap.alerts).lower()
+    out = []
+    for e in snap.elements:
+        if not (e.interactive and e.editable and e.enabled) or e.attrs.get("value"):
+            continue
+        if e.attrs.get("type") in ("password", "search", "hidden"):
+            continue
+        label = (e.label or e.name).strip()
+        core = label.rstrip("* ").lower()
+        if "required" in e.attrs or label.endswith("*") or (core and core in alerts):
+            out.append(e)
+    return out
+
+
+async def _complete_required(ctx: RunContext, page: Any, rec: EffectRecorder, st: "_Exec", step: Step,
+                             snap: Any) -> int:
+    """Fill newly required fields with valid heuristic data and press the page's progress button."""
+    from argus.explore.explorer import heuristic_value
+    fields = _blocking_fields(snap)
+    if not fields:
+        return 0
+    done = 0
+    for n, el in enumerate(fields[:4], 1):
+        value = heuristic_value(el, ctx.settings.credentials)
+        if not value:
+            continue
+        s = Step(id=f"{step.id}-h{n}", intent=f"Fill new required field '{(el.label or el.name).rstrip('* ')}'",
+                 action="fill", target=Fingerprint.from_element(el), value=value)
+        await _execute(ctx, page, rec, st, s, Resolution(element=el, tier=4, method="heuristic", score=1.0),
+                       snap, "added")
+        done += 1
+    if not done:
+        return 0
+    ctx_name = fields[0].context
+    buttons = [e for e in snap.elements if e.role == "button" and e.enabled and _PROGRESS.search(e.name or e.text)]
+    buttons.sort(key=lambda e: e.context != ctx_name)
+    if buttons:
+        b = buttons[0]
+        s = Step(id=f"{step.id}-h0", intent=f"Continue with '{b.name}'", action="click",
+                 target=Fingerprint.from_element(b))
+        await _execute(ctx, page, rec, st, s, Resolution(element=b, tier=4, method="heuristic", score=1.0),
+                       snap, "added")
+    return done
+
+
+def _target_present(snap: Any, fp: Fingerprint, weights: dict[str, float]) -> bool:
+    from argus.healing.similarity import rank
+    ranked = rank(fp, snap.elements, "goto", weights, top_k=1)
+    return bool(ranked) and ranked[0][1] >= 0.6
+
+
+async def _advance_to_target(ctx: RunContext, page: Any, rec: EffectRecorder, st: "_Exec", fp: Fingerprint,
+                             hops: int = 3) -> None:
+    """Walk forward through a (possibly reordered) flow until the oracle's target is on screen."""
+    for hop in range(hops):
+        snap = await take_snapshot(page)
+        if _target_present(snap, fp, ctx.weights):
+            return
+        if await _complete_required(ctx, page, rec, st, Step(id=f"adv{hop}", intent="advance", action="click"), snap):
+            continue
+        buttons = [e for e in snap.elements if e.role == "button" and e.enabled and _PROGRESS.search(e.name or e.text)]
+        if not buttons:
+            return
+        b = buttons[0]
+        s = Step(id=f"adv{hop}-c", intent=f"Advance with '{b.name}' to reach the checked screen", action="click",
+                 target=Fingerprint.from_element(b))
+        await _execute(ctx, page, rec, st, s, Resolution(element=b, tier=4, method="heuristic", score=1.0), snap, "added")
+
+
+def _is_commit(step: Step) -> bool:
+    """A commit point made a mutating API call on the baseline (create/save/launch...)."""
+    return any(c.method.upper() in MUTATING for c in step.expect.network)
+
+
+async def _save_trace(context: Any, ctx: RunContext, test: TestSpec, result: TestResult) -> None:
+    """Keep a Playwright trace (open with `playwright show-trace`) only for runs with real deviations."""
+    deviating = any(o.kind != "locator_healed" for o in all_observations(result))
+    try:
+        if deviating:
+            rel = f"traces/{test.id}.zip"
+            (ctx.run_dir / "traces").mkdir(exist_ok=True)
+            await context.tracing.stop(path=str(ctx.run_dir / rel))
+            result.trace = rel
+        else:
+            await context.tracing.stop()
+    except Exception:
+        pass
 
 
 def _rules_excerpt(product: str, limit: int = 1500) -> str:
@@ -296,6 +394,10 @@ async def run_test(test: TestSpec, ctx: RunContext, browser: Browser, auth_state
                         verdict=Verdict(category="PASS"))
     context = await browser.new_context(viewport=ctx.settings.viewport,
                                         storage_state=auth_state if (test.requires_login and auth_state) else None)
+    try:
+        await context.tracing.start(screenshots=True, snapshots=True)
+    except Exception:
+        pass
     page = await context.new_page()
     rec = EffectRecorder(page)
     try:
@@ -307,6 +409,14 @@ async def run_test(test: TestSpec, ctx: RunContext, browser: Browser, auth_state
             result.verdict = Verdict(category="INFRA", confidence=0.9, rationale=f"App unreachable: {exc}"[:300])
             return result
         start_status = resp.status if resp else 0
+        if test.requires_login and "login" not in test.start_url and "login" in normalize_path(page.url):
+            result.observations.append(Observation(
+                kind="goal_unreachable", detail=f"session missing: {test.start_url} redirected to login",
+                evidence={"precondition": "authenticated session"}))
+            result.steps = []
+            result.verdict = await triage(test, result, ctx)
+            result.status = "error"
+            return result
         if start_status >= 400:
             result.observations.append(Observation(
                 kind="network_error" if start_status >= 500 else "effect_mismatch",
@@ -314,6 +424,7 @@ async def run_test(test: TestSpec, ctx: RunContext, browser: Browser, auth_state
 
         pending = list(test.steps)
         replans = 0
+        heuristic_rounds = 0
         while pending:
             step = pending[0]
             if step.action in ("goto", "wait") or (step.target is None and step.action == "press"):
@@ -335,13 +446,21 @@ async def run_test(test: TestSpec, ctx: RunContext, browser: Browser, auth_state
             snap = await take_snapshot(page)
             res = await resolve(snap, step, ctx.weights, ctx.llm, ctx.settings)
             if res.found:
-                await _execute(ctx, page, rec, st, step, res, snap, "orig")
+                sr = await _execute(ctx, page, rec, st, step, res, snap, "orig")
                 pending.pop(0)
+                blocked = any(o.kind == "effect_mismatch" and "expected navigation" in o.detail for o in sr.observations)
+                if blocked and heuristic_rounds < 2:
+                    after = await take_snapshot(page)
+                    if _blocking_fields(after):
+                        heuristic_rounds += 1
+                        await _complete_required(ctx, page, rec, st, step, after)
                 continue
 
             # T2: the flow may have been reordered - is a later step's target here? (no LLM)
             moved = False
             for j in range(1, min(LOOKAHEAD, len(pending) - 1) + 1):
+                if _is_commit(pending[j - 1]):
+                    break  # ordering constraint: nothing may jump across a step that commits data
                 later = pending[j]
                 if later.target is None or later.action == "goto":
                     continue
@@ -363,6 +482,12 @@ async def run_test(test: TestSpec, ctx: RunContext, browser: Browser, auth_state
                                                                   "already hold at this point"))
                 pending.clear()
                 break
+
+            # T4a: a new required field blocks the flow -> complete it deterministically (no LLM)
+            if heuristic_rounds < 2 and start_status < 400:
+                heuristic_rounds += 1
+                if await _complete_required(ctx, page, rec, st, step, snap):
+                    continue
 
             # T4: bounded replanning with a model
             if replans >= MAX_REPLANS or start_status >= 400 or ctx.llm is None:
@@ -406,6 +531,11 @@ async def run_test(test: TestSpec, ctx: RunContext, browser: Browser, auth_state
                        f"{normalize_path(snap.url)} alerts {snap.alerts[:3]}"))
             break
 
+        # an element oracle whose target lives on a later screen (flow reordered): advance until it appears
+        for a in test.oracles:
+            if a.kind in ("element_state", "element_visible") and isinstance(a.params.get("fingerprint"), dict):
+                await _advance_to_target(ctx, page, rec, st, Fingerprint(**a.params["fingerprint"]))
+
         # business oracles
         for i, a in enumerate(test.oracles):
             ok, detail = await check(a, page, ctx, st.calls, rec.all_page_errors())
@@ -426,6 +556,7 @@ async def run_test(test: TestSpec, ctx: RunContext, browser: Browser, auth_state
                 pass
     finally:
         result.steps = st.results
+        await _save_trace(context, ctx, test, result)
         await context.close()
 
     result.verdict = await triage(test, result, ctx)
@@ -459,7 +590,7 @@ def _apply_verdict(test: TestSpec, result: TestResult, st: _Exec, ctx: RunContex
         saved = mem.save_test(test.model_copy(update={"steps": steps}), TestChange(
             version=test.version + 1, kind="healed", summary=f"Self-healed {n} locator(s); flow unchanged.",
             diff="\n".join(f"- {o.describe()}\n+ {nw.describe()}" for o, nw in st.healed),
-            verdict_ref=ctx.run_id))
+            verdict_ref=ctx.run_id), build=ctx.settings.build)
         result.updated_to_version = saved.version
     elif v.category == "INTENDED_CHANGE":
         steps = [s for s, _ in st.trace]
@@ -469,12 +600,12 @@ def _apply_verdict(test: TestSpec, result: TestResult, st: _Exec, ctx: RunContex
                                               lineterm="", n=0))
         saved = mem.save_test(test.model_copy(update={"steps": steps}), TestChange(
             version=test.version + 1, kind="updated", summary=f"Adapted to intended change: {v.rationale}"[:400],
-            diff=diff, verdict_ref=ctx.run_id))
+            diff=diff, verdict_ref=ctx.run_id), build=ctx.settings.build)
         result.updated_to_version = saved.version
         mem.put_decision(deviation_signature(test.id, all_observations(result)), v)
     elif v.category == "FEATURE_REMOVED":
         saved = mem.save_test(test.model_copy(update={"status": "retired"}), TestChange(
-            version=test.version + 1, kind="retired", summary=f"Retired: {v.rationale}"[:400], verdict_ref=ctx.run_id))
+            version=test.version + 1, kind="retired", summary=f"Retired: {v.rationale}"[:400], verdict_ref=ctx.run_id), build=ctx.settings.build)
         result.updated_to_version = saved.version
     elif v.category == "NEEDS_REVIEW":
         proposal = test.model_copy(update={"steps": [s for s, _ in st.trace]})
@@ -624,7 +755,7 @@ async def run_suite(settings: Settings, *, test_ids: Optional[list[str]] = None,
         from argus.llm.client import LLMClient
         llm = LLMClient(settings)
     ctx = RunContext(settings, memory, llm, run_id, run_dir)
-    tests = [t for t in memory.list_tests("active") if not test_ids or t.id in test_ids]
+    tests = [t for t in memory.list_tests("active", build=settings.build) if not test_ids or t.id in test_ids]
     tests.sort(key=lambda t: (0 if "auth" in t.tags else 1, "negative" in t.tags, t.id))
     report = RunReport(run_id=run_id, app_url=settings.base_url, label=label)
     async with async_playwright() as pw:

@@ -59,6 +59,41 @@ def verify_quotes(quotes: list[str], changelog: str) -> list[str]:
     return ok
 
 
+def _line_mentioning(changelog: str, phrase: str) -> Optional[str]:
+    """The first changelog line that mentions `phrase` (markdown-insensitive), as a quotable string."""
+    p = _plain(phrase).strip(" *:")
+    if len(p) < 4 or p in {"main", "main navigation", "navigation", "nav", "header", "footer", "form", "section",
+                           "dialog", "aside", "banner", "content", "body"}:
+        return None
+    for line in changelog.splitlines():
+        if p in _plain(line):
+            return re.sub(r"[*_`]+", "", line).strip(" -")[:240]
+    return None
+
+
+def explain_by_changelog(structural: list[Observation], changelog: str) -> Optional[list[str]]:
+    """Quotes explaining every data-bearing structural change, or None if any change is unexplained.
+
+    Progress clicks (Next/Continue) inserted around new fields are ancillary and need no citation.
+    """
+    quotes: list[str] = []
+    data_steps = [o for o in structural if o.evidence.get("action") in ("fill", "select", "check", "uncheck")
+                  or o.kind == "step_missing"]
+    if not data_steps:
+        return None
+    for o in data_steps:
+        line = None
+        for phrase in (o.evidence.get("label", ""), o.evidence.get("context", "")):
+            line = _line_mentioning(changelog, phrase) if phrase else None
+            if line:
+                break
+        if line is None:
+            return None
+        if line not in quotes:
+            quotes.append(line)
+    return quotes
+
+
 def _rule_mentioned(rule_ref: str, changelog: str) -> bool:
     return bool(rule_ref) and re.search(rf"\b{re.escape(rule_ref)}\b", changelog or "") is not None
 
@@ -94,7 +129,7 @@ def _verdict(category: str, confidence: float, rationale: str, decided_by: str =
     action = {
         "PASS": "none", "COSMETIC_DRIFT": "test_healed", "INTENDED_CHANGE": "test_updated",
         "FEATURE_REMOVED": "test_retired", "BUG": "bug_reported", "NEEDS_REVIEW": "review_requested",
-        "INFRA": "none",
+        "INFRA": "none", "PRECONDITION_FAILURE": "none",
     }[category]
     return Verdict(category=category, confidence=round(confidence, 2), rationale=rationale,
                    decided_by=decided_by, action=action, evidence_refs=evidence or [],
@@ -104,6 +139,9 @@ def _verdict(category: str, confidence: float, rationale: str, decided_by: str =
 async def triage(test: TestSpec, result: TestResult, ctx: Any) -> Verdict:
     """Classify one test run. `ctx` provides .llm, .memory, .product_context, .changelog."""
     obs = all_observations(result)
+    pre = [o for o in obs if o.evidence.get("precondition")]
+    if pre:
+        return _verdict("PRECONDITION_FAILURE", 0.9, f"Starting state not established: {pre[0].detail[:200]}")
     if not obs:
         return _verdict("PASS", 1.0, "Replayed exactly; every step and oracle held.")
 
@@ -136,6 +174,24 @@ async def triage(test: TestSpec, result: TestResult, ctx: Any) -> Verdict:
             return _verdict("BUG", 0.9,
                             f"Business rule(s) {', '.join(sorted(rules))} violated: {rule_failures[0].detail[:160]}",
                             evidence=[f"rule {r}" for r in sorted(rules)])
+
+    # 3b) Grounded in the release notes, no model: every data-bearing structural change names a field or
+    #     screen that the changelog mentions verbatim, and the business outcome held -> intended.
+    if structural and not hard and not failed_asserts and not unreachable and changelog:
+        quotes = explain_by_changelog(structural, changelog)
+        if quotes is not None:
+            return _verdict("INTENDED_CHANGE", 0.85,
+                            f"{len(structural)} flow change(s), each naming fields/screens that the release notes "
+                            "describe; business oracles still hold.", quotes=quotes)
+    # 3c) The journey's page is gone and the release notes say so -> retired, no model.
+    if unreachable and not hard and changelog:
+        gone = [o for o in obs if o.kind in ("effect_mismatch", "network_error") and "returned HTTP 4" in o.detail]
+        if gone:
+            path = re.search(r"start page (\S+) returned", gone[0].detail)
+            line = _line_mentioning(changelog, path.group(1)) if path else None
+            if line:
+                return _verdict("FEATURE_REMOVED", 0.85, f"{path.group(1)} no longer exists and the release notes "
+                                "retire it.", quotes=[line])
 
     # 4) Memory: a human (or earlier verified judgement) already decided this exact deviation.
     sig = deviation_signature(test.id, obs)

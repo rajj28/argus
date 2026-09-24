@@ -94,8 +94,8 @@ async def check(a: Assertion, page: Any, ctx: Any, calls: list[NetCall], page_er
             return False, "assertion has no fingerprint"
         snap = await take_snapshot(page)
         weights = ctx.memory_weights() if hasattr(ctx, "memory_weights") else None
-        ranked = rank(fp, snap.elements, "hover", weights or {}, top_k=2) if weights else \
-            rank(fp, snap.elements, "hover", _default_weights(), top_k=2)
+        ranked = rank(fp, snap.elements, "goto", weights or {}, top_k=2) if weights else \
+            rank(fp, snap.elements, "goto", _default_weights(), top_k=2)
         if not ranked:
             return False, f"{fp.describe()} not found"
         el, score = (ranked[0][0], ranked[0][1]) if isinstance(ranked[0], (tuple, list)) else \

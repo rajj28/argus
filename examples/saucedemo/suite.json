@@ -1,0 +1,103 @@
+[
+  {
+    "id": "login", "name": "Shopper signs in", "tags": ["auth", "smoke"], "requires_login": false,
+    "goal": "A shopper with valid store credentials reaches the Products catalogue", "start_url": "/",
+    "steps": [
+      {"intent": "Enter the username", "action": "fill", "find": {"role": "textbox", "name": "username"}, "value": "${creds.user}"},
+      {"intent": "Enter the password", "action": "fill", "find": {"type": "password"}, "value": "${creds.password}"},
+      {"intent": "Sign in", "action": "click", "find": {"role": "button", "name": "login"}}
+    ],
+    "oracles": [
+      {"kind": "url_matches", "params": {"pattern": "/inventory"}, "description": "The Products catalogue opens", "rule_ref": "R1"},
+      {"kind": "text_visible", "params": {"text": "Products"}, "description": "The Products title is shown", "rule_ref": "R1"}
+    ]
+  },
+  {
+    "id": "sort-by-price", "name": "Sort the catalogue by price low to high", "tags": ["catalogue"],
+    "goal": "The shopper sorts the catalogue by Price (low to high)", "start_url": "/inventory.html",
+    "steps": [
+      {"intent": "Sort products by Price (low to high)", "action": "select", "find": {"role": "combobox", "name": "price (low to high)"}, "value": "Price (low to high)"}
+    ],
+    "oracles": [
+      {"kind": "text_visible", "params": {"text": "Sauce Labs Onesie"}, "description": "The catalogue list is populated", "rule_ref": "R2"}
+    ]
+  },
+  {
+    "id": "add-to-cart", "name": "Add a product to the cart", "tags": ["cart"],
+    "goal": "Adding a product to the cart flips its button to Remove and increments the badge", "start_url": "/inventory.html",
+    "steps": [
+      {"intent": "Add the first product to the cart", "action": "click", "find": {"role": "button", "name": "add to cart"}}
+    ],
+    "oracles": [
+      {"kind": "text_visible", "params": {"text": "Remove"}, "description": "The first product's button reads Remove", "rule_ref": "R3"}
+    ]
+  },
+  {
+    "id": "cart-contents", "name": "Cart lists the added item with its price", "tags": ["cart"],
+    "goal": "The cart shows the added item at its price", "start_url": "/inventory.html",
+    "steps": [
+      {"intent": "Add the first product to the cart", "action": "click", "find": {"role": "button", "name": "add to cart"}},
+      {"intent": "Open the cart", "action": "goto", "value": "/cart.html"}
+    ],
+    "oracles": [
+      {"kind": "text_visible", "params": {"text": "Sauce Labs Backpack"}, "description": "The added item is listed", "rule_ref": "R4"},
+      {"kind": "text_visible", "params": {"text": "29.99"}, "description": "The item's price is shown", "rule_ref": "R4"}
+    ]
+  },
+  {
+    "id": "checkout-happy", "name": "Complete checkout to the order confirmation", "tags": ["critical", "checkout"],
+    "goal": "A shopper checks out and reaches the Thank you for your order! confirmation", "start_url": "/inventory.html",
+    "steps": [
+      {"intent": "Add the first product to the cart", "action": "click", "find": {"role": "button", "name": "add to cart"}},
+      {"intent": "Open the cart", "action": "goto", "value": "/cart.html"},
+      {"intent": "Start the checkout", "action": "click", "find": {"role": "button", "name": "checkout"}},
+      {"intent": "Enter the first name", "action": "fill", "find": {"role": "textbox", "name": "first name"}, "value": "Ada"},
+      {"intent": "Enter the last name", "action": "fill", "find": {"role": "textbox", "name": "last name"}, "value": "Lovelace"},
+      {"intent": "Enter the ZIP code", "action": "fill", "find": {"role": "textbox", "name": "zip"}, "value": "94107"},
+      {"intent": "Continue to the overview", "action": "click", "find": {"role": "button", "name": "continue"}},
+      {"intent": "Place the order", "action": "click", "find": {"role": "button", "name": "finish"}}
+    ],
+    "oracles": [
+      {"kind": "url_matches", "params": {"pattern": "/checkout-complete"}, "description": "The confirmation page opens", "rule_ref": "R7"},
+      {"kind": "text_visible", "params": {"text": "Thank you for your order!"}, "description": "The order is confirmed", "rule_ref": "R7"}
+    ]
+  },
+  {
+    "id": "checkout-validation", "name": "Checkout without a ZIP code is rejected", "tags": ["negative", "checkout"],
+    "goal": "Submitting the checkout form without a ZIP/Postal Code shows the validation error", "start_url": "/inventory.html",
+    "steps": [
+      {"intent": "Add the first product to the cart", "action": "click", "find": {"role": "button", "name": "add to cart"}},
+      {"intent": "Open the cart", "action": "goto", "value": "/cart.html"},
+      {"intent": "Start the checkout", "action": "click", "find": {"role": "button", "name": "checkout"}},
+      {"intent": "Enter the first name", "action": "fill", "find": {"role": "textbox", "name": "first name"}, "value": "Ada"},
+      {"intent": "Enter the last name", "action": "fill", "find": {"role": "textbox", "name": "last name"}, "value": "Lovelace"},
+      {"intent": "Submit without a ZIP code", "action": "click", "find": {"role": "button", "name": "continue"}}
+    ],
+    "oracles": [
+      {"kind": "text_visible", "params": {"text": "Postal Code is required"}, "description": "The missing ZIP is flagged", "rule_ref": "R5"}
+    ]
+  },
+  {
+    "id": "item-detail", "name": "Open the Sauce Labs Backpack detail page", "tags": ["catalogue"],
+    "goal": "Opening the Backpack title link navigates to the Backpack's detail page", "start_url": "/inventory.html",
+    "steps": [
+      {"intent": "Open the Sauce Labs Backpack details", "action": "click", "find": {"role": "link", "name": "sauce labs backpack"}}
+    ],
+    "oracles": [
+      {"kind": "url_matches", "params": {"pattern": "/inventory-item"}, "description": "A product detail page opens", "rule_ref": "R9"},
+      {"kind": "text_visible", "params": {"text": "Sauce Labs Backpack"}, "description": "The detail page is for the clicked product", "rule_ref": "R9"}
+    ]
+  },
+  {
+    "id": "logout", "name": "Shopper signs out from the main menu", "tags": ["auth-exit"],
+    "goal": "Signing out via the main menu returns to the sign-in page", "start_url": "/inventory.html",
+    "steps": [
+      {"intent": "Open the main menu", "action": "click", "find": {"role": "button", "name": "open menu"}},
+      {"intent": "Sign out", "action": "click", "find": {"role": "link", "name": "logout"}}
+    ],
+    "oracles": [
+      {"kind": "url_matches", "params": {"pattern": "/$"}, "description": "The sign-in page opens", "rule_ref": "R10"},
+      {"kind": "text_visible", "params": {"text": "Accepted usernames are"}, "description": "The sign-in prompt is shown", "rule_ref": "R10"}
+    ]
+  }
+]

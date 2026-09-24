@@ -315,6 +315,13 @@
       }
       result[attr.name] = attr.value;
     }
+    // Live value (what the user typed/selected), not the HTML attribute. Passwords are never exposed.
+    const isText = (tag === "input" && !["submit", "button", "reset", "checkbox", "radio", "password", "file"].includes(type))
+      || tag === "textarea" || tag === "select";
+    if (isText) {
+      const live = (el.value || "").trim();
+      if (live) result["value"] = live.slice(0, 40); else delete result["value"];
+    }
     return result;
   }
 

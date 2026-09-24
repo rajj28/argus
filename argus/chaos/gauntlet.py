@@ -52,6 +52,7 @@ async def run_gauntlet(s: Settings, trials: int = 6, bugs: bool = True, seed0: i
                        log: Callable[..., None] = print) -> dict:
     rows = []
     rng = random.Random(seed0)
+    s.build = "1.0"   # every trial is judged against the plans compiled for the v1.0 baseline
     for i in range(trials):
         seed = seed0 + i
         _prepare(s, seed, [])

@@ -1,0 +1,203 @@
+{
+  "id": "low-battery-drone",
+  "name": "Low-battery drone cannot be assigned",
+  "goal": "Drones below 30% battery must not be selectable for a mission (business rule R2)",
+  "tags": [
+    "negative",
+    "safety"
+  ],
+  "start_url": "/missions/new",
+  "steps": [
+    {
+      "id": "s1",
+      "intent": "Name the mission",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Mission name *",
+        "text": "",
+        "attrs": {
+          "type": "text",
+          "id": "field-mission-name",
+          "name": "name",
+          "required": "",
+          "placeholder": "e.g. Morning patrol run"
+        },
+        "label": "Mission name *",
+        "context": "Mission details",
+        "neighbor_text": "Mission name * | Pilot in command * Required for DGCA compliance | Site * Select",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[2]/div[1]/input[1]",
+        "css": "#field-mission-name",
+        "bbox": {
+          "x": 273.0,
+          "y": 284.0,
+          "w": 954.0,
+          "h": 34.0
+        }
+      },
+      "value": "Battery check ${unique}",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    },
+    {
+      "id": "s2",
+      "intent": "Choose mission type Patrol",
+      "action": "select",
+      "target": {
+        "tag": "select",
+        "role": "combobox",
+        "name": "Mission type *",
+        "text": "Select type… Survey Inspection Delivery Patrol",
+        "attrs": {
+          "id": "field-mission-type",
+          "name": "type",
+          "required": ""
+        },
+        "label": "Mission type *",
+        "context": "Mission details",
+        "neighbor_text": "Mission type * | Mission name * | Pilot in command * Required for DGCA complianc",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[2]/div[4]/select[1]",
+        "css": "#field-mission-type",
+        "bbox": {
+          "x": 273.0,
+          "y": 565.0,
+          "w": 954.0,
+          "h": 34.0
+        }
+      },
+      "value": "Patrol",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    },
+    {
+      "id": "s3",
+      "intent": "Choose the Pune Depot site",
+      "action": "select",
+      "target": {
+        "tag": "select",
+        "role": "combobox",
+        "name": "Site *",
+        "text": "Select site… Pune Depot Mumbai Port Bengaluru Solar Farm",
+        "attrs": {
+          "id": "field-mission-site",
+          "name": "site",
+          "required": ""
+        },
+        "label": "Site *",
+        "context": "Mission details",
+        "neighbor_text": "Site * | Mission name * | Pilot in command * Required for DGCA compliance",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[2]/div[3]/select[1]",
+        "css": "#field-mission-site",
+        "bbox": {
+          "x": 273.0,
+          "y": 479.0,
+          "w": 954.0,
+          "h": 34.0
+        }
+      },
+      "value": "Pune Depot",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    },
+    {
+      "id": "s4",
+      "intent": "Continue from mission details",
+      "action": "click",
+      "target": {
+        "tag": "a",
+        "role": "button",
+        "name": "Continue",
+        "text": "Continue",
+        "attrs": {
+          "href": "#",
+          "class": "btn btn-primary",
+          "aria-label": "Continue"
+        },
+        "label": "",
+        "context": "Mission details",
+        "neighbor_text": "Mission details | Mission name * Pilot in command * Required for DGCA compliance",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[3]/a[1]",
+        "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(3) > a",
+        "bbox": {
+          "x": 273.0,
+          "y": 650.0,
+          "w": 90.0,
+          "h": 36.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": true,
+        "url_pattern": "/missions/new",
+        "network": [
+          {
+            "method": "POST",
+            "path": "/api/missions/validate",
+            "status": 422,
+            "resource_type": "fetch"
+          }
+        ],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    }
+  ],
+  "oracles": [
+    {
+      "kind": "no_page_errors",
+      "params": {},
+      "description": "No uncaught errors during the journey",
+      "rule_ref": null
+    }
+  ],
+  "version": 2,
+  "status": "active",
+  "origin": "manual",
+  "history": [
+    {
+      "version": 1,
+      "at": "2026-09-24T10:54:59+00:00",
+      "kind": "created",
+      "summary": "Authored (manual); baseline recorded",
+      "diff": "",
+      "verdict_ref": null
+    },
+    {
+      "version": 2,
+      "at": "2026-09-24T10:56:11+00:00",
+      "kind": "healed",
+      "summary": "Self-healed 1 locator(s); flow unchanged.",
+      "diff": "- button \"Next\" (in: Mission details)\n+ button \"Continue\" (in: Mission details)",
+      "verdict_ref": "20260924-105542-4c52"
+    }
+  ],
+  "requires_login": true
+}

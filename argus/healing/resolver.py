@@ -19,7 +19,7 @@ class Resolution(BaseModel):
     tier: Optional[int] = None
     score: float = 0.0
     margin: float = 0.0
-    method: Literal["replay", "similarity", "llm", "vision", "not_found"] = "not_found"
+    method: Literal["replay", "similarity", "heuristic", "llm", "vision", "not_found"] = "not_found"
     candidates: list[dict[str, Any]] = Field(default_factory=list)
     reason: str = ""
 

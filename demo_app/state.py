@@ -11,7 +11,7 @@ from typing import Optional
 SEED_DRONES: list[dict] = [
     {"id": "d1", "name": "Falcon-1", "model": "DJI M350", "battery": 92, "status": "Idle", "dock": "Dock-A"},
     {"id": "d2", "name": "Falcon-2", "model": "DJI M350", "battery": 88, "status": "Idle", "dock": "Dock-A"},
-    {"id": "d3", "name": "Hawk-7", "model": "Autel EVO II", "battery": 12, "status": "Charging", "dock": "Dock-B"},
+    {"id": "d3", "name": "Hawk-7", "model": "Autel EVO II", "battery": 12, "status": "Idle", "dock": "Dock-B"},
     {"id": "d4", "name": "Osprey-3", "model": "DJI M300", "battery": 64, "status": "In mission", "dock": "Dock-C"},
     {"id": "d5", "name": "Kite-5", "model": "Parrot ANAFI", "battery": 45, "status": "Idle", "dock": "Dock-B"},
     {"id": "d6", "name": "Raven-9", "model": "DJI M350", "battery": 100, "status": "Maintenance", "dock": "Dock-D"},

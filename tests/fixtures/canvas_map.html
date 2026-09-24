@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SkyOps — drone map (canvas)</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #e9edf2; }
+  body { padding: 12px; }
+  #map {
+    display: block;
+    width: 800px;
+    height: 600px;
+    background: #dfe7f0;
+    cursor: crosshair;
+  }
+</style>
+</head>
+<body>
+<canvas id="map" width="800" height="600"></canvas>
+<script>
+"use strict";
+const W = 800, H = 600;
+const canvas = document.getElementById("map");
+const ctx = canvas.getContext("2d");
+
+const DRONES = [
+  { id: "falcon-1", name: "Falcon-1", kind: "triangle", color: "#d63131" },
+  { id: "osprey-3", name: "Osprey-3", kind: "circle",   color: "#1f4e9c" },
+  { id: "hawk-7",   name: "Hawk-7",   kind: "square",   color: "#2e8b57" },
+  { id: "eagle-2",  name: "Eagle-2",  kind: "diamond",  color: "#e07b12" },
+];
+
+// Deterministic seeded layout: fixed anchors perturbed by a seeded RNG.
+const ANCHORS = {
+  "falcon-1": [250, 190],
+  "osprey-3": [430, 320],
+  "hawk-7":   [620, 180],
+  "eagle-2":  [330, 450],
+};
+let _seed = 987654321;
+function seeded() {
+  _seed = (Math.imul(_seed, 1664525) + 1013904223) >>> 0;
+  return _seed / 4294967296;
+}
+function jitter() { return (seeded() - 0.5) * 60; }
+
+const params = new URLSearchParams(location.search);
+const shift = parseInt(params.get("shift") || "0", 10) || 0;
+const zoom  = parseFloat(params.get("zoom") || "1") || 1;
+
+const cx = W / 2, cy = H / 2;
+const ICON = 26;
+const iconSize = ICON * zoom;
+
+function finalPos(d) {
+  let x = ANCHORS[d.id][0] + jitter();
+  let y = ANCHORS[d.id][1] + jitter();
+  x += shift; y += shift * 0.35;
+  x = cx + (x - cx) * zoom;
+  y = cy + (y - cy) * zoom;
+  return { x, y };
+}
+
+const drones = DRONES.map((d) => ({ ...d, ...finalPos(d) }));
+window.__drones = drones.map(({ id, name, kind, color, x, y }) => ({ id, name, kind, color, x, y }));
+
+function drawBackground() {
+  ctx.save();
+  ctx.translate(cx, cy); ctx.scale(zoom, zoom); ctx.translate(-cx, -cy);
+  ctx.fillStyle = "#dfe7f0";
+  ctx.fillRect(0, 0, W, H);
+
+  // water
+  ctx.fillStyle = "#bcd7ef";
+  ctx.beginPath();
+  ctx.ellipse(150, 520, 140, 60, -0.35, 0, Math.PI * 2);
+  ctx.fill();
+
+  // grid
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = "#c8d3df";
+  for (let gx = 40; gx < W; gx += 60) {
+    ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke();
+  }
+  for (let gy = 40; gy < H; gy += 60) {
+    ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke();
+  }
+
+  // roads
+  ctx.strokeStyle = "#e8cf9c";
+  ctx.lineWidth = 9;
+  ctx.beginPath();
+  ctx.moveTo(0, 150); ctx.bezierCurveTo(300, 220, 500, 80, W, 180);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(420, 0); ctx.bezierCurveTo(380, 250, 560, 380, W, 420);
+  ctx.stroke();
+
+  ctx.restore();
+}
+
+function drawIcon(kind, x, y, s, color) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.strokeStyle = "#ffffff";
+  ctx.lineWidth = 3;
+  ctx.lineJoin = "round";
+  ctx.fillStyle = color;
+  const r = s / 2;
+  ctx.beginPath();
+  if (kind === "circle") {
+    ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+  } else if (kind === "square") {
+    ctx.rect(-r, -r, s, s); ctx.fill(); ctx.stroke();
+  } else if (kind === "diamond") {
+    ctx.moveTo(0, -r); ctx.lineTo(r, 0); ctx.lineTo(0, r); ctx.lineTo(-r, 0);
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+  } else { // triangle (forward-pointing drone glyph)
+    ctx.moveTo(0, -r); ctx.lineTo(r * 0.85, r); ctx.lineTo(0, r * 0.55);
+    ctx.lineTo(-r * 0.85, r); ctx.closePath(); ctx.fill(); ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function drawLabel(name, x, y) {
+  ctx.font = (12 * zoom) + "px sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#223244";
+  ctx.fillText(name, x, y + iconSize * 0.75 + 9);
+}
+
+function draw() {
+  drawBackground();
+  for (const d of drones) {
+    drawIcon(d.kind, d.x, d.y, iconSize, d.color);
+    drawLabel(d.name, d.x, d.y);
+  }
+}
+
+canvas.addEventListener("click", (e) => {
+  const r = canvas.getBoundingClientRect();
+  const px = (e.clientX - r.left) * (W / r.width);
+  const py = (e.clientY - r.top) * (H / r.height);
+  let best = null, bestD = 40;
+  for (const d of drones) {
+    const dist = Math.hypot(d.x - px, d.y - py);
+    if (dist < bestD) { bestD = dist; best = d; }
+  }
+  window.lastHit = best ? best.id : null;
+});
+
+window.lastHit = null;
+draw();
+</script>
+</body>
+</html>

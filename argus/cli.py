@@ -152,6 +152,7 @@ def demo(fresh: bool = typer.Option(True, help="Start from an empty memory"), ll
             input("  [Enter] to deploy ")
         deploy(version)
         s = load_settings(home)
+        s.build = version
         if not llm:
             s.llm_enabled = False
         if version == "1.0":
@@ -219,10 +220,12 @@ def generate(max_tests: int = 8, home: str = HOME):
 
 @app.command()
 def run(label: str = "", test: Optional[list[str]] = typer.Option(None, "--test"), no_update: bool = False,
-        headed: bool = False, home: str = HOME):
+        headed: bool = False, build: str = typer.Option("", help="Build/release label; plans are versioned per build"),
+        home: str = HOME):
     """Run the suite: replay, self-heal, adapt, triage."""
     from argus.runner.runner import run_suite
     s = load_settings(home)
+    s.build = build
     if headed:
         s.headless = False
 
@@ -312,6 +315,24 @@ def gauntlet(trials: int = 6, bugs: bool = True, llm: bool = typer.Option(False,
     s = load_settings(home)
     s.llm_enabled = s.llm_enabled and llm
     asyncio.run(run_gauntlet(s, trials=trials, bugs=bugs, log=console.print))
+
+
+@app.command()
+def diff(baseline: str = typer.Option(..., help="URL of the known-good build"),
+         candidate: str = typer.Option(..., help="URL of the build under test"),
+         test: Optional[list[str]] = typer.Option(None, "--test"), llm: bool = False, home: str = HOME):
+    """Differential execution: same intents on two live builds -> REGRESSION / BEHAVIOR_CHANGE / UI_DRIFT."""
+    from argus.diff import run_diff
+    s = load_settings(home)
+    s.llm_enabled = s.llm_enabled and llm
+    out = asyncio.run(run_diff(s, baseline, candidate, test_ids=test, log=console.print))
+    colors = {"REGRESSION": "bold red", "BEHAVIOR_CHANGE": "yellow", "LIKELY_INTENDED": "blue",
+              "UI_DRIFT": "cyan", "NO_CHANGE": "green", "BASELINE_BROKEN": "magenta", "JOURNEY_GONE": "bright_black"}
+    table = Table("test", "delta", "evidence")
+    for r in out["tests"]:
+        table.add_row(r["name"], f"[{colors.get(r['class'], 'white')}]{r['class']}[/]", r["why"][:150])
+    console.print(table)
+    console.print(f"summary: {out['summary']}  (saved to {s.home}/diff.json)")
 
 
 @app.command()

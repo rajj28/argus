@@ -1,5 +1,15 @@
 # SkyOps Changelog
 
+## v1.3 — Performance improvements
+
+Internal performance and bundle size improvements.
+
+- Faster mission list rendering via incremental DOM updates.
+- Smaller JS bundle (removed unused polyfills).
+- Reduced server-side template compilation overhead.
+
+---
+
 ## v1.2 — Mission planner v2
 
 Significant improvements to mission planning workflow.

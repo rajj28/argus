@@ -232,6 +232,7 @@ VerdictCategory = Literal[
     "FEATURE_REMOVED",    # flow retired on purpose (changelog) -> test retired
     "BUG",                # regression: business outcome broken or hard error signals
     "NEEDS_REVIEW",       # not enough evidence either way; a human decides (decision is remembered)
+    "PRECONDITION_FAILURE",  # the test could not establish its starting state (session, data) - not a bug
     "INFRA",              # environment problem (app down, timeouts before first step)
 ]
 
@@ -287,6 +288,7 @@ class TestResult(BaseModel):
     llm_calls: list[LLMCallRecord] = Field(default_factory=list)
     updated_to_version: Optional[int] = None
     bug_report: Optional[str] = None          # markdown repro + evidence if BUG
+    trace: Optional[str] = None               # Playwright trace zip (relative to run dir) for deviating runs
 
 
 class RunTotals(BaseModel):

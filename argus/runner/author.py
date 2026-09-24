@@ -110,8 +110,12 @@ async def author(settings: Any, specs: list[dict[str, Any]], log=print) -> list[
                 log(f"  ! {d['id']}: baseline run failed")
                 continue
             saved.append(memory.save_test(frozen, TestChange(version=1, kind="created",
-                                                             summary=f"Authored ({frozen.origin}); baseline recorded")))
+                                                             summary=f"Authored ({frozen.origin}); baseline recorded"),
+                                          build=getattr(settings, "build", "")))
             log(f"  + {frozen.id}: {len(frozen.steps)} steps, {len(frozen.oracles)} oracles")
+            dropped = [o.description or o.kind for o in spec.oracles if o not in frozen.oracles]
+            if dropped:
+                log(f"    ! oracle(s) did not hold on the baseline and were dropped: {dropped}")
         await browser.close()
     return saved
 
