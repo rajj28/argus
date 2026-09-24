@@ -6,13 +6,16 @@ from datetime import date, timedelta
 import pytest
 
 from argus import models
+from argus.config import Settings
 from argus.explore.explorer import heuristic_value, input_kind, pick_option
 from argus.explore.generator import (
     _deterministic_tests,
     _login_spec,
     atlas_digest,
+    propose,
     to_spec,
 )
+from argus.llm import prompts as P
 
 
 # --------------------------------------------------------------------------------------
@@ -275,10 +278,101 @@ def test_to_spec_none_when_no_valid_steps():
 
 
 # --------------------------------------------------------------------------------------
-# login + deterministic fallback
+# propose (offline fake LLM)
 # --------------------------------------------------------------------------------------
 
-def test_login_spec_built_from_login_state():
+class FakeLLM:
+    """Return canned responses in order; records each `json` call."""
+
+    def __init__(self, responses: list):
+        self.responses = list(responses)
+        self.calls: list[dict] = []
+
+    async def json(self, **kw) -> dict | str:
+        self.calls.append(kw)
+        if not self.responses:
+            raise AssertionError("FakeLLM exhausted its responses")
+        return self.responses.pop(0)
+
+
+def _propose_settings() -> Settings:
+    return Settings(home=Path("."), base_url="http://localhost:8000",
+                    build="1.0", llm_enabled=True)
+
+
+def test_propose_returns_wrapped_tests():
+    fp = make_fp(name="Save settings", attrs={"data-js": "save-settings-btn"})
+    st = state("S2", "/settings", "http://x/settings", elements=[el_entry("S2.e0", fp)])
+    llm = FakeLLM([{"tests": [{"name": "A", "goal": "…"},
+                              {"name": "B", "goal": "…"}]}])
+    out = asyncio.run(propose(_propose_settings(), atlas(st), llm))
+    assert [t["name"] for t in out] == ["A", "B"]
+    assert len(llm.calls) == 1
+    assert llm.calls[0]["tier"] == "smart"
+    assert llm.calls[0]["purpose"] == "generate"
+
+
+def test_propose_retries_on_fragment_then_succeeds():
+    fp = make_fp(name="New mission")
+    st = state("S1", "/dashboard", "http://x/dashboard", elements=[el_entry("S1.e0", fp)])
+    llm = FakeLLM([{"el": "S0.e0", "action": "fill"},   # truncated fragment: no tests wrapper
+                   {"tests": [{"name": "plan", "goal": "…"}]}])
+    out = asyncio.run(propose(_propose_settings(), atlas(st), llm))
+    assert [t["name"] for t in out] == ["plan"]
+    assert len(llm.calls) == 2
+    assert "was NOT a single" in llm.calls[1]["user"]
+
+
+def test_propose_gives_up_after_three_bad_attempts():
+    fp = make_fp(name="Thing")
+    st = state("S2", "/things", "http://x/things", elements=[el_entry("S2.e0", fp)])
+    llm = FakeLLM([{}, {"foo": 1}, '{"broken json":'])
+    out = asyncio.run(propose(_propose_settings(), atlas(st), llm))
+    assert out == []
+    assert len(llm.calls) == 3
+
+
+def test_propose_parses_string_json_response():
+    fp = make_fp(name="Thing")
+    st = state("S2", "/things", "http://x/things", elements=[el_entry("S2.e0", fp)])
+    llm = FakeLLM(['```json\n{"tests": [{"name": "wrapped", "goal": "…"}]}\n```'])
+    out = asyncio.run(propose(_propose_settings(), atlas(st), llm))
+    assert [t["name"] for t in out] == ["wrapped"]
+
+
+def test_generate_user_format_keeps_placeholders_and_escapes_braces():
+    user = P.GENERATE_USER.format(product="SkyOps rules", atlas="S1 /dashboard")
+    assert '{"kind":"url_matches"' in user          # dict-literal braces double-escaped
+    assert "${unique}" in user                      # ${unique} survives .format()
+    assert "${vars.mission_name}" in user
+    assert "${creds.user}" in P.GENERATE_SYSTEM and "${creds.password}" in P.GENERATE_SYSTEM
+    assert "{{" not in user                         # no residual double-braces
+    assert "{product}" not in user and "{atlas}" not in user
+
+
+def test_to_spec_keeps_element_state_oracle_with_rule_ref():
+    disabled = make_fp(role="radio", name="Hawk-7 — Battery too low", tag="input",
+                       attrs={"type": "radio"})
+    next_fp = make_fp(name="Next")
+    st = state("S7", "/missions/new", "http://x/missions/new",
+               elements=[el_entry("S7.e0", disabled), el_entry("S7.e1", next_fp)])
+    a = atlas(st)
+    raw = {
+        "name": "Low-battery drone is disabled", "goal": "R2", "tags": ["negative"],
+        "steps": [{"el": "S7.e0", "action": "click", "intent": "Never interact"},
+                  {"el": "S7.e1", "action": "click", "intent": "Next"}],
+        "oracles": [{"kind": "element_state",
+                     "params": {"fingerprint": disabled.model_dump(mode="json"),
+                                "enabled": False},
+                     "description": "drone radio stays disabled", "rule_ref": "R2"}],
+    }
+    spec = to_spec(raw, a, 0)
+    assert spec is not None
+    o = spec.oracles[0]
+    assert o.kind == "element_state"
+    assert o.rule_ref == "R2"
+    assert o.params["enabled"] is False
+    assert o.params["fingerprint"]["name"] == "Hawk-7 — Battery too low"
     email = make_fp(tag="input", role="textbox", name="Email address",
                     attrs={"type": "email"})
     pw = make_fp(tag="input", role="textbox", name="Password", attrs={"type": "password"})
