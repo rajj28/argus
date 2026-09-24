@@ -23,7 +23,8 @@
       {"intent": "Confirm the Price (low to high) sort", "action": "press", "find": {"role": "combobox", "name": "price (low to high)"}, "value": "Enter"}
     ],
     "oracles": [
-      {"kind": "text_visible", "params": {"text": "Sauce Labs Onesie"}, "description": "The catalogue list is populated", "rule_ref": "R2"}
+      {"kind": "text_visible", "params": {"text": "Sauce Labs Onesie"}, "description": "The catalogue list is populated", "rule_ref": "R2"},
+      {"kind": "value_equals", "params": {"find": {"role": "combobox", "name": "Sort products"}, "value": "lohi"}, "description": "The sort dropdown actually selected Price (low to high)", "rule_ref": "R2"}
     ]
   },
   {
