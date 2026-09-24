@@ -13,3 +13,4 @@ __pycache__/
 *.log
 node_modules/
 .logs/
+.argus*/auth/
