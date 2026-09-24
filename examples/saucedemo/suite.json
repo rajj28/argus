@@ -17,7 +17,10 @@
     "goal": "The shopper sorts the catalogue by Price (low to high)", "start_url": "/",
     "steps": [
       {"intent": "Open the Products catalogue", "action": "goto", "value": "/inventory.html"},
-      {"intent": "Sort products by Price (low to high)", "action": "select", "find": {"role": "combobox", "name": "price (low to high)"}, "value": "Price (low to high)"}
+      {"intent": "Open the sort options", "action": "click", "find": {"role": "combobox", "name": "price (low to high)"}},
+      {"intent": "Move the sort selection to the Price (low to high) option", "action": "press", "find": {"role": "combobox", "name": "price (low to high)"}, "value": "ArrowDown"},
+      {"intent": "Move the sort selection to the Price (low to high) option", "action": "press", "find": {"role": "combobox", "name": "price (low to high)"}, "value": "ArrowDown"},
+      {"intent": "Confirm the Price (low to high) sort", "action": "press", "find": {"role": "combobox", "name": "price (low to high)"}, "value": "Enter"}
     ],
     "oracles": [
       {"kind": "text_visible", "params": {"text": "Sauce Labs Onesie"}, "description": "The catalogue list is populated", "rule_ref": "R2"}

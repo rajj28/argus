@@ -9,8 +9,13 @@ from __future__ import annotations
 import re
 from typing import Any, Optional
 
+from playwright.async_api import async_playwright
+
+from argus.browser.effects import EffectRecorder, wait_for_settle
 from argus.browser.snapshot import take_snapshot
+from argus.memory.store import Memory
 from argus.models import Assertion, ElementInfo, Fingerprint, PageSnapshot, Step, TestChange, TestSpec
+from argus.runner.runner import RunContext, _act, ensure_auth, record_baseline
 
 
 def find_element(snap: PageSnapshot, find: dict[str, Any]) -> Optional[ElementInfo]:
@@ -51,12 +56,6 @@ def spec_from_dict(d: dict[str, Any]) -> TestSpec:
 
 async def author(settings: Any, specs: list[dict[str, Any]], log=print) -> list[TestSpec]:
     """Resolve each semantic step on the live app, then freeze the baseline via record_baseline."""
-    from playwright.async_api import async_playwright
-
-    from argus.browser.effects import EffectRecorder, wait_for_settle
-    from argus.memory.store import Memory
-    from argus.runner.runner import RunContext, _act, ensure_auth, record_baseline
-
     memory = Memory(settings.home)
     run_id, run_dir = memory.new_run_dir()
     ctx = RunContext(settings, memory, None, run_id, run_dir)
@@ -87,6 +86,13 @@ async def author(settings: Any, specs: list[dict[str, Any]], log=print) -> list[
                     await rec.begin()
                     await page.mouse.click(box["x"] + x, box["y"] + y)
                     await rec.end()
+                    continue
+                # Steps that act on the page without a DOM target
+                if s["action"] == "wait":
+                    await page.wait_for_timeout(int(s.get("value") or 500))
+                    continue
+                if s["action"] == "press" and not s.get("find"):
+                    await page.keyboard.press(s.get("value") or "Enter")
                     continue
                 snap = await take_snapshot(page)
                 el = find_element(snap, s["find"])

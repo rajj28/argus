@@ -196,13 +196,18 @@ class LLMClient:
         self._used_calls = 0
         self._last_error = ""
         self._sleep = asyncio.sleep
-        self._client = AsyncOpenAI(
-            base_url=settings.llm_base_url,
-            api_key=settings.api_key,
-            timeout=_TIMEOUT_S,
-            default_headers={"HTTP-Referer": "https://github.com/argus-qa", "X-Title": "Argus"},
-        )
-        self._clients: dict[str, AsyncOpenAI] = {"openrouter": self._client}
+        # Build the default OpenRouter client only when a key is present; otherwise leave it
+        # None so _client_for("openrouter") returns None and the fallback chain skips it.
+        if settings.api_key:
+            self._client = AsyncOpenAI(
+                base_url=settings.llm_base_url,
+                api_key=settings.api_key,
+                timeout=_TIMEOUT_S,
+                default_headers={"HTTP-Referer": "https://github.com/argus-qa", "X-Title": "Argus"},
+            )
+        else:
+            self._client = None
+        self._clients: dict[str, AsyncOpenAI | None] = {"openrouter": self._client}
 
     def _client_for(self, provider: str) -> AsyncOpenAI | None:
         """One OpenAI-compatible client per provider, created lazily when its key is present."""

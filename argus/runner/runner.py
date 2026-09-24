@@ -200,6 +200,8 @@ async def _execute(ctx: RunContext, page: Any, rec: EffectRecorder, st: _Exec, s
     el = res.element
     value = ctx.value_for(step) if step.action in ("fill", "select", "press") else None
     ctx.naive_tokens += len(compact_for_llm(snap)) // 4 + 350
+    _DETACH_MARKERS = ("detached", "not attached", "element is not attached")
+
     await rec.begin()
     error = None
     try:
@@ -209,6 +211,19 @@ async def _execute(ctx: RunContext, page: Any, rec: EffectRecorder, st: _Exec, s
         await _act(page, handle, step.action, value)
     except Exception as exc:
         error = str(exc).splitlines()[0][:200]
+        # Retry once if the element was detached between snapshot and action (e.g. React re-render)
+        if any(m in error.lower() for m in _DETACH_MARKERS):
+            try:
+                fresh_snap = await take_snapshot(page)
+                retry_res = await resolve(fresh_snap, step, ctx.weights, None, ctx.settings)
+                if retry_res.found:
+                    el = retry_res.element
+                    handle = await element_handle(page, el.ref)
+                    if handle is not None:
+                        await _act(page, handle, step.action, value)
+                        error = None   # retry succeeded
+            except Exception as retry_exc:
+                error = str(retry_exc).splitlines()[0][:200]
     eff = await rec.end()
     st.calls.extend(eff.network)
     if step.save_as and value is not None:
@@ -618,6 +633,14 @@ async def run_test(test: TestSpec, ctx: RunContext, browser: Browser, auth_state
                 result.observations[-1].evidence["screenshot"] = rel
             except Exception:
                 pass
+    except Exception as _unexpected:
+        # Catch-all: any unexpected exception during the step loop becomes an INFRA verdict so
+        # the suite can continue with the next test instead of propagating a crash.
+        result.status = "error"
+        result.verdict = Verdict(
+            category="INFRA", confidence=0.9,
+            rationale=f"Unexpected error during test execution: {_unexpected}"[:300],
+        )
     finally:
         result.steps = st.results
         await _save_trace(context, ctx, test, result)
@@ -842,7 +865,18 @@ async def run_suite(settings: Settings, *, test_ids: Optional[list[str]] = None,
         try:
             auth_state = await ensure_auth(browser, ctx) if any(t.requires_login for t in tests) else None
             for test in tests:
-                res = await run_test(test, ctx, browser, auth_state, update=update)
+                try:
+                    res = await run_test(test, ctx, browser, auth_state, update=update)
+                except Exception as exc:
+                    # run_test itself crashed (e.g. browser context gone); record INFRA and continue.
+                    res = TestResult(
+                        test_id=test.id, test_name=test.name, test_version=test.version,
+                        status="error",
+                        verdict=Verdict(
+                            category="INFRA", confidence=0.9,
+                            rationale=f"run_test raised an unexpected exception: {exc}"[:300],
+                        ),
+                    )
                 report.results.append(res)
                 if on_result:
                     on_result(res)
