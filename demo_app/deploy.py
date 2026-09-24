@@ -40,6 +40,14 @@ def call_admin(path: str, payload: dict, port: int = 8000) -> dict:
         return {}
 
 
+def deploy(version: str, port: int = 8000) -> None:
+    """Switch the running SkyOps to `version`, reset its data and publish that release's changelog."""
+    call_admin("/__admin/version", {"version": version}, port)
+    call_admin("/__admin/chaos", {"seed": None}, port)
+    call_admin("/__admin/reset", {}, port)
+    write_changelog(version)
+
+
 def main() -> None:
     if len(sys.argv) < 2:
         print("Usage: python -m demo_app.deploy <version>")

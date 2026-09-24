@@ -33,6 +33,145 @@ COLORS = {"PASS": "green", "COSMETIC_DRIFT": "cyan", "INTENDED_CHANGE": "blue", 
 TIER = {0: "replay", 1: "heal", 2: "reorder", 3: "llm-heal", 4: "replan", 5: "vision"}
 
 
+BANNER = r"""[bold cyan]
+     _    ____   ____ _   _ ____
+    / \  |  _ \ / ___| | | / ___|
+   / _ \ | |_) | |  _| | | \___ \
+  / ___ \|  _ <| |_| | |_| |___) |
+ /_/   \_\_| \_\\____|\___/|____/[/]  [dim]the tireless hand in the browser[/]
+"""
+
+
+@app.callback(invoke_without_command=True)
+def _main(ctx: typer.Context):
+    if ctx.invoked_subcommand is None:
+        console.print(BANNER)
+        console.print("  [bold]Quick start[/]\n"
+                      "  argus doctor                       check browser, app, LLM mesh\n"
+                      "  argus init --url URL --context DIR [--user U --password P]\n"
+                      "  argus explore && argus generate    build a suite for an app with no tests\n"
+                      "  argus run                          replay, self-heal, adapt, triage\n"
+                      "  argus dashboard                    Mission Control UI\n"
+                      "  argus demo                         the full on-stage showcase (SkyOps v1.0 -> v1.3)\n")
+
+
+@app.command()
+def models(home: str = HOME):
+    """Show the layered free-LLM mesh (layer 1 = JEV/OpenRouter, layer 2 = other free LLMs)."""
+    from argus.llm.providers import ORDER, PROVIDERS, api_key, available, ollama_models, split
+    s = load_settings(home)
+    avail = available()
+    table = Table("layer", "provider", "status", "free-tier rpm", "get a free key")
+    for name in ORDER:
+        p = PROVIDERS[name]
+        layer = "1 (primary)" if name == "openrouter" else ("offline" if name == "ollama" else "2 (main capacity)")
+        ok = name in avail
+        status = "[green]ready[/]" if ok else "[dim]not configured[/]"
+        if name == "ollama" and ok:
+            status = f"[green]ready[/] ({', '.join(ollama_models()[:2])})"
+        env = "/".join(p.key_envs) or "-"
+        table.add_row(layer, name, status, str(p.rpm), f"{env}  {p.signup}")
+    console.print(table)
+    for tier, chain in s.models.items():
+        console.print(f"[bold]{tier:<6}[/] " + " -> ".join(f"[cyan]{split(m)[0]}[/]:{split(m)[1]}" for m in chain))
+    console.print(f"LLM {'[green]enabled[/]' if s.llm_enabled else '[red]disabled[/]'}"
+                  "  (add keys to .env - they are never written anywhere else)")
+
+
+@app.command()
+def doctor(home: str = HOME):
+    """Preflight check: browser, app under test, LLM mesh, memory."""
+    import urllib.request
+    from argus.llm.providers import available
+    from argus.memory.store import Memory
+    s = load_settings(home)
+    console.print(BANNER)
+    rows = []
+    try:
+        from playwright.sync_api import sync_playwright
+        with sync_playwright() as pw:
+            b = pw.chromium.launch()
+            b.close()
+        rows.append(("Chromium (Playwright)", True, "launches headless"))
+    except Exception as exc:
+        rows.append(("Chromium (Playwright)", False, f"{exc}"[:80] + "  -> python -m playwright install chromium"))
+    try:
+        code = urllib.request.urlopen(s.base_url, timeout=4).status
+        rows.append(("App under test", True, f"{s.base_url} -> HTTP {code}"))
+    except Exception as exc:
+        rows.append(("App under test", False, f"{s.base_url} unreachable ({type(exc).__name__})"))
+    prov = available()
+    rows.append(("LLM mesh", bool(prov), " > ".join(prov) if prov else "no keys: set JEV_API / GEMINI_API_KEY / GROQ_API_KEY"))
+    rows.append(("Product context", bool(s.product_context()), str(s.context_dir or "not set (argus init --context)")))
+    m = Memory(s.home)
+    rows.append(("Memory", True, f"{len(m.list_tests(None))} tests, {len(m.list_runs())} runs in {s.home}"))
+    table = Table("check", "", "detail")
+    for name, ok, detail in rows:
+        table.add_row(name, "[green]OK[/]" if ok else "[red]FAIL[/]", detail)
+    console.print(table)
+
+
+@app.command()
+def demo(fresh: bool = typer.Option(True, help="Start from an empty memory"), llm: bool = True,
+         pause: bool = typer.Option(False, help="Wait for Enter between acts (for live presenting)"),
+         home: str = HOME):
+    """On-stage showcase on SkyOps: baseline -> refactor -> redesign -> buggy release."""
+    import shutil
+    import urllib.request
+    from argus.runner.author import author as _author
+    from argus.runner.runner import run_suite
+    s = load_settings(home)
+    if not llm:
+        s.llm_enabled = False
+
+    def deploy(version: str) -> None:
+        from urllib.parse import urlparse
+        from demo_app.deploy import deploy as _deploy
+        _deploy(version, urlparse(s.base_url).port or 80)
+
+    try:
+        urllib.request.urlopen(s.base_url, timeout=4)
+    except Exception:
+        console.print(f"[red]SkyOps is not running on {s.base_url}.[/] Start it: python -m demo_app.server --port 8000")
+        raise typer.Exit(1)
+    console.print(BANNER)
+    if fresh:
+        for sub in ("tests", "runs", "auth"):
+            shutil.rmtree(s.home / sub, ignore_errors=True)
+        (s.home / "knowledge.json").unlink(missing_ok=True)
+    acts = [
+        ("1.0", "Act 1 - Day zero: an app with no tests", "Argus authors a suite and freezes each step's contract."),
+        ("1.1", "Act 2 - Design-system refresh", "Every id renamed, classes hashed, test-ids gone, nav moved, labels reworded."),
+        ("1.2", "Act 3 - Mission planner v2", "Wizard reordered, new required field, Flight logs retired (all in the release notes)."),
+        ("1.3", "Act 4 - 'Performance improvements'", "Release notes say nothing else... but five regressions shipped."),
+    ]
+    board = []
+    for version, title, blurb in acts:
+        console.rule(f"[bold]{title}[/]  [dim]SkyOps v{version}[/]")
+        console.print(f"[dim]{blurb}[/]")
+        if pause:
+            input("  [Enter] to deploy ")
+        deploy(version)
+        s = load_settings(home)
+        if not llm:
+            s.llm_enabled = False
+        if version == "1.0":
+            specs = json.loads(Path("examples/skyops_suite.json").read_text(encoding="utf-8"))
+            asyncio.run(_author(s, specs, log=console.print))
+        report = asyncio.run(run_suite(s, label=f"demo v{version}", on_result=_print_result))
+        _summary(report)
+        board.append((version, report))
+    console.rule("[bold]Scoreboard[/]")
+    table = Table("release", "verdicts", "replayed", "healed", "LLM calls", "tokens avoided", "time")
+    for version, r in board:
+        t = r.totals
+        saved = max(0, t.naive_tokens_estimate - t.tokens_in - t.tokens_out)
+        table.add_row(f"v{version}", ", ".join(f"{k}:{v}" for k, v in t.verdicts.items()), str(t.replayed_steps),
+                      str(t.healed_steps), str(t.llm_calls), f"{saved:,}", f"{t.duration_ms / 1000:.0f}s")
+    console.print(table)
+    console.print("Open [bold]argus dashboard[/] for evidence, diffs and learned memory.")
+
+
 @app.command()
 def init(url: str = typer.Option(..., help="Base URL of the app under test"),
          context: Optional[Path] = typer.Option(None, help="Folder with PRODUCT.md / CHANGELOG.md"),
@@ -88,24 +227,25 @@ def run(label: str = "", test: Optional[list[str]] = typer.Option(None, "--test"
     if headed:
         s.headless = False
 
-    def on_result(r):
-        v = r.verdict
-        tiers = {}
-        for st in r.steps:
-            if st.tier is not None:
-                tiers[TIER.get(st.tier, st.tier)] = tiers.get(TIER.get(st.tier, st.tier), 0) + 1
-        calls = sum(1 for c in r.llm_calls if not c.cached)
-        extra = f" -> v{r.updated_to_version}" if r.updated_to_version else ""
-        console.print(f"[{COLORS.get(v.category, 'white')}]{v.category:<16}[/] {r.test_name:<42} "
-                      f"{tiers}  llm={calls}  {r.duration_ms / 1000:.1f}s{extra}")
-        if v.category not in ("PASS",):
-            console.print(f"      [dim]{v.rationale[:220]}[/]")
-        for q in v.changelog_refs[:2]:
-            console.print(f"      [blue]cites:[/] \"{q[:120]}\"")
-
     console.rule(f"[bold]Argus run[/] {label}")
-    report = asyncio.run(run_suite(s, test_ids=test, label=label, update=not no_update, on_result=on_result))
+    report = asyncio.run(run_suite(s, test_ids=test, label=label, update=not no_update, on_result=_print_result))
     _summary(report)
+
+
+def _print_result(r) -> None:
+    v = r.verdict
+    tiers = {}
+    for st in r.steps:
+        if st.tier is not None:
+            tiers[TIER.get(st.tier, st.tier)] = tiers.get(TIER.get(st.tier, st.tier), 0) + 1
+    calls = sum(1 for c in r.llm_calls if not c.cached)
+    extra = f" -> v{r.updated_to_version}" if r.updated_to_version else ""
+    console.print(f"[{COLORS.get(v.category, 'white')}]{v.category:<16}[/] {r.test_name:<42} "
+                  f"{tiers}  llm={calls}  {r.duration_ms / 1000:.1f}s{extra}")
+    if v.category not in ("PASS",):
+        console.print(f"      [dim]{v.rationale[:220]}[/]")
+    for q in v.changelog_refs[:2]:
+        console.print(f"      [blue]cites:[/] \"{q[:120]}\"")
 
 
 def _summary(report) -> None:
@@ -166,10 +306,12 @@ def approve(run_id: str, test_id: str, as_: str = typer.Option("intended", "--as
 
 
 @app.command()
-def gauntlet(trials: int = 6, bugs: bool = True, home: str = HOME):
+def gauntlet(trials: int = 6, bugs: bool = True, llm: bool = typer.Option(False, help="Allow LLM heals/triage "
+              "(off by default: shows what the deterministic core alone achieves)"), home: str = HOME):
     """Robustness benchmark: random UI mutations (must heal, no false bugs) + injected bugs (must catch)."""
     from argus.chaos.gauntlet import run_gauntlet
     s = load_settings(home)
+    s.llm_enabled = s.llm_enabled and llm
     asyncio.run(run_gauntlet(s, trials=trials, bugs=bugs, log=console.print))
 
 

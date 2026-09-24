@@ -61,12 +61,16 @@ class Settings(BaseModel):
     max_llm_calls_per_run: int = 30
     thresholds: Thresholds = Field(default_factory=Thresholds)
     viewport: dict[str, int] = Field(default_factory=lambda: {"width": 1280, "height": 800})
+    pending_change: str = Field(default="", exclude=True)   # intent of an unreleased change (PR / agent)
 
     def product_context(self) -> str:
         return _read(self.context_dir, "PRODUCT.md")
 
     def changelog(self) -> str:
-        return _read(self.context_dir, "CHANGELOG.md")
+        notes = _read(self.context_dir, "CHANGELOG.md")
+        if self.pending_change:
+            notes = "## Pending change (PR / coding agent)" + chr(10) + self.pending_change + chr(10) * 2 + notes
+        return notes
 
     def save(self) -> None:
         self.home.mkdir(parents=True, exist_ok=True)
