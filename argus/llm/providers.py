@@ -29,7 +29,9 @@ PROVIDERS: dict[str, Provider] = {
     "openrouter": Provider(
         "openrouter", "https://openrouter.ai/api/v1", ("OPENROUTER_API_KEY", "JEV_API"), 18,
         {"fast": ("nvidia/nemotron-3-super-120b-a12b:free", "qwen/qwen3.8-27b:free"),
-         "smart": ("nvidia/nemotron-3-ultra-550b-a55b:free", "nex-agi/nex-n2.5-pro:free"),
+         # the 550B "ultra" is strongest but slow on long prompts (>25s); the 120B answers in ~1s
+         "smart": ("nvidia/nemotron-3-super-120b-a12b:free", "nex-agi/nex-n2.5-pro:free",
+                   "qwen/qwen3.8-27b:free", "nvidia/nemotron-3-ultra-550b-a55b:free"),
          "vision": ("qwen/qwen3.8-27b:free", "google/gemma-4-31b-it:free")},
         "https://openrouter.ai/keys"),
     "gemini": Provider(

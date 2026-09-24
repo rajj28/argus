@@ -27,8 +27,9 @@ def write_changelog(version: str) -> None:
     print(f"Wrote {CHANGELOG_PATH}")
 
 
-def call_admin(path: str, payload: dict, port: int = 8000) -> dict:
-    url = f"http://127.0.0.1:{port}{path}"
+def call_admin(path: str, payload: dict, port: int | str = 8000) -> dict:
+    base = port if isinstance(port, str) else f"http://127.0.0.1:{port}"
+    url = f"{base.rstrip('/')}{path}"
     data = json.dumps(payload).encode("utf-8")
     req = urllib.request.Request(url, data=data, method="POST",
                                   headers={"Content-Type": "application/json"})
@@ -40,7 +41,7 @@ def call_admin(path: str, payload: dict, port: int = 8000) -> dict:
         return {}
 
 
-def deploy(version: str, port: int = 8000) -> None:
+def deploy(version: str, port: int | str = 8000) -> None:
     """Switch the running SkyOps to `version`, reset its data and publish that release's changelog."""
     call_admin("/__admin/version", {"version": version}, port)
     call_admin("/__admin/chaos", {"seed": None}, port)

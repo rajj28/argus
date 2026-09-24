@@ -40,13 +40,21 @@ def deviation_signature(test_id: str, observations: list[Observation]) -> str:
     return hashlib.sha1((test_id + "\n" + "\n".join(parts)).encode("utf-8")).hexdigest()[:16]
 
 
+def _plain(s: str) -> str:
+    """Normalise away markdown/typography so a quote matches regardless of **bold**, `code`, dashes."""
+    s = re.sub(r"[*_`#>]+", "", s or "")
+    s = s.replace("→", "->").replace("—", "-").replace("–", "-")
+    return _norm(s)
+
+
 def verify_quotes(quotes: list[str], changelog: str) -> list[str]:
-    """Keep only quotes that literally occur in the changelog (anti-hallucination guard)."""
-    hay = _norm(changelog)
+    """Keep only quotes that (near-)verbatim occur in the changelog (anti-hallucination guard)."""
+    from rapidfuzz import fuzz
+    hay = _plain(changelog)
     ok = []
     for q in quotes or []:
-        nq = _norm(q).strip(" .")
-        if len(nq) >= 12 and nq in hay:
+        nq = _plain(q).strip(" .")
+        if len(nq) >= 12 and (nq in hay or fuzz.partial_ratio(nq, hay) >= 92):
             ok.append(q)
     return ok
 
@@ -178,6 +186,8 @@ async def _llm_judge(test: TestSpec, result: TestResult, obs: list[Observation],
     quotes = verify_quotes([str(q) for q in data.get("changelog_refs", []) or []], changelog)
     evidence = [str(e) for e in data.get("evidence_refs", []) or []][:8]
 
+    if cat == "INTENDED_CHANGE" and any(o.kind == "goal_unreachable" for o in obs):
+        cat = "FEATURE_REMOVED"  # intended, but the journey no longer exists: retire rather than update
     if cat in {"INTENDED_CHANGE", "FEATURE_REMOVED"} and (conf < 0.7 or not quotes):
         why = "no verbatim changelog citation" if not quotes else f"confidence {conf:.2f} < 0.70"
         return _verdict("NEEDS_REVIEW", conf, f"Judge suggested {cat} but {why}. {rationale}",

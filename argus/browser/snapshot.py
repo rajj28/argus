@@ -160,6 +160,10 @@ def compact_for_llm(
                 break
         if not e.enabled:
             useful_attrs.append("disabled")
+        if "required" in e.attrs:
+            useful_attrs.append("required")
+        if e.editable and not e.attrs.get("value"):
+            useful_attrs.append("empty")
         if not e.interactive:
             useful_attrs.append("anchor")
 

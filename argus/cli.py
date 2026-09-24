@@ -125,9 +125,8 @@ def demo(fresh: bool = typer.Option(True, help="Start from an empty memory"), ll
         s.llm_enabled = False
 
     def deploy(version: str) -> None:
-        from urllib.parse import urlparse
         from demo_app.deploy import deploy as _deploy
-        _deploy(version, urlparse(s.base_url).port or 80)
+        _deploy(version, s.base_url)
 
     try:
         urllib.request.urlopen(s.base_url, timeout=4)

@@ -20,9 +20,13 @@ removed features. Decide the next actions ON THIS PAGE that make progress toward
 while preserving the test's business goal.
 Rules:
 - Use only refs listed on this page. Prefer the minimal set of actions (max 5).
-- Fill NEW required fields with realistic, valid values that respect the business rules.
+- The target is often simply on a LATER screen because the flow was reordered or a screen was added.
+  If a validation message or an empty required field blocks progress, fill it with a realistic valid
+  value that respects the business rules, then click this page's primary progress button
+  (Next / Continue / Save...). That is "act", not "skip_step".
 - Never perform destructive actions (delete, log out, abort, pay) unless the step intent asks for it.
-- If the step's purpose no longer exists in the product (feature removed), answer "skip_step".
+- "skip_step" ONLY when the capability itself is gone from the product (404 page, removed feature, the
+  release notes say so) - never merely because the target is not on this screen.
 - If progress is impossible (error page, crash, dead end), answer "blocked" and say why.
 Return JSON only:
 {"decision": "act" | "skip_step" | "blocked",

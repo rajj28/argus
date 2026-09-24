@@ -1,0 +1,70 @@
+# docker-compose.yml — Argus sandbox stress-test environment
+# Both services share an isolated internal network (no outbound internet).
+#
+# Usage:
+#   docker compose -f sandbox/docker-compose.yml up --build --abort-on-container-exit
+#   TRIALS=3 docker compose -f sandbox/docker-compose.yml up --build --abort-on-container-exit
+#
+# Results land in sandbox/out/ on the host.
+
+services:
+
+  # ─── SkyOps demo application ──────────────────────────────────────────────
+  skyops:
+    build:
+      context: ..            # repo root (respects ../.dockerignore)
+      dockerfile: sandbox/Dockerfile
+    # Override the default entrypoint to run only the SkyOps server
+    entrypoint: ["python", "-m", "demo_app.server", "--host", "0.0.0.0", "--port", "8000"]
+    # NOTE: port 8000 is NOT published to the host — only reachable inside the
+    # sandbox network.  The host's port 8000 (another demo server) is left alone.
+    expose:
+      - "8000"
+    networks:
+      - sandbox-net
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: "2g"
+    restart: "no"
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import urllib.request; urllib.request.urlopen('http://localhost:8000/login', timeout=3)"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+  # ─── Argus stress-test runner ─────────────────────────────────────────────
+  argus:
+    build:
+      context: ..
+      dockerfile: sandbox/Dockerfile
+    # Default entrypoint (/app/sandbox/stress.sh) is used here
+    depends_on:
+      skyops:
+        condition: service_healthy
+    environment:
+      # Tell Argus where SkyOps lives inside the sandbox network
+      - ARGUS_LLM=off
+      - TRIALS=${TRIALS:-10}
+    networks:
+      - sandbox-net
+    volumes:
+      # Results are written to /out inside the container; the host reads them from sandbox/out/
+      - type: bind
+        source: ./out
+        target: /out
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: "2g"
+    restart: "no"
+
+# ─── Isolated network (no internet access) ──────────────────────────────────
+networks:
+  sandbox-net:
+    driver: bridge
+    internal: true

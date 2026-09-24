@@ -24,7 +24,8 @@ from argus.models import LLMCallRecord
 
 Tier = Literal["fast", "smart", "vision"]
 
-_TIMEOUT_S = 60.0
+_TIMEOUT_S = 25.0
+_CALL_DEADLINE_S = 75.0          # hard ceiling for one json() decision across all fallbacks
 _MAX_ATTEMPTS_PER_MODEL = 3
 _BACKOFF_SECONDS = (1.0, 2.0, 4.0)
 _CACHE_DIR = "llm_cache"
@@ -34,6 +35,8 @@ _RATE_MAX = 18
 _RATE_WINDOW_S = 60.0
 _request_ts: list[float] = []            # OpenRouter window (kept for backwards compatibility)
 _provider_ts: dict[str, list[float]] = {"openrouter": _request_ts}
+_exhausted: dict[str, str] = {}          # provider -> reason: daily quota gone, skip it for this process
+_QUOTA_MARKERS = ("per-day", "per day", "daily", "quota", "insufficient credits", "monthly")
 
 
 class LLMUnavailable(Exception):
@@ -288,7 +291,11 @@ class LLMClient:
         max_tokens: int,
     ) -> _CallResult:
         messages = _build_messages(system, user, images)
+        deadline = time.monotonic() + _CALL_DEADLINE_S
         for model in models:
+            if time.monotonic() > deadline:
+                self._last_error = f"decision deadline of {_CALL_DEADLINE_S:.0f}s exceeded"
+                break
             result = await self._try_one_model(model, messages, max_tokens, tier=tier)
             if result is not None:
                 return result
@@ -300,6 +307,9 @@ class LLMClient:
         self, model: str, messages: list[dict[str, Any]], max_tokens: int, *, tier: Tier
     ) -> _CallResult | None:
         provider, model_id = split(model)
+        if provider in _exhausted:
+            self._last_error = f"{provider} skipped: {_exhausted[provider]}"
+            return None
         client = self._client_for(provider)
         if client is None:
             self._last_error = f"provider {provider!r} not configured"
@@ -319,16 +329,24 @@ class LLMClient:
                 }
                 if use_json:
                     kwargs["response_format"] = {"type": "json_object"}
-                if tier == "fast" and provider == "openrouter":
+                if provider == "openrouter":
+                    # free reasoning models otherwise "think" for minutes; keep every tier snappy
                     kwargs["extra_body"] = {"reasoning": {"effort": "low", "exclude": True}}
                 resp = await client.chat.completions.create(**kwargs)
             except Exception as exc:  # noqa: BLE001 - any provider/transport error
                 status = _error_status(exc)
                 self._last_error = f"{type(exc).__name__}: {exc}"
+                self._log_error(model, time.monotonic() - t0, self._last_error)
                 if status == 400 and use_json:
                     use_json = False  # provider rejects json_object; retry without it
                     continue
-                retriable = status is None or status == 429 or (isinstance(status, int) and status >= 500)
+                if status in (402, 429) and any(m in str(exc).lower() for m in _QUOTA_MARKERS):
+                    # account-wide quota: every model of this provider will fail - open the circuit
+                    _exhausted[provider] = "daily/monthly free quota exhausted"
+                    return None
+                if "timeout" in type(exc).__name__.lower():
+                    return None  # slow model: move on to the next one instead of waiting again
+                retriable = status == 429 or (isinstance(status, int) and status >= 500)
                 if retriable and attempt < _MAX_ATTEMPTS_PER_MODEL:
                     await self._sleep(_BACKOFF_SECONDS[attempt - 1])
                     continue
@@ -348,6 +366,16 @@ class LLMClient:
                 latency_ms=latency_ms,
             )
         return None
+
+    def _log_error(self, model: str, seconds: float, error: str) -> None:
+        """Append provider failures to .argus/llm_errors.log (diagnostics; never contains keys)."""
+        try:
+            path = Path(self.settings.home) / "llm_errors.log"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            with path.open("a", encoding="utf-8") as fh:
+                fh.write(f"{time.strftime('%H:%M:%S')} {model} {seconds:.1f}s {error[:300]}" + chr(10))
+        except OSError:
+            pass
 
     # ------------------------------------------------------------------ cache
     def _cache_path(self, key: str) -> Path:
