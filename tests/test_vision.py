@@ -229,6 +229,64 @@ async def test_vlm_null_mark_returns_none(browser):
 
 
 @pytest.mark.asyncio
+async def test_visual_heal_persisted(browser):
+    """After a tier>0 heal the new VisualMark must let the next locate call hit V0 (tier 0).
+
+    This is the unit-level proof for the 'visual heal persistence' fix in _execute_visual:
+    - Capture mark on the base layout (V0 baseline).
+    - Navigate to a panned layout so V0 misses and locate() uses V1/V2 (tier >= 1).
+    - Re-capture the mark at the hit point (same as _execute_visual does after the fix).
+    - Verify the fresh mark: its center_norm encodes the *new* canvas position.
+    - Verify that locate() on the SAME panned page using the fresh mark returns tier 0.
+    """
+    page = await _open(browser)
+    try:
+        # --- step 1: baseline capture ---
+        mark_v0 = await _capture_falcon(page)
+
+        # --- step 2: navigate to a panned layout so V0 misses ---
+        await page.goto(_url(shift=40))
+        v0_result = await cached(page, mark_v0)
+        assert v0_result is None, "V0 must miss after pan so the test is valid"
+
+        # --- step 3: locate() falls through to V1/V2 ---
+        hit = await locate(page, mark_v0)
+        assert hit is not None, "locate() must still find the marker via template/multiscale"
+        assert hit["tier"] >= 1, f"expected tier>=1 after pan, got {hit['tier']}"
+
+        # --- step 4: re-capture at the hit point (mirrors _execute_visual after the fix) ---
+        bbox = await page.locator(mark_v0.canvas_selector).bounding_box()
+        assert bbox is not None
+        canvas_x = hit["x"] - bbox["x"]
+        canvas_y = hit["y"] - bbox["y"]
+        fresh_mark = await capture_mark(
+            page, mark_v0.canvas_selector, canvas_x, canvas_y,
+            mark_v0.hint, size=mark_v0.crop_size or 64,
+        )
+
+        # --- step 5: the fresh mark must encode the new canvas position ---
+        drone = await _drone(page, DRONE_ID)
+        assert fresh_mark.center_norm[0] * fresh_mark.bbox[2] == pytest.approx(drone["x"], abs=8)
+        assert fresh_mark.center_norm[1] * fresh_mark.bbox[3] == pytest.approx(drone["y"], abs=8)
+
+        # the fresh mark must differ from the original (the drone moved)
+        original_cx = mark_v0.center_norm[0] * mark_v0.bbox[2]
+        fresh_cx = fresh_mark.center_norm[0] * fresh_mark.bbox[2]
+        assert abs(fresh_cx - original_cx) > 2, (
+            "recaptured mark center_norm must differ from original after pan"
+        )
+
+        # --- step 6: using the fresh mark, the next locate() must return tier 0 (V0) ---
+        r_v0 = await locate(page, fresh_mark)
+        assert r_v0 is not None, "locate() with fresh mark must find the marker"
+        assert r_v0["tier"] == 0, (
+            f"next run must be pure tier-0 replay after a heal; got tier={r_v0['tier']}"
+        )
+    finally:
+        await page.close()
+
+
+@pytest.mark.asyncio
 async def test_template_robust_to_pan(browser):
     """V1/V2 must succeed even when the map is panned (background pixels in the crop change).
 

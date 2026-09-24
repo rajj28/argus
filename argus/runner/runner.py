@@ -307,13 +307,39 @@ async def _complete_required(ctx: RunContext, page: Any, rec: EffectRecorder, st
 
 
 async def _execute_visual(ctx: RunContext, page: Any, rec: EffectRecorder, st: "_Exec", step: Step) -> bool:
-    """Canvas/map target: locate the VisualMark (cached coords -> template -> multiscale -> VLM) and click."""
+    """Canvas/map target: locate the VisualMark (cached coords -> template -> multiscale -> VLM) and click.
+
+    When locate() returns tier > 0 (the mark had to be re-found by template/multiscale/VLM), we
+    re-capture the mark at the new hit point so that _apply_verdict can persist the updated
+    VisualMark into the plan after a verified run.  Next run will then hit V0 (tier 0) from the
+    freshly-captured crop/phash/center_norm instead of re-running the full cascade.
+    """
     from argus.vision.locate import locate
-    from argus.vision.marks import VisualMark
+    from argus.vision.marks import VisualMark, capture_mark
     t0 = time.perf_counter()
-    hit = await locate(page, VisualMark(**step.visual), ctx.llm)
+    old_mark = VisualMark(**step.visual)
+    hit = await locate(page, old_mark, ctx.llm)
     if hit is None:
         return False
+
+    # When the mark was healed (tier > 0), re-capture it at the new page position so that
+    # _apply_verdict can persist the up-to-date VisualMark into the compiled plan.
+    new_visual: dict = step.visual  # default: keep original if recapture fails
+    if hit["tier"] != 0:
+        try:
+            canvas_selector = old_mark.canvas_selector
+            # hit["x"]/hit["y"] are page coordinates; convert to canvas-relative coords
+            bbox = await page.locator(canvas_selector).bounding_box()
+            if bbox is not None:
+                canvas_x = hit["x"] - bbox["x"]
+                canvas_y = hit["y"] - bbox["y"]
+                hint = old_mark.hint
+                fresh = await capture_mark(page, canvas_selector, canvas_x, canvas_y,
+                                           hint, size=old_mark.crop_size or 64)
+                new_visual = fresh.model_dump()
+        except Exception:
+            pass  # non-fatal: worst case next run re-heals again
+
     await rec.begin()
     await page.mouse.click(hit["x"], hit["y"])
     eff = await rec.end()
@@ -329,7 +355,9 @@ async def _execute_visual(ctx: RunContext, page: Any, rec: EffectRecorder, st: "
     st.results.append(StepResult(step_id=step.id, intent=step.intent, status="passed" if tier == 0 else "healed",
                                  tier=tier, score=float(hit["confidence"]), screenshot=shot, observations=obs,
                                  duration_ms=int((time.perf_counter() - t0) * 1000), effects=eff))
-    st.trace.append((step.model_copy(update={"expect": expect_from_effects(eff, ctx.vars)}), "orig"))
+    # Carry the (possibly recaptured) VisualMark on the trace step so _apply_verdict can persist it.
+    st.trace.append((step.model_copy(update={"visual": new_visual,
+                                             "expect": expect_from_effects(eff, ctx.vars)}), "orig"))
     st.done.append(f"{len(st.done) + 1}. {step.intent}")
     return True
 
@@ -618,8 +646,18 @@ def _apply_verdict(test: TestSpec, result: TestResult, st: _Exec, ctx: RunContex
     v = result.verdict
     mem = ctx.memory
     if v.category == "COSMETIC_DRIFT":
+        # Build a lookup of updated targets AND updated visuals from the trace.
+        # _execute_visual places a fresh VisualMark on the trace step when tier > 0,
+        # so new_visuals carries the healed canvas mark that must replace the old one.
         new_targets = {s.id: s.target for s, origin in st.trace if origin == "orig"}
-        steps = [s.model_copy(update={"target": new_targets.get(s.id, s.target)}) for s in test.steps]
+        new_visuals = {s.id: s.visual for s, origin in st.trace if origin == "orig" and s.visual is not None}
+        steps = [
+            s.model_copy(update={
+                "target": new_targets.get(s.id, s.target),
+                "visual": new_visuals.get(s.id, s.visual),
+            })
+            for s in test.steps
+        ]
         for old, new in st.healed:
             mem.learn_from_heal(old, new)
         n = len(st.healed)
@@ -629,6 +667,7 @@ def _apply_verdict(test: TestSpec, result: TestResult, st: _Exec, ctx: RunContex
             verdict_ref=ctx.run_id), build=ctx.settings.build)
         result.updated_to_version = saved.version
     elif v.category == "INTENDED_CHANGE":
+        # st.trace steps already carry the updated target + visual (set by _execute and _execute_visual).
         steps = [s for s, _ in st.trace]
         for old, new in st.healed:
             mem.learn_from_heal(old, new)
