@@ -12,3 +12,4 @@ __pycache__/
 .argus/llm_cache/
 *.log
 node_modules/
+.logs/

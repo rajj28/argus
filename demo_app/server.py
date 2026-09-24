@@ -88,6 +88,26 @@ async def api_logout():
 # ---------------------------------------------------------------------------
 
 
+MAP_POS = {"d1": (0.22, 0.30), "d2": (0.64, 0.24), "d3": (0.40, 0.66), "d4": (0.80, 0.58),
+           "d5": (0.18, 0.78), "d6": (0.58, 0.44)}
+
+
+@app.get("/map", response_class=HTMLResponse)
+async def live_map(request: Request, session: Optional[str] = Cookie(default=None)):
+    """Canvas-only fleet map (no DOM per drone) - the kind of UI where DOM-based testers go blind."""
+    if not _is_auth(session):
+        return RedirectResponse("/login", status_code=302)
+    refreshed = app_state.version >= "1.1"          # the design refresh pans + zooms the map
+    view = {"dx": 70, "dy": -35, "zoom": 1.12} if refreshed else {"dx": 0, "dy": 0, "zoom": 1.0}
+    if app_state.chaos_seed is not None:
+        seed = int(app_state.chaos_seed)
+        view = {"dx": (seed * 37) % 120 - 60, "dy": (seed * 53) % 80 - 40, "zoom": 1.0 + ((seed % 5) - 2) * 0.05}
+    markers = [{"id": d["id"], "name": d["name"], "battery": d["battery"], "status": d["status"],
+                "x": MAP_POS.get(d["id"], (0.5, 0.5))[0], "y": MAP_POS.get(d["id"], (0.5, 0.5))[1]}
+               for d in app_state.get_drones()]
+    return _tmpl(request, "map.html", {"markers": markers, "view": view})
+
+
 @app.get("/dashboard", response_class=HTMLResponse)
 async def dashboard(request: Request, session: Optional[str] = Cookie(default=None)):
     if not _is_auth(session):

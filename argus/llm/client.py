@@ -329,7 +329,7 @@ class LLMClient:
                 }
                 if use_json:
                     kwargs["response_format"] = {"type": "json_object"}
-                if provider == "openrouter":
+                if provider in ("openrouter", "openrouter2"):
                     # free reasoning models otherwise "think" for minutes; keep every tier snappy
                     kwargs["extra_body"] = {"reasoning": {"effort": "low", "exclude": True}}
                 resp = await client.chat.completions.create(**kwargs)

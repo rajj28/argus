@@ -49,8 +49,11 @@ Overview (item total, tax 8%, total) → **Finish** → Confirmation ("Thank you
 
 ## Notes for automated agents
 
-- The store requires sign-in before any other page; unauthenticated requests are redirected to the
-  sign-in page at `/`.
+- The store requires sign-in before any other page; unauthenticated access to a deep link
+  (e.g. `/inventory.html`) returns an HTTP **404** page with a "must be logged in" sad-face
+  message (it does **not** redirect). Full-page reloads that the server answers also return
+  status **404** even when authenticated, while still rendering the correct content — so a
+  test must start on the sign-in page at `/` (HTTP 200) and sign in there.
 - The cart header link is a client-side (non-href) navigation target; use the cart URL
   `/cart.html` directly.
 - Displayed prices on the inventory page come from the live catalogue; the cart page re-prices items.

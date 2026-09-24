@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Diff - Argus{% endblock %}
+{% block content %}
+<h1 class="page-title">Differential run <span class="dim">(no changelog, no LLM)</span></h1>
+{% if present %}
+<div class="meta-line">
+  <span class="mono">baseline: {{ baseline }}</span>
+  <span class="mono">candidate: {{ candidate }}</span>
+  {% if runs.baseline %}<span class="mono">runs: {{ runs.baseline }} vs {{ runs.candidate }}</span>{% endif %}
+</div>
+<section class="card">
+  <h2>Verdict summary</h2>
+  <div class="kpis">
+    {% for s in summary %}
+    <div class="kpi"><div class="kpi-label">{{ s.class }}</div><div class="kpi-value num">{{ s.count }}</div></div>
+    {% endfor %}
+  </div>
+</section>
+<section class="card">
+  <h2>Journey by journey</h2>
+  <table class="grid">
+    <thead><tr><th>Test</th><th>Class</th><th>Why</th></tr></thead>
+    <tbody>
+    {% for r in rows %}
+      <tr>
+        <td><a href="/tests/{{ r.test }}">{{ r.name or r.test }}</a> <span class="dim mono small">{{ r.test }}</span></td>
+        <td><span class="pill {{ r.pill }}">{{ r.class }}</span></td>
+        <td class="small">{{ r.why }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% else %}
+<p class="empty">No diff data found. Run <span class="mono">argus diff</span> (two live instances,
+no changelog, no LLM) to populate <span class="mono">&lt;home&gt;/diff.json</span>.</p>
+{% endif %}
+{% endblock %}

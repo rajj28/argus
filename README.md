@@ -22,32 +22,71 @@ is genuinely new, and whatever it learns is written to memory, so the same situa
 | **State memory & self-improvement** | `.argus/` is git-friendly JSON: versioned tests, app atlas, learned **attribute-stability weights** (e.g. "ids are unstable in this app" lowers their weight automatically), remembered human decisions, and an LLM cache. **Verified-only memory:** nothing is learned from a failed run. |
 | **Test generation & maintenance** | `explore` crawls the app deterministically into an atlas. `generate` turns atlas + product context into journeys **and business-rule negative tests** in 1–3 LLM calls, then compiles and baselines them. Tests are auto-healed, auto-updated on intended changes (with a diff) and auto-retired when a feature is removed. They export as standard Playwright `.spec.ts` files. |
 
-## The resolution cascade
+## Architecture
 
-```
-T0 replay        cached fingerprint still matches (score >= 0.90, same path)         $0
-T1 heal          multi-attribute similarity, clear winner (score/margin, identity)   $0
-T2 reorder       flow reordered: a later step's target is here -> execute it now      $0
-T3 LLM heal      ambiguous: small model picks among the top-5 candidates only         ~300 tokens
-T4 replan        target gone (new required field / new screen): bounded LLM replan    ~2k tokens
-triage           rules first; LLM judge only for unexplained behaviour changes        ~2k tokens
-```
+**Immutable intent vs per-build compiled plans.** A test's *intent* — name, goal, business oracles,
+tags — is frozen the first time the test is saved (`.argus/tests/_intent/`) and can never be rewritten
+by healing or adaptation. What the runtime mutates is the *compiled plan* (locators, step order,
+expected effects), versioned per build under `.argus/tests/_plans/<build>/`. Evidence from a new build
+is therefore always compared against a trusted baseline instead of a plan the previous release already
+rewrote.
 
-Each step also carries a **falsifiable contract** captured automatically from the green run: the API calls it
-makes (method, path, status class), where it navigates, and which screen appears. A mismatch becomes
-evidence, with no model involved.
+**The resolution cascade.** Each tier runs in order and stops as soon as it succeeds; only T3–T5 spend
+tokens:
 
-## Results on SkyOps (a drone-operations console, versions 1.0 → 1.3)
+| Tier | What it does | Cost |
+|---|---|---|
+| T0 replay | the cached fingerprint still matches (score ≥ 0.90, same path) | $0 |
+| T1 similarity | multi-attribute Similo-style score, clear winner (score/margin, identity) | $0 |
+| T2 out-of-order | the flow was reordered: a later step's target is here → execute it now — never **across a commit point** (a step that wrote data on the baseline) | $0 |
+| T4a required-field completion | a new required field blocks the flow → fill it with deterministic heuristics, press the progress button | $0 |
+| T3 LLM heal | ambiguous: a small model picks among the top-5 candidates only | ~300 tokens |
+| T4 replan | target gone (new required field / new screen): bounded LLM replan | ~2k tokens |
+| T5 vision | VisualMark on canvas/map: **cached coords → template match → multiscale match → the VLM picks a numbered mark id** | VLM only |
+
+Each step also carries a **falsifiable contract** captured automatically from the green run: the API
+calls it makes (method, path, status class), where it navigates, and which screen appears. A mismatch
+becomes evidence, with no model involved.
+
+**Triage is rules-first.** Deterministic business rules and step contracts decide verdicts on their
+own; the LLM judge only sees what's left, and every changelog citation it produces is **verified
+verbatim** against the release notes before it is trusted. Without a citation a change is never
+silently accepted. When there is **no changelog at all**, `argus diff` runs the same immutable intents
+against two live instances and compares canonical behaviour traces — regressions vs refactor-only
+drift. A test that cannot establish its starting state (session, data) is `PRECONDITION_FAILURE`, not
+a bug.
+
+**Free libraries:** `opencv-headless` and `imagehash` power the vision tier (template + multiscale
+matching with a perceptual-hash cache); Playwright **tracing** keeps a debuggable trace of every
+deviating run.
+
+## Verified results on SkyOps (a drone-operations console, versions 1.0 → 1.3)
+
+### 1. Offline Gauntlet (`argus gauntlet`, 0 LLM calls) — source: `.argus/gauntlet.json`
+
+| Trials | Heal success | False alarms | Bug recall | Steps self-healed |
+|---|---|---|---|---|
+| 3 random refactor trials + 5 injected-bug trials | **100%** | **0%** | **100% (5/5)** | **106** |
+
+### 2. Four-act demo, offline (`argus demo`, 0 LLM calls)
 
 | Release | What changed | Argus verdicts | LLM calls |
 |---|---|---|---|
-| v1.0 | baseline | 8/8 PASS, 32/32 steps replayed | 0 |
-| v1.1 | ids renamed, classes hashed, test-ids removed, nav → sidebar, labels reworded | 7× COSMETIC_DRIFT (auto-healed, tests → v2), 1 PASS | **0** |
-| v1.2 | wizard reordered, new required field, Flight logs retired | INTENDED_CHANGE (tests updated with diff, release note cited), FEATURE_REMOVED (test retired) | a few |
-| v1.3 | "performance improvements" + 5 silent regressions | BUG × 5 with repro steps + evidence | ~0 (rules) |
+| v1.0 | baseline | **8 PASS** | 0 |
+| v1.1 | ids renamed, classes hashed, test-ids removed, nav → sidebar, labels reworded | **7 COSMETIC_DRIFT + 1 PASS** | 0 |
+| v1.2 | wizard reordered, new required field, Flight logs retired | **3 INTENDED_CHANGE** (release-note quotes verified) **+ 1 FEATURE_REMOVED + 4 PASS** | 0 |
+| v1.3 | "performance improvements" + 5 silent regressions | **5 BUG + 2 PASS (+1 retired)** | 0 |
 
-Run `argus demo` to reproduce, and `argus gauntlet` for the randomized robustness benchmark
-(heal-success rate, false-alarm rate, bug recall).
+### 3. `argus diff` — v1.0 vs v1.3 on two live instances, no changelog, no LLM
+
+| What was compared | Evidence captured | Argus verdicts |
+|---|---|---|
+| Same immutable intents, two builds | lost side effects, a crash, a 500, business-rule violations | all **5 hidden bugs** flagged **REGRESSION** |
+| Refactor-only flows | identical outcome and side effects; only how elements were found changed | **UI_DRIFT** |
+
+`argus demo` and `argus gauntlet` reproduce those numbers; `benchmarks/ten_runs.py` replays the suite
+10 times across 1.0 → 1.2 with the LLM off (steady-state cost curve, 0 LLM calls). The dashboard shows
+the 10-run curve at `/tenruns` and any `argus diff` output at `/diff`.
 
 ## Quick start
 

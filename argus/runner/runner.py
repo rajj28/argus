@@ -306,6 +306,34 @@ async def _complete_required(ctx: RunContext, page: Any, rec: EffectRecorder, st
     return done
 
 
+async def _execute_visual(ctx: RunContext, page: Any, rec: EffectRecorder, st: "_Exec", step: Step) -> bool:
+    """Canvas/map target: locate the VisualMark (cached coords -> template -> multiscale -> VLM) and click."""
+    from argus.vision.locate import locate
+    from argus.vision.marks import VisualMark
+    t0 = time.perf_counter()
+    hit = await locate(page, VisualMark(**step.visual), ctx.llm)
+    if hit is None:
+        return False
+    await rec.begin()
+    await page.mouse.click(hit["x"], hit["y"])
+    eff = await rec.end()
+    st.calls.extend(eff.network)
+    tier = 0 if hit["tier"] == 0 else 5
+    obs = compare_effects(step, eff, ctx.vars)
+    if tier:
+        obs.insert(0, Observation(kind="locator_healed", step_id=step.id, tier=5, confidence=float(hit["confidence"]),
+                                  detail=f"visual '{step.visual.get('hint', '')}' re-found by {hit['method']} "
+                                         f"(confidence {float(hit['confidence']):.2f})"))
+    st.idx += 1
+    shot = await _shot(page, ctx, f"{st.test.id}_{st.idx:02d}")
+    st.results.append(StepResult(step_id=step.id, intent=step.intent, status="passed" if tier == 0 else "healed",
+                                 tier=tier, score=float(hit["confidence"]), screenshot=shot, observations=obs,
+                                 duration_ms=int((time.perf_counter() - t0) * 1000), effects=eff))
+    st.trace.append((step.model_copy(update={"expect": expect_from_effects(eff, ctx.vars)}), "orig"))
+    st.done.append(f"{len(st.done) + 1}. {step.intent}")
+    return True
+
+
 def _target_present(snap: Any, fp: Fingerprint, weights: dict[str, float]) -> bool:
     from argus.healing.similarity import rank
     ranked = rank(fp, snap.elements, "goto", weights, top_k=1)
@@ -443,6 +471,14 @@ async def run_test(test: TestSpec, ctx: RunContext, browser: Browser, auth_state
                 pending.pop(0)
                 continue
 
+            if step.visual:
+                if await _execute_visual(ctx, page, rec, st, step):
+                    pending.pop(0)
+                    continue
+                result.observations.append(Observation(kind="goal_unreachable", step_id=step.id,
+                                                       detail=f"visual target '{step.visual.get('hint', '')}' not found "
+                                                              "on the canvas (V0-V3)"))
+                break
             snap = await take_snapshot(page)
             res = await resolve(snap, step, ctx.weights, ctx.llm, ctx.settings)
             if res.found:
@@ -648,6 +684,10 @@ async def record_baseline(test: TestSpec, ctx: RunContext, browser: Browser,
         await page.goto(ctx.url(test.start_url), wait_until="domcontentloaded", timeout=15000)
         await wait_for_settle(page, rec)
         for step in test.steps:
+            if step.visual:
+                if not await _execute_visual(ctx, page, rec, st, step):
+                    return None
+                continue
             if step.action in ("goto", "wait") or step.target is None:
                 if step.action == "goto":
                     await page.goto(ctx.url(step.value or test.start_url), wait_until="domcontentloaded")

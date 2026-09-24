@@ -226,3 +226,49 @@ async def test_vlm_null_mark_returns_none(browser):
         assert await vlm(page, mark, _FakeLLM(mark_id=1, confidence=0.1)) is None
     finally:
         await page.close()
+
+
+@pytest.mark.asyncio
+async def test_template_robust_to_pan(browser):
+    """V1/V2 must succeed even when the map is panned (background pixels in the crop change).
+
+    This mirrors chaos-seed-7 in the live demo (dx=-41, dy=11, zoom=1.0): the stored
+    crop contains a background that is now at a different offset, so the raw pixel
+    content of the crop differs from the live canvas at the new marker position.
+    The foreground mask ensures only the marker shape/colour/label pixels are compared.
+    """
+    page = await _open(browser)
+    try:
+        # --- baseline capture (zoom=1.0, no shift) ---
+        mark = await _capture_falcon(page)
+
+        # Mask must be stored (non-empty) for new marks.
+        assert mark.mask_png_b64 != "", "mask_png_b64 must be stored by capture_mark"
+
+        # --- pan only (shift=41 approximates dx=-41 in the live app) ---
+        await page.goto(_url(shift=41))
+
+        # V0 must fail (the stored position no longer has the same phash).
+        v0 = await cached(page, mark)
+        assert v0 is None, "V0 should miss after a pure pan"
+
+        # V1 must succeed with confidence >= 0.80 despite the background shift.
+        v1 = await template(page, mark)
+        assert v1 is not None, "V1 must find the marker after a pure pan using the foreground mask"
+        x1, y1, tier1, conf1 = v1
+        assert tier1 == 1
+        assert conf1 >= 0.80, f"V1 confidence too low after pan: {conf1}"
+
+        # The located point must be close to the actual drone position on the panned canvas.
+        drone = await _drone(page, DRONE_ID)
+        bbox = await page.locator("#map").bounding_box()
+        assert x1 == pytest.approx(bbox["x"] + drone["x"], abs=10)
+        assert y1 == pytest.approx(bbox["y"] + drone["y"], abs=10)
+
+        # Clicking the located point must hit the correct drone.
+        await page.mouse.click(x1, y1)
+        assert await page.evaluate("window.lastHit") == DRONE_ID, (
+            "click after pan-locate must hit the same drone"
+        )
+    finally:
+        await page.close()

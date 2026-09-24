@@ -42,7 +42,7 @@ def spec_from_dict(d: dict[str, Any]) -> TestSpec:
     steps = []
     for i, s in enumerate(d["steps"], 1):
         steps.append(Step(id=f"s{i}", intent=s["intent"], action=s["action"], value=s.get("value"),
-                          save_as=s.get("save_as"), optional=s.get("optional", False),
+                          save_as=s.get("save_as"), optional=s.get("optional", False), visual=s.get("visual_mark"),
                           target=Fingerprint(**s["fp"]) if s.get("fp") else None))
     return TestSpec(id=d["id"], name=d["name"], goal=d["goal"], tags=d.get("tags", []), start_url=d["start_url"],
                     steps=steps, oracles=[Assertion(**o) for o in d.get("oracles", [])],
@@ -76,6 +76,17 @@ async def author(settings: Any, specs: list[dict[str, Any]], log=print) -> list[
                 if s["action"] == "goto":
                     await page.goto(ctx.url(s["value"]), wait_until="domcontentloaded")
                     await wait_for_settle(page, rec)
+                    continue
+                if s.get("visual"):
+                    from argus.vision.marks import capture_mark
+                    v = s["visual"]
+                    box = await page.locator(v["canvas"]).bounding_box()
+                    x, y = v["at"][0] * box["width"], v["at"][1] * box["height"]
+                    mark = await capture_mark(page, v["canvas"], x, y, hint=v.get("hint", ""))
+                    s["visual_mark"] = mark.model_dump()
+                    await rec.begin()
+                    await page.mouse.click(box["x"] + x, box["y"] + y)
+                    await rec.end()
                     continue
                 snap = await take_snapshot(page)
                 el = find_element(snap, s["find"])

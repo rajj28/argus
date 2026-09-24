@@ -34,14 +34,19 @@ PROVIDERS: dict[str, Provider] = {
                    "qwen/qwen3.8-27b:free", "nvidia/nemotron-3-ultra-550b-a55b:free"),
          "vision": ("qwen/qwen3.8-27b:free", "google/gemma-4-31b-it:free")},
         "https://openrouter.ai/keys"),
+    "openrouter2": Provider(
+        "openrouter2", "https://openrouter.ai/api/v1", ("JEV2_API", "OPENROUTER_API_KEY_2"), 18,
+        {"fast": ("nvidia/nemotron-3-super-120b-a12b:free", "qwen/qwen3.8-27b:free"),
+         "smart": ("nvidia/nemotron-3-super-120b-a12b:free", "nex-agi/nex-n2.5-pro:free"),
+         "vision": ("qwen/qwen3.8-27b:free", "google/gemma-4-31b-it:free")},
+        "https://openrouter.ai/keys"),
     "gemini": Provider(
         "gemini", "https://generativelanguage.googleapis.com/v1beta/openai/", ("GEMINI_API_KEY", "GOOGLE_API_KEY"), 10,
         {"fast": ("gemini-flash-lite-latest",), "smart": ("gemini-flash-latest",), "vision": ("gemini-flash-latest",)},
         "https://aistudio.google.com/apikey"),
     "groq": Provider(
-        "groq", "https://api.groq.com/openai/v1", ("GROQ_API_KEY",), 25,
-        {"fast": ("llama-3.1-8b-instant",), "smart": ("openai/gpt-oss-120b", "llama-3.3-70b-versatile"),
-         "vision": ("meta-llama/llama-4-scout-17b-16e-instruct",)},
+        "groq", "https://api.groq.com/openai/v1", ("GROQ_API_KEY", "GROK_API"), 25,
+        {"fast": ("openai/gpt-oss-20b",), "smart": ("openai/gpt-oss-120b",), "vision": ("qwen/qwen3.8-27b",)},
         "https://console.groq.com/keys"),
     "cerebras": Provider(
         "cerebras", "https://api.cerebras.ai/v1", ("CEREBRAS_API_KEY",), 25,
@@ -56,7 +61,7 @@ PROVIDERS: dict[str, Provider] = {
 
 # Layer 1: JEV (OpenRouter) is always tried first. Layer 2: the other free LLMs carry the load when
 # JEV is rate-limited (50 req/day on its free tier) or fails. Ollama (local, offline) is the last net.
-ORDER = ("openrouter", "gemini", "groq", "cerebras", "custom", "ollama")
+ORDER = ("openrouter", "openrouter2", "groq", "gemini", "cerebras", "custom", "ollama")
 
 
 def api_key(p: Provider) -> str:
@@ -115,10 +120,10 @@ def default_chain(tier: str) -> list[str]:
     chain: list[str] = []
     for name, models in zip(available(), per):   # follows ORDER, so JEV comes first
         chain += models
-        if name == "openrouter":
-            chain.append("openrouter/free")      # JEV's own free router closes layer 1
+        if name in ("openrouter", "openrouter2"):
+            chain.append(("" if name == "openrouter" else name + ":") + "openrouter/free")
     return chain
 
 
 def is_free(provider: str, model: str) -> bool:
-    return provider in ("gemini", "groq", "cerebras", "ollama") or model.endswith(":free") or model == "openrouter/free"
+    return provider in ("gemini", "groq", "cerebras", "ollama") or model.endswith(":free") or model.endswith("openrouter/free")

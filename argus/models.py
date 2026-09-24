@@ -169,6 +169,7 @@ class Step(BaseModel):
     expect: StepExpect = Field(default_factory=StepExpect)
     optional: bool = False                    # e.g. dismiss a banner if present
     page_hint: str = ""                       # heading/title of the page where the step happens
+    visual: Optional[dict[str, Any]] = None   # VisualMark json for canvas/map targets (no DOM element)
     save_as: Optional[str] = None             # store the concrete filled value in run vars
     #                                           (assertions may reference ${vars.<name>})
 

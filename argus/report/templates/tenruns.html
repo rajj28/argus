@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+{% block title %}10-run cost curve - Argus{% endblock %}
+{% block content %}
+<h1 class="page-title">10-run cost curve
+  {% if present and base_url %}<span class="dim small mono">{{ base_url }}{% if generated_at %} · {{ generated_at }}{% endif %}</span>{% endif %}
+</h1>
+{% if present %}
+<section class="charts-row">
+  <div class="card">
+    <h2>LLM calls per run (bar) vs % steps replayed at T0 (line)</h2>
+    <canvas id="callsT0Chart" height="90"></canvas>
+  </div>
+  <div class="card">
+    <h2>Naive-agent tokens per run <span class="dim">(estimate, not billed)</span></h2>
+    <canvas id="naiveChart" height="90"></canvas>
+  </div>
+</section>
+<section class="card">
+  <h2>Per-run detail</h2>
+  <table class="grid">
+    <thead>
+      <tr><th>#</th><th>Build</th><th>Steps</th><th>T0 replayed</th><th>% T0</th><th>Healed</th><th>LLM calls</th><th>Naive-agent tokens (estimate)</th><th>Duration</th></tr>
+    </thead>
+    <tbody>
+    {% for r in rows %}
+      <tr>
+        <td class="num">{{ r.run }}</td>
+        <td class="mono">v{{ r.version }}</td>
+        <td class="num">{{ r.steps }}</td>
+        <td class="num">{{ r.t0_replayed }}</td>
+        <td class="num">{{ r.t0_pct }}%</td>
+        <td class="num">{{ r.healed }}</td>
+        <td class="num">{{ r.llm_calls }}</td>
+        <td class="num">{{ r.naive_tokens_estimate }} <span class="dim">(est.)</span></td>
+        <td class="num">{{ r.duration_s }}s</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+<script>
+const charts = {{ charts | tojson }};
+new Chart(document.getElementById('callsT0Chart'), {
+  data: {
+    labels: charts.labels,
+    datasets: [
+      { type: 'bar', label: 'LLM calls', data: charts.llm_calls, backgroundColor: '#f59e0b', yAxisID: 'y' },
+      { type: 'line', label: '% steps replayed at T0', data: charts.t0_pct, borderColor: '#38bdf8',
+        backgroundColor: 'rgba(56,189,248,.15)', yAxisID: 'y1', tension: .3 }
+    ]
+  },
+  options: { responsive: true, scales: {
+    y: { beginAtZero: true, title: { display: true, text: 'LLM calls' } },
+    y1: { beginAtZero: true, max: 100, position: 'right', grid: { drawOnChartArea: false },
+          title: { display: true, text: '% steps at T0' } } } }
+});
+new Chart(document.getElementById('naiveChart'), {
+  type: 'bar',
+  data: { labels: charts.labels, datasets: [{ label: 'naive-agent tokens (estimate)', data: charts.naive, backgroundColor: '#a78bfa' }] },
+  options: { responsive: true, scales: { y: { beginAtZero: true, title: { display: true, text: 'tokens (estimate)' } } } }
+});
+</script>
+{% else %}
+<p class="empty">No ten-run data found. Run
+<span class="mono">.venv/Scripts/python.exe benchmarks/ten_runs.py</span> to populate
+<span class="mono">&lt;home&gt;/ten_runs.json</span>.</p>
+{% endif %}
+{% endblock %}

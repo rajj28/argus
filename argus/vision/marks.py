@@ -22,6 +22,12 @@ from argus.browser.snapshot import normalize_path
 
 _PHASH_SIZE = 16
 
+# Foreground mask parameters
+_MASK_BG_COLORS = 4         # number of dominant background colours to subtract
+_MASK_BG_THRESH = 28        # per-channel tolerance for "matches background"
+_MASK_DILATE_PX = 3         # dilation radius to blend marker edges
+_MASK_LABEL_PAD = 6         # extra pixels below icon centre included in mask (text region)
+
 
 class VisualMark(BaseModel):
     """One reusable visual identity for a canvas / map point of interest."""
@@ -34,6 +40,7 @@ class VisualMark(BaseModel):
     phash: str                       # imagehash.phash of the crop (hex string)
     nearby_labels: list[str] = Field(default_factory=list)
     hint: str = ""
+    mask_png_b64: str = ""           # uint8 foreground mask (255=foreground, 0=background); "" for old marks
 
     @property
     def crop_size(self) -> int:
@@ -57,6 +64,11 @@ async def capture_mark(page: Page, canvas_selector: str, x: float, y: float,
     ``x`` / ``y`` are coordinates in the canvas element's own pixel grid. The
     crop's phash is the mark's reusable identity; `nearby_labels` collects the
     closest DOM text (best-effort - canvas glyphs are not OCR'd).
+
+    A foreground mask is also computed: pixels that differ from the dominant
+    background colours of the crop are marked as 255 (foreground), the rest as
+    0 (background). The label text region below the icon centre is unconditionally
+    included so that different marker labels contribute to uniqueness.
     """
     locator = page.locator(canvas_selector)
     bbox = await locator.bounding_box()
@@ -78,6 +90,9 @@ async def capture_mark(page: Page, canvas_selector: str, x: float, y: float,
     px, py = bbox["x"] + x, bbox["y"] + y
     viewport = page.viewport_size or {"width": 0, "height": 0}
 
+    # Build foreground mask: marker pixels that are not part of the background.
+    mask = _build_foreground_mask(patch, size)
+
     return VisualMark(
         state_key=f"{normalize_path(page.url)}@{viewport['width']}x{viewport['height']}",
         bbox=[bbox["x"], bbox["y"], bbox["width"], bbox["height"]],
@@ -87,6 +102,7 @@ async def capture_mark(page: Page, canvas_selector: str, x: float, y: float,
         phash=str(imagehash.phash(Image.fromarray(gray), hash_size=_PHASH_SIZE)),
         nearby_labels=await _nearby_labels(page, px, py),
         hint=hint,
+        mask_png_b64=_mask_b64(mask),
     )
 
 
@@ -106,6 +122,69 @@ def _png_b64(img: Image.Image) -> str:
     buf = io.BytesIO()
     img.save(buf, format="PNG")
     return base64.b64encode(buf.getvalue()).decode("ascii")
+
+
+def _mask_b64(mask: np.ndarray) -> str:
+    """Encode a uint8 single-channel mask as a base64 PNG string."""
+    pil = Image.fromarray(mask, mode="L")
+    buf = io.BytesIO()
+    pil.save(buf, format="PNG")
+    return base64.b64encode(buf.getvalue()).decode("ascii")
+
+
+def _build_foreground_mask(patch: np.ndarray, size: int) -> np.ndarray:
+    """Build a uint8 foreground mask for a BGR crop.
+
+    Algorithm:
+      1. Sample the four corner regions to estimate dominant background colours.
+      2. Mark every pixel that is NOT within ``_MASK_BG_THRESH`` of any background
+         colour as foreground (255).
+      3. Dilate slightly so marker edges are captured cleanly.
+      4. Force the lower third of the crop (label text region) to be foreground so
+         that different drone labels contribute to uniqueness between markers.
+    """
+    h, w = patch.shape[:2]
+    # --- step 1: collect background colour samples from corners ---
+    corner_size = max(4, size // 8)
+    corners = [
+        patch[:corner_size, :corner_size],          # top-left
+        patch[:corner_size, -corner_size:],          # top-right
+        patch[-corner_size:, :corner_size],          # bottom-left
+        patch[-corner_size:, -corner_size:],         # bottom-right
+    ]
+    bg_pixels = np.concatenate([c.reshape(-1, 3) for c in corners], axis=0).astype(np.float32)
+
+    # cluster into _MASK_BG_COLORS dominant colours with k-means
+    n_clusters = min(_MASK_BG_COLORS, len(bg_pixels))
+    if n_clusters >= 2:
+        criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 20, 1.0)
+        _, _, centers = cv2.kmeans(bg_pixels, n_clusters, None, criteria, 3, cv2.KMEANS_RANDOM_CENTERS)
+        bg_colors = centers.astype(np.float32)
+    else:
+        bg_colors = bg_pixels[:1]
+
+    # --- step 2: per-pixel background test ---
+    flat = patch.reshape(-1, 3).astype(np.float32)
+    is_bg = np.zeros(flat.shape[0], dtype=bool)
+    for bgc in bg_colors:
+        diff = np.abs(flat - bgc)
+        is_bg |= (diff.max(axis=1) <= _MASK_BG_THRESH)
+
+    fg_mask = (~is_bg).reshape(h, w).astype(np.uint8) * 255
+
+    # --- step 3: dilate so edges are included ---
+    if _MASK_DILATE_PX > 0:
+        kernel = cv2.getStructuringElement(
+            cv2.MORPH_ELLIPSE,
+            (2 * _MASK_DILATE_PX + 1, 2 * _MASK_DILATE_PX + 1),
+        )
+        fg_mask = cv2.dilate(fg_mask, kernel)
+
+    # --- step 4: force label text region (lower portion of crop) ---
+    label_y_start = max(0, h // 2)
+    fg_mask[label_y_start:, :] = 255
+
+    return fg_mask
 
 
 _LABEL_JS = """(arg) => {

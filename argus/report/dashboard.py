@@ -43,6 +43,15 @@ VERDICT_CSS: dict[str, str] = {
     "NEEDS_REVIEW": "review",
     "INFRA": "infra",
 }
+DIFF_CSS: dict[str, str] = {
+    "REGRESSION": "bug",
+    "UI_DRIFT": "drift",
+    "BEHAVIOR_CHANGE": "change",
+    "LIKELY_INTENDED": "change",
+    "JOURNEY_GONE": "removed",
+    "BASELINE_BROKEN": "neutral",
+    "NO_CHANGE": "pass",
+}
 
 
 def load_runs(home: Path) -> list[RunReport]:
@@ -119,6 +128,16 @@ def load_atlas(home: Path) -> dict[str, Any]:
 def load_gauntlet(home: Path) -> Any:
     """Raw <home>/gauntlet.json content (None when absent)."""
     return _json_objects(Path(home) / "gauntlet.json")
+
+
+def load_ten_runs(home: Path) -> dict[str, Any]:
+    """Parsed <home>/ten_runs.json (the 10-run cost curve), tolerant of a missing file."""
+    return _json_objects(Path(home) / "ten_runs.json") or {}
+
+
+def load_diff(home: Path) -> dict[str, Any]:
+    """Parsed <home>/diff.json (argus diff output), tolerant of a missing file."""
+    return _json_objects(Path(home) / "diff.json") or {}
 
 
 def create_app(home: Path, base_url: str | None = None) -> FastAPI:
@@ -276,6 +295,18 @@ def create_app(home: Path, base_url: str | None = None) -> FastAPI:
     def gauntlet_page(request: Request):
         return templates.TemplateResponse(
             request, "gauntlet.html", _gauntlet_context(load_gauntlet(home))
+        )
+
+    @app.get("/tenruns", response_class=HTMLResponse)
+    def ten_runs_page(request: Request):
+        return templates.TemplateResponse(
+            request, "tenruns.html", _tenruns_context(load_ten_runs(home))
+        )
+
+    @app.get("/diff", response_class=HTMLResponse)
+    def diff_page(request: Request):
+        return templates.TemplateResponse(
+            request, "diff.html", _diff_context(load_diff(home))
         )
 
     @app.get("/api/runs")
@@ -454,3 +485,84 @@ def _gauntlet_context(data: Any) -> dict[str, Any]:
         if dist:
             break
     return {"present": True, "headers": headers, "rows": rows, "dist": dist}
+
+
+def _tenruns_context(data: dict[str, Any]) -> dict[str, Any]:
+    """Tolerant rendering context for <home>/ten_runs.json.
+
+    Bar: LLM calls per run; line: % steps replayed at T0; the naive-agent token
+    number is always labelled a *estimate*.
+    """
+    runs = data.get("runs") if isinstance(data.get("runs"), list) else []
+    rows = [dict(r) for r in runs if isinstance(r, dict)]
+    if not rows:
+        return {"present": False}
+    labels = [f"run {r.get('run', i + 1)}" for i, r in enumerate(rows)]
+    steps = [int(r.get("steps", 0)) for r in rows]
+    t0 = [int(r.get("t0_replayed", 0)) for r in rows]
+    naive = [int(r.get("naive_tokens_estimate", 0)) for r in rows]
+    table = []
+    for i, (r, pct) in enumerate(zip(rows, _pct(t0, steps))):
+        table.append(
+            {
+                "run": r.get("run", i + 1),
+                "version": r.get("version", "?"),
+                "steps": steps[i],
+                "t0_replayed": t0[i],
+                "t0_pct": pct,
+                "healed": int(r.get("healed", 0)),
+                "llm_calls": int(r.get("llm_calls", 0)),
+                "naive_tokens_estimate": naive[i],
+                "duration_s": round(int(r.get("duration_ms", 0)) / 1000.0, 1),
+            }
+        )
+    charts = {
+        "labels": labels,
+        "llm_calls": [int(r.get("llm_calls", 0)) for r in rows],
+        "t0_pct": _pct(t0, steps),
+        "naive": naive,
+    }
+    return {
+        "present": True,
+        "charts": charts,
+        "rows": table,
+        "base_url": data.get("base_url", ""),
+        "generated_at": data.get("generated_at", ""),
+    }
+
+
+def _diff_context(data: dict[str, Any]) -> dict[str, Any]:
+    """Tolerant rendering context for <home>/diff.json of unknown schema."""
+    if not isinstance(data, dict) or not data or not isinstance(data.get("tests"), list):
+        return {"present": False}
+    tests = [t for t in data["tests"] if isinstance(t, dict)]
+    rows = []
+    for t in tests:
+        cls = str(t.get("class", ""))
+        rows.append(
+            {
+                "test": t.get("test", ""),
+                "name": t.get("name", ""),
+                "class": cls,
+                "pill": DIFF_CSS.get(cls, "neutral"),
+                "why": t.get("why", ""),
+            }
+        )
+    summary = data.get("summary")
+    counts = (
+        [{"class": str(k), "count": int(v)} for k, v in summary.items()]
+        if isinstance(summary, dict)
+        else []
+    )
+    return {
+        "present": True,
+        "baseline": data.get("baseline", "-"),
+        "candidate": data.get("candidate", "-"),
+        "runs": data.get("runs") or {},
+        "summary": counts,
+        "rows": rows,
+    }
+
+
+def _pct(numerator: list[int], denominator: list[int]) -> list[float]:
+    return [round(100.0 * a / b, 1) if b else 0.0 for a, b in zip(numerator, denominator)]

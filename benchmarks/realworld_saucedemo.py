@@ -17,6 +17,7 @@ import argparse
 import asyncio
 import json
 import os
+import shutil
 import sys
 import time
 from collections import Counter
@@ -80,6 +81,11 @@ def report_payload() -> dict[str, Any]:
 
 async def run_all(llm: bool) -> int:
     suite = json.loads(SUITE_FILE.read_text(encoding="utf-8"))
+
+    # Wipe the memory home so stale tests/plans from earlier runs never replay.
+    if HOME.exists():
+        shutil.rmtree(HOME)
+    HOME.mkdir(parents=True)
 
     author_settings = make_settings("standard_user", llm)
     saved = await author(author_settings, suite, print)

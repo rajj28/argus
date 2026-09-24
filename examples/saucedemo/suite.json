@@ -5,7 +5,7 @@
     "steps": [
       {"intent": "Enter the username", "action": "fill", "find": {"role": "textbox", "name": "username"}, "value": "${creds.user}"},
       {"intent": "Enter the password", "action": "fill", "find": {"type": "password"}, "value": "${creds.password}"},
-      {"intent": "Sign in", "action": "click", "find": {"role": "button", "name": "login"}}
+      {"intent": "Submit the sign-in form", "action": "press", "find": {"type": "password"}, "value": "Enter"}
     ],
     "oracles": [
       {"kind": "url_matches", "params": {"pattern": "/inventory"}, "description": "The Products catalogue opens", "rule_ref": "R1"},
@@ -14,8 +14,9 @@
   },
   {
     "id": "sort-by-price", "name": "Sort the catalogue by price low to high", "tags": ["catalogue"],
-    "goal": "The shopper sorts the catalogue by Price (low to high)", "start_url": "/inventory.html",
+    "goal": "The shopper sorts the catalogue by Price (low to high)", "start_url": "/",
     "steps": [
+      {"intent": "Open the Products catalogue", "action": "goto", "value": "/inventory.html"},
       {"intent": "Sort products by Price (low to high)", "action": "select", "find": {"role": "combobox", "name": "price (low to high)"}, "value": "Price (low to high)"}
     ],
     "oracles": [
@@ -24,8 +25,9 @@
   },
   {
     "id": "add-to-cart", "name": "Add a product to the cart", "tags": ["cart"],
-    "goal": "Adding a product to the cart flips its button to Remove and increments the badge", "start_url": "/inventory.html",
+    "goal": "Adding a product to the cart flips its button to Remove and increments the badge", "start_url": "/",
     "steps": [
+      {"intent": "Open the Products catalogue", "action": "goto", "value": "/inventory.html"},
       {"intent": "Add the first product to the cart", "action": "click", "find": {"role": "button", "name": "add to cart"}}
     ],
     "oracles": [
@@ -34,8 +36,9 @@
   },
   {
     "id": "cart-contents", "name": "Cart lists the added item with its price", "tags": ["cart"],
-    "goal": "The cart shows the added item at its price", "start_url": "/inventory.html",
+    "goal": "The cart shows the added item at its price", "start_url": "/",
     "steps": [
+      {"intent": "Open the Products catalogue", "action": "goto", "value": "/inventory.html"},
       {"intent": "Add the first product to the cart", "action": "click", "find": {"role": "button", "name": "add to cart"}},
       {"intent": "Open the cart", "action": "goto", "value": "/cart.html"}
     ],
@@ -46,8 +49,9 @@
   },
   {
     "id": "checkout-happy", "name": "Complete checkout to the order confirmation", "tags": ["critical", "checkout"],
-    "goal": "A shopper checks out and reaches the Thank you for your order! confirmation", "start_url": "/inventory.html",
+    "goal": "A shopper checks out and reaches the Thank you for your order! confirmation", "start_url": "/",
     "steps": [
+      {"intent": "Open the Products catalogue", "action": "goto", "value": "/inventory.html"},
       {"intent": "Add the first product to the cart", "action": "click", "find": {"role": "button", "name": "add to cart"}},
       {"intent": "Open the cart", "action": "goto", "value": "/cart.html"},
       {"intent": "Start the checkout", "action": "click", "find": {"role": "button", "name": "checkout"}},
@@ -64,8 +68,9 @@
   },
   {
     "id": "checkout-validation", "name": "Checkout without a ZIP code is rejected", "tags": ["negative", "checkout"],
-    "goal": "Submitting the checkout form without a ZIP/Postal Code shows the validation error", "start_url": "/inventory.html",
+    "goal": "Submitting the checkout form without a ZIP/Postal Code shows the validation error", "start_url": "/",
     "steps": [
+      {"intent": "Open the Products catalogue", "action": "goto", "value": "/inventory.html"},
       {"intent": "Add the first product to the cart", "action": "click", "find": {"role": "button", "name": "add to cart"}},
       {"intent": "Open the cart", "action": "goto", "value": "/cart.html"},
       {"intent": "Start the checkout", "action": "click", "find": {"role": "button", "name": "checkout"}},
@@ -79,9 +84,10 @@
   },
   {
     "id": "item-detail", "name": "Open the Sauce Labs Backpack detail page", "tags": ["catalogue"],
-    "goal": "Opening the Backpack title link navigates to the Backpack's detail page", "start_url": "/inventory.html",
+    "goal": "Opening the Backpack title link navigates to the Backpack's detail page", "start_url": "/",
     "steps": [
-      {"intent": "Open the Sauce Labs Backpack details", "action": "click", "find": {"role": "link", "name": "sauce labs backpack"}}
+      {"intent": "Open the Products catalogue", "action": "goto", "value": "/inventory.html"},
+      {"intent": "Open the Sauce Labs Backpack details", "action": "click", "find": {"role": "button", "name": "view details for sauce labs backpack"}}
     ],
     "oracles": [
       {"kind": "url_matches", "params": {"pattern": "/inventory-item"}, "description": "A product detail page opens", "rule_ref": "R9"},
@@ -90,10 +96,11 @@
   },
   {
     "id": "logout", "name": "Shopper signs out from the main menu", "tags": ["auth-exit"],
-    "goal": "Signing out via the main menu returns to the sign-in page", "start_url": "/inventory.html",
+    "goal": "Signing out via the main menu returns to the sign-in page", "start_url": "/",
     "steps": [
+      {"intent": "Open the Products catalogue", "action": "goto", "value": "/inventory.html"},
       {"intent": "Open the main menu", "action": "click", "find": {"role": "button", "name": "open menu"}},
-      {"intent": "Sign out", "action": "click", "find": {"role": "link", "name": "logout"}}
+      {"intent": "Sign out", "action": "click", "find": {"role": "button", "name": "logout"}}
     ],
     "oracles": [
       {"kind": "url_matches", "params": {"pattern": "/$"}, "description": "The sign-in page opens", "rule_ref": "R10"},

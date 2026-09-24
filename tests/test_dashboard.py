@@ -87,6 +87,47 @@ def _build_home(tmp_path: Path) -> Path:
         ),
         encoding="utf-8",
     )
+    (home / "ten_runs.json").write_text(
+        json.dumps(
+            {
+                "schema": "argus-ten-runs-v1",
+                "base_url": "http://127.0.0.1:8002",
+                "generated_at": "2026-09-24T12:00:00+00:00",
+                "runs": [
+                    {
+                        "run": i,
+                        "version": "1.0" if i < 3 else "1.1" if i < 6 else "1.2",
+                        "run_id": f"20260924-120000-{i:04x}",
+                        "steps": 32,
+                        "t0_replayed": 32 if i == 1 else 20,
+                        "healed": 0 if i == 1 else 12,
+                        "llm_calls": 0,
+                        "naive_tokens_estimate": 50000,
+                        "duration_ms": 21000,
+                    }
+                    for i in range(1, 11)
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (home / "diff.json").write_text(
+        json.dumps(
+            {
+                "baseline": "http://127.0.0.1:8001",
+                "candidate": "http://127.0.0.1:8003",
+                "summary": {"REGRESSION": 5, "UI_DRIFT": 2},
+                "runs": {"baseline": "20260924-100000-0000", "candidate": "20260924-100001-0001"},
+                "tests": [
+                    {"test": "login", "name": "Pilot signs in", "class": "UI_DRIFT",
+                     "why": "1 element(s) re-identified; identical outcome and side effects"},
+                    {"test": "logout", "name": "Pilot signs out", "class": "REGRESSION",
+                     "why": "uncaught exception: Cannot read properties of undefined (reading 'crash')"},
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
     return home
 
 
@@ -112,6 +153,8 @@ RUN_A, RUN_B = _run_ids()
         "/tests",
         "/memory",
         "/gauntlet",
+        "/tenruns",
+        "/diff",
         f"/runs/{RUN_A}",
         f"/runs/{RUN_B}",
         "/tests/login_flow",
@@ -127,7 +170,7 @@ def test_pages_return_200(path, client):
 def test_empty_home_is_tolerant(tmp_path):
     app = create_app(tmp_path / "does_not_exist")
     with TestClient(app) as c:
-        for path in ["/", "/tests", "/memory", "/gauntlet"]:
+        for path in ["/", "/tests", "/memory", "/gauntlet", "/tenruns", "/diff"]:
             assert c.get(path).status_code == 200
 
 
@@ -179,6 +222,33 @@ def test_gauntlet_page(client):
     html = client.get("/gauntlet").text
     assert "login stuck" in html
     assert "COSMETIC_DRIFT" in html
+
+
+def test_tenruns_page(client):
+    html = client.get("/tenruns").text
+    assert "10-run cost curve" in html
+    assert "LLM calls per run" in html
+    assert "% steps replayed at T0" in html
+    assert "http://127.0.0.1:8002" in html
+    assert "50000" in html and "(est.)" in html
+    assert "naive-agent tokens (estimate)" in html.lower()
+    assert "https://cdn.jsdelivr.net/npm/chart.js" in html
+    assert "62.5%" in html  # run 2: 20/32 steps replayed at T0
+
+
+def test_diff_page(client):
+    html = client.get("/diff").text
+    assert "Differential run" in html
+    assert "http://127.0.0.1:8001" in html and "http://127.0.0.1:8003" in html
+    assert "Pilot signs in" in html
+    assert '<span class="pill bug">REGRESSION</span>' in html
+    assert '<span class="pill drift">UI_DRIFT</span>' in html
+
+
+def test_nav_links_to_tenruns_and_diff(client):
+    html = client.get("/").text
+    assert 'href="/tenruns"' in html
+    assert 'href="/diff"' in html
 
 
 def test_api_runs_sorted_by_started_at(client, home):

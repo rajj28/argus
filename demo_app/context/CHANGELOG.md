@@ -1,30 +1,5 @@
 # SkyOps Changelog
 
-## v1.3 — Performance improvements
-
-Internal performance and bundle size improvements.
-
-- Faster mission list rendering via incremental DOM updates.
-- Smaller JS bundle (removed unused polyfills).
-- Reduced server-side template compilation overhead.
-
----
-
-## v1.2 — Mission planner v2
-
-Significant improvements to mission planning workflow.
-
-- **Wizard reorder**: Mission details → Flight parameters → Select drone → Review & launch.
-  Rationale: collecting flight parameters before drone selection allows SkyOps to recommend
-  drones that can fulfil the plan (range, payload).
-- **New required field "Pilot in command"** on Mission details step (DGCA compliance requirement).
-- **Flight logs page retired**: flight history now lives in the new Analytics page (`/analytics`).
-  The `/logs` URL returns 404.
-- **New Analytics page** (`/analytics`): totals cards (flights, distance, incidents, missions)
-  plus a flight history table with drone filter.
-
----
-
 ## v1.1 — Aurora design system
 
 Visual refresh (Aurora design system). Navigation moved to a sidebar; button labels polished. No functional changes.
