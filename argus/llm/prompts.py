@@ -90,12 +90,33 @@ Final oracles:
 
 GENERATE_SYSTEM = """You are a senior QA engineer. From an exploration map of a web app and its product context,
 write the most valuable end-to-end regression suite.
-Produce 4-8 tests: the business-critical user journeys first, then NEGATIVE tests that check business rules
-(e.g. an out-of-range value must be rejected). Each step references an element id from the map ("S3.e7") and
-must be executable in order from start_url. Use realistic valid values; use "${unique}" inside values that must
-be unique (e.g. names). Save values you assert on later with "save_as" and reference them as ${vars.<name>}.
-Oracles verify BUSINESS outcomes, not cosmetics. Allowed oracle kinds: text_visible {text}, text_absent {text},
-url_matches {pattern}, network_called {method, path, status_class}, network_absent {method, path, status_class}.
+Produce 6-8 tests: the business-critical user journeys first, then BUSINESS-RULE NEGATIVE tests
+(out-of-range values must be rejected, unavailable/low-battery options must be disabled, duplicate
+names must be rejected). Every NEGATIVE test must carry a business-rule `rule_ref` (e.g. R1, R2, R3)
+on each of its oracles.
+
+KEY RULES:
+- A test with "requires_login": true starts ALREADY LOGGED IN (the runner authenticates automatically).
+  NEVER include sign-in steps (do not reference S0 or any login field) in such tests, and set start_url
+  to the page where the journey begins (e.g. "/missions", "/missions/new", "/logs", "/settings").
+  Use "requires_login": false ONLY if you test login itself, and fill the credentials as
+  "${creds.user}" / "${creds.password}".
+- Each step MUST reference an exact element id from the map (e.g. "S10.e8") and the whole test must be
+  executable in order from start_url. Use only elements that appear in the map (every state also lists
+  its nav links and side controls, e.g. the "Next" button of the drone step is "S9.e15", of flight
+  parameters "S10.e12"). Use realistic valid values; use "${unique}" inside values that must be unique
+  (e.g. mission names). Save values you assert on later with "save_as" and reference them as ${vars.<name>}.
+- Disabled elements are marked "{disabled}" in the map: never click them - assert their disabled state
+  with an element_state oracle (what matters is the STATE, never interact with the element).
+- For a NEGATIVE test: drive the flow until the input/option is reachable, enter the INVALID value,
+  attempt the action that exposes it (e.g. click the current step's Next / Launch button), then assert
+  the REJECTION message (text_visible) or the disabled state (element_state) - do NOT assert successful
+  completion.
+
+Oracles verify BUSINESS outcomes, not cosmetics. Allowed oracle kinds:
+text_visible {text}, text_absent {text}, url_matches {pattern}, network_called {method, path, status_class},
+network_absent {method, path, status_class}, element_state {fingerprint: {name, tag, role, attrs, ...}, enabled: bool}.
+For network oracles status_class must be a class string like "2xx", "4xx" or "any" - never a raw number.
 Return JSON only:
 {"tests": [{"name": "...", "goal": "...", "tags": ["smoke"|"critical"|"negative"|...],
   "requires_login": true, "start_url": "/path",
@@ -108,7 +129,40 @@ GENERATE_USER = """Product context:
 {product}
 
 Exploration map (states, their elements, and observed transitions):
-{atlas}"""
+{atlas}
+
+Required coverage — write at least these 5 tests (add up to 2 more valuable ones if you wish):
+Every test: "requires_login": true, no sign-in steps, elements taken ONLY from the map ids listed
+below, executable in the listed order from its start_url.
+
+T1 PLAN AND LAUNCH (tags ["critical","smoke"], oracle rule_ref "R4"):
+  start_url "/missions". Steps: S2.e7 click; S7.e8 fill "${{unique}}" (save_as "mission_name");
+  S7.e9 select "Survey"; S7.e10 select "Pune Depot"; S7.e11 click; S9.e8 click; S9.e15 click;
+  S10.e8 fill "100"; S10.e9 fill "10"; S10.e12 click; S11.e9 click; S12.e2 click.
+  Oracles: {{"kind":"url_matches","params":{{"pattern":"missions/[a-z0-9]+"}},"rule_ref":"R4"}};
+  {{"kind":"network_called","params":{{"method":"POST","path":"/api/missions","status_class":"2xx"}},"rule_ref":"R4"}};
+  {{"kind":"text_visible","params":{{"text":"${{vars.mission_name}}"}},"rule_ref":"R4"}};
+  {{"kind":"text_visible","params":{{"text":"Scheduled"}},"rule_ref":"R4"}}.
+
+T2 ALTITUDE ABOVE LIMIT REJECTED (tags ["negative"], oracle rule_ref "R1"):
+  start_url "/missions/new". Steps: S7.e8 fill "${{unique}}"; S7.e9 select "Survey";
+  S7.e10 select "Pune Depot"; S7.e11 click; S9.e8 click; S9.e15 click; S10.e8 fill "150";
+  S10.e12 click. Oracle: {{"kind":"text_visible","params":{{"text":"at most 120 m"}},"rule_ref":"R1"}}.
+
+T3 LOW-BATTERY DRONE IS DISABLED (tags ["negative"], oracle rule_ref "R2"):
+  start_url "/missions/new". Steps: S7.e8 fill "${{unique}}"; S7.e9 select "Survey";
+  S7.e10 select "Pune Depot"; S7.e11 click.
+  Oracle: {{"kind":"element_state","params":{{"fingerprint":{{"name":"Hawk-7 — Battery too low",
+  "tag":"input","role":"radio","attrs":{{}}}},"enabled":false}},"rule_ref":"R2"}}.
+  Do NOT click the disabled drone.
+
+T4 SETTINGS SAVE (tags ["critical"], oracle rule_ref "R7"):
+  start_url "/settings". Steps: S5.e7 fill "Night Ops Team"; S5.e12 click.
+  Oracles: {{"kind":"network_called","params":{{"method":"PUT","path":"/api/settings","status_class":"2xx"}},"rule_ref":"R7"}};
+  {{"kind":"text_visible","params":{{"text":"Settings saved"}},"rule_ref":"R7"}}.
+
+T5 FLIGHT LOGS EXPORT: start_url "/logs". Steps: S4.e7 click.
+  Oracle: {{"kind":"network_called","params":{{"method":"GET","path":"/api/logs/export","status_class":"2xx"}}}}."""
 
 
 LLM_CHECK_SYSTEM = """You verify one statement about the current page of a web app.

@@ -260,3 +260,184 @@ async def test_rate_limiter_caps_requests(monkeypatch):
     t0 = time.monotonic()
     await llm_mod._acquire_slot()  # must wait for the window to roll
     assert time.monotonic() - t0 >= 0.03
+
+
+# ================================================================= Groq gpt-oss fixes
+# All tests below use a fake Groq provider so no network or real API key is needed.
+# The monkeypatch installs a "groq" provider with a matching entry in PROVIDERS so
+# _client_for("groq") returns a working fake client.
+
+def _groq_settings(tmp_path, **kwargs) -> Settings:
+    """Settings that point the 'fast' tier at groq:openai/gpt-oss-20b."""
+    defaults = dict(
+        home=tmp_path / "home",
+        api_key="sk-test",        # openrouter key (unused here)
+        llm_base_url="http://fake/v1",
+        models={"fast": ["groq:openai/gpt-oss-20b"], "smart": ["groq:openai/gpt-oss-120b"]},
+        llm_cache=False,
+    )
+    defaults.update(kwargs)
+    return Settings(**defaults)
+
+
+def _fake_groq_response(content: str, reasoning: str = "", reasoning_content: str = ""):
+    """Build a fake response like the Groq SDK returns for gpt-oss models."""
+    msg = types.SimpleNamespace(
+        content=content,
+        reasoning=reasoning or None,
+        reasoning_content=reasoning_content or None,
+        model_extra=None,
+    )
+    return types.SimpleNamespace(
+        choices=[types.SimpleNamespace(message=msg)],
+        usage=types.SimpleNamespace(prompt_tokens=20, completion_tokens=15),
+        model="openai/gpt-oss-20b",
+    )
+
+
+@pytest.fixture
+def fake_groq(monkeypatch):
+    """Install a fake Groq provider that does NOT require a real API key."""
+    import argus.llm.providers as prov_mod
+
+    # Inject a GROQ_API_KEY into os.environ for the duration of the test
+    monkeypatch.setenv("GROQ_API_KEY", "sk-groq-fake")
+
+    state = {"calls": [], "handler": lambda kwargs, n: _fake_groq_response('{"ok": true}')}
+
+    async def dispatch(**kwargs):
+        state["calls"].append(kwargs)
+        result = state["handler"](kwargs, len(state["calls"]))
+        if isinstance(result, BaseException):
+            raise result
+        return result
+
+    class _Completions:
+        async def create(self, **kwargs):
+            return await dispatch(**kwargs)
+
+    class _Chat:
+        def __init__(self):
+            self.completions = _Completions()
+
+    class _FakeAsyncOpenAI:
+        def __init__(self, **kwargs):
+            self.chat = _Chat()
+
+    # Patch AsyncOpenAI only for client creation so the Groq client ends up as our fake
+    monkeypatch.setattr(llm_mod, "AsyncOpenAI", _FakeAsyncOpenAI)
+    return state
+
+
+@pytest.fixture(autouse=False)
+def _clean_groq_exhausted():
+    """Ensure groq is not in the _exhausted dict before/after each test."""
+    llm_mod._exhausted.pop("groq", None)
+    yield
+    llm_mod._exhausted.pop("groq", None)
+
+
+# --------------------------------------------------------------------------- gpt-oss: reasoning_effort
+@pytest.mark.asyncio
+async def test_gpt_oss_sends_reasoning_effort_low(fake_groq, _clean_groq_exhausted, tmp_path):
+    """groq:gpt-oss models must include reasoning_effort=low in extra_body."""
+    client = LLMClient(_groq_settings(tmp_path))
+    data = await client.json(tier="fast", purpose="triage", system="s", user="u")
+    assert data == {"ok": True}
+    call = fake_groq["calls"][0]
+    assert call.get("extra_body", {}).get("reasoning_effort") == "low"
+
+
+# --------------------------------------------------------------------------- gpt-oss: max_tokens floor
+@pytest.mark.asyncio
+async def test_gpt_oss_raises_max_tokens_to_1024(fake_groq, _clean_groq_exhausted, tmp_path):
+    """Even if the caller passes max_tokens=100, gpt-oss must use at least 1024."""
+    client = LLMClient(_groq_settings(tmp_path))
+    await client.json(tier="fast", purpose="triage", system="s", user="u", max_tokens=100)
+    assert fake_groq["calls"][0]["max_tokens"] >= 1024
+
+
+@pytest.mark.asyncio
+async def test_gpt_oss_respects_large_caller_max_tokens(fake_groq, _clean_groq_exhausted, tmp_path):
+    """If the caller already passes max_tokens > 1024, do not override it."""
+    client = LLMClient(_groq_settings(tmp_path))
+    await client.json(tier="fast", purpose="triage", system="s", user="u", max_tokens=2048)
+    assert fake_groq["calls"][0]["max_tokens"] == 2048
+
+
+# --------------------------------------------------------------------------- gpt-oss: reasoning field fallback
+@pytest.mark.asyncio
+async def test_gpt_oss_parses_reasoning_field_on_empty_content(
+    fake_groq, _clean_groq_exhausted, tmp_path
+):
+    """When content is empty but reasoning contains valid JSON, use that."""
+    fake_groq["handler"] = lambda kwargs, n: _fake_groq_response(
+        content="", reasoning='{"healed": true, "step": 2}'
+    )
+    client = LLMClient(_groq_settings(tmp_path))
+    data = await client.json(tier="fast", purpose="heal", system="s", user="u")
+    assert data == {"healed": True, "step": 2}
+
+
+@pytest.mark.asyncio
+async def test_gpt_oss_parses_reasoning_content_field_on_empty_content(
+    fake_groq, _clean_groq_exhausted, tmp_path
+):
+    """Same as above but uses the `reasoning_content` field name."""
+    fake_groq["handler"] = lambda kwargs, n: _fake_groq_response(
+        content="", reasoning_content='{"verdict": "PASS"}'
+    )
+    client = LLMClient(_groq_settings(tmp_path))
+    data = await client.json(tier="fast", purpose="triage", system="s", user="u")
+    assert data == {"verdict": "PASS"}
+
+
+# --------------------------------------------------------------------------- gpt-oss: retry without response_format
+@pytest.mark.asyncio
+async def test_gpt_oss_retries_without_response_format_on_empty_content(
+    fake_groq, _clean_groq_exhausted, tmp_path
+):
+    """On first empty content (no reasoning), retry once without response_format."""
+    responses = [
+        _fake_groq_response(content=""),           # first call: empty, no reasoning
+        _fake_groq_response(content='{"ok": 1}'),  # retry without response_format: success
+    ]
+    idx = {"n": 0}
+
+    def handler(kwargs, n):
+        r = responses[idx["n"]]
+        idx["n"] += 1
+        return r
+
+    fake_groq["handler"] = handler
+    client = LLMClient(_groq_settings(tmp_path))
+    data = await client.json(tier="fast", purpose="triage", system="s", user="u")
+    assert data == {"ok": 1}
+    # First call must have response_format; retry must NOT have it
+    assert fake_groq["calls"][0].get("response_format") == {"type": "json_object"}
+    assert "response_format" not in fake_groq["calls"][1]
+
+
+@pytest.mark.asyncio
+async def test_gpt_oss_empty_content_no_reasoning_falls_back_to_next_model(
+    fake_groq, _clean_groq_exhausted, tmp_path
+):
+    """If all retries for gpt-oss-20b yield empty content, fall through to the next model."""
+    fallback_settings = _groq_settings(
+        tmp_path,
+        models={"fast": ["groq:openai/gpt-oss-20b", "model-fallback"]},
+    )
+    # groq:gpt-oss-20b always returns empty; model-fallback (openrouter) returns good JSON
+    def handler(kwargs, n):
+        m = kwargs.get("model", "")
+        if m == "openai/gpt-oss-20b":
+            return _fake_groq_response(content="")
+        return _fake_response('{"fallback": true}')
+
+    fake_groq["handler"] = handler
+    client = LLMClient(fallback_settings)
+    data = await client.json(tier="fast", purpose="triage", system="s", user="u")
+    assert data == {"fallback": True}
+    models_called = [c["model"] for c in fake_groq["calls"]]
+    assert "openai/gpt-oss-20b" in models_called
+    assert "model-fallback" in models_called

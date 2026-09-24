@@ -176,6 +176,26 @@ def _usage_tokens(resp: Any, name: str) -> int:
     return int(value or 0)
 
 
+def _extract_gpt_oss_reasoning(resp: Any) -> dict | None:
+    """For Groq gpt-oss: when visible content is empty, try to parse JSON from the reasoning
+    fields that the model may have populated instead (`reasoning` or `reasoning_content`)."""
+    try:
+        msg = resp.choices[0].message
+    except (AttributeError, IndexError, TypeError):
+        return None
+    for attr in ("reasoning", "reasoning_content"):
+        raw = getattr(msg, attr, None)
+        if not raw:
+            # also look inside model_extra / __dict__ for SDK versions that use __extra__
+            extra = getattr(msg, "model_extra", None) or getattr(msg, "__dict__", {})
+            raw = (extra or {}).get(attr)
+        if raw and isinstance(raw, str):
+            data = _parse_json(raw)
+            if data is not None:
+                return data
+    return None
+
+
 class _CallResult:
     __slots__ = ("data", "model", "tokens_in", "tokens_out", "latency_ms")
 
@@ -320,7 +340,18 @@ class LLMClient:
             self._last_error = f"provider {provider!r} not configured"
             return None
         rpm = PROVIDERS[provider].rpm if provider in PROVIDERS else _RATE_MAX
+
+        # gpt-oss are Groq reasoning models: hidden reasoning eats the token budget, leaving
+        # empty content when max_tokens is too low.  Apply three mitigations:
+        #   1. Floor max_tokens at 1024 so the model has room to produce a response.
+        #   2. Send reasoning_effort="low" via extra_body to minimise reasoning overhead.
+        #   3. On empty content, attempt once more without response_format (see below).
+        _is_gpt_oss = provider == "groq" and "gpt-oss" in model_id
+        if _is_gpt_oss:
+            max_tokens = max(max_tokens, 1024)
+
         use_json = True
+        _gpt_oss_no_format_retry = False   # True after we drop response_format for gpt-oss
         for attempt in range(1, _MAX_ATTEMPTS_PER_MODEL + 1):
             await _acquire_slot(provider, rpm)
             t0 = time.monotonic()
@@ -337,6 +368,10 @@ class LLMClient:
                 if provider in ("openrouter", "openrouter2"):
                     # free reasoning models otherwise "think" for minutes; keep every tier snappy
                     kwargs["extra_body"] = {"reasoning": {"effort": "low", "exclude": True}}
+                elif _is_gpt_oss:
+                    # Groq gpt-oss: low reasoning effort keeps the hidden scratchpad short so the
+                    # visible content token budget is not consumed by reasoning alone.
+                    kwargs["extra_body"] = {"reasoning_effort": "low"}
                 resp = await client.chat.completions.create(**kwargs)
             except Exception as exc:  # noqa: BLE001 - any provider/transport error
                 status = _error_status(exc)
@@ -357,9 +392,30 @@ class LLMClient:
                     continue
                 return None  # hard failure on this model -> next in the chain
             latency_ms = int((time.monotonic() - t0) * 1000)
-            data = _parse_json(_content_text(resp))
+            content = _content_text(resp)
+            data = _parse_json(content)
             if data is None:
-                self._last_error = f"model returned non-JSON output: {_content_text(resp)[:120]!r}"
+                # --- gpt-oss empty-content recovery -------------------------------------
+                if _is_gpt_oss and not content.strip():
+                    # 1. The reasoning field sometimes carries the JSON the model "meant" to
+                    #    output.  Check both common field names before giving up.
+                    data = _extract_gpt_oss_reasoning(resp)
+                    if data is not None:
+                        return _CallResult(
+                            data=data,
+                            model=model,
+                            tokens_in=_usage_tokens(resp, "prompt_tokens"),
+                            tokens_out=_usage_tokens(resp, "completion_tokens"),
+                            latency_ms=latency_ms,
+                        )
+                    # 2. Retry once without response_format; gpt-oss sometimes refuses to
+                    #    emit JSON-mode output but answers correctly in plain-text mode.
+                    if use_json and not _gpt_oss_no_format_retry:
+                        use_json = False
+                        _gpt_oss_no_format_retry = True
+                        continue
+                # --- generic empty / non-JSON fallback ----------------------------------
+                self._last_error = f"model returned non-JSON output: {content[:120]!r}"
                 if attempt < _MAX_ATTEMPTS_PER_MODEL:
                     continue  # one free retry, then fall through to the next model
                 return None

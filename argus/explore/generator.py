@@ -107,15 +107,46 @@ def atlas_digest(atlas: dict, max_chars: int = 24000) -> str:
 # LLM proposal -> spec
 # --------------------------------------------------------------------------------------
 
-async def propose(settings: Settings, atlas: dict, llm) -> list[dict]:
-    """One `smart` call proposing the regression suite; returns raw test dicts."""
-    user = P.GENERATE_USER.format(
+async def propose(settings: Settings, atlas: dict, llm, log=print) -> list[dict]:
+    """One `smart` call proposing the regression suite; returns raw test dicts.
+
+    If the model returns a fragment or an object without a `tests` wrapper (some free
+    providers truncate long completions), retry up to 2 extra times with a corrective
+    hint appended — each retry has its own cache key, so it only costs a call when a
+    previous attempt actually was malformed.
+    """
+    base = P.GENERATE_USER.format(
         product=settings.product_context() or "(no product context provided)",
         atlas=atlas_digest(atlas),
     )
-    data = await llm.json(tier="smart", purpose="generate",
-                          system=P.GENERATE_SYSTEM, user=user, max_tokens=900)
-    return [t for t in (data or {}).get("tests") or [] if isinstance(t, dict)]
+    _CORRECTION = (
+        "\n\nYour previous response was NOT a single {'tests': [...]} JSON object. "
+        "Return exactly one valid JSON object: {\"tests\": [<test objects>]} and nothing else."
+    )
+    user = base
+    for attempt in range(3):
+        data = await llm.json(tier="smart", purpose="generate",
+                              system=P.GENERATE_SYSTEM, user=user, max_tokens=2600)
+        if isinstance(data, str):
+            import json as _json
+            try:
+                data = _json.loads(data)
+            except (TypeError, ValueError):
+                data = None
+            if isinstance(data, str):  # double-encoded JSON string
+                try:
+                    data = _json.loads(data)
+                except (TypeError, ValueError):
+                    data = None
+        tests = [t for t in (data or {}).get("tests") or [] if isinstance(t, dict)]
+        if tests:
+            return tests
+        if attempt < 2:
+            log(f"[generate] proposal attempt {attempt + 1} had no 'tests' wrapper; retrying")
+            user = base + _CORRECTION
+        else:
+            log("[generate] proposal failed: no usable 'tests' wrapper after 3 attempts")
+    return []
 
 
 def to_spec(raw: dict, atlas: dict, idx: int) -> Optional[TestSpec]:
