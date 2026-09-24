@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SkyOps — Drone Operations Console</title>
+  <link rel="stylesheet" href="/static/app.css" />
+</head>
+<body>
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="login-logo">
+      <span class="logo-icon">🛸</span>
+      <span>SkyOps</span>
+    </div>
+    <h1 class="login-title">Drone Operations Console</h1>
+    <p class="login-subtitle">Sign in to manage your fleet</p>
+
+    <form data-js="login-form" novalidate>
+      {{ ui.wrap_start()|safe }}
+      <div class="form-group" style="margin-bottom:16px;">
+        <label for="{{ ui.id('login-email') }}">Email address</label>
+        <input
+          type="email"
+          id="{{ ui.id('login-email') }}"
+          data-js="login-email"
+          {% if ui.testid('login-email') %}data-testid="{{ ui.testid('login-email') }}"{% endif %}
+          name="email"
+          autocomplete="email"
+          required
+          placeholder="pilot@skyops.io"
+          aria-label="Email address"
+        />
+      </div>
+      <div class="form-group" style="margin-bottom:20px;">
+        <label for="{{ ui.id('login-password') }}">Password</label>
+        <input
+          type="password"
+          id="{{ ui.id('login-password') }}"
+          data-js="login-password"
+          {% if ui.testid('login-password') %}data-testid="{{ ui.testid('login-password') }}"{% endif %}
+          name="password"
+          autocomplete="current-password"
+          required
+          aria-label="Password"
+        />
+      </div>
+      {{ ui.wrap_end()|safe }}
+
+      <div
+        id="{{ ui.id('login-error') }}"
+        data-js="login-error"
+        class="alert alert-error"
+        role="alert"
+        style="display:none;margin-bottom:16px;"
+        aria-live="assertive"
+      ></div>
+
+      {% set tag = ui.tag('button') %}
+      {% if tag == 'button' %}
+      <button
+        type="submit"
+        id="{{ ui.id('login-submit') }}"
+        data-js="login-submit"
+        {% if ui.testid('login-submit') %}data-testid="{{ ui.testid('login-submit') }}"{% endif %}
+        class="{{ ui.cls('btn btn-primary') }}"
+        style="width:100%;"
+      >{{ ui.text('Log in') }}</button>
+      {% elif tag == 'a_role_button' %}
+      <a
+        href="#"
+        role="button"
+        id="{{ ui.id('login-submit') }}"
+        data-js="login-submit"
+        {% if ui.testid('login-submit') %}data-testid="{{ ui.testid('login-submit') }}"{% endif %}
+        class="{{ ui.cls('btn btn-primary') }}"
+        style="width:100%;display:flex;justify-content:center;"
+        aria-label="{{ ui.text('Log in') }}"
+        onclick="this.closest('form').dispatchEvent(new Event('submit',{cancelable:true,bubbles:true}));return false;"
+      >{{ ui.text('Log in') }}</a>
+      {% else %}
+      <div
+        role="button"
+        tabindex="0"
+        id="{{ ui.id('login-submit') }}"
+        data-js="login-submit"
+        {% if ui.testid('login-submit') %}data-testid="{{ ui.testid('login-submit') }}"{% endif %}
+        class="{{ ui.cls('btn btn-primary') }}"
+        style="width:100%;display:flex;justify-content:center;"
+        aria-label="{{ ui.text('Log in') }}"
+        onclick="this.closest('form').dispatchEvent(new Event('submit',{cancelable:true,bubbles:true}))"
+        onkeydown="if(event.key==='Enter'||event.key===' ')this.click()"
+      >{{ ui.text('Log in') }}</div>
+      {% endif %}
+    </form>
+  </div>
+</div>
+<script src="/static/app.js"></script>
+</body>
+</html>

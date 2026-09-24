@@ -1,0 +1,175 @@
+{
+  "id": "login",
+  "name": "Pilot signs in",
+  "goal": "A pilot with valid credentials reaches the fleet overview",
+  "tags": [
+    "auth",
+    "smoke"
+  ],
+  "start_url": "/login",
+  "steps": [
+    {
+      "id": "s1",
+      "intent": "Enter the pilot email",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Email address",
+        "text": "",
+        "attrs": {
+          "type": "email",
+          "id": "login-email",
+          "data-testid": "login-email",
+          "name": "email",
+          "required": "",
+          "placeholder": "pilot@skyops.io",
+          "aria-label": "Email address"
+        },
+        "label": "Email address",
+        "context": "Drone Operations Console",
+        "neighbor_text": "Email address | Password | Log in",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/form[1]/div[1]/input[1]",
+        "css": "#login-email",
+        "bbox": {
+          "x": 481.0,
+          "y": 399.0,
+          "w": 318.0,
+          "h": 37.0
+        }
+      },
+      "value": "${creds.user}",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    },
+    {
+      "id": "s2",
+      "intent": "Enter the password",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Password",
+        "text": "",
+        "attrs": {
+          "type": "password",
+          "id": "login-password",
+          "data-testid": "login-password",
+          "name": "password",
+          "required": "",
+          "aria-label": "Password"
+        },
+        "label": "Password",
+        "context": "Drone Operations Console",
+        "neighbor_text": "Password | Email address | Log in",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/form[1]/div[2]/input[1]",
+        "css": "#login-password",
+        "bbox": {
+          "x": 481.0,
+          "y": 478.0,
+          "w": 318.0,
+          "h": 37.0
+        }
+      },
+      "value": "${creds.password}",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    },
+    {
+      "id": "s3",
+      "intent": "Submit the sign-in form",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Log in",
+        "text": "Log in",
+        "attrs": {
+          "type": "submit",
+          "id": "login-submit",
+          "data-testid": "login-submit",
+          "class": "btn btn-primary"
+        },
+        "label": "",
+        "context": "Drone Operations Console",
+        "neighbor_text": "Email address | Password | 🛸 SkyOps",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/form[1]/button[1]",
+        "css": "#login-submit",
+        "bbox": {
+          "x": 481.0,
+          "y": 535.0,
+          "w": 318.0,
+          "h": 36.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": true,
+        "url_pattern": "/dashboard",
+        "network": [
+          {
+            "method": "POST",
+            "path": "/api/login",
+            "status": 200,
+            "resource_type": "fetch"
+          }
+        ],
+        "headings_any": [
+          "Fleet overview"
+        ],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    }
+  ],
+  "oracles": [
+    {
+      "kind": "url_matches",
+      "params": {
+        "pattern": "/dashboard"
+      },
+      "description": "Pilot lands on the dashboard",
+      "rule_ref": "R5"
+    },
+    {
+      "kind": "text_visible",
+      "params": {
+        "text": "Fleet overview"
+      },
+      "description": "Fleet overview is shown",
+      "rule_ref": null
+    }
+  ],
+  "version": 1,
+  "status": "active",
+  "origin": "manual",
+  "history": [
+    {
+      "version": 1,
+      "at": "2026-09-24T08:50:14+00:00",
+      "kind": "created",
+      "summary": "Authored (manual); baseline recorded",
+      "diff": "",
+      "verdict_ref": null
+    }
+  ],
+  "requires_login": false
+}

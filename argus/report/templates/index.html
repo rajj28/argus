@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block head %}
+<meta http-equiv="refresh" content="5">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+{% block title %}Dashboard - Argus{% endblock %}
+{% block content %}
+<h1 class="page-title">Mission overview</h1>
+
+<section class="kpis">
+  <div class="kpi"><div class="kpi-label">Active tests</div><div class="kpi-value num">{{ kpis.tests }}</div></div>
+  <div class="kpi"><div class="kpi-label">Pass rate</div><div class="kpi-value num">{{ kpis.pass_rate }}%</div></div>
+  <div class="kpi"><div class="kpi-label">Healed steps</div><div class="kpi-value num">{{ kpis.healed_steps }}</div></div>
+  <div class="kpi"><div class="kpi-label">Bugs found</div><div class="kpi-value num">{{ kpis.bugs }}</div></div>
+  <div class="kpi"><div class="kpi-label">LLM calls</div><div class="kpi-value num">{{ kpis.llm_calls }}</div></div>
+  <div class="kpi"><div class="kpi-label">$ spent</div><div class="kpi-value num">${{ kpis.cost_total }}</div></div>
+  <div class="kpi"><div class="kpi-label">Tokens avoided vs LLM-per-action</div><div class="kpi-value num">{{ kpis.tokens_avoided }}</div></div>
+</section>
+
+<section class="charts-row">
+  <div class="card">
+    <h2>Cost per run ($) vs LLM calls</h2>
+    <canvas id="costChart" height="90"></canvas>
+  </div>
+  <div class="card">
+    <h2>Resolution tiers per run (T0 replay .. T5 vision)</h2>
+    <canvas id="tierChart" height="90"></canvas>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Recent runs</h2>
+  {% if rows %}
+  <table class="grid">
+    <thead>
+      <tr><th>Run</th><th>Label</th><th>Started</th><th>T</th><th>Pass</th><th>Fail</th><th>Healed</th><th>LLM</th><th>Cost</th><th>Verdicts</th></tr>
+    </thead>
+    <tbody>
+    {% for r in rows %}
+      <tr>
+        <td><a href="/runs/{{ r.run_id }}"><span class="mono">{{ r.run_id }}</span></a></td>
+        <td>{{ r.label }}</td>
+        <td class="mono">{{ r.started_at }}</td>
+        <td class="num">{{ r.tests }}</td>
+        <td class="num ok">{{ r.passed }}</td>
+        <td class="num bad">{{ r.failed }}</td>
+        <td class="num">{{ r.healed }}</td>
+        <td class="num">{{ r.llm_calls }}</td>
+        <td class="num">${{ r.cost }}</td>
+        <td>{% for v in r.verdicts %}<span class="pill {{ pill_class(v) }}">{{ v }}</span>{% endfor %}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="empty">No runs recorded yet. Run `argus run` to populate this view.</p>
+  {% endif %}
+</section>
+
+<script>
+const charts = {{ charts | tojson }};
+new Chart(document.getElementById('costChart'), {
+  type: 'line',
+  data: {
+    labels: charts.labels,
+    datasets: [
+      { label: 'cost (USD)', data: charts.cost, borderColor: '#22d3ee', backgroundColor: 'rgba(34,211,238,.15)', yAxisID: 'y' },
+      { label: 'LLM calls', data: charts.calls, borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,.15)', yAxisID: 'y1' }
+    ]
+  },
+  options: { responsive: true, scales: { y: { beginAtZero: true }, y1: { beginAtZero: true, position: 'right', grid: { drawOnChartArea: false } } } }
+});
+new Chart(document.getElementById('tierChart'), {
+  type: 'bar',
+  data: { labels: charts.labels, datasets: charts.tiers },
+  options: { responsive: true, scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true } } }
+});
+</script>
+{% endblock %}

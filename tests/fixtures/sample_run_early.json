@@ -1,0 +1,92 @@
+{
+  "run_id": "run_20260923_0900",
+  "started_at": "2026-09-23T09:00:00+00:00",
+  "app_url": "https://skyops.example.com",
+  "label": "pre-deploy v1.2 baseline",
+  "results": [
+    {
+      "test_id": "login_flow",
+      "test_name": "Operator login",
+      "test_version": 2,
+      "status": "passed",
+      "verdict": {
+        "category": "PASS",
+        "confidence": 1.0,
+        "rationale": "Baseline run: all steps replayed unchanged.",
+        "evidence_refs": [],
+        "changelog_refs": [],
+        "decided_by": "rules",
+        "action": "none"
+      },
+      "steps": [
+        {
+          "step_id": "s1",
+          "intent": "Open the operator login page",
+          "status": "passed",
+          "tier": 0,
+          "score": 1.0,
+          "duration_ms": 205,
+          "screenshot": "screenshots/login_flow_s1.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "https://skyops.example.com/",
+            "url_after": "https://skyops.example.com/login",
+            "url_changed": true,
+            "title_after": "Sign in - SkyOps",
+            "new_headings": ["Sign in"],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s2",
+          "intent": "Submit the sign-in form",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.98,
+          "duration_ms": 330,
+          "screenshot": "screenshots/login_flow_s4.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "https://skyops.example.com/login",
+            "url_after": "https://skyops.example.com/missions",
+            "url_changed": true,
+            "title_after": "Missions - SkyOps",
+            "new_headings": ["Your missions"],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        }
+      ],
+      "observations": [],
+      "duration_ms": 535,
+      "llm_calls": []
+    }
+  ],
+  "totals": {
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "healed_steps": 0,
+    "replayed_steps": 2,
+    "llm_calls": 0,
+    "llm_calls_cached": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": 0.0,
+    "list_cost_usd": 0.0,
+    "naive_tokens_estimate": 4000,
+    "verdicts": {"PASS": 1},
+    "tiers": {"0": 2},
+    "duration_ms": 535
+  },
+  "learned": {}
+}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Tests - Argus{% endblock %}
+{% block content %}
+<h1 class="page-title">Test specs <span class="num dim">({{ count }})</span></h1>
+<section class="card">
+  {% if rows %}
+  <table class="grid">
+    <thead>
+      <tr><th>id</th><th>name</th><th>goal</th><th>v</th><th>status</th><th>steps</th><th>tags</th><th>start</th></tr>
+    </thead>
+    <tbody>
+    {% for t in rows %}
+      <tr>
+        <td><a href="/tests/{{ t.id }}"><span class="mono">{{ t.id }}</span></a></td>
+        <td>{{ t.name }}</td>
+        <td class="dim">{{ t.goal }}</td>
+        <td class="num">{{ t.version }}</td>
+        <td><span class="status status-{{ t.status }}">{{ t.status }}</span></td>
+        <td class="num">{{ t.steps }}</td>
+        <td>{% for tag in t.tags %}<span class="tag">{{ tag }}</span>{% endfor %}</td>
+        <td class="mono">{{ t.start_url }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="empty">No test specs found in <span class="mono">tests/</span>.</p>
+  {% endif %}
+</section>
+{% endblock %}

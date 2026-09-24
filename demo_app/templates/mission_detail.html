@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}{{ mission.name }}{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 data-js="page-heading">{{ mission.name }}</h1>
+    <p class="page-subhead">{{ mission.type }} · {{ mission.site }}</p>
+  </div>
+  <a href="/missions" class="{{ ui.cls('btn btn-secondary') }}">← Missions</a>
+</div>
+
+{% if launched %}
+<div class="alert alert-success" role="status" aria-live="polite" data-js="launch-toast">
+  🚀 Mission launched successfully!
+</div>
+{% endif %}
+
+<div class="detail-grid">
+  <div class="detail-field">
+    <span class="field-label">Drone</span>
+    <span class="field-value" data-js="mission-drone">{{ mission.drone_name }}</span>
+  </div>
+  <div class="detail-field">
+    <span class="field-label">Type</span>
+    <span class="field-value" data-js="mission-type">{{ mission.type }}</span>
+  </div>
+  <div class="detail-field">
+    <span class="field-label">Site</span>
+    <span class="field-value" data-js="mission-site">{{ mission.site }}</span>
+  </div>
+  <div class="detail-field">
+    <span class="field-label">Altitude</span>
+    <span class="field-value" data-js="mission-altitude">{{ mission.altitude }} m</span>
+  </div>
+  <div class="detail-field">
+    <span class="field-label">Speed</span>
+    <span class="field-value" data-js="mission-speed">{{ mission.speed }} m/s</span>
+  </div>
+  <div class="detail-field">
+    <span class="field-label">Return to home</span>
+    <span class="field-value" data-js="mission-rth">{{ 'Yes' if mission.rth else 'No' }}</span>
+  </div>
+  {% if mission.pilot %}
+  <div class="detail-field">
+    <span class="field-label">Pilot in command</span>
+    <span class="field-value" data-js="mission-pilot">{{ mission.pilot }}</span>
+  </div>
+  {% endif %}
+  <div class="detail-field">
+    <span class="field-label">Created</span>
+    <span class="field-value" data-js="mission-created">{{ mission.created[:10] }}</span>
+  </div>
+  <div class="detail-field">
+    <span class="field-label">Status</span>
+    <span class="field-value" data-js="mission-status">
+      {% set s = mission.status %}
+      {% if s == 'Scheduled' %}<span class="pill pill-scheduled">Scheduled</span>
+      {% elif s == 'In mission' %}<span class="pill pill-in-mission">In mission</span>
+      {% elif s == 'Completed' %}<span class="pill pill-completed">Completed</span>
+      {% elif s == 'Aborted' %}<span class="pill pill-aborted">Aborted</span>
+      {% else %}<span class="pill">{{ s }}</span>
+      {% endif %}
+    </span>
+  </div>
+</div>
+
+{% if mission.status not in ('Aborted', 'Completed') %}
+<div style="margin-top:8px;">
+  {% set tag = ui.tag('button') %}
+  {% if tag == 'button' %}
+  <button
+    type="button"
+    class="{{ ui.cls('btn btn-danger') }}"
+    data-js="abort-mission-btn"
+    data-mission-id="{{ mission.id }}"
+    aria-label="Abort mission {{ mission.name }}"
+  >Abort mission</button>
+  {% elif tag == 'a_role_button' %}
+  <a
+    href="#"
+    role="button"
+    class="{{ ui.cls('btn btn-danger') }}"
+    data-js="abort-mission-btn"
+    data-mission-id="{{ mission.id }}"
+    aria-label="Abort mission {{ mission.name }}"
+  >Abort mission</a>
+  {% else %}
+  <div
+    role="button"
+    tabindex="0"
+    class="{{ ui.cls('btn btn-danger') }}"
+    data-js="abort-mission-btn"
+    data-mission-id="{{ mission.id }}"
+    aria-label="Abort mission {{ mission.name }}"
+    onkeydown="if(event.key==='Enter'||event.key===' ')this.click()"
+  >Abort mission</div>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,115 @@
+{
+  "id": "login_flow",
+  "name": "Operator login",
+  "goal": "Operators can sign in with their credentials and land on the missions list",
+  "tags": ["auth", "smoke"],
+  "start_url": "/login",
+  "steps": [
+    {
+      "id": "s1",
+      "intent": "Open the login page",
+      "action": "goto",
+      "value": "/login",
+      "expect": {
+        "url_pattern": "/login",
+        "headings_any": ["Sign in"],
+        "network": [
+          {"method": "GET", "path": "/login", "status": 200, "resource_type": "document"}
+        ],
+        "assertions": [
+          {"kind": "text_visible", "params": {"text": "Sign in"}, "description": "Login form heading is visible"}
+        ]
+      }
+    },
+    {
+      "id": "s2",
+      "intent": "Type the operator email",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Email",
+        "text": "",
+        "attrs": {"data-testid": "email", "type": "email", "id": "email"},
+        "label": "Email",
+        "css": "input#email",
+        "xpath": "/html/body/form/input[1]"
+      },
+      "value": "${creds.user}",
+      "save_as": "username",
+      "expect": {"assertions": []}
+    },
+    {
+      "id": "s3",
+      "intent": "Type the password",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Password",
+        "text": "",
+        "attrs": {"type": "password", "placeholder": "Password"},
+        "label": "Password",
+        "css": "input[placeholder='Password']",
+        "xpath": "/html/body/form/input[2]"
+      },
+      "value": "${creds.password}",
+      "expect": {"assertions": []}
+    },
+    {
+      "id": "s4",
+      "intent": "Submit the sign-in form",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Sign in",
+        "text": "Sign in",
+        "attrs": {"type": "submit"},
+        "css": "button[type='submit']",
+        "xpath": "/html/body/form/button"
+      },
+      "expect": {
+        "url_pattern": "/missions",
+        "network": [
+          {"method": "POST", "path": "/sessions", "status": 201, "resource_type": "fetch"}
+        ],
+        "assertions": [
+          {"kind": "url_matches", "params": {"pattern": "/missions"}, "description": "Lands on the missions page"}
+        ]
+      }
+    }
+  ],
+  "oracles": [
+    {"kind": "text_visible", "params": {"text": "Your missions"}, "description": "The missions list is shown after login"}
+  ],
+  "version": 3,
+  "status": "active",
+  "origin": "generated",
+  "history": [
+    {
+      "version": 1,
+      "kind": "created",
+      "at": "2026-09-20T10:00:00+00:00",
+      "summary": "Initial recording from the atlas explorer",
+      "diff": ""
+    },
+    {
+      "version": 2,
+      "kind": "updated",
+      "at": "2026-09-22T14:20:00+00:00",
+      "summary": "Password fill now targets placeholder text for reliability",
+      "diff": "@@ s3 target\n- attrs.placeholder=<none>\n+ attrs.placeholder=Password\n",
+      "verdict_ref": "run_20260923_0900/login_flow"
+    },
+    {
+      "version": 3,
+      "kind": "healed",
+      "at": "2026-09-24T11:35:00+00:00",
+      "summary": "Login button gained data-testid=submit after the re-brand; sticky",
+      "diff": "@@ s4 target\n+ attrs.data-testid=submit\n",
+      "verdict_ref": "run_20260924_1130/login_flow"
+    }
+  ],
+  "requires_login": false
+}

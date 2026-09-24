@@ -136,6 +136,7 @@ AssertionKind = Literal[
     "network_absent",     # params: {method, path, status_class}
     "no_page_errors",     # params: {}
     "value_equals",       # params: {fingerprint, value}
+    "element_state",      # params: {fingerprint, enabled?: bool, checked?: bool}
     "llm_check",          # params: {question}  - semantic check, used sparingly (costs a call)
 ]
 

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}{{ test.id }} - Argus{% endblock %}
+{% block content %}
+<nav class="crumbs"><a href="/">Dashboard</a> / <a href="/tests">Tests</a> / <span class="mono">{{ test.id }}</span></nav>
+<div class="card-head page-title-row">
+  <h1 class="page-title">{{ test.name }}</h1>
+  <span class="status status-{{ test.status }}">{{ test.status }}</span>
+  <a class="btn" href="{{ export_url }}">View Playwright export</a>
+</div>
+<div class="meta-line small">
+  <span>id <span class="mono">{{ test.id }}</span></span>
+  <span class="mono">v{{ test.version }}</span>
+  <span>{{ test.origin }}</span>
+  <span>start <span class="mono">{{ test.start_url }}</span></span>
+  <span>requires_login: {{ test.requires_login }}</span>
+</div>
+<p class="goal">{{ test.goal }}</p>
+
+<section class="card">
+  <h2>Steps <span class="num dim">({{ steps | length }})</span></h2>
+  <table class="grid">
+    <thead><tr><th>#</th><th>action</th><th>intent</th><th>target</th><th>value</th><th>expectations</th></tr></thead>
+    <tbody>
+    {% for s in steps %}
+      <tr>
+        <td class="num">{{ loop.index }}</td>
+        <td><span class="status status-{{ s.action }}">{{ s.action }}</span></td>
+        <td>{{ s.intent }}{% if s.optional %} <span class="tag">optional</span>{% endif %}</td>
+        <td class="mono small">{{ s.target_desc }}</td>
+        <td class="mono small">{{ s.value or "-" }}</td>
+        <td class="small">
+          {% if s.expect.url_pattern %}<div class="mono">url ~ {{ s.expect.url_pattern }}</div>{% endif %}
+          {% if s.expect.network %}<div class="mono">net: {{ s.expect.network | join(', ') }}</div>{% endif %}
+          {% for a in s.expect.assertions %}<div class="mono">{{ a.kind }}: {{ a.description }}</div>{% endfor %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+{% if oracles %}
+<section class="card">
+  <h2>Oracles <span class="num dim">({{ oracles | length }})</span></h2>
+  <table class="grid">
+    <thead><tr><th>kind</th><th>description</th></tr></thead>
+    <tbody>
+    {% for o in oracles %}
+      <tr><td><span class="status">{{ o.kind }}</span></td><td>{{ o.description }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endif %}
+
+{% if history %}
+<section class="card">
+  <h2>Version history</h2>
+  {% for c in history %}
+  <div class="change">
+    <div class="change-head">
+      <span class="status status-{{ c.kind }}">{{ c.kind }}</span>
+      <span class="mono">v{{ c.version }}</span>
+      <span class="mono dim">{{ c.at }}</span>
+      {% if c.verdict_ref %}<span class="mono dim">ref: {{ c.verdict_ref }}</span>{% endif %}
+    </div>
+    <p class="small">{{ c.summary }}</p>
+    {% if c.diff %}<pre class="pre-box mono">{{ c.diff }}</pre>{% endif %}
+  </div>
+  {% endfor %}
+</section>
+{% endif %}
+
+{% if archived %}
+<section class="card">
+  <h2>Archived versions <span class="num dim">({{ archived | length }})</span></h2>
+  <table class="grid">
+    <thead><tr><th>version</th><th>name</th><th>status</th><th>steps</th></tr></thead>
+    <tbody>
+    {% for a in archived %}
+      <tr><td class="num">{{ a.version }}</td><td>{{ a.name }}</td><td>{{ a.status }}</td><td class="num">{{ a.steps }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endif %}
+{% endblock %}

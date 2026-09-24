@@ -70,7 +70,7 @@ class Settings(BaseModel):
 
     def save(self) -> None:
         self.home.mkdir(parents=True, exist_ok=True)
-        data = self.model_dump(mode="json", exclude={"api_key"})
+        data = self.model_dump(mode="json", exclude={"api_key", "models", "llm_enabled"})
         (self.home / "config.json").write_text(json.dumps(data, indent=2), encoding="utf-8")
 
 
@@ -105,10 +105,14 @@ def load_settings(home: Path | str = ".argus", **overrides) -> Settings:
     data["home"] = home
     s = Settings(**data)
     s.api_key = os.environ.get("OPENROUTER_API_KEY") or os.environ.get("JEV_API", "")
+    from argus.llm.providers import available, default_chain
     for tier in ("fast", "smart", "vision"):
         env = os.environ.get(f"ARGUS_MODELS_{tier.upper()}")
         if env:
             s.models[tier] = [m.strip() for m in env.split(",") if m.strip()]
-    if os.environ.get("ARGUS_LLM", "").lower() == "off" or not s.api_key:
-        s.llm_enabled = False
+        else:
+            chain = default_chain(tier)          # layer 1: JEV/OpenRouter, layer 2: other free LLMs
+            if chain:
+                s.models[tier] = chain
+    s.llm_enabled = os.environ.get("ARGUS_LLM", "").lower() != "off" and bool(available())
     return s

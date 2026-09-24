@@ -1,0 +1,313 @@
+{% extends "base.html" %}
+{% block title %}Plan a mission{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 data-js="page-heading">Plan a mission</h1>
+    <p class="page-subhead">Create a new drone mission in {{ state.version >= '1.2' and '4' or '4' }} steps</p>
+  </div>
+  <a href="/missions" class="{{ ui.cls('btn btn-secondary') }}">← Missions</a>
+</div>
+
+{# Define step order based on version #}
+{% if state.version >= '1.2' %}
+  {%- set steps = [
+    {'id': 'details', 'title': 'Mission details', 'num': 1},
+    {'id': 'params', 'title': 'Flight parameters', 'num': 2},
+    {'id': 'drone', 'title': 'Select drone', 'num': 3},
+    {'id': 'review', 'title': 'Review & launch', 'num': 4},
+  ] -%}
+{% else %}
+  {%- set steps = [
+    {'id': 'details', 'title': 'Mission details', 'num': 1},
+    {'id': 'drone', 'title': 'Select drone', 'num': 2},
+    {'id': 'params', 'title': 'Flight parameters', 'num': 3},
+    {'id': 'review', 'title': 'Review & launch', 'num': 4},
+  ] -%}
+{% endif %}
+
+{# Stepper #}
+<div class="stepper" role="list" aria-label="Wizard steps" data-js="wizard-stepper">
+  {% for step in steps %}
+  <div class="step-item" role="listitem">
+    <div class="step-circle {% if loop.first %}active{% endif %}" data-js="step-circle" aria-current="{{ 'step' if loop.first else 'false' }}">{{ step.num }}</div>
+    <span class="step-label {% if loop.first %}active{% endif %}" data-js="step-label">{{ step.title }}</span>
+  </div>
+  {% if not loop.last %}
+  <div class="step-line" data-js="step-line" aria-hidden="true"></div>
+  {% endif %}
+  {% endfor %}
+</div>
+
+{# Wizard form #}
+<div data-js="mission-wizard" class="card">
+
+  {# ---- Step: Mission details ---- #}
+  <div data-js="wizard-panel" data-step="details" class="wizard-panel" aria-hidden="true">
+    <h2 class="section-title">Mission details</h2>
+    <div
+      data-js="step-alert"
+      class="alert alert-error"
+      role="alert"
+      aria-live="assertive"
+      style="display:none;margin-bottom:16px;"
+    ></div>
+    <div class="form-section">
+      {{ ui.wrap_start()|safe }}
+      <div class="form-group">
+        <label for="field-mission-name">Mission name <span aria-hidden="true">*</span></label>
+        <input
+          type="text"
+          id="field-mission-name"
+          data-js="field-mission-name"
+          name="name"
+          required
+          placeholder="e.g. Morning patrol run"
+          aria-required="true"
+          autocomplete="off"
+        />
+        <span class="field-error" data-js="field-error" data-field="name" role="alert" aria-live="polite"></span>
+      </div>
+
+      {% if state.version >= '1.2' %}
+      {# v1.2: pilot field on details step #}
+      <div class="form-group">
+        <label for="field-pilot">Pilot in command <span aria-hidden="true">*</span></label>
+        <input
+          type="text"
+          id="field-pilot"
+          data-js="field-pilot"
+          name="pilot"
+          required
+          placeholder="e.g. Capt. Sharma"
+          aria-required="true"
+        />
+        <span class="form-hint">Required for DGCA compliance</span>
+        <span class="field-error" data-js="field-error" data-field="pilot" role="alert" aria-live="polite"></span>
+      </div>
+      {% endif %}
+
+      {% if state.version >= '1.1' %}
+      {# v1.1: Site before Mission type #}
+      <div class="form-group">
+        <label for="field-mission-site">Site <span aria-hidden="true">*</span></label>
+        <select id="field-mission-site" data-js="field-mission-site" name="site" required aria-required="true">
+          <option value="">Select site…</option>
+          <option value="Pune Depot">Pune Depot</option>
+          <option value="Mumbai Port">Mumbai Port</option>
+          <option value="Bengaluru Solar Farm">Bengaluru Solar Farm</option>
+        </select>
+        <span class="field-error" data-js="field-error" data-field="site" role="alert" aria-live="polite"></span>
+      </div>
+      <div class="form-group">
+        <label for="field-mission-type">Mission type <span aria-hidden="true">*</span></label>
+        <select id="field-mission-type" data-js="field-mission-type" name="type" required aria-required="true">
+          <option value="">Select type…</option>
+          <option value="Survey">Survey</option>
+          <option value="Inspection">Inspection</option>
+          <option value="Delivery">Delivery</option>
+          <option value="Patrol">Patrol</option>
+        </select>
+        <span class="field-error" data-js="field-error" data-field="type" role="alert" aria-live="polite"></span>
+      </div>
+      {% else %}
+      {# v1.0: Mission type before Site #}
+      <div class="form-group">
+        <label for="field-mission-type">Mission type <span aria-hidden="true">*</span></label>
+        <select id="field-mission-type" data-js="field-mission-type" name="type" required aria-required="true">
+          <option value="">Select type…</option>
+          <option value="Survey">Survey</option>
+          <option value="Inspection">Inspection</option>
+          <option value="Delivery">Delivery</option>
+          <option value="Patrol">Patrol</option>
+        </select>
+        <span class="field-error" data-js="field-error" data-field="type" role="alert" aria-live="polite"></span>
+      </div>
+      <div class="form-group">
+        <label for="field-mission-site">Site <span aria-hidden="true">*</span></label>
+        <select id="field-mission-site" data-js="field-mission-site" name="site" required aria-required="true">
+          <option value="">Select site…</option>
+          <option value="Pune Depot">Pune Depot</option>
+          <option value="Mumbai Port">Mumbai Port</option>
+          <option value="Bengaluru Solar Farm">Bengaluru Solar Farm</option>
+        </select>
+        <span class="field-error" data-js="field-error" data-field="site" role="alert" aria-live="polite"></span>
+      </div>
+      {% endif %}
+      {{ ui.wrap_end()|safe }}
+    </div>
+    <div class="wizard-actions">
+      {% set tag = ui.tag('button') %}
+      {% if tag == 'button' %}
+      <button type="button" class="{{ ui.cls('btn btn-primary') }}" data-js="wizard-next">{{ ui.text('Next') }}</button>
+      {% elif tag == 'a_role_button' %}
+      <a href="#" role="button" class="{{ ui.cls('btn btn-primary') }}" data-js="wizard-next" aria-label="{{ ui.text('Next') }}">{{ ui.text('Next') }}</a>
+      {% else %}
+      <div role="button" tabindex="0" class="{{ ui.cls('btn btn-primary') }}" data-js="wizard-next" aria-label="{{ ui.text('Next') }}" onkeydown="if(event.key==='Enter'||event.key===' ')this.click()">{{ ui.text('Next') }}</div>
+      {% endif %}
+    </div>
+  </div>
+
+  {# ---- Step: Select drone ---- #}
+  <div data-js="wizard-panel" data-step="drone" class="wizard-panel" aria-hidden="true">
+    <h2 class="section-title">Select drone</h2>
+    <div
+      data-js="step-alert"
+      class="alert alert-error"
+      role="alert"
+      aria-live="assertive"
+      style="display:none;margin-bottom:16px;"
+    ></div>
+    <fieldset style="border:none;padding:0;">
+      <legend class="form-hint" style="margin-bottom:12px;">Select an available drone for this mission</legend>
+      <div class="drone-grid" data-js="drone-grid">
+        {% for drone in drones %}
+          {% set is_low_bat = drone.battery < 30 and 'low_battery_assignable' not in bugs %}
+          {% set is_busy = drone.status != 'Idle' %}
+          {% set disabled = is_low_bat or is_busy %}
+          <label class="drone-card {% if disabled %}disabled{% endif %}" for="drone-{{ drone.id }}">
+            {{ ui.wrap_start()|safe }}
+            <input
+              type="radio"
+              id="drone-{{ drone.id }}"
+              name="drone_id"
+              value="{{ drone.id }}"
+              data-js="field-drone"
+              {% if disabled %}disabled{% endif %}
+              aria-label="{{ drone.name }}{% if is_busy %} — Currently {{ drone.status }}{% elif is_low_bat %} — Battery too low{% endif %}"
+            />
+            <div class="drone-name">{{ drone.name }}</div>
+            <div class="drone-model">{{ drone.model }}</div>
+            <div class="battery-bar" style="margin-top:4px;">
+              <div class="battery-track">
+                <div class="battery-fill {% if drone.battery >= 50 %}battery-high{% elif drone.battery >= 20 %}battery-medium{% else %}battery-low{% endif %}"
+                     style="width:{{ drone.battery }}%"></div>
+              </div>
+              <span class="battery-pct">{{ drone.battery }}%</span>
+            </div>
+            {% if is_busy %}
+            <div class="drone-reason" role="status">Currently {{ drone.status }}</div>
+            {% elif is_low_bat %}
+            <div class="drone-reason" role="status">Battery {{ drone.battery }}% — below 30%</div>
+            {% endif %}
+            {{ ui.wrap_end()|safe }}
+          </label>
+        {% endfor %}
+      </div>
+      <span class="field-error" data-js="field-error" data-field="drone_id" role="alert" aria-live="polite" style="display:block;margin-top:8px;"></span>
+    </fieldset>
+    <div class="wizard-actions">
+      {% set tag = ui.tag('button') %}
+      {% if tag == 'button' %}
+      <button type="button" class="{{ ui.cls('btn btn-secondary') }}" data-js="wizard-back">{{ ui.text('Back') }}</button>
+      <button type="button" class="{{ ui.cls('btn btn-primary') }}" data-js="wizard-next">{{ ui.text('Next') }}</button>
+      {% elif tag == 'a_role_button' %}
+      <a href="#" role="button" class="{{ ui.cls('btn btn-secondary') }}" data-js="wizard-back">{{ ui.text('Back') }}</a>
+      <a href="#" role="button" class="{{ ui.cls('btn btn-primary') }}" data-js="wizard-next">{{ ui.text('Next') }}</a>
+      {% else %}
+      <div role="button" tabindex="0" class="{{ ui.cls('btn btn-secondary') }}" data-js="wizard-back" onkeydown="if(event.key==='Enter'||event.key===' ')this.click()">{{ ui.text('Back') }}</div>
+      <div role="button" tabindex="0" class="{{ ui.cls('btn btn-primary') }}" data-js="wizard-next" onkeydown="if(event.key==='Enter'||event.key===' ')this.click()">{{ ui.text('Next') }}</div>
+      {% endif %}
+    </div>
+  </div>
+
+  {# ---- Step: Flight parameters ---- #}
+  <div data-js="wizard-panel" data-step="params" class="wizard-panel" aria-hidden="true">
+    <h2 class="section-title">Flight parameters</h2>
+    <div
+      data-js="step-alert"
+      class="alert alert-error"
+      role="alert"
+      aria-live="assertive"
+      style="display:none;margin-bottom:16px;"
+    ></div>
+    <div class="form-section">
+      {{ ui.wrap_start()|safe }}
+      <div class="form-group">
+        <label for="field-altitude">Altitude (m) <span aria-hidden="true">*</span></label>
+        <input
+          type="number"
+          id="field-altitude"
+          data-js="field-altitude"
+          name="altitude"
+          min="10"
+          max="120"
+          value="60"
+          required
+          aria-required="true"
+          aria-describedby="altitude-hint"
+        />
+        <span id="altitude-hint" class="form-hint">10–120 m AGL (DGCA limit)</span>
+        <span class="field-error" data-js="field-error" data-field="altitude" role="alert" aria-live="polite"></span>
+      </div>
+      <div class="form-group">
+        <label for="field-speed">Speed (m/s) <span aria-hidden="true">*</span></label>
+        <input
+          type="number"
+          id="field-speed"
+          data-js="field-speed"
+          name="speed"
+          min="1"
+          max="15"
+          value="8"
+          required
+          aria-required="true"
+          aria-describedby="speed-hint"
+        />
+        <span id="speed-hint" class="form-hint">1–15 m/s</span>
+        <span class="field-error" data-js="field-error" data-field="speed" role="alert" aria-live="polite"></span>
+      </div>
+      <div class="checkbox-row">
+        <input type="checkbox" id="field-rth" data-js="field-rth" name="rth" checked />
+        <label for="field-rth">Return to home on low battery</label>
+      </div>
+      {{ ui.wrap_end()|safe }}
+    </div>
+    <div class="wizard-actions">
+      {% set tag = ui.tag('button') %}
+      {% if tag == 'button' %}
+      <button type="button" class="{{ ui.cls('btn btn-secondary') }}" data-js="wizard-back">{{ ui.text('Back') }}</button>
+      <button type="button" class="{{ ui.cls('btn btn-primary') }}" data-js="wizard-next">{{ ui.text('Next') }}</button>
+      {% elif tag == 'a_role_button' %}
+      <a href="#" role="button" class="{{ ui.cls('btn btn-secondary') }}" data-js="wizard-back">{{ ui.text('Back') }}</a>
+      <a href="#" role="button" class="{{ ui.cls('btn btn-primary') }}" data-js="wizard-next">{{ ui.text('Next') }}</a>
+      {% else %}
+      <div role="button" tabindex="0" class="{{ ui.cls('btn btn-secondary') }}" data-js="wizard-back" onkeydown="if(event.key==='Enter'||event.key===' ')this.click()">{{ ui.text('Back') }}</div>
+      <div role="button" tabindex="0" class="{{ ui.cls('btn btn-primary') }}" data-js="wizard-next" onkeydown="if(event.key==='Enter'||event.key===' ')this.click()">{{ ui.text('Next') }}</div>
+      {% endif %}
+    </div>
+  </div>
+
+  {# ---- Step: Review & launch ---- #}
+  <div data-js="wizard-panel" data-step="review" class="wizard-panel" aria-hidden="true">
+    <h2 class="section-title">Review & launch</h2>
+    <p class="page-subhead" style="margin-bottom:16px;">Review your mission parameters before launching.</p>
+    <ul class="summary-list" aria-label="Mission summary">
+      <li><span class="sl-key">Mission name</span> <span class="sl-val" data-js="review-name">—</span></li>
+      <li><span class="sl-key">Mission type</span> <span class="sl-val" data-js="review-type">—</span></li>
+      <li><span class="sl-key">Site</span> <span class="sl-val" data-js="review-site">—</span></li>
+      {% if state.version >= '1.2' %}
+      <li><span class="sl-key">Pilot in command</span> <span class="sl-val" data-js="review-pilot">—</span></li>
+      {% endif %}
+      <li><span class="sl-key">Drone</span> <span class="sl-val" data-js="review-drone">—</span></li>
+      <li><span class="sl-key">Altitude</span> <span class="sl-val" data-js="review-altitude">—</span></li>
+      <li><span class="sl-key">Speed</span> <span class="sl-val" data-js="review-speed">—</span></li>
+      <li><span class="sl-key">Return to home</span> <span class="sl-val" data-js="review-rth">—</span></li>
+    </ul>
+    <div class="wizard-actions">
+      {% set tag = ui.tag('button') %}
+      {% if tag == 'button' %}
+      <button type="button" class="{{ ui.cls('btn btn-secondary') }}" data-js="wizard-back">{{ ui.text('Back') }}</button>
+      <button type="button" class="{{ ui.cls('btn btn-primary') }}" data-js="wizard-launch">{{ ui.text('Launch mission') }}</button>
+      {% elif tag == 'a_role_button' %}
+      <a href="#" role="button" class="{{ ui.cls('btn btn-secondary') }}" data-js="wizard-back">{{ ui.text('Back') }}</a>
+      <a href="#" role="button" class="{{ ui.cls('btn btn-primary') }}" data-js="wizard-launch">{{ ui.text('Launch mission') }}</a>
+      {% else %}
+      <div role="button" tabindex="0" class="{{ ui.cls('btn btn-secondary') }}" data-js="wizard-back" onkeydown="if(event.key==='Enter'||event.key===' ')this.click()">{{ ui.text('Back') }}</div>
+      <div role="button" tabindex="0" class="{{ ui.cls('btn btn-primary') }}" data-js="wizard-launch" onkeydown="if(event.key==='Enter'||event.key===' ')this.click()">{{ ui.text('Launch mission') }}</div>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}

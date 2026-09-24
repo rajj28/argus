@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}{{ test.id }} export - Argus{% endblock %}
+{% block content %}
+<nav class="crumbs"><a href="/">Dashboard</a> / <a href="/tests">Tests</a> / <a href="/tests/{{ test.id }}">{{ test.id }}</a> / export</nav>
+<h1 class="page-title">Playwright export - {{ test.name }}</h1>
+<p class="small dim">base_url: <span class="mono">{{ base_url }}</span> &middot; steps: <span class="num">{{ test.steps | length }}</span></p>
+<pre class="pre-box">{{ ts }}</pre>
+{% endblock %}

@@ -1,0 +1,85 @@
+{
+  "stability": {
+    "tag": {
+      "same": 0,
+      "changed": 8
+    },
+    "name": {
+      "same": 2,
+      "changed": 6
+    },
+    "placeholder": {
+      "same": 8,
+      "changed": 0
+    },
+    "label": {
+      "same": 8,
+      "changed": 0
+    },
+    "neighbor_text": {
+      "same": 5,
+      "changed": 3
+    },
+    "type": {
+      "same": 0,
+      "changed": 8
+    },
+    "name_attr": {
+      "same": 8,
+      "changed": 0
+    },
+    "href": {
+      "same": 0,
+      "changed": 8
+    },
+    "class": {
+      "same": 7,
+      "changed": 1
+    },
+    "testid": {
+      "same": 8,
+      "changed": 0
+    },
+    "css": {
+      "same": 0,
+      "changed": 8
+    },
+    "id": {
+      "same": 7,
+      "changed": 1
+    },
+    "role": {
+      "same": 8,
+      "changed": 0
+    },
+    "context": {
+      "same": 7,
+      "changed": 1
+    },
+    "text": {
+      "same": 1,
+      "changed": 7
+    },
+    "title": {
+      "same": 8,
+      "changed": 0
+    },
+    "alt": {
+      "same": 8,
+      "changed": 0
+    },
+    "xpath": {
+      "same": 0,
+      "changed": 8
+    },
+    "position": {
+      "same": 1,
+      "changed": 7
+    },
+    "size": {
+      "same": 3,
+      "changed": 5
+    }
+  },
+  "decisions": {}
+}

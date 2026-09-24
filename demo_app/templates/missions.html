@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Missions{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 data-js="page-heading">Missions</h1>
+    <p class="page-subhead">Plan and monitor drone missions</p>
+  </div>
+  {% set tag = ui.tag('button') %}
+  {% if tag == 'button' %}
+  <button type="button" class="{{ ui.cls('btn btn-primary') }}" data-js="new-mission-btn"
+    onclick="window.location='/missions/new'" aria-label="{{ ui.text('New mission') }}">
+    + {{ ui.text('New mission') }}
+  </button>
+  {% elif tag == 'a_role_button' %}
+  <a href="/missions/new" role="button" class="{{ ui.cls('btn btn-primary') }}" data-js="new-mission-btn"
+    aria-label="{{ ui.text('New mission') }}">
+    + {{ ui.text('New mission') }}
+  </a>
+  {% else %}
+  <div role="button" tabindex="0" class="{{ ui.cls('btn btn-primary') }}" data-js="new-mission-btn"
+    onclick="window.location='/missions/new'"
+    onkeydown="if(event.key==='Enter')window.location='/missions/new'"
+    aria-label="{{ ui.text('New mission') }}">
+    + {{ ui.text('New mission') }}
+  </div>
+  {% endif %}
+</div>
+
+<div class="search-bar">
+  <label for="mission-search-input" class="sr-only">Search missions</label>
+  <input
+    type="search"
+    id="mission-search-input"
+    data-js="mission-search"
+    placeholder="Search missions"
+    value="{{ q }}"
+    aria-label="Search missions"
+  />
+</div>
+
+<div class="table-wrap">
+  <table aria-label="Missions list">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Drone</th>
+        <th>Altitude (m)</th>
+        <th>Status</th>
+        <th>Created</th>
+      </tr>
+    </thead>
+    <tbody data-js="missions-tbody">
+      {% for m in missions %}
+      <tr>
+        <td><a href="/missions/{{ m.id }}" data-js="mission-link">{{ m.name }}</a></td>
+        <td>{{ m.drone_name }}</td>
+        <td>{{ m.altitude }} m</td>
+        <td>
+          {% set s = m.status %}
+          {% if s == 'Scheduled' %}<span class="pill pill-scheduled">Scheduled</span>
+          {% elif s == 'In mission' %}<span class="pill pill-in-mission">In mission</span>
+          {% elif s == 'Completed' %}<span class="pill pill-completed">Completed</span>
+          {% elif s == 'Aborted' %}<span class="pill pill-aborted">Aborted</span>
+          {% else %}<span class="pill">{{ s }}</span>
+          {% endif %}
+        </td>
+        <td>{{ m.created[:10] }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5" class="empty-state">No missions found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

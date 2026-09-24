@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Argus{% endblock %}</title>
+<link rel="stylesheet" href="/static/style.css">
+{% block head %}{% endblock %}
+</head>
+<body>
+<nav class="topbar">
+  <a class="brand" href="/"><span class="accent">ARGUS</span> mission control</a>
+  <div class="navlinks">
+    <a href="/">Dashboard</a>
+    <a href="/tests">Tests</a>
+    <a href="/memory">Memory</a>
+    <a href="/gauntlet">Gauntlet</a>
+  </div>
+</nav>
+<main class="content">
+{% block content %}{% endblock %}
+</main>
+</body>
+</html>

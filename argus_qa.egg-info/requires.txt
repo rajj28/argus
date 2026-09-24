@@ -1,0 +1,11 @@
+playwright
+fastapi
+uvicorn[standard]
+pydantic>=2
+openai
+typer
+jinja2
+rapidfuzz
+mcp[cli]
+rich
+httpx

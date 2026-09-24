@@ -1,0 +1,471 @@
+{
+  "run_id": "run_20260924_1130",
+  "started_at": "2026-09-24T11:30:00+00:00",
+  "app_url": "https://skyops.example.com",
+  "label": "after deploy v1.3",
+  "results": [
+    {
+      "test_id": "login_flow",
+      "test_name": "Operator login",
+      "test_version": 3,
+      "status": "passed",
+      "verdict": {
+        "category": "PASS",
+        "confidence": 1.0,
+        "rationale": "All 4 steps replayed at tier 0 and both oracles passed; no observations.",
+        "evidence_refs": [],
+        "changelog_refs": [],
+        "decided_by": "rules",
+        "action": "none"
+      },
+      "steps": [
+        {
+          "step_id": "s1",
+          "intent": "Open the operator login page",
+          "status": "passed",
+          "tier": 0,
+          "score": 1.0,
+          "duration_ms": 210,
+          "screenshot": "screenshots/login_flow_s1.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "https://skyops.example.com/",
+            "url_after": "https://skyops.example.com/login",
+            "url_changed": true,
+            "title_after": "Sign in - SkyOps",
+            "new_headings": ["Sign in"],
+            "new_alerts": [],
+            "network": [
+              {"method": "GET", "path": "/login", "status": 200, "resource_type": "document"}
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s2",
+          "intent": "Type the operator email",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.96,
+          "duration_ms": 180,
+          "screenshot": "screenshots/login_flow_s2.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "https://skyops.example.com/login",
+            "url_after": "https://skyops.example.com/login",
+            "url_changed": false,
+            "title_after": "",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s3",
+          "intent": "Type the password",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.95,
+          "duration_ms": 170,
+          "screenshot": "screenshots/login_flow_s3.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "https://skyops.example.com/login",
+            "url_after": "https://skyops.example.com/login",
+            "url_changed": false,
+            "title_after": "",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s4",
+          "intent": "Submit the sign-in form",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.99,
+          "duration_ms": 340,
+          "screenshot": "screenshots/login_flow_s4.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "https://skyops.example.com/login",
+            "url_after": "https://skyops.example.com/missions",
+            "url_changed": true,
+            "title_after": "Missions - SkyOps",
+            "new_headings": ["Your missions"],
+            "new_alerts": [],
+            "network": [
+              {"method": "POST", "path": "/sessions", "status": 201, "resource_type": "fetch"}
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        }
+      ],
+      "observations": [],
+      "duration_ms": 900,
+      "llm_calls": []
+    },
+    {
+      "test_id": "mission_flow",
+      "test_name": "Create and review a mission",
+      "test_version": 4,
+      "status": "passed",
+      "verdict": {
+        "category": "COSMETIC_DRIFT",
+        "confidence": 0.85,
+        "rationale": "Three locators moved after the v1.3 re-brand; similarity heal matched each target and the business outcome is intact. Healed fingerprints committed.",
+        "evidence_refs": ["run_20260924_1130/mission_flow/s2", "run_20260924_1130/mission_flow/s3"],
+        "changelog_refs": [],
+        "decided_by": "rules",
+        "action": "test_healed"
+      },
+      "steps": [
+        {
+          "step_id": "s1",
+          "intent": "Open the missions list",
+          "status": "passed",
+          "tier": 0,
+          "score": 1.0,
+          "duration_ms": 190,
+          "screenshot": "screenshots/mission_flow_s1.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "https://skyops.example.com/login",
+            "url_after": "https://skyops.example.com/missions",
+            "url_changed": true,
+            "title_after": "Missions - SkyOps",
+            "new_headings": ["Your missions"],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s2",
+          "intent": "Click 'New mission' to open the create form",
+          "status": "healed",
+          "tier": 1,
+          "score": 0.83,
+          "duration_ms": 260,
+          "screenshot": "screenshots/mission_flow_s2.jpg",
+          "observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s2",
+              "detail": "Button renamed from 'New mission' to 'Create mission'; matched via role+neighbor text.",
+              "evidence": {"candidates": [{"ref": "e14", "score": 0.83}]},
+              "tier": 1,
+              "confidence": 0.85
+            }
+          ],
+          "effects": {
+            "url_before": "https://skyops.example.com/missions",
+            "url_after": "https://skyops.example.com/missions/new",
+            "url_changed": true,
+            "title_after": "New mission - SkyOps",
+            "new_headings": ["New mission"],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s3",
+          "intent": "Type a mission name",
+          "status": "healed",
+          "tier": 1,
+          "score": 0.79,
+          "duration_ms": 240,
+          "screenshot": "screenshots/mission_flow_s3.jpg",
+          "observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s3",
+              "detail": "Label text changed from 'Mission name' to 'Name'; matched via label+placeholder.",
+              "evidence": {"candidates": [{"ref": "e22", "score": 0.79}]},
+              "tier": 1,
+              "confidence": 0.8
+            }
+          ],
+          "effects": {
+            "url_before": "https://skyops.example.com/missions/new",
+            "url_after": "https://skyops.example.com/missions/new",
+            "url_changed": false,
+            "title_after": "",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s4",
+          "intent": "Choose the mission priority",
+          "status": "healed",
+          "tier": 1,
+          "score": 0.88,
+          "duration_ms": 220,
+          "screenshot": "screenshots/mission_flow_s4.jpg",
+          "observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s4",
+              "detail": "Select moved inside a new fieldset; matched via context.",
+              "evidence": {"candidates": [{"ref": "e31", "score": 0.88}]},
+              "tier": 1,
+              "confidence": 0.9
+            }
+          ],
+          "effects": {
+            "url_before": "https://skyops.example.com/missions/new",
+            "url_after": "https://skyops.example.com/missions/new",
+            "url_changed": false,
+            "title_after": "",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s5",
+          "intent": "Submit the create form",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.97,
+          "duration_ms": 380,
+          "screenshot": "screenshots/mission_flow_s5.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "https://skyops.example.com/missions/new",
+            "url_after": "https://skyops.example.com/missions/42",
+            "url_changed": true,
+            "title_after": "Mission details - SkyOps",
+            "new_headings": ["Perimeter sweep"],
+            "new_alerts": ["Mission created"],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        }
+      ],
+      "observations": [],
+      "duration_ms": 1290,
+      "updated_to_version": 5,
+      "llm_calls": [
+        {
+          "purpose": "heal",
+          "tier": "fast",
+          "model": "nvidia/nemotron-3-super-120b-a12b:free",
+          "tokens_in": 880,
+          "tokens_out": 120,
+          "cost_usd": 0.0,
+          "list_cost_usd": 0.0025,
+          "latency_ms": 1450,
+          "cached": false,
+          "ok": true
+        }
+      ]
+    },
+    {
+      "test_id": "billing_flow",
+      "test_name": "Billing export for a mission",
+      "test_version": 2,
+      "status": "failed",
+      "verdict": {
+        "category": "BUG",
+        "confidence": 0.9,
+        "rationale": "Hard signal: POST /missions/:id/export returned 500 after the 'Export' click and the page never navigated. Business outcome broken.",
+        "evidence_refs": ["run_20260924_1130/billing_flow/s4"],
+        "changelog_refs": [],
+        "decided_by": "rules",
+        "action": "bug_reported"
+      },
+      "steps": [
+        {
+          "step_id": "s1",
+          "intent": "Open the billing export page",
+          "status": "passed",
+          "tier": 0,
+          "score": 1.0,
+          "duration_ms": 200,
+          "screenshot": "screenshots/billing_flow_s1.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "https://skyops.example.com/missions/42",
+            "url_after": "https://skyops.example.com/billing/export",
+            "url_changed": true,
+            "title_after": "Billing export - SkyOps",
+            "new_headings": ["Billing export"],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s2",
+          "intent": "Pick the billing period",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.94,
+          "duration_ms": 160,
+          "screenshot": "screenshots/billing_flow_s2.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "https://skyops.example.com/billing/export",
+            "url_after": "https://skyops.example.com/billing/export",
+            "url_changed": false,
+            "title_after": "",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s3",
+          "intent": "Click 'Export billing report'",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.95,
+          "duration_ms": 190,
+          "screenshot": "screenshots/billing_flow_s3.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "https://skyops.example.com/billing/export",
+            "url_after": "https://skyops.example.com/billing/export",
+            "url_changed": false,
+            "title_after": "",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [
+              {"method": "POST", "path": "/billing/export", "status": 500, "resource_type": "fetch"}
+            ],
+            "console_errors": ["Failed to load resource: the server responded with a status of 500 (Internal Server Error)"],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s4",
+          "intent": "Watch for the download confirmation",
+          "status": "failed",
+          "tier": 0,
+          "score": 0.91,
+          "duration_ms": 420,
+          "screenshot": "screenshots/billing_flow_s4_fail.jpg",
+          "observations": [
+            {
+              "kind": "network_error",
+              "step_id": "s4",
+              "detail": "Expected 2xx download but got HTTP 500 on /billing/export.",
+              "evidence": {
+                "net_call": {"method": "POST", "path": "/billing/export", "status": 500, "resource_type": "fetch"}
+              },
+              "tier": 0,
+              "confidence": 0.9
+            },
+            {
+              "kind": "effect_mismatch",
+              "step_id": "s4",
+              "detail": "Expected new heading 'Export ready' but none appeared.",
+              "evidence": {}
+            }
+          ],
+          "effects": {
+            "url_before": "https://skyops.example.com/billing/export",
+            "url_after": "https://skyops.example.com/billing/export",
+            "url_changed": false,
+            "title_after": "Billing export - SkyOps",
+            "new_headings": [],
+            "new_alerts": ["Export failed"],
+            "network": [
+              {"method": "POST", "path": "/billing/export", "status": 500, "resource_type": "fetch"}
+            ],
+            "console_errors": ["Failed to load resource: the server responded with a status of 500 (Internal Server Error)"],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        }
+      ],
+      "observations": [
+        {
+          "kind": "console_error",
+          "detail": "500 (Internal Server Error) reported twice for /billing/export.",
+          "evidence": {}
+        }
+      ],
+      "duration_ms": 970,
+      "bug_report": "# Repro: billing export fails with 500\n\n1. Log in as an operator.\n2. Open /billing/export.\n3. Pick any period.\n4. Click 'Export billing report'.\n\n**Expected:** an xlsx download starts and the heading 'Export ready' appears.\n**Actual:** POST /billing/export returns HTTP 500; the toast says 'Export failed'.\n\n## Evidence\n- net call: POST /billing/export -> 500 (x2)\n- console: Failed to load resource: the server responded with a status of 500\n- screenshot: screenshots/billing_flow_s4_fail.jpg",
+      "llm_calls": [
+        {
+          "purpose": "triage",
+          "tier": "smart",
+          "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+          "tokens_in": 2100,
+          "tokens_out": 240,
+          "cost_usd": 0.0,
+          "list_cost_usd": 0.014,
+          "latency_ms": 3120,
+          "cached": false,
+          "ok": true
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "tests": 3,
+    "passed": 1,
+    "failed": 2,
+    "healed_steps": 3,
+    "replayed_steps": 9,
+    "llm_calls": 2,
+    "llm_calls_cached": 1,
+    "tokens_in": 2980,
+    "tokens_out": 360,
+    "cost_usd": 0.0,
+    "list_cost_usd": 0.0165,
+    "naive_tokens_estimate": 46000,
+    "verdicts": {"PASS": 1, "COSMETIC_DRIFT": 1, "BUG": 1},
+    "tiers": {"0": 9, "1": 3, "2": 1, "5": 1},
+    "duration_ms": 3160
+  },
+  "learned": {}
+}

@@ -1,0 +1,16 @@
+Metadata-Version: 2.4
+Name: argus-qa
+Version: 0.1.0
+Summary: Argus - the tireless hand in the browser: autonomous, self-healing, cost-aware UI testing.
+Requires-Python: >=3.11
+Requires-Dist: playwright
+Requires-Dist: fastapi
+Requires-Dist: uvicorn[standard]
+Requires-Dist: pydantic>=2
+Requires-Dist: openai
+Requires-Dist: typer
+Requires-Dist: jinja2
+Requires-Dist: rapidfuzz
+Requires-Dist: mcp[cli]
+Requires-Dist: rich
+Requires-Dist: httpx

@@ -1,0 +1,129 @@
+{
+  "id": "save-settings",
+  "name": "Pilot updates display name",
+  "goal": "Profile settings are saved and persisted (business rule R7)",
+  "tags": [
+    "settings"
+  ],
+  "start_url": "/settings",
+  "steps": [
+    {
+      "id": "s1",
+      "intent": "Change the display name",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Display name",
+        "text": "",
+        "attrs": {
+          "type": "text",
+          "id": "settings-display-name",
+          "name": "display_name",
+          "value": "Pilot bc797",
+          "aria-label": "Display name"
+        },
+        "label": "Display name",
+        "context": "form",
+        "neighbor_text": "Display name | Email Email cannot be changed here. | Units Metric Imperial",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[2]/form[1]/div[1]/div[1]/input[1]",
+        "css": "#settings-display-name",
+        "bbox": {
+          "x": 53.0,
+          "y": 216.0,
+          "w": 518.0,
+          "h": 37.0
+        }
+      },
+      "value": "Pilot ${unique}",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": "display_name"
+    },
+    {
+      "id": "s2",
+      "intent": "Save the settings",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Save settings",
+        "text": "Save settings",
+        "attrs": {
+          "type": "submit",
+          "class": "btn btn-primary"
+        },
+        "label": "",
+        "context": "form",
+        "neighbor_text": "Display name Email Email cannot be changed here. Units Metric Imperial Email me ",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[2]/form[1]/div[2]/button[1]",
+        "css": "#main-content > div:nth-of-type(2) > form > div:nth-of-type(2) > button",
+        "bbox": {
+          "x": 53.0,
+          "y": 508.0,
+          "w": 117.0,
+          "h": 36.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [
+          {
+            "method": "PUT",
+            "path": "/api/settings",
+            "status": 200,
+            "resource_type": "fetch"
+          }
+        ],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    }
+  ],
+  "oracles": [
+    {
+      "kind": "network_called",
+      "params": {
+        "method": "PUT",
+        "path": "/api/settings",
+        "status_class": "2xx"
+      },
+      "description": "Settings are persisted by the API",
+      "rule_ref": "R7"
+    },
+    {
+      "kind": "text_visible",
+      "params": {
+        "text": "Settings saved"
+      },
+      "description": "Confirmation is shown",
+      "rule_ref": null
+    }
+  ],
+  "version": 1,
+  "status": "active",
+  "origin": "manual",
+  "history": [
+    {
+      "version": 1,
+      "at": "2026-09-24T08:50:58+00:00",
+      "kind": "created",
+      "summary": "Authored (manual); baseline recorded",
+      "diff": "",
+      "verdict_ref": null
+    }
+  ],
+  "requires_login": true
+}

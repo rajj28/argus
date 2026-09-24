@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Flight logs{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 data-js="page-heading">Flight logs</h1>
+    <p class="page-subhead">Recent flight history</p>
+  </div>
+  {% set tag = ui.tag('button') %}
+  {% if tag == 'button' %}
+  <button type="button" class="{{ ui.cls('btn btn-secondary') }}" data-js="export-csv" aria-label="Export logs as CSV">Export CSV</button>
+  {% elif tag == 'a_role_button' %}
+  <a href="#" role="button" class="{{ ui.cls('btn btn-secondary') }}" data-js="export-csv" aria-label="Export logs as CSV">Export CSV</a>
+  {% else %}
+  <div role="button" tabindex="0" class="{{ ui.cls('btn btn-secondary') }}" data-js="export-csv" aria-label="Export logs as CSV" onkeydown="if(event.key==='Enter'||event.key===' ')this.click()">Export CSV</div>
+  {% endif %}
+</div>
+
+<div style="margin-bottom:16px;">
+  <label for="log-drone-filter">Filter by drone</label>
+  <select id="log-drone-filter" data-js="log-drone-filter" aria-label="Filter by drone" style="max-width:220px;display:inline-block;margin-left:8px;">
+    <option value="all">All drones</option>
+    {% for d in drones %}
+    <option value="{{ d.name }}" {% if d.name == drone_filter %}selected{% endif %}>{{ d.name }}</option>
+    {% endfor %}
+  </select>
+</div>
+
+<div class="table-wrap">
+  <table aria-label="Flight logs">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Drone</th>
+        <th>Duration</th>
+        <th>Distance (km)</th>
+        <th>Incidents</th>
+      </tr>
+    </thead>
+    <tbody data-js="logs-tbody">
+      {% for l in logs %}
+      <tr>
+        <td>{{ l.date }}</td>
+        <td>{{ l.drone }}</td>
+        <td>{{ l.duration }}</td>
+        <td>{{ l.distance_km }} km</td>
+        <td>{% if l.incidents > 0 %}<span class="badge-danger">{{ l.incidents }}</span>{% else %}0{% endif %}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5" class="empty-state">No logs found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

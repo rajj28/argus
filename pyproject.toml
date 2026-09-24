@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "argus-qa"
+version = "0.1.0"
+description = "Argus - the tireless hand in the browser: autonomous, self-healing, cost-aware UI testing."
+requires-python = ">=3.11"
+dependencies = ["playwright", "fastapi", "uvicorn[standard]", "pydantic>=2", "openai", "typer", "jinja2",
+                "rapidfuzz", "mcp[cli]", "rich", "httpx"]
+
+[project.scripts]
+argus = "argus.cli:app"
+
+[tool.setuptools.packages.find]
+include = ["argus*", "demo_app*"]
+
+[tool.setuptools.package-data]
+argus = ["browser/*.js", "report/templates/*", "report/static/*"]
+demo_app = ["templates/*", "static/*", "context/*", "context/releases/*"]

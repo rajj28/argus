@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vis-network/standalone/umd/vis-network.min.js"></script>
+{% endblock %}
+{% block title %}Memory - Argus{% endblock %}
+{% block content %}
+<h1 class="page-title">Memory</h1>
+
+<section class="card">
+  <h2>Attribute stability</h2>
+  {% if stability %}
+  <canvas id="stabilityChart" height="90"></canvas>
+  <table class="grid">
+    <thead><tr><th>attribute</th><th>same</th><th>changed</th><th>stability</th></tr></thead>
+    <tbody>
+    {% for attr, frac in stability.items() %}
+      <tr>
+        <td class="mono">{{ attr }}</td>
+        <td class="num">{{ stability_totals[attr].same }}</td>
+        <td class="num">{{ stability_totals[attr].changed }}</td>
+        <td class="num">{{ frac }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="empty">No stability data recorded.</p>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h2>Remembered decisions <span class="num dim">({{ decisions | length }})</span></h2>
+  {% if decisions %}
+    {% for d in decisions %}
+    <div class="change">
+      <div class="change-head">
+        <span class="mono">{{ d.sig }}</span>
+        <span class="pill {{ pill_class(d.verdict.category) }}">{{ d.verdict.category }}</span>
+        <span class="dim num">conf {{ d.verdict.confidence }}</span>
+        <span class="dim">{{ d.verdict.decided_by }}</span>
+      </div>
+      <p class="small">{{ d.verdict.rationale }}</p>
+    </div>
+    {% endfor %}
+  {% else %}
+  <p class="empty">No remembered decisions.</p>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h2>Atlas <span class="num dim">({{ atlas_counts.states }} states / {{ atlas_counts.transitions }} transitions)</span></h2>
+  {% if atlas_counts.states %}
+  <div id="atlas" class="atlas"></div>
+  {% else %}
+  <p class="empty">Atlas is empty.</p>
+  {% endif %}
+</section>
+
+<script>
+const stability = {{ stability | tojson }};
+new Chart(document.getElementById('stabilityChart'), {
+  type: 'bar',
+  data: { labels: Object.keys(stability), datasets: [{ label: 'stability', data: Object.values(stability), backgroundColor: '#22d3ee' }] },
+  options: { scales: { y: { min: 0, max: 1 } } }
+});
+</script>
+{% if atlas_counts.states %}
+<script>
+const graph = {{ graph | tojson }};
+const container = document.getElementById('atlas');
+const nodes = new vis.DataSet(graph.nodes);
+const edges = new vis.DataSet(graph.edges);
+new vis.Network(container, { nodes: nodes, edges: edges }, {
+  nodes: { color: { background: '#0f172a', border: '#22d3ee' }, font: { color: '#cbd5e1' } },
+  edges: { color: { color: '#475569' }, font: { color: '#94a3b8' } },
+  physics: { enabled: true }
+});
+</script>
+{% endif %}
+{% endblock %}

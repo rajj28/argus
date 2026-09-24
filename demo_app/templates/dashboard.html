@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 data-js="page-heading">Fleet overview</h1>
+    <p class="page-subhead">Live status of your drone fleet</p>
+  </div>
+</div>
+
+<div class="kpi-grid" data-js="kpi-grid">
+  {% for card in ui.kpi_order(kpi) %}
+  <div class="kpi-card" data-js="{{ card.js }}">
+    <div class="kpi-label">{{ card.label }}</div>
+    <div class="kpi-value">{{ card.value }}</div>
+  </div>
+  {% endfor %}
+</div>
+
+<div>
+  <div class="section-title">Fleet status</div>
+  <div class="table-wrap">
+    <table aria-label="Drone fleet">
+      <thead>
+        <tr>
+          <th>Drone</th>
+          <th>Model</th>
+          <th>Battery</th>
+          <th>Status</th>
+          <th>Dock</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody data-js="fleet-tbody">
+        {% for drone in drones %}
+        <tr>
+          <td><strong>{{ drone.name }}</strong></td>
+          <td>{{ drone.model }}</td>
+          <td>
+            <div class="battery-bar">
+              <div class="battery-track" aria-hidden="true">
+                <div class="battery-fill {% if drone.battery >= 50 %}battery-high{% elif drone.battery >= 20 %}battery-medium{% else %}battery-low{% endif %}"
+                     style="width:{{ drone.battery }}%"></div>
+              </div>
+              <span class="battery-pct" aria-label="{{ drone.battery }}% battery">{{ drone.battery }}%</span>
+            </div>
+          </td>
+          <td>
+            {% set s = drone.status %}
+            {% if s == 'Idle' %}<span class="pill pill-idle">Idle</span>
+            {% elif s == 'In mission' %}<span class="pill pill-mission">In mission</span>
+            {% elif s == 'Charging' %}<span class="pill pill-charging">Charging</span>
+            {% else %}<span class="pill pill-maintenance">Maintenance</span>
+            {% endif %}
+          </td>
+          <td>{{ drone.dock }}</td>
+          <td>
+            {% set tag = ui.tag('button') %}
+            {% if tag == 'button' %}
+            <button type="button" class="{{ ui.cls('btn btn-secondary btn-sm') }}" data-js="drone-view-btn" data-drone="{{ drone.id }}" aria-label="View {{ drone.name }}">{{ ui.text('View') }}</button>
+            {% elif tag == 'a_role_button' %}
+            <a href="/drones/{{ drone.id }}" role="button" class="{{ ui.cls('btn btn-secondary btn-sm') }}" data-js="drone-view-btn" data-drone="{{ drone.id }}" aria-label="View {{ drone.name }}">{{ ui.text('View') }}</a>
+            {% else %}
+            <div role="button" tabindex="0" class="{{ ui.cls('btn btn-secondary btn-sm') }}" data-js="drone-view-btn" data-drone="{{ drone.id }}" aria-label="View {{ drone.name }}" onclick="window.location='/drones/{{ drone.id }}'" onkeydown="if(event.key==='Enter')this.click()">{{ ui.text('View') }}</div>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

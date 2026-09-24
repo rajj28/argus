@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Analytics{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 data-js="page-heading">Analytics</h1>
+    <p class="page-subhead">Flight history and operational metrics</p>
+  </div>
+</div>
+
+<div class="kpi-grid" data-js="analytics-kpi">
+  <div class="kpi-card" data-js="kpi-total-flights">
+    <div class="kpi-label">Total flights</div>
+    <div class="kpi-value">{{ total_flights }}</div>
+  </div>
+  <div class="kpi-card" data-js="kpi-total-distance">
+    <div class="kpi-label">Total distance</div>
+    <div class="kpi-value">{{ total_distance }} <span style="font-size:18px;color:var(--text-secondary);">km</span></div>
+  </div>
+  <div class="kpi-card" data-js="kpi-total-incidents">
+    <div class="kpi-label">Incidents</div>
+    <div class="kpi-value">{{ total_incidents }}</div>
+  </div>
+  <div class="kpi-card" data-js="kpi-total-missions">
+    <div class="kpi-label">Missions</div>
+    <div class="kpi-value">{{ total_missions }}</div>
+  </div>
+</div>
+
+<div>
+  <div class="page-header" style="margin-bottom:12px;">
+    <div class="section-title">Flight history</div>
+    <div>
+      <label for="analytics-drone-filter">Filter by drone</label>
+      <select id="analytics-drone-filter" data-js="log-drone-filter" aria-label="Filter by drone" style="max-width:220px;display:inline-block;margin-left:8px;">
+        <option value="all">All drones</option>
+        {% for d in drones %}
+        <option value="{{ d.name }}" {% if d.name == drone_filter %}selected{% endif %}>{{ d.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table aria-label="Flight history">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Drone</th>
+          <th>Duration</th>
+          <th>Distance (km)</th>
+          <th>Incidents</th>
+        </tr>
+      </thead>
+      <tbody data-js="logs-tbody">
+        {% for l in logs %}
+        <tr>
+          <td>{{ l.date }}</td>
+          <td>{{ l.drone }}</td>
+          <td>{{ l.duration }}</td>
+          <td>{{ l.distance_km }} km</td>
+          <td>{% if l.incidents > 0 %}<span class="badge-danger">{{ l.incidents }}</span>{% else %}0{% endif %}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" class="empty-state">No flights recorded.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

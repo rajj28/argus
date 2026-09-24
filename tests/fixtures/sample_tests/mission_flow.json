@@ -1,0 +1,116 @@
+{
+  "id": "mission_flow",
+  "name": "Create and review a mission",
+  "goal": "An operator can create a new drone mission and inspect it in the details view",
+  "tags": ["missions", "core"],
+  "start_url": "/missions",
+  "steps": [
+    {
+      "id": "s1",
+      "intent": "Open the missions list",
+      "action": "goto",
+      "value": "/missions",
+      "expect": {
+        "url_pattern": "/missions",
+        "headings_any": ["Your missions"],
+        "assertions": []
+      }
+    },
+    {
+      "id": "s2",
+      "intent": "Click 'New mission' to open the create form",
+      "action": "click",
+      "target": {
+        "tag": "a",
+        "role": "link",
+        "name": "New mission",
+        "text": "New mission",
+        "attrs": {"href": "/missions/new"},
+        "css": "a[href='/missions/new']",
+        "xpath": "/html/body/main/a[1]"
+      },
+      "expect": {"url_pattern": "/missions/new", "assertions": []}
+    },
+    {
+      "id": "s3",
+      "intent": "Type a mission name",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Mission name",
+        "attrs": {"id": "mission-name", "type": "text", "placeholder": "e.g. Night survey"},
+        "label": "Mission name",
+        "css": "#mission-name",
+        "xpath": "/html/body/form/input[1]"
+      },
+      "value": "Perimeter sweep",
+      "expect": {"assertions": []}
+    },
+    {
+      "id": "s4",
+      "intent": "Choose the mission priority",
+      "action": "select",
+      "target": {
+        "tag": "select",
+        "role": "combobox",
+        "name": "Priority",
+        "attrs": {"id": "priority"},
+        "css": "#priority",
+        "xpath": "/html/body/form/select"
+      },
+      "value": "high",
+      "expect": {"assertions": []}
+    },
+    {
+      "id": "s5",
+      "intent": "Confirm the briefing is emailed",
+      "action": "check",
+      "target": {
+        "tag": "input",
+        "role": "checkbox",
+        "name": "Send briefing by email",
+        "attrs": {"type": "checkbox"},
+        "css": "input[type='checkbox']",
+        "xpath": "/html/body/form/input[3]"
+      },
+      "expect": {"assertions": []}
+    },
+    {
+      "id": "s6",
+      "intent": "Press Enter to submit the form",
+      "action": "press",
+      "value": "Enter",
+      "expect": {"url_pattern": "/missions/:id", "assertions": []}
+    },
+    {
+      "id": "s7",
+      "intent": "Wait for the confirmation toast",
+      "action": "wait",
+      "value": "800",
+      "expect": {
+        "assertions": [
+          {"kind": "text_visible", "params": {"text": "Mission created"}, "description": "Creation confirmation appears"}
+        ]
+      }
+    }
+  ],
+  "oracles": [
+    {"kind": "url_matches", "params": {"pattern": "/missions/\\d+"}, "description": "URL shows a mission id"},
+    {"kind": "text_visible", "params": {"text": "Perimeter sweep"}, "description": "Mission name is shown on the details page"}
+  ],
+  "version": 4,
+  "status": "active",
+  "origin": "generated",
+  "history": [
+    {
+      "version": 4,
+      "kind": "healed",
+      "at": "2026-09-24T11:35:00+00:00",
+      "summary": "Three fingerprints healed after the v1.3 re-brand",
+      "diff": "@@ s2 attrs.text\n- name: New mission\n+ name: Create mission\n@@ s3 name → label: 'Name'\n@@ s4 select moved into new fieldset\n",
+      "verdict_ref": "run_20260924_1130/mission_flow"
+    }
+  ],
+  "requires_login": true
+}

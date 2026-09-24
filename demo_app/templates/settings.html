@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 data-js="page-heading">Settings</h1>
+    <p class="page-subhead">Account and display preferences</p>
+  </div>
+</div>
+
+<div class="card" style="max-width:560px;">
+  <form data-js="settings-form" novalidate>
+    <div class="form-section">
+      {{ ui.wrap_start()|safe }}
+      <div class="form-group">
+        <label for="settings-display-name">Display name</label>
+        <input
+          type="text"
+          id="settings-display-name"
+          data-js="settings-display-name"
+          name="display_name"
+          value="{{ settings.display_name }}"
+          autocomplete="name"
+          aria-label="Display name"
+        />
+      </div>
+      <div class="form-group">
+        <label for="settings-email">Email</label>
+        <input
+          type="email"
+          id="settings-email"
+          data-js="settings-email"
+          name="email"
+          value="{{ settings.email }}"
+          readonly
+          aria-label="Email address (read-only)"
+        />
+        <span class="form-hint">Email cannot be changed here.</span>
+      </div>
+      <div class="form-group">
+        <label>Units</label>
+        <div class="radio-group" role="radiogroup" aria-label="Units">
+          <div class="radio-opt">
+            <input type="radio" id="units-metric" name="units" value="Metric"
+              data-js="settings-units"
+              {% if settings.units == 'Metric' %}checked{% endif %} />
+            <label for="units-metric">Metric</label>
+          </div>
+          <div class="radio-opt">
+            <input type="radio" id="units-imperial" name="units" value="Imperial"
+              data-js="settings-units"
+              {% if settings.units == 'Imperial' %}checked{% endif %} />
+            <label for="units-imperial">Imperial</label>
+          </div>
+        </div>
+      </div>
+      <div class="checkbox-row">
+        <input type="checkbox" id="email-reports" data-js="settings-email-reports"
+          name="email_reports" {% if settings.email_reports %}checked{% endif %} />
+        <label for="email-reports">Email me flight reports</label>
+      </div>
+      {{ ui.wrap_end()|safe }}
+    </div>
+
+    <div class="wizard-actions" style="border-top:1px solid var(--border);padding-top:20px;margin-top:20px;">
+      {% set tag = ui.tag('button') %}
+      {% if tag == 'button' %}
+      <button type="submit" class="{{ ui.cls('btn btn-primary') }}" data-js="save-settings-btn">{{ ui.text('Save settings') }}</button>
+      {% elif tag == 'a_role_button' %}
+      <a href="#" role="button" class="{{ ui.cls('btn btn-primary') }}" data-js="save-settings-btn"
+        onclick="this.closest('form').dispatchEvent(new Event('submit',{cancelable:true,bubbles:true}));return false;"
+        aria-label="{{ ui.text('Save settings') }}">{{ ui.text('Save settings') }}</a>
+      {% else %}
+      <div role="button" tabindex="0" class="{{ ui.cls('btn btn-primary') }}" data-js="save-settings-btn"
+        onclick="this.closest('form').dispatchEvent(new Event('submit',{cancelable:true,bubbles:true}))"
+        onkeydown="if(event.key==='Enter'||event.key===' ')this.click()"
+        aria-label="{{ ui.text('Save settings') }}">{{ ui.text('Save settings') }}</div>
+      {% endif %}
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+{% block title %}Gauntlet - Argus{% endblock %}
+{% block content %}
+<h1 class="page-title">Gauntlet benchmark</h1>
+{% if present %}
+  {% if dist %}
+  <section class="card">
+    <h2>Outcome distribution</h2>
+    <canvas id="gauntletChart" height="70"></canvas>
+  </section>
+  {% endif %}
+  <section class="card">
+    <h2>Trials <span class="num dim">({{ rows | length }})</span></h2>
+    <table class="grid">
+      <thead><tr>{% for h in headers %}<th>{{ h }}</th>{% endfor %}</tr></thead>
+      <tbody>
+      {% for r in rows %}
+        <tr>{% for h in headers %}<td class="mono small">{{ r.get(h) }}</td>{% endfor %}</tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </section>
+  {% if dist %}
+  <script>
+  const dist = {{ dist | tojson }};
+  new Chart(document.getElementById('gauntletChart'), {
+    type: 'bar',
+    data: { labels: Object.keys(dist), datasets: [{ label: 'trials', data: Object.values(dist), backgroundColor: '#22d3ee' }] },
+    options: { scales: { y: { beginAtZero: true } } }
+  });
+  </script>
+  {% endif %}
+{% else %}
+<p class="empty">No gauntlet data found. Run <span class="mono">argus gauntlet</span> to populate it.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,422 @@
+{
+  "id": "altitude-limit",
+  "name": "Altitude above 120 m is rejected",
+  "goal": "The planner must reject an altitude above the 120 m DGCA limit (business rule R1)",
+  "tags": [
+    "negative",
+    "compliance"
+  ],
+  "start_url": "/missions/new",
+  "steps": [
+    {
+      "id": "s1",
+      "intent": "Name the mission",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Mission name *",
+        "text": "",
+        "attrs": {
+          "type": "text",
+          "id": "field-mission-name",
+          "name": "name",
+          "required": "",
+          "placeholder": "e.g. Morning patrol run"
+        },
+        "label": "Mission name *",
+        "context": "Mission details",
+        "neighbor_text": "Mission name * | Mission type * Select type… Survey Inspection Delivery Patrol |",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[2]/div[1]/input[1]",
+        "css": "#field-mission-name",
+        "bbox": {
+          "x": 53.0,
+          "y": 340.0,
+          "w": 1174.0,
+          "h": 37.0
+        }
+      },
+      "value": "Altitude check ${unique}",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    },
+    {
+      "id": "s2",
+      "intent": "Choose mission type Inspection",
+      "action": "select",
+      "target": {
+        "tag": "select",
+        "role": "combobox",
+        "name": "Mission type *",
+        "text": "Select type… Survey Inspection Delivery Patrol",
+        "attrs": {
+          "id": "field-mission-type",
+          "name": "type",
+          "required": ""
+        },
+        "label": "Mission type *",
+        "context": "Mission details",
+        "neighbor_text": "Mission type * | Mission name * | Site * Select site… Pune Depot Mumbai Port Ben",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[2]/div[2]/select[1]",
+        "css": "#field-mission-type",
+        "bbox": {
+          "x": 53.0,
+          "y": 429.0,
+          "w": 1174.0,
+          "h": 37.0
+        }
+      },
+      "value": "Inspection",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    },
+    {
+      "id": "s3",
+      "intent": "Choose the Mumbai Port site",
+      "action": "select",
+      "target": {
+        "tag": "select",
+        "role": "combobox",
+        "name": "Site *",
+        "text": "Select site… Pune Depot Mumbai Port Bengaluru Solar Farm",
+        "attrs": {
+          "id": "field-mission-site",
+          "name": "site",
+          "required": ""
+        },
+        "label": "Site *",
+        "context": "Mission details",
+        "neighbor_text": "Site * | Mission name * | Mission type * Select type… Survey Inspection Delivery",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[2]/div[3]/select[1]",
+        "css": "#field-mission-site",
+        "bbox": {
+          "x": 53.0,
+          "y": 517.0,
+          "w": 1174.0,
+          "h": 37.0
+        }
+      },
+      "value": "Mumbai Port",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    },
+    {
+      "id": "s4",
+      "intent": "Continue from mission details",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Next",
+        "text": "Next",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-primary"
+        },
+        "label": "",
+        "context": "Mission details",
+        "neighbor_text": "Mission details | Mission name * Mission type * Select type… Survey Inspection D",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[3]/button[1]",
+        "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(3) > button",
+        "bbox": {
+          "x": 53.0,
+          "y": 605.0,
+          "w": 64.0,
+          "h": 36.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": true,
+        "url_pattern": "/missions/new",
+        "network": [
+          {
+            "method": "POST",
+            "path": "/api/missions/validate",
+            "status": 200,
+            "resource_type": "fetch"
+          }
+        ],
+        "headings_any": [
+          "Select drone"
+        ],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    },
+    {
+      "id": "s5",
+      "intent": "Assign drone Falcon-2",
+      "action": "check",
+      "target": {
+        "tag": "input",
+        "role": "radio",
+        "name": "Falcon-2",
+        "text": "",
+        "attrs": {
+          "type": "radio",
+          "id": "drone-d2",
+          "name": "drone_id",
+          "value": "d2",
+          "aria-label": "Falcon-2"
+        },
+        "label": "Falcon-2 DJI M350 88%",
+        "context": "Select drone",
+        "neighbor_text": "Falcon-2 | DJI M350 | 88%",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/fieldset[1]/div[1]/label[2]/input[1]",
+        "css": "#drone-d2",
+        "bbox": {
+          "x": 488.0,
+          "y": 359.0,
+          "w": 13.0,
+          "h": 13.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    },
+    {
+      "id": "s6",
+      "intent": "Continue from drone selection",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Next",
+        "text": "Next",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-primary"
+        },
+        "label": "",
+        "context": "Select drone",
+        "neighbor_text": "Back | Select drone | Select an available drone for this mission Falcon-1 DJI M3",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/div[2]/button[2]",
+        "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(2) > div:nth-of-type(2) > button:nth-of-type(2)",
+        "bbox": {
+          "x": 129.0,
+          "y": 668.0,
+          "w": 64.0,
+          "h": 36.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": true,
+        "url_pattern": "/missions/new",
+        "network": [
+          {
+            "method": "POST",
+            "path": "/api/missions/validate",
+            "status": 200,
+            "resource_type": "fetch"
+          }
+        ],
+        "headings_any": [
+          "Flight parameters"
+        ],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    },
+    {
+      "id": "s7",
+      "intent": "Enter an illegal altitude of 500 m",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "spinbutton",
+        "name": "Altitude (m) *",
+        "text": "",
+        "attrs": {
+          "type": "number",
+          "id": "field-altitude",
+          "name": "altitude",
+          "min": "10",
+          "max": "120",
+          "value": "60",
+          "required": ""
+        },
+        "label": "Altitude (m) *",
+        "context": "Flight parameters",
+        "neighbor_text": "Altitude (m) * | 10–120 m AGL (DGCA limit) | Speed (m/s) * 1–15 m/s",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[3]/div[2]/div[1]/input[1]",
+        "css": "#field-altitude",
+        "bbox": {
+          "x": 53.0,
+          "y": 340.0,
+          "w": 1174.0,
+          "h": 37.0
+        }
+      },
+      "value": "500",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    },
+    {
+      "id": "s8",
+      "intent": "Set speed to 8 m/s",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "spinbutton",
+        "name": "Speed (m/s) *",
+        "text": "",
+        "attrs": {
+          "type": "number",
+          "id": "field-speed",
+          "name": "speed",
+          "min": "1",
+          "max": "15",
+          "value": "8",
+          "required": ""
+        },
+        "label": "Speed (m/s) *",
+        "context": "Flight parameters",
+        "neighbor_text": "Speed (m/s) * | 1–15 m/s | Altitude (m) * 10–120 m AGL (DGCA limit)",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[3]/div[2]/div[2]/input[1]",
+        "css": "#field-speed",
+        "bbox": {
+          "x": 53.0,
+          "y": 453.0,
+          "w": 1174.0,
+          "h": 37.0
+        }
+      },
+      "value": "8",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    },
+    {
+      "id": "s9",
+      "intent": "Try to continue from flight parameters",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Next",
+        "text": "Next",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-primary"
+        },
+        "label": "",
+        "context": "Flight parameters",
+        "neighbor_text": "Back | Flight parameters | Altitude (m) * 10–120 m AGL (DGCA limit) Speed (m/s) ",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[3]/div[3]/button[2]",
+        "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(3) > div:nth-of-type(3) > button:nth-of-type(2)",
+        "bbox": {
+          "x": 129.0,
+          "y": 606.0,
+          "w": 64.0,
+          "h": 36.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [
+          {
+            "method": "POST",
+            "path": "/api/missions/validate",
+            "status": 422,
+            "resource_type": "fetch"
+          }
+        ],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    }
+  ],
+  "oracles": [
+    {
+      "kind": "text_visible",
+      "params": {
+        "text": "Altitude must be at most 120 m"
+      },
+      "description": "Altitude limit error is shown",
+      "rule_ref": "R1"
+    },
+    {
+      "kind": "network_absent",
+      "params": {
+        "method": "POST",
+        "path": "/api/missions",
+        "status_class": "2xx"
+      },
+      "description": "No mission is created",
+      "rule_ref": "R1"
+    }
+  ],
+  "version": 1,
+  "status": "active",
+  "origin": "manual",
+  "history": [
+    {
+      "version": 1,
+      "at": "2026-09-24T08:50:46+00:00",
+      "kind": "created",
+      "summary": "Authored (manual); baseline recorded",
+      "diff": "",
+      "verdict_ref": null
+    }
+  ],
+  "requires_login": true
+}

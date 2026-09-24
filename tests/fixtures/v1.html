@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SkyOps v1 — Drone Operations</title>
+  <style>
+    body { font-family: sans-serif; margin: 20px; }
+    .card { border: 1px solid #ccc; padding: 12px; margin: 12px 0; }
+    .error { color: red; }
+    nav { background: #333; padding: 8px; }
+    nav a { color: white; margin-right: 12px; text-decoration: none; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    .wizard { background: #f5f5f5; padding: 16px; margin-top: 16px; }
+  </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav aria-label="Main navigation">
+  <a href="/dashboard">Dashboard</a>
+  <a href="/fleet">Fleet</a>
+  <a href="/missions">Missions</a>
+  <a href="/settings">Settings</a>
+</nav>
+
+<main>
+  <h1>SkyOps Control Panel</h1>
+
+  <!-- Login form section -->
+  <section id="login-section" aria-label="Authentication">
+    <h2>Log in</h2>
+    <form id="login-form">
+      <div>
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" placeholder="Enter your username" data-testid="username-input" />
+      </div>
+      <div>
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" placeholder="Enter your password" data-testid="password-input" />
+      </div>
+      <div>
+        <label>
+          <input type="checkbox" id="remember-me" name="remember" />
+          Remember me
+        </label>
+      </div>
+      <button type="submit" id="login-btn" data-testid="login-button">Log in</button>
+      <a href="/signup" id="signup-link">Sign up</a>
+    </form>
+  </section>
+
+  <!-- Fleet table section -->
+  <section id="fleet-section" aria-label="Fleet management">
+    <h2>Fleet Overview</h2>
+    <p id="fleet-desc">Manage your drone fleet below.</p>
+    <table id="fleet-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Model</th>
+          <th>Battery</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="drone-row-1">
+          <td>Falcon-1</td>
+          <td>DJI M350</td>
+          <td>92%</td>
+          <td>Idle</td>
+          <td>
+            <button id="view-drone-1" data-testid="view-drone-1" class="btn btn-primary">View</button>
+          </td>
+        </tr>
+        <tr id="drone-row-2">
+          <td>Hawk-7</td>
+          <td>Autel EVO II</td>
+          <td>45%</td>
+          <td>Charging</td>
+          <td>
+            <button id="view-drone-2" data-testid="view-drone-2" class="btn btn-primary">View</button>
+          </td>
+        </tr>
+        <tr id="drone-row-3">
+          <td>Eagle-3</td>
+          <td>Skydio 2+</td>
+          <td>78%</td>
+          <td>In Mission</td>
+          <td>
+            <button id="view-drone-3" data-testid="view-drone-3" class="btn btn-primary">View</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button id="add-drone-btn" data-testid="add-drone" class="btn btn-success">Add drone</button>
+  </section>
+
+  <!-- Mission wizard -->
+  <section id="wizard-section" aria-label="Mission wizard">
+    <h2>New Mission</h2>
+    <div class="wizard" id="mission-wizard">
+      <h3>Step 1: Mission Details</h3>
+      <div>
+        <label for="mission-name">Mission name</label>
+        <input id="mission-name" name="mission_name" type="text" placeholder="Enter mission name" data-testid="mission-name-input" />
+      </div>
+      <div>
+        <label for="mission-type">Mission type</label>
+        <select id="mission-type" name="mission_type" data-testid="mission-type-select">
+          <option value="">Select type…</option>
+          <option value="survey">Survey</option>
+          <option value="delivery">Delivery</option>
+          <option value="inspection">Inspection</option>
+        </select>
+      </div>
+      <div>
+        <label for="mission-notes">Notes</label>
+        <textarea id="mission-notes" name="notes" placeholder="Optional notes" data-testid="mission-notes-textarea"></textarea>
+      </div>
+      <button id="next-btn" data-testid="next-button" class="btn btn-primary">Next</button>
+      <button id="cancel-mission-btn" data-testid="cancel-button" class="btn btn-secondary">Cancel</button>
+    </div>
+  </section>
+
+  <!-- Delete confirmation dialog -->
+  <dialog id="delete-dialog">
+    <h2>Confirm deletion</h2>
+    <p>Are you sure you want to delete this drone?</p>
+    <button id="confirm-delete-btn" data-testid="confirm-delete">Delete</button>
+    <button id="dismiss-dialog-btn" data-testid="dismiss-dialog">Cancel</button>
+  </dialog>
+
+  <!-- Search / filter -->
+  <section id="search-section" aria-label="Search">
+    <h2>Search missions</h2>
+    <div>
+      <label for="search-input">Search</label>
+      <input id="search-input" name="q" type="search" placeholder="Search missions…" data-testid="search-input" />
+      <button id="search-btn" data-testid="search-button">Search</button>
+    </div>
+  </section>
+
+  <!-- Settings link -->
+  <section id="settings-section" aria-label="Quick settings">
+    <h2>Settings</h2>
+    <a href="/settings/profile" id="settings-link" data-testid="settings-link">Settings</a>
+    <button id="save-settings-btn" data-testid="save-settings" class="btn">Save changes</button>
+  </section>
+
+</main>
+
+</body>
+</html>

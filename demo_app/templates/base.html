@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" data-logout-crash="{{ '1' if 'logout_crash' in bugs else '0' }}">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}SkyOps{% endblock %} — Drone Operations Console</title>
+  <link rel="stylesheet" href="/static/app.css" />
+</head>
+<body>
+{% set layout = ui.layout() %}
+{%- set nav_items_base = [
+  {'label': 'Dashboard', 'href': '/dashboard', 'icon': '⬡'},
+  {'label': 'Missions', 'href': '/missions', 'icon': '⚡'},
+  {'label': 'Flight logs', 'href': '/logs', 'icon': '📋'} if state.version < '1.2' else {'label': 'Analytics', 'href': '/analytics', 'icon': '📊'},
+  {'label': 'Settings', 'href': '/settings', 'icon': '⚙'},
+] -%}
+{%- set nav_items = ui.nav_order(nav_items_base) -%}
+{% set logout_tag = ui.tag('button') %}
+<div class="{{ 'layout-sidebar' if layout == 'sidebar' else 'layout-topbar' }}">
+{% if layout == 'sidebar' %}
+  <aside class="sidebar" role="navigation" aria-label="Main navigation">
+    <a href="/dashboard" class="{{ ui.cls('brand') }}" data-js="brand-link">
+      <span class="brand-icon">🛸</span> SkyOps
+    </a>
+    <nav>
+      {% for item in nav_items %}
+      <a href="{{ item.href }}" class="{{ ui.cls('') }}{% if request.url.path.startswith(item.href) %} active{% endif %}" data-js="nav-{{ item.label.lower().replace(' ', '-') }}">
+        <span aria-hidden="true">{{ item.icon }}</span>
+        {{ item.label }}
+      </a>
+      {% endfor %}
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">{{ state.get_settings().display_name }}</div>
+      {% if logout_tag == 'button' %}
+      <button class="btn btn-ghost" data-js="logout-btn" style="width:100%;justify-content:flex-start;gap:8px;padding:8px 12px;margin-top:4px;" type="button">
+        <span aria-hidden="true">🚪</span> Log out
+      </button>
+      {% elif logout_tag == 'a_role_button' %}
+      <a href="#" role="button" class="btn btn-ghost" data-js="logout-btn" style="width:100%;justify-content:flex-start;gap:8px;padding:8px 12px;margin-top:4px;" aria-label="Log out">
+        <span aria-hidden="true">🚪</span> Log out
+      </a>
+      {% else %}
+      <div role="button" tabindex="0" class="btn btn-ghost" data-js="logout-btn" style="width:100%;justify-content:flex-start;gap:8px;padding:8px 12px;margin-top:4px;" aria-label="Log out">
+        <span aria-hidden="true">🚪</span> Log out
+      </div>
+      {% endif %}
+      <div class="version-badge" style="margin-top:8px;">v{{ version }}</div>
+    </div>
+  </aside>
+{% else %}
+  <header class="topbar" role="banner">
+    <a href="/dashboard" class="{{ ui.cls('brand') }}" data-js="brand-link">
+      <span class="brand-icon">🛸</span> SkyOps
+    </a>
+    <nav aria-label="Main navigation">
+      {% for item in nav_items %}
+      <a href="{{ item.href }}" class="{{ ui.cls('') }}{% if request.url.path.startswith(item.href) %} active{% endif %}" data-js="nav-{{ item.label.lower().replace(' ', '-') }}">
+        {{ item.label }}
+      </a>
+      {% endfor %}
+    </nav>
+    <div class="user-menu">
+      <span class="version-badge">v{{ version }}</span>
+      {% if logout_tag == 'button' %}
+      <button class="btn btn-secondary btn-sm" data-js="logout-btn" type="button">Log out</button>
+      {% elif logout_tag == 'a_role_button' %}
+      <a href="#" role="button" class="btn btn-secondary btn-sm" data-js="logout-btn" aria-label="Log out">Log out</a>
+      {% else %}
+      <div role="button" tabindex="0" class="btn btn-secondary btn-sm" data-js="logout-btn" aria-label="Log out">Log out</div>
+      {% endif %}
+    </div>
+  </header>
+{% endif %}
+  <main class="{{ 'main-content' if layout == 'sidebar' else 'topbar-body' }}" id="main-content">
+    {% block content %}{% endblock %}
+  </main>
+</div>
+<script src="/static/app.js"></script>
+</body>
+</html>
