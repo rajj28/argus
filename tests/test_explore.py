@@ -1,7 +1,9 @@
 """Unit tests for argus.explore (no network, no LLM)."""
 from __future__ import annotations
 
+import asyncio
 from datetime import date, timedelta
+from pathlib import Path
 
 import pytest
 
@@ -373,6 +375,13 @@ def test_to_spec_keeps_element_state_oracle_with_rule_ref():
     assert o.rule_ref == "R2"
     assert o.params["enabled"] is False
     assert o.params["fingerprint"]["name"] == "Hawk-7 — Battery too low"
+
+
+# --------------------------------------------------------------------------------------
+# login + deterministic fallback
+# --------------------------------------------------------------------------------------
+
+def test_login_spec_built_from_login_state():
     email = make_fp(tag="input", role="textbox", name="Email address",
                     attrs={"type": "email"})
     pw = make_fp(tag="input", role="textbox", name="Password", attrs={"type": "password"})

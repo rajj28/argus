@@ -1,0 +1,15 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "xkiro": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "xKiro (free 500k tokens/day)",
+      "options": { "baseURL": "https://api.xkiro.com/v1", "apiKey": "{env:XKIRO_API}" },
+      "models": {
+        "qwen/qwen3.8-max:free": { "name": "Qwen 3.8 Max (free)" },
+        "qwen/qwen3.7-plus:free": { "name": "Qwen 3.7 Plus (free)" },
+        "minimax/minimax-m3:free": { "name": "MiniMax M3 (free)" }
+      }
+    }
+  }
+}

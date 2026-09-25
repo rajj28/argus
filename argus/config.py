@@ -59,6 +59,12 @@ class Settings(BaseModel):
     llm_enabled: bool = True
     llm_cache: bool = True
     max_llm_calls_per_run: int = 30
+    jury: list[str] = Field(default_factory=lambda: [
+        "nvidia/nemotron-3-super-120b-a12b:free",   # Nvidia family via OpenRouter
+        "qwen/qwen3.8-27b:free",                    # Qwen family via OpenRouter
+        "google/gemma-4-31b-it:free",               # Google Gemma family via OpenRouter
+    ])
+    jury_enabled: bool = True
     thresholds: Thresholds = Field(default_factory=Thresholds)
     viewport: dict[str, int] = Field(default_factory=lambda: {"width": 1280, "height": 800})
     build: str = Field(default="", exclude=True)            # label of the build under test (plan versioning)

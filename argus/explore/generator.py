@@ -130,12 +130,12 @@ async def propose(settings: Settings, atlas: dict, llm, log=print) -> list[dict]
         if isinstance(data, str):
             import json as _json
             try:
-                data = _json.loads(data)
+                data = _json.loads(_crop_fences(data))
             except (TypeError, ValueError):
                 data = None
             if isinstance(data, str):  # double-encoded JSON string
                 try:
-                    data = _json.loads(data)
+                    data = _json.loads(_crop_fences(data))
                 except (TypeError, ValueError):
                     data = None
         tests = [t for t in (data or {}).get("tests") or [] if isinstance(t, dict)]

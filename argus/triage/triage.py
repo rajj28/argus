@@ -6,6 +6,7 @@ from the changelog / release notes, otherwise we downgrade to NEEDS_REVIEW.
 """
 from __future__ import annotations
 
+import asyncio
 import hashlib
 import re
 from typing import Any, Optional
@@ -226,11 +227,128 @@ async def _llm_judge(test: TestSpec, result: TestResult, obs: list[Observation],
         rules=(getattr(ctx, "product_context", "") or "(none)")[:3500],
         changelog=(changelog or "(no changelog provided)")[:3500],
         steps=_fmt_steps(result), observations=_fmt_obs(obs), oracles=_fmt_oracles(test, obs))
+
+    # ------------------------------------------------------------------ jury path
+    settings = getattr(ctx, "settings", None)
+    jury_enabled = getattr(settings, "jury_enabled", False) if settings is not None else False
+    jury_models: list[str] = list(getattr(settings, "jury", []) if settings is not None else [])
+
+    if jury_enabled and jury_models and hasattr(llm, "json_from"):
+        verdict = await _jury_vote(llm, jury_models, obs, changelog,
+                                   P.TRIAGE_SYSTEM, user, fallback_cat)
+        if verdict is not None:
+            return verdict
+        # fewer than 2 jurors were reachable — fall through to single judge
+
+    # ------------------------------------------------------------------ single judge fallback
     try:
         data = await llm.json(tier="smart", purpose="triage", system=P.TRIAGE_SYSTEM, user=user, max_tokens=500)
     except Exception as exc:  # LLMUnavailable, BudgetExceeded, provider errors
         return _verdict(fallback_cat, 0.5, f"Judge unavailable ({type(exc).__name__}); needs a human.")
 
+    return _parse_judge_response(data, obs, changelog, fallback_cat, decided_by="llm")
+
+
+async def _jury_vote(
+    llm: Any,
+    jury_models: list[str],
+    obs: list[Observation],
+    changelog: str,
+    system: str,
+    user: str,
+    fallback_cat: str,
+) -> "Verdict | None":
+    """Ask all jurors concurrently; aggregate votes.
+
+    Returns None when fewer than 2 jurors produced a valid response (caller falls
+    back to the single judge).
+    """
+
+    async def _ask_juror(model_spec: str) -> "dict | None":
+        try:
+            return await llm.json_from(model_spec, purpose="triage", system=system,
+                                       user=user, max_tokens=500)
+        except Exception:
+            return None
+
+    raw_results = await asyncio.gather(*(_ask_juror(m) for m in jury_models), return_exceptions=False)
+
+    # Parse each raw result through the same citation guard as the single judge uses.
+    valid_votes: list[tuple[str, float, str, list[str], list[str], str]] = []
+    # (category, confidence, rationale, evidence_refs, changelog_refs, model_spec)
+    for model_spec, raw in zip(jury_models, raw_results):
+        if raw is None:
+            continue
+        cat = str(raw.get("category", "NEEDS_REVIEW")).upper().strip()
+        if cat not in {"BUG", "INTENDED_CHANGE", "FEATURE_REMOVED", "NEEDS_REVIEW"}:
+            cat = "NEEDS_REVIEW"
+        try:
+            conf = float(raw.get("confidence", 0.5))
+        except (TypeError, ValueError):
+            conf = 0.5
+        rationale = str(raw.get("rationale", ""))[:500]
+        quotes = verify_quotes([str(q) for q in raw.get("changelog_refs", []) or []], changelog)
+        evidence = [str(e) for e in raw.get("evidence_refs", []) or []][:8]
+
+        if cat == "INTENDED_CHANGE" and any(o.kind == "goal_unreachable" for o in obs):
+            cat = "FEATURE_REMOVED"
+        # Citation guard applied per vote (same rule as the single judge).
+        if cat in {"INTENDED_CHANGE", "FEATURE_REMOVED"} and (conf < 0.7 or not quotes):
+            why = "no verbatim changelog citation" if not quotes else f"confidence {conf:.2f} < 0.70"
+            cat = "NEEDS_REVIEW"
+            rationale = f"juror suggested {cat} but {why}. {rationale}"
+
+        valid_votes.append((cat, conf, rationale, evidence, quotes, model_spec))
+
+    if len(valid_votes) < 2:
+        return None  # not enough jurors — caller falls back to single judge
+
+    # Tally votes.
+    from collections import Counter
+    tally: Counter[str] = Counter(v[0] for v in valid_votes)
+    mean_conf = sum(v[1] for v in valid_votes) / len(valid_votes)
+
+    # Build evidence_refs recording each juror's vote.
+    juror_refs = [
+        f"juror:{v[5]}={v[0]}({v[1]:.2f})"
+        for v in valid_votes
+    ]
+
+    # Unanimous (all valid votes agree).
+    if len(tally) == 1:
+        winning_cat = valid_votes[0][0]
+        # Merge rationale and evidence from the first vote (representative).
+        best = valid_votes[0]
+        return _verdict(winning_cat, round(mean_conf, 2),
+                        best[2], decided_by="llm",
+                        evidence=best[3] + juror_refs,
+                        quotes=best[4])
+
+    # 2/3 majority (or more).
+    most_common_cat, most_common_count = tally.most_common(1)[0]
+    if most_common_count >= 2:
+        # Use the first vote that matches the majority category.
+        best = next(v for v in valid_votes if v[0] == most_common_cat)
+        dissent_cats = [v[0] for v in valid_votes if v[0] != most_common_cat]
+        rationale = best[2] + f" (jury majority; dissent: {', '.join(dissent_cats)})"
+        return _verdict(most_common_cat, round(mean_conf * 0.85, 2),
+                        rationale, decided_by="llm",
+                        evidence=best[3] + juror_refs,
+                        quotes=best[4])
+
+    # No majority — split jury.
+    split_detail = ", ".join(f"{cat}:{cnt}" for cat, cnt in tally.most_common())
+    return _verdict("NEEDS_REVIEW", round(mean_conf, 2),
+                    f"jury split: {split_detail}",
+                    decided_by="llm",
+                    evidence=juror_refs,
+                    quotes=[])
+
+
+def _parse_judge_response(
+    data: dict, obs: list[Observation], changelog: str, fallback_cat: str, decided_by: str
+) -> "Verdict":
+    """Convert a raw LLM JSON response dict into a Verdict, applying the citation guard."""
     cat = str(data.get("category", "NEEDS_REVIEW")).upper().strip()
     if cat not in {"BUG", "INTENDED_CHANGE", "FEATURE_REMOVED", "NEEDS_REVIEW"}:
         cat = "NEEDS_REVIEW"
@@ -243,9 +361,9 @@ async def _llm_judge(test: TestSpec, result: TestResult, obs: list[Observation],
     evidence = [str(e) for e in data.get("evidence_refs", []) or []][:8]
 
     if cat == "INTENDED_CHANGE" and any(o.kind == "goal_unreachable" for o in obs):
-        cat = "FEATURE_REMOVED"  # intended, but the journey no longer exists: retire rather than update
+        cat = "FEATURE_REMOVED"
     if cat in {"INTENDED_CHANGE", "FEATURE_REMOVED"} and (conf < 0.7 or not quotes):
         why = "no verbatim changelog citation" if not quotes else f"confidence {conf:.2f} < 0.70"
         return _verdict("NEEDS_REVIEW", conf, f"Judge suggested {cat} but {why}. {rationale}",
-                        decided_by="llm", evidence=evidence, quotes=quotes)
-    return _verdict(cat, conf, rationale, decided_by="llm", evidence=evidence, quotes=quotes)
+                        decided_by=decided_by, evidence=evidence, quotes=quotes)
+    return _verdict(cat, conf, rationale, decided_by=decided_by, evidence=evidence, quotes=quotes)

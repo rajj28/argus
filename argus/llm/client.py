@@ -304,6 +304,71 @@ class LLMClient:
         self._used_calls += 1
         return result.data
 
+    async def json_from(
+        self,
+        model_spec: str,
+        *,
+        purpose: str,
+        system: str,
+        user: str,
+        max_tokens: int = 700,
+    ) -> dict:
+        """Call ONE specific model spec and return parsed JSON dict.
+
+        Applies the same cache / ledger / budget / circuit-breaker behaviour as
+        ``json()``.  ``model_spec`` is a full provider:model string, e.g.
+        ``"nvidia/nemotron-3-super-120b-a12b:free"`` (openrouter) or
+        ``"openrouter2:qwen/qwen3.8-27b:free"`` or ``"groq:openai/gpt-oss-120b"``.
+        """
+        if not self.settings.llm_enabled:
+            raise LLMUnavailable("LLM is disabled (ARGUS_LLM=off or no API key)")
+
+        # Derive a deterministic tier name from the spec for cache-key and ledger.
+        # We use a synthetic tier so the cache is independent of the standard tiers.
+        tier: Tier = "smart"
+
+        key = _cache_key(f"jury:{model_spec}", system, user, None) if self.settings.llm_cache else ""
+        if key:
+            cached = self._load_cache(key)
+            if cached is not None:
+                self.ledger.append(
+                    LLMCallRecord(purpose=purpose, tier=tier, model="cache", cached=True, ok=True)
+                )
+                return cached
+
+        if self._used_calls >= self.settings.max_llm_calls_per_run:
+            raise BudgetExceeded(
+                f"per-run budget of {self.settings.max_llm_calls_per_run} non-cached LLM calls exhausted"
+            )
+
+        result = await self._try_models(
+            [model_spec], tier=tier, system=system, user=user, images=None, max_tokens=max_tokens
+        )
+        if key:
+            self._write_cache(key, result.data)
+
+        price_in, price_out = self.settings.reference_prices.get(tier, (0.0, 0.0))
+        free = is_free(*split(result.model)) or ":free" in result.model
+        cost = 0.0 if free else (result.tokens_in / 1e6) * price_in + (result.tokens_out / 1e6) * price_out
+        list_cost = (result.tokens_in / 1e6) * price_in + (result.tokens_out / 1e6) * price_out
+
+        self.ledger.append(
+            LLMCallRecord(
+                purpose=purpose,
+                tier=tier,
+                model=result.model,
+                tokens_in=result.tokens_in,
+                tokens_out=result.tokens_out,
+                cost_usd=cost,
+                list_cost_usd=list_cost,
+                latency_ms=result.latency_ms,
+                cached=False,
+                ok=True,
+            )
+        )
+        self._used_calls += 1
+        return result.data
+
     # ---------------------------------------------------------------- internal
     async def _try_models(
         self,
