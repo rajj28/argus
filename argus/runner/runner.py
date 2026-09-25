@@ -30,7 +30,7 @@ from argus.runner.assertions import check, interpolate, network_match, path_matc
 from argus.triage.triage import all_observations, deviation_signature, triage
 
 MAX_REPLANS = 4
-LOOKAHEAD = 3
+LOOKAHEAD = 12          # bounded in practice by commit points: nothing jumps across a data-saving step
 MUTATING = {"POST", "PUT", "PATCH", "DELETE"}
 _IGNORED_CONSOLE = ("failed to load resource", "favicon", "[vite]", "download the react devtools")
 
