@@ -60,6 +60,13 @@ def _slug(text: str) -> str:
     return re.sub(_SLUG_RE, "-", text.lower()).strip("-")[:60] or "test"
 
 
+def _crop_fences(text: str) -> str:
+    """Unwrap a markdown code fence (```json ... ```) around a JSON payload."""
+    t = (text or "").strip()
+    m = re.search(r"`{3,}[a-zA-Z0-9_-]*\s*(.*?)\s*`{3,}", t, re.S)
+    return m.group(1) if m else t
+
+
 def _is_launch(el: dict) -> bool:
     fp = el.get("fp") or {}
     label = " ".join(str(fp.get(k) or "") for k in ("name", "text", "label"))

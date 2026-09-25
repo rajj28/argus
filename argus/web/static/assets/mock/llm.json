@@ -1,0 +1,23 @@
+[
+  {
+    "name": "JEV",
+    "available": true,
+    "calls_this_hour": 3,
+    "cap_per_hour": 15,
+    "exhausted": false
+  },
+  {
+    "name": "JEV2",
+    "available": true,
+    "calls_this_hour": 1,
+    "cap_per_hour": 15,
+    "exhausted": false
+  },
+  {
+    "name": "Groq",
+    "available": true,
+    "calls_this_hour": 12,
+    "cap_per_hour": 60,
+    "exhausted": false
+  }
+]

@@ -1,0 +1,1252 @@
+{
+  "generated_at": "2026-09-24T13:21:47+00:00",
+  "recorded": {
+    "gauntlet": {
+      "measured_at": "2026-09-24T12:25:34+00:00",
+      "source": ".argus/gauntlet.json (argus gauntlet, 0 LLM calls)",
+      "summary": {
+        "mutation_trials": 3,
+        "heal_success_rate": 1.0,
+        "false_alarm_rate": 0.0,
+        "bug_trials": 5,
+        "bug_recall": 1.0,
+        "avg_llm_calls_per_run": 0.0,
+        "steps_healed_total": 106
+      },
+      "trial_count": 8
+    },
+    "ten_runs": {
+      "measured_at": "2026-09-24T13:21:47+00:00",
+      "source": "benchmarks/ten_runs.py -> .argus-10/ten_runs.json",
+      "base_url": "http://127.0.0.1:8002",
+      "runs": [
+        {
+          "run": 1,
+          "version": "1.0",
+          "run_id": "20260924-184523-9dc7",
+          "label": "10run#1 v1.0",
+          "steps": 33,
+          "t0_replayed": 33,
+          "healed": 0,
+          "llm_calls": 0,
+          "naive_tokens_estimate": 19094,
+          "duration_ms": 33451,
+          "wall_s": 35.8,
+          "verdicts": {
+            "PASS": 9
+          }
+        },
+        {
+          "run": 2,
+          "version": "1.0",
+          "run_id": "20260924-184558-7fbf",
+          "label": "10run#2 v1.0",
+          "steps": 33,
+          "t0_replayed": 33,
+          "healed": 0,
+          "llm_calls": 0,
+          "naive_tokens_estimate": 19094,
+          "duration_ms": 33802,
+          "wall_s": 36.1,
+          "verdicts": {
+            "PASS": 9
+          }
+        },
+        {
+          "run": 3,
+          "version": "1.1",
+          "run_id": "20260924-184634-43f3",
+          "label": "10run#3 v1.1",
+          "steps": 33,
+          "t0_replayed": 19,
+          "healed": 14,
+          "llm_calls": 0,
+          "naive_tokens_estimate": 18611,
+          "duration_ms": 35871,
+          "wall_s": 38.2,
+          "verdicts": {
+            "COSMETIC_DRIFT": 8,
+            "PASS": 1
+          }
+        },
+        {
+          "run": 4,
+          "version": "1.1",
+          "run_id": "20260924-184713-6542",
+          "label": "10run#4 v1.1",
+          "steps": 33,
+          "t0_replayed": 33,
+          "healed": 0,
+          "llm_calls": 0,
+          "naive_tokens_estimate": 18611,
+          "duration_ms": 34293,
+          "wall_s": 36.6,
+          "verdicts": {
+            "PASS": 9
+          }
+        },
+        {
+          "run": 5,
+          "version": "1.1",
+          "run_id": "20260924-184749-0495",
+          "label": "10run#5 v1.1",
+          "steps": 33,
+          "t0_replayed": 33,
+          "healed": 0,
+          "llm_calls": 0,
+          "naive_tokens_estimate": 18611,
+          "duration_ms": 34214,
+          "wall_s": 36.5,
+          "verdicts": {
+            "PASS": 9
+          }
+        },
+        {
+          "run": 6,
+          "version": "1.2",
+          "run_id": "20260924-184826-f1d3",
+          "label": "10run#6 v1.2",
+          "steps": 38,
+          "t0_replayed": 32,
+          "healed": 0,
+          "llm_calls": 0,
+          "naive_tokens_estimate": 22558,
+          "duration_ms": 41627,
+          "wall_s": 43.9,
+          "verdicts": {
+            "FEATURE_REMOVED": 1,
+            "INTENDED_CHANGE": 3,
+            "PASS": 5
+          }
+        },
+        {
+          "run": 7,
+          "version": "1.2",
+          "run_id": "20260924-184910-a9a9",
+          "label": "10run#7 v1.2",
+          "steps": 38,
+          "t0_replayed": 38,
+          "healed": 0,
+          "llm_calls": 0,
+          "naive_tokens_estimate": 22552,
+          "duration_ms": 37241,
+          "wall_s": 39.5,
+          "verdicts": {
+            "PASS": 8
+          }
+        },
+        {
+          "run": 8,
+          "version": "1.2",
+          "run_id": "20260924-184949-25fd",
+          "label": "10run#8 v1.2",
+          "steps": 38,
+          "t0_replayed": 38,
+          "healed": 0,
+          "llm_calls": 0,
+          "naive_tokens_estimate": 22552,
+          "duration_ms": 37178,
+          "wall_s": 39.4,
+          "verdicts": {
+            "PASS": 8
+          }
+        },
+        {
+          "run": 9,
+          "version": "1.2",
+          "run_id": "20260924-185029-5059",
+          "label": "10run#9 v1.2",
+          "steps": 38,
+          "t0_replayed": 38,
+          "healed": 0,
+          "llm_calls": 0,
+          "naive_tokens_estimate": 22552,
+          "duration_ms": 36805,
+          "wall_s": 39.1,
+          "verdicts": {
+            "PASS": 8
+          }
+        },
+        {
+          "run": 10,
+          "version": "1.2",
+          "run_id": "20260924-185108-1454",
+          "label": "10run#10 v1.2",
+          "steps": 38,
+          "t0_replayed": 38,
+          "healed": 0,
+          "llm_calls": 0,
+          "naive_tokens_estimate": 22552,
+          "duration_ms": 37131,
+          "wall_s": 39.3,
+          "verdicts": {
+            "PASS": 8
+          }
+        }
+      ]
+    },
+    "saucedemo": {
+      "measured_at": "2026-09-24T17:51:46.998364+00:00",
+      "source": ".argus-saucedemo/realworld.json (saucedemo.com)",
+      "base_url": "https://www.saucedemo.com",
+      "users": {
+        "verdicts": {
+          "standard_user": {
+            "login": "PASS",
+            "add-to-cart": "PASS",
+            "cart-contents": "PASS",
+            "checkout-happy": "PASS",
+            "item-detail": "PASS",
+            "logout": "PASS",
+            "sort-by-price": "PASS",
+            "checkout-validation": "PASS"
+          },
+          "problem_user": {
+            "login": "PASS",
+            "add-to-cart": "PASS",
+            "cart-contents": "PASS",
+            "checkout-happy": "NEEDS_REVIEW",
+            "item-detail": "BUG",
+            "logout": "PASS",
+            "sort-by-price": "BUG",
+            "checkout-validation": "BUG"
+          },
+          "error_user": {
+            "login": "PASS",
+            "add-to-cart": "PASS",
+            "cart-contents": "PASS",
+            "checkout-happy": "BUG",
+            "item-detail": "BUG",
+            "logout": "PASS",
+            "sort-by-price": "BUG",
+            "checkout-validation": "BUG"
+          },
+          "performance_glitch_user": {
+            "login": "PASS",
+            "add-to-cart": "PASS",
+            "cart-contents": "PASS",
+            "checkout-happy": "PASS",
+            "item-detail": "PASS",
+            "logout": "PASS",
+            "sort-by-price": "PASS",
+            "checkout-validation": "PASS"
+          },
+          "visual_user": {
+            "login": "PASS",
+            "add-to-cart": "PASS",
+            "cart-contents": "PASS",
+            "checkout-happy": "PASS",
+            "item-detail": "PASS",
+            "logout": "PASS",
+            "sort-by-price": "PASS",
+            "checkout-validation": "PASS"
+          }
+        },
+        "metrics": {
+          "standard_user": {
+            "counts": {
+              "PASS": 8
+            },
+            "llm_calls": 0,
+            "llm_calls_cached": 0,
+            "naive_tokens_estimate": 16994,
+            "duration_ms": 45001,
+            "wall_s": 50.0
+          },
+          "problem_user": {
+            "counts": {
+              "BUG": 3,
+              "NEEDS_REVIEW": 1,
+              "PASS": 4
+            },
+            "llm_calls": 0,
+            "llm_calls_cached": 0,
+            "naive_tokens_estimate": 19106,
+            "duration_ms": 58004,
+            "wall_s": 63.1
+          },
+          "error_user": {
+            "counts": {
+              "BUG": 4,
+              "PASS": 4
+            },
+            "llm_calls": 0,
+            "llm_calls_cached": 0,
+            "naive_tokens_estimate": 16999,
+            "duration_ms": 49260,
+            "wall_s": 54.4
+          },
+          "performance_glitch_user": {
+            "counts": {
+              "PASS": 8
+            },
+            "llm_calls": 0,
+            "llm_calls_cached": 0,
+            "naive_tokens_estimate": 16994,
+            "duration_ms": 89697,
+            "wall_s": 99.4
+          },
+          "visual_user": {
+            "counts": {
+              "PASS": 8
+            },
+            "llm_calls": 0,
+            "llm_calls_cached": 0,
+            "naive_tokens_estimate": 16994,
+            "duration_ms": 45682,
+            "wall_s": 50.7
+          }
+        }
+      }
+    },
+    "exam_before": {
+      "measured_at": "2026-09-25T16:50:00+00:00",
+      "source": "exam/results/scorecard.json#a_nollm (MediQueue hold-out, LLM off)",
+      "app": "MediQueue (exam_app) - hold-out, blind",
+      "overall": {
+        "correct": 25,
+        "total": 40,
+        "accuracy": 0.625
+      },
+      "criteria": {
+        "Reliability": {
+          "detail": "r2 is a design-only refresh: PASS or COSMETIC_DRIFT everywhere",
+          "correct": 7,
+          "total": 8,
+          "accuracy": 0.875,
+          "memory_probe_heals": 2
+        },
+        "Context": {
+          "detail": "r3-r6: intended change, banner reflow, masked 500 bug, feature removal",
+          "correct": 18,
+          "total": 32,
+          "accuracy": 0.562,
+          "per_release": {
+            "r3": 0.5,
+            "r4": 0.25,
+            "r5": 0.5,
+            "r6": 1.0
+          }
+        },
+        "Cost": {
+          "detail": "steady-state LLM cost of a full suite run",
+          "llm_calls_total": 0,
+          "tokens_total": 0,
+          "per_run": [
+            {
+              "label": "r1-baseline",
+              "llm_calls": 0,
+              "cached": 0,
+              "tokens": 0,
+              "cost_usd": 0.0
+            },
+            {
+              "label": "r2-run",
+              "llm_calls": 0,
+              "cached": 0,
+              "tokens": 0,
+              "cost_usd": 0.0
+            },
+            {
+              "label": "r3-run",
+              "llm_calls": 0,
+              "cached": 0,
+              "tokens": 0,
+              "cost_usd": 0.0
+            },
+            {
+              "label": "r4-run",
+              "llm_calls": 0,
+              "cached": 0,
+              "tokens": 0,
+              "cost_usd": 0.0
+            },
+            {
+              "label": "r5-run",
+              "llm_calls": 0,
+              "cached": 0,
+              "tokens": 0,
+              "cost_usd": 0.0
+            },
+            {
+              "label": "r6-run",
+              "llm_calls": 0,
+              "cached": 0,
+              "tokens": 0,
+              "cost_usd": 0.0
+            },
+            {
+              "label": "r2-memory-probe-1",
+              "llm_calls": 0,
+              "cached": 0,
+              "tokens": 0,
+              "cost_usd": 0.0
+            },
+            {
+              "label": "r2-memory-probe-2",
+              "llm_calls": 0,
+              "cached": 0,
+              "tokens": 0,
+              "cost_usd": 0.0
+            }
+          ]
+        },
+        "Memory": {
+          "detail": "heals when the same release is run again (r2 x3)",
+          "runs": [
+            {
+              "label": "r2-run",
+              "healed_steps": 6,
+              "replayed_steps": 74
+            },
+            {
+              "label": "r2-memory-probe-1",
+              "healed_steps": 1,
+              "replayed_steps": 79
+            },
+            {
+              "label": "r2-memory-probe-2",
+              "healed_steps": 1,
+              "replayed_steps": 79
+            }
+          ],
+          "heals_first_run": 6,
+          "heals_repeat_runs": 2
+        },
+        "Generation": {
+          "detail": "zero-knowledge coverage (mode B) and how much of it baselined",
+          "coverage": null,
+          "baseline_success": null,
+          "atlas": null,
+          "login_wall": false,
+          "generate_log": [],
+          "authored": 8,
+          "intents": 9
+        }
+      },
+      "failures": [
+        {
+          "release": "r2",
+          "intent": "reschedule-appointment",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "PASS",
+            "COSMETIC_DRIFT"
+          ],
+          "observation": "cannot find 'Click Reschedule on the first appointment' (best candidate 0.93 below thresholds); page / headings ['Appointments', 'Upcoming schedule'] alerts []",
+          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "why": "Rescheduling remains directly available and behavior is unchanged.",
+          "weakness": "similarity margin gate (best match below threshold)",
+          "decided_by": "rules"
+        },
+        {
+          "release": "r3",
+          "intent": "cancel-appointment",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "PASS",
+            "COSMETIC_DRIFT"
+          ],
+          "observation": "cannot find 'Click Cancel on the first appointment in the list' (best candidate 0.57 below thresholds); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "why": "Cancellation remains directly available and retains its confirmation behavior.",
+          "weakness": "overlay / modal blocks navigation",
+          "decided_by": "rules"
+        },
+        {
+          "release": "r3",
+          "intent": "doctor-list-loads",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "PASS",
+            "COSMETIC_DRIFT"
+          ],
+          "observation": "Status shows all eight doctors loaded: expected text \"8 doctors available\" not found on /",
+          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "why": "The r2 refreshed doctor cards continue to load normally.",
+          "weakness": "expected UI text missing (label or text drift)",
+          "decided_by": "rules"
+        },
+        {
+          "release": "r3",
+          "intent": "invoice-total-correct",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "PASS",
+            "COSMETIC_DRIFT"
+          ],
+          "observation": "Line item 'Specialist consultation' is visible: expected text \"Specialist consultation\" not found on /",
+          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "why": "Billing is unchanged.",
+          "weakness": "expected UI text missing (label or text drift)",
+          "decided_by": "rules"
+        },
+        {
+          "release": "r3",
+          "intent": "emergency-fee-zero",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "PASS",
+            "COSMETIC_DRIFT"
+          ],
+          "observation": "cannot find 'Enter a valid patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "why": "The emergency fee rule is unchanged.",
+          "weakness": "overlay / modal blocks navigation",
+          "decided_by": "rules"
+        },
+        {
+          "release": "r4",
+          "intent": "book-consultation",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "PASS",
+            "COSMETIC_DRIFT"
+          ],
+          "observation": "cannot find 'Enter the patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "why": "Booking is unchanged.",
+          "weakness": "overlay / modal blocks navigation",
+          "decided_by": "rules"
+        },
+        {
+          "release": "r4",
+          "intent": "doctor-list-loads",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "PASS",
+            "COSMETIC_DRIFT"
+          ],
+          "observation": "Status shows all eight doctors loaded: expected text \"8 doctors available\" not found on /",
+          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "why": "Doctor loading is unchanged.",
+          "weakness": "expected UI text missing (label or text drift)",
+          "decided_by": "rules"
+        },
+        {
+          "release": "r4",
+          "intent": "invoice-total-correct",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "PASS",
+            "COSMETIC_DRIFT"
+          ],
+          "observation": "Line item 'Specialist consultation' is visible: expected text \"Specialist consultation\" not found on /",
+          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "why": "Billing is unchanged.",
+          "weakness": "expected UI text missing (label or text drift)",
+          "decided_by": "rules"
+        },
+        {
+          "release": "r4",
+          "intent": "reschedule-appointment",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "PASS",
+            "COSMETIC_DRIFT"
+          ],
+          "observation": "cannot find 'Click Reschedule on the first appointment' (best candidate 0.52 below thresholds); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "why": "The r3 overflow-menu behavior continues to work.",
+          "weakness": "overlay / modal blocks navigation",
+          "decided_by": "rules"
+        },
+        {
+          "release": "r4",
+          "intent": "age-validation",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "PASS",
+            "COSMETIC_DRIFT"
+          ],
+          "observation": "cannot find 'Enter a patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "why": "Age validation is unchanged.",
+          "weakness": "overlay / modal blocks navigation",
+          "decided_by": "rules"
+        },
+        {
+          "release": "r4",
+          "intent": "emergency-fee-zero",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "PASS",
+            "COSMETIC_DRIFT"
+          ],
+          "observation": "cannot find 'Enter a valid patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "why": "Emergency fee behavior is unchanged.",
+          "weakness": "overlay / modal blocks navigation",
+          "decided_by": "rules"
+        },
+        {
+          "release": "r5",
+          "intent": "book-consultation",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "BUG"
+          ],
+          "observation": "cannot find 'Enter the patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "why": "The interface reports a successful confirmation even though the request fails and no appointment is saved, violating B4.",
+          "weakness": "overlay / modal blocks navigation",
+          "decided_by": "rules"
+        },
+        {
+          "release": "r5",
+          "intent": "invoice-total-correct",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "BUG"
+          ],
+          "observation": "Line item 'Specialist consultation' is visible: expected text \"Specialist consultation\" not found on /",
+          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "why": "Line items total INR 1180.00 while the displayed total is INR 1179.00, violating B3.",
+          "weakness": "expected UI text missing (label or text drift)",
+          "decided_by": "rules"
+        },
+        {
+          "release": "r5",
+          "intent": "age-validation",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "BUG"
+          ],
+          "observation": "cannot find 'Enter a patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "why": "An age of 150 is accepted, violating B1.",
+          "weakness": "overlay / modal blocks navigation",
+          "decided_by": "rules"
+        },
+        {
+          "release": "r5",
+          "intent": "emergency-fee-zero",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "BUG"
+          ],
+          "observation": "cannot find 'Enter a valid patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "why": "An emergency visit is charged INR 500, violating B2.",
+          "weakness": "overlay / modal blocks navigation",
+          "decided_by": "rules"
+        }
+      ]
+    },
+    "exam_after": {
+      "measured_at": "2026-09-25T17:47:33+00:00",
+      "source": "exam/results/scorecard.json#a_llm (MediQueue hold-out, LLM on)",
+      "app": "MediQueue (exam_app) - hold-out, blind",
+      "overall": {
+        "correct": 27,
+        "total": 40,
+        "accuracy": 0.675
+      },
+      "criteria": {
+        "Reliability": {
+          "detail": "r2 is a design-only refresh: PASS or COSMETIC_DRIFT everywhere",
+          "correct": 7,
+          "total": 8,
+          "accuracy": 0.875,
+          "memory_probe_heals": 3
+        },
+        "Context": {
+          "detail": "r3-r6: intended change, banner reflow, masked 500 bug, feature removal",
+          "correct": 20,
+          "total": 32,
+          "accuracy": 0.625,
+          "per_release": {
+            "r3": 0.5,
+            "r4": 0.25,
+            "r5": 0.75,
+            "r6": 1.0
+          }
+        },
+        "Cost": {
+          "detail": "steady-state LLM cost of a full suite run",
+          "llm_calls_total": 31,
+          "tokens_total": 42010,
+          "per_run": [
+            {
+              "label": "r1-baseline",
+              "llm_calls": 5,
+              "cached": 6,
+              "tokens": 8614,
+              "cost_usd": 0.0
+            },
+            {
+              "label": "r2-run",
+              "llm_calls": 5,
+              "cached": 6,
+              "tokens": 8685,
+              "cost_usd": 0.0
+            },
+            {
+              "label": "r3-run",
+              "llm_calls": 5,
+              "cached": 0,
+              "tokens": 5693,
+              "cost_usd": 0.0
+            },
+            {
+              "label": "r4-run",
+              "llm_calls": 5,
+              "cached": 9,
+              "tokens": 6068,
+              "cost_usd": 0.0
+            },
+            {
+              "label": "r5-run",
+              "llm_calls": 2,
+              "cached": 13,
+              "tokens": 2912,
+              "cost_usd": 0.0
+            },
+            {
+              "label": "r6-run",
+              "llm_calls": 5,
+              "cached": 0,
+              "tokens": 5585,
+              "cost_usd": 0.0
+            },
+            {
+              "label": "r2-memory-probe-1",
+              "llm_calls": 3,
+              "cached": 9,
+              "tokens": 4157,
+              "cost_usd": 0.0
+            },
+            {
+              "label": "r2-memory-probe-2",
+              "llm_calls": 1,
+              "cached": 0,
+              "tokens": 296,
+              "cost_usd": 0.0
+            }
+          ]
+        },
+        "Memory": {
+          "detail": "heals when the same release is run again (r2 x3)",
+          "runs": [
+            {
+              "label": "r2-run",
+              "healed_steps": 6,
+              "replayed_steps": 74
+            },
+            {
+              "label": "r2-memory-probe-1",
+              "healed_steps": 1,
+              "replayed_steps": 79
+            },
+            {
+              "label": "r2-memory-probe-2",
+              "healed_steps": 2,
+              "replayed_steps": 83
+            }
+          ],
+          "heals_first_run": 6,
+          "heals_repeat_runs": 3
+        },
+        "Generation": {
+          "detail": "zero-knowledge coverage (mode B) and how much of it baselined",
+          "coverage": null,
+          "baseline_success": null,
+          "atlas": null,
+          "login_wall": false,
+          "generate_log": [],
+          "authored": 8,
+          "intents": 9
+        }
+      },
+      "failures": [
+        {
+          "release": "r2",
+          "intent": "reschedule-appointment",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "PASS",
+            "COSMETIC_DRIFT"
+          ],
+          "observation": "cannot find 'Click Reschedule on the first appointment' (LLM found no confident match (Cannot determine which Reschedule button corresponds to first appointment)); page / headings ['Appointments', 'Upcoming schedule', 'Reschedule appointment'] alerts []",
+          "rationale": "Judge unavailable (BudgetExceeded); needs a human.",
+          "why": "Rescheduling remains directly available and behavior is unchanged.",
+          "weakness": "step target not resolvable on the page",
+          "decided_by": "rules"
+        },
+        {
+          "release": "r3",
+          "intent": "cancel-appointment",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "PASS",
+            "COSMETIC_DRIFT"
+          ],
+          "observation": "blocked at 'Click Cancel on the first appointment in the list': no plan; page / alerts []",
+          "rationale": "Judge unavailable (BudgetExceeded); needs a human.",
+          "why": "Cancellation remains directly available and retains its confirmation behavior.",
+          "weakness": "step target not resolvable on the page",
+          "decided_by": "rules"
+        },
+        {
+          "release": "r3",
+          "intent": "doctor-list-loads",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "PASS",
+            "COSMETIC_DRIFT"
+          ],
+          "observation": "Status shows all eight doctors loaded: expected text \"8 doctors available\" not found on /",
+          "rationale": "Judge unavailable (BudgetExceeded); needs a human.",
+          "why": "The r2 refreshed doctor cards continue to load normally.",
+          "weakness": "expected UI text missing (label or text drift)",
+          "decided_by": "rules"
+        },
+        {
+          "release": "r3",
+          "intent": "invoice-total-correct",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "PASS",
+            "COSMETIC_DRIFT"
+          ],
+          "observation": "Line item 'Specialist consultation' is visible: expected text \"Specialist consultation\" not found on /",
+          "rationale": "Judge unavailable (BudgetExceeded); needs a human.",
+          "why": "Billing is unchanged.",
+          "weakness": "expected UI text missing (label or text drift)",
+          "decided_by": "rules"
+        },
+        {
+          "release": "r3",
+          "intent": "emergency-fee-zero",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "PASS",
+            "COSMETIC_DRIFT"
+          ],
+          "observation": "blocked at 'Enter a valid patient name': no plan; page / alerts []",
+          "rationale": "Judge unavailable (BudgetExceeded); needs a human.",
+          "why": "The emergency fee rule is unchanged.",
+          "weakness": "step target not resolvable on the page",
+          "decided_by": "rules"
+        },
+        {
+          "release": "r4",
+          "intent": "book-consultation",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "PASS",
+            "COSMETIC_DRIFT"
+          ],
+          "observation": "cannot find 'Enter the patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+          "rationale": "Judge unavailable (LLMUnavailable); needs a human.",
+          "why": "Booking is unchanged.",
+          "weakness": "overlay / modal blocks navigation",
+          "decided_by": "rules"
+        },
+        {
+          "release": "r4",
+          "intent": "doctor-list-loads",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "PASS",
+            "COSMETIC_DRIFT"
+          ],
+          "observation": "Status shows all eight doctors loaded: expected text \"8 doctors available\" not found on /",
+          "rationale": "",
+          "why": "Doctor loading is unchanged.",
+          "weakness": "expected UI text missing (label or text drift)",
+          "decided_by": "llm"
+        },
+        {
+          "release": "r4",
+          "intent": "invoice-total-correct",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "PASS",
+            "COSMETIC_DRIFT"
+          ],
+          "observation": "Line item 'Specialist consultation' is visible: expected text \"Specialist consultation\" not found on /",
+          "rationale": "Judge unavailable (BudgetExceeded); needs a human.",
+          "why": "Billing is unchanged.",
+          "weakness": "expected UI text missing (label or text drift)",
+          "decided_by": "rules"
+        },
+        {
+          "release": "r4",
+          "intent": "reschedule-appointment",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "PASS",
+            "COSMETIC_DRIFT"
+          ],
+          "observation": "blocked at 'Click Reschedule on the first appointment': no plan; page / alerts []",
+          "rationale": "Judge unavailable (BudgetExceeded); needs a human.",
+          "why": "The r3 overflow-menu behavior continues to work.",
+          "weakness": "step target not resolvable on the page",
+          "decided_by": "rules"
+        },
+        {
+          "release": "r4",
+          "intent": "age-validation",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "PASS",
+            "COSMETIC_DRIFT"
+          ],
+          "observation": "blocked at 'Enter a patient name': no plan; page / alerts []",
+          "rationale": "Judge unavailable (BudgetExceeded); needs a human.",
+          "why": "Age validation is unchanged.",
+          "weakness": "step target not resolvable on the page",
+          "decided_by": "rules"
+        },
+        {
+          "release": "r4",
+          "intent": "emergency-fee-zero",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "PASS",
+            "COSMETIC_DRIFT"
+          ],
+          "observation": "blocked at 'Enter a valid patient name': no plan; page / alerts []",
+          "rationale": "Judge unavailable (BudgetExceeded); needs a human.",
+          "why": "Emergency fee behavior is unchanged.",
+          "weakness": "step target not resolvable on the page",
+          "decided_by": "rules"
+        },
+        {
+          "release": "r5",
+          "intent": "book-consultation",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "BUG"
+          ],
+          "observation": "cannot find 'Enter the patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+          "rationale": "Judge unavailable (LLMUnavailable); needs a human.",
+          "why": "The interface reports a successful confirmation even though the request fails and no appointment is saved, violating B4.",
+          "weakness": "overlay / modal blocks navigation",
+          "decided_by": "rules"
+        },
+        {
+          "release": "r5",
+          "intent": "age-validation",
+          "got": "NEEDS_REVIEW",
+          "acceptable": [
+            "BUG"
+          ],
+          "observation": "blocked at 'Enter a patient name': no plan; page / alerts []",
+          "rationale": "Judge unavailable (LLMUnavailable); needs a human.",
+          "why": "An age of 150 is accepted, violating B1.",
+          "weakness": "step target not resolvable on the page",
+          "decided_by": "rules"
+        }
+      ]
+    },
+    "diff": {
+      "measured_at": "2026-09-24T12:20:07+00:00",
+      "source": ".argus-d/diff.json (argus diff v1.0 vs v1.3, no changelog, 0 LLM)",
+      "summary": {
+        "UI_DRIFT": 2,
+        "REGRESSION": 6
+      },
+      "tests": [
+        {
+          "test": "login",
+          "name": "Pilot signs in",
+          "class": "UI_DRIFT",
+          "why": "1 element(s) re-identified; identical outcome and side effects",
+          "delta": "[[], [], [], [], []]",
+          "baseline": {
+            "outcome_ok": true,
+            "failed_oracles": [],
+            "hard_signals": [],
+            "calls": [
+              "POST /api/login 2xx"
+            ],
+            "routes": [
+              "/dashboard"
+            ],
+            "healed": 0,
+            "structural": []
+          },
+          "candidate": {
+            "outcome_ok": true,
+            "failed_oracles": [],
+            "hard_signals": [],
+            "calls": [
+              "POST /api/login 2xx"
+            ],
+            "routes": [
+              "/dashboard"
+            ],
+            "healed": 1,
+            "structural": []
+          }
+        },
+        {
+          "test": "create-mission",
+          "name": "Plan and launch a survey mission",
+          "class": "REGRESSION",
+          "why": "The launched mission appears in the Missions list: expected text \"Survey 6f861\" not found on /missions",
+          "delta": "[[], [], [], [\"POST /api/missions/validate 4xx\"], [\"step_added\"]]",
+          "baseline": {
+            "outcome_ok": true,
+            "failed_oracles": [],
+            "hard_signals": [],
+            "calls": [
+              "POST /api/missions/validate 2xx",
+              "POST /api/missions/validate 2xx",
+              "POST /api/missions/validate 2xx",
+              "POST /api/missions 2xx"
+            ],
+            "routes": [
+              "/missions/new",
+              "/missions/:id",
+              "/missions"
+            ],
+            "healed": 0,
+            "structural": []
+          },
+          "candidate": {
+            "outcome_ok": false,
+            "failed_oracles": [
+              "The launched mission appears in the Missions list: expected text \"Survey 6f861\" not found on /missions"
+            ],
+            "hard_signals": [],
+            "calls": [
+              "POST /api/missions/validate 4xx",
+              "POST /api/missions/validate 2xx",
+              "POST /api/missions/validate 2xx",
+              "POST /api/missions/validate 2xx",
+              "POST /api/missions 2xx"
+            ],
+            "routes": [
+              "/missions/new",
+              "/missions/:id",
+              "/missions"
+            ],
+            "healed": 5,
+            "structural": [
+              "step_added"
+            ]
+          }
+        },
+        {
+          "test": "drone-detail",
+          "name": "Inspect a drone from the fleet table",
+          "class": "UI_DRIFT",
+          "why": "1 element(s) re-identified; identical outcome and side effects",
+          "delta": "[[], [], [], [], []]",
+          "baseline": {
+            "outcome_ok": true,
+            "failed_oracles": [],
+            "hard_signals": [],
+            "calls": [],
+            "routes": [
+              "/drones/:id"
+            ],
+            "healed": 0,
+            "structural": []
+          },
+          "candidate": {
+            "outcome_ok": true,
+            "failed_oracles": [],
+            "hard_signals": [],
+            "calls": [],
+            "routes": [
+              "/drones/:id"
+            ],
+            "healed": 1,
+            "structural": []
+          }
+        },
+        {
+          "test": "flight-logs",
+          "name": "Filter flight logs by drone",
+          "class": "REGRESSION",
+          "why": "Falcon-1 flights are listed: expected text \"Falcon-1\" not found on /logs",
+          "delta": "[[], [], [], [], []]",
+          "baseline": {
+            "outcome_ok": true,
+            "failed_oracles": [],
+            "hard_signals": [],
+            "calls": [],
+            "routes": [],
+            "healed": 0,
+            "structural": []
+          },
+          "candidate": {
+            "outcome_ok": false,
+            "failed_oracles": [
+              "Falcon-1 flights are listed: expected text \"Falcon-1\" not found on /logs"
+            ],
+            "hard_signals": [],
+            "calls": [],
+            "routes": [],
+            "healed": 0,
+            "structural": []
+          }
+        },
+        {
+          "test": "logout",
+          "name": "Pilot signs out",
+          "class": "REGRESSION",
+          "why": "uncaught exception: Cannot read properties of undefined (reading 'crash') | side effects lost: ['POST /api/logout 2xx']",
+          "delta": "[[\"/login\"], [], [\"POST /api/logout 2xx\"], [], []]",
+          "baseline": {
+            "outcome_ok": true,
+            "failed_oracles": [],
+            "hard_signals": [],
+            "calls": [
+              "POST /api/logout 2xx"
+            ],
+            "routes": [
+              "/login"
+            ],
+            "healed": 0,
+            "structural": []
+          },
+          "candidate": {
+            "outcome_ok": false,
+            "failed_oracles": [
+              "Pilot is back on the login page: url /dashboard does not match //login/"
+            ],
+            "hard_signals": [
+              "uncaught exception: Cannot read properties of undefined (reading 'crash')"
+            ],
+            "calls": [],
+            "routes": [],
+            "healed": 1,
+            "structural": []
+          }
+        },
+        {
+          "test": "save-settings",
+          "name": "Pilot updates display name",
+          "class": "REGRESSION",
+          "why": "PUT /api/settings returned 500 (baseline 200) | side effects lost: ['PUT /api/settings 2xx']",
+          "delta": "[[], [], [\"PUT /api/settings 2xx\"], [\"PUT /api/settings 5xx\"], []]",
+          "baseline": {
+            "outcome_ok": true,
+            "failed_oracles": [],
+            "hard_signals": [],
+            "calls": [
+              "PUT /api/settings 2xx"
+            ],
+            "routes": [],
+            "healed": 0,
+            "structural": []
+          },
+          "candidate": {
+            "outcome_ok": false,
+            "failed_oracles": [
+              "Settings are persisted by the API: PUT /api/settings [2xx] NOT observed (recent calls: PUT /api/settings 500)",
+              "Confirmation is shown: expected text \"Settings saved\" not found on /settings"
+            ],
+            "hard_signals": [
+              "PUT /api/settings returned 500 (baseline 200)"
+            ],
+            "calls": [
+              "PUT /api/settings 5xx"
+            ],
+            "routes": [],
+            "healed": 1,
+            "structural": []
+          }
+        },
+        {
+          "test": "altitude-limit",
+          "name": "Altitude above 120 m is rejected",
+          "class": "REGRESSION",
+          "why": "Altitude limit error is shown: expected text \"Altitude must be at most 120 m\" not found on /missions/new",
+          "delta": "[[], [], [], [], [\"step_added\"]]",
+          "baseline": {
+            "outcome_ok": true,
+            "failed_oracles": [],
+            "hard_signals": [],
+            "calls": [
+              "POST /api/missions/validate 2xx",
+              "POST /api/missions/validate 2xx",
+              "POST /api/missions/validate 4xx"
+            ],
+            "routes": [
+              "/missions/new"
+            ],
+            "healed": 0,
+            "structural": []
+          },
+          "candidate": {
+            "outcome_ok": false,
+            "failed_oracles": [
+              "Altitude limit error is shown: expected text \"Altitude must be at most 120 m\" not found on /missions/new"
+            ],
+            "hard_signals": [],
+            "calls": [
+              "POST /api/missions/validate 4xx",
+              "POST /api/missions/validate 2xx",
+              "POST /api/missions/validate 2xx",
+              "POST /api/missions/validate 2xx"
+            ],
+            "routes": [
+              "/missions/new"
+            ],
+            "healed": 3,
+            "structural": [
+              "step_added"
+            ]
+          }
+        },
+        {
+          "test": "low-battery-drone",
+          "name": "Low-battery drone cannot be assigned",
+          "class": "REGRESSION",
+          "why": "Hawk-7 (12% battery) is disabled: radio \"Hawk-7 — Battery too low\" (in: Select drone): enabled=True (expected False)",
+          "delta": "[[], [], [], [\"POST /api/missions/validate 4xx\"], [\"step_added\"]]",
+          "baseline": {
+            "outcome_ok": true,
+            "failed_oracles": [],
+            "hard_signals": [],
+            "calls": [
+              "POST /api/missions/validate 2xx"
+            ],
+            "routes": [
+              "/missions/new"
+            ],
+            "healed": 0,
+            "structural": []
+          },
+          "candidate": {
+            "outcome_ok": false,
+            "failed_oracles": [
+              "Hawk-7 (12% battery) is disabled: radio \"Hawk-7 — Battery too low\" (in: Select drone): enabled=True (expected False)"
+            ],
+            "hard_signals": [],
+            "calls": [
+              "POST /api/missions/validate 4xx",
+              "POST /api/missions/validate 2xx"
+            ],
+            "routes": [
+              "/missions/new"
+            ],
+            "healed": 1,
+            "structural": [
+              "step_added"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "live": {
+    "runs_total": 69,
+    "last_run_at": "2026-09-25T18:00:17+00:00",
+    "llm_calls_today": 31,
+    "tiers": {
+      "0": 1483,
+      "1": 181,
+      "2": 6,
+      "3": 1,
+      "4": 70,
+      "5": 8
+    }
+  }
+}

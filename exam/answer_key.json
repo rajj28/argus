@@ -1,0 +1,232 @@
+{
+  "tests": {
+    "login": {
+      "intent": "Sign in with the demo front-desk account and reach the clinic overview without a full-page reload.",
+      "business_rule": null
+    },
+    "book-consultation": {
+      "intent": "Book a consultation for a new patient, confirm it, and verify that the confirmed appointment appears in the schedule.",
+      "business_rule": "B4"
+    },
+    "age-validation": {
+      "intent": "Attempt to book an appointment for a patient aged 150 and verify that the booking is rejected.",
+      "business_rule": "B1"
+    },
+    "emergency-fee-zero": {
+      "intent": "Book an emergency visit and verify that both the doctor fee and total are zero.",
+      "business_rule": "B2"
+    },
+    "invoice-total-correct": {
+      "intent": "Open billing, add all invoice line items, and verify that the displayed total matches their sum exactly.",
+      "business_rule": "B3"
+    },
+    "cancel-appointment": {
+      "intent": "Scroll to Rahul Iyer near the bottom of the appointment list, cancel that visit, confirm the cancellation, and verify that the row is removed.",
+      "business_rule": "B6"
+    },
+    "reschedule-appointment": {
+      "intent": "Reschedule an existing appointment to a different future time and verify that the new time is retained.",
+      "business_rule": null
+    },
+    "toggle-sms-reminders": {
+      "intent": "Change the SMS reminders preference through the custom toggle and verify that the new preference is saved.",
+      "business_rule": null
+    },
+    "doctor-list-loads": {
+      "intent": "Open the doctor directory, observe the asynchronous loading state, and verify that all eight doctors become available.",
+      "business_rule": null
+    }
+  },
+  "releases": {
+    "r2": {
+      "login": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT"],
+        "why": "Only the visual design, ordering, and action wording changed."
+      },
+      "book-consultation": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT"],
+        "why": "The booking behavior is unchanged despite the refreshed layout and action labels."
+      },
+      "age-validation": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT"],
+        "why": "The age rule and its rejection behavior are unchanged."
+      },
+      "emergency-fee-zero": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT"],
+        "why": "The emergency fee behavior is unchanged."
+      },
+      "invoice-total-correct": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT"],
+        "why": "Billing behavior is unchanged."
+      },
+      "cancel-appointment": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT"],
+        "why": "The cancellation interaction and behavior are unchanged."
+      },
+      "reschedule-appointment": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT"],
+        "why": "Rescheduling remains directly available and behavior is unchanged."
+      },
+      "toggle-sms-reminders": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT"],
+        "why": "The preference still works through the same custom control."
+      },
+      "doctor-list-loads": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT"],
+        "why": "Card order and action presentation changed, but all doctors still load."
+      }
+    },
+    "r3": {
+      "login": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT"],
+        "why": "The r2 visual refresh carries forward and login behavior is unchanged."
+      },
+      "book-consultation": {
+        "acceptable": ["INTENDED_CHANGE", "NEEDS_REVIEW"],
+        "why": "The booking sequence and required patient information intentionally changed."
+      },
+      "age-validation": {
+        "acceptable": ["INTENDED_CHANGE", "NEEDS_REVIEW"],
+        "why": "The booking journey around the age field changed even though B1 remains in force."
+      },
+      "emergency-fee-zero": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT"],
+        "why": "The emergency fee rule is unchanged."
+      },
+      "invoice-total-correct": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT"],
+        "why": "Billing is unchanged."
+      },
+      "cancel-appointment": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT"],
+        "why": "Cancellation remains directly available and retains its confirmation behavior."
+      },
+      "reschedule-appointment": {
+        "acceptable": ["INTENDED_CHANGE", "NEEDS_REVIEW"],
+        "why": "Rescheduling intentionally moved into the appointment overflow menu."
+      },
+      "toggle-sms-reminders": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT"],
+        "why": "The preference control and saved behavior are unchanged."
+      },
+      "doctor-list-loads": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT"],
+        "why": "The r2 refreshed doctor cards continue to load normally."
+      }
+    },
+    "r4": {
+      "login": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT"],
+        "why": "Login is unchanged."
+      },
+      "book-consultation": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT"],
+        "why": "Booking is unchanged."
+      },
+      "age-validation": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT"],
+        "why": "Age validation is unchanged."
+      },
+      "emergency-fee-zero": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT"],
+        "why": "Emergency fee behavior is unchanged."
+      },
+      "invoice-total-correct": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT"],
+        "why": "Billing is unchanged."
+      },
+      "cancel-appointment": {
+        "acceptable": ["INTENDED_CHANGE", "COSMETIC_DRIFT", "NEEDS_REVIEW"],
+        "why": "Cancellation intentionally moved into the appointment overflow menu; confirmation and removal remain intact."
+      },
+      "reschedule-appointment": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT"],
+        "why": "The r3 overflow-menu behavior continues to work."
+      },
+      "toggle-sms-reminders": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT"],
+        "why": "The preference control is unchanged."
+      },
+      "doctor-list-loads": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT"],
+        "why": "Doctor loading is unchanged."
+      }
+    },
+    "r5": {
+      "login": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT", "INTENDED_CHANGE", "NEEDS_REVIEW", "FEATURE_REMOVED", "INFRA_ISSUE"],
+        "why": "No login regression was introduced."
+      },
+      "book-consultation": {
+        "acceptable": ["BUG"],
+        "why": "The interface reports a successful confirmation even though the request fails and no appointment is saved, violating B4."
+      },
+      "age-validation": {
+        "acceptable": ["BUG"],
+        "why": "An age of 150 is accepted, violating B1."
+      },
+      "emergency-fee-zero": {
+        "acceptable": ["BUG"],
+        "why": "An emergency visit is charged INR 500, violating B2."
+      },
+      "invoice-total-correct": {
+        "acceptable": ["BUG"],
+        "why": "Line items total INR 1180.00 while the displayed total is INR 1179.00, violating B3."
+      },
+      "cancel-appointment": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT", "INTENDED_CHANGE", "NEEDS_REVIEW", "FEATURE_REMOVED", "INFRA_ISSUE"],
+        "why": "No cancellation regression was introduced."
+      },
+      "reschedule-appointment": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT", "INTENDED_CHANGE", "NEEDS_REVIEW", "FEATURE_REMOVED", "INFRA_ISSUE"],
+        "why": "No rescheduling regression was introduced."
+      },
+      "toggle-sms-reminders": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT", "INTENDED_CHANGE", "NEEDS_REVIEW", "FEATURE_REMOVED", "INFRA_ISSUE"],
+        "why": "The preference still saves correctly."
+      },
+      "doctor-list-loads": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT", "INTENDED_CHANGE", "NEEDS_REVIEW", "FEATURE_REMOVED", "INFRA_ISSUE"],
+        "why": "All doctors still load; the release note is intentionally broad and does not imply a product defect."
+      }
+    },
+    "r6": {
+      "login": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT", "INTENDED_CHANGE", "NEEDS_REVIEW", "FEATURE_REMOVED", "INFRA_ISSUE"],
+        "why": "Login remains available."
+      },
+      "book-consultation": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT", "INTENDED_CHANGE", "NEEDS_REVIEW", "FEATURE_REMOVED", "INFRA_ISSUE"],
+        "why": "Booking remains available."
+      },
+      "age-validation": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT", "INTENDED_CHANGE", "NEEDS_REVIEW", "FEATURE_REMOVED", "INFRA_ISSUE"],
+        "why": "Age validation remains available."
+      },
+      "emergency-fee-zero": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT", "INTENDED_CHANGE", "NEEDS_REVIEW", "FEATURE_REMOVED", "INFRA_ISSUE"],
+        "why": "Emergency fee behavior remains available."
+      },
+      "invoice-total-correct": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT", "INTENDED_CHANGE", "NEEDS_REVIEW", "FEATURE_REMOVED", "INFRA_ISSUE"],
+        "why": "Billing remains available."
+      },
+      "cancel-appointment": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT", "INTENDED_CHANGE", "NEEDS_REVIEW", "FEATURE_REMOVED", "INFRA_ISSUE"],
+        "why": "Cancellation remains available."
+      },
+      "reschedule-appointment": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT", "INTENDED_CHANGE", "NEEDS_REVIEW", "FEATURE_REMOVED", "INFRA_ISSUE"],
+        "why": "Rescheduling remains available."
+      },
+      "toggle-sms-reminders": {
+        "acceptable": ["FEATURE_REMOVED", "NEEDS_REVIEW"],
+        "why": "The retired clinic settings remove access to the SMS reminder preference."
+      },
+      "doctor-list-loads": {
+        "acceptable": ["PASS", "COSMETIC_DRIFT", "INTENDED_CHANGE", "NEEDS_REVIEW", "FEATURE_REMOVED", "INFRA_ISSUE"],
+        "why": "Every third request has an infrastructure delay of 3.5 seconds, but the doctors still load and this is not a product bug."
+      }
+    }
+  }
+}

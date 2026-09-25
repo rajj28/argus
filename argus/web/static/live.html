@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Argus — live console</title>
+<meta name="description" content="Argus live console: pick a scenario and watch a real browser driven by Argus on this server.">
+<meta name="argus-region" content="">
+<meta name="argus-skyops-url" content="">
+<link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@600;700&family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/argus.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- ===================== Top bar ===================== -->
+  <header class="topbar">
+    <a class="wordmark is-live" href="index.html" aria-label="Argus home">
+      <span class="light" aria-hidden="true"></span>Argus
+    </a>
+    <span class="chip" id="chip-env">Azure</span>
+    <span class="chip chip-mono" id="chip-skyops"><span class="dot off"></span>SkyOps · —</span>
+    <a class="open-sky" id="link-skyops" href="#" aria-disabled="true" title="SkyOps host not configured">Open SkyOps&nbsp;&#8599;</a>
+    <span class="spacer"></span>
+    <div class="mesh" id="mesh" aria-label="LLM mesh"></div>
+  </header>
+
+  <!-- ===================== Body: rails + center ===================== -->
+  <div class="body">
+    <!-- mobile rail switcher -->
+    <div class="railtabs" role="tablist" aria-label="Console panels">
+      <button class="railtab" role="tab" id="rtab-scn" aria-controls="rail-left" aria-selected="false" data-panel="rail-left">Scenarios</button>
+      <button class="railtab" role="tab" id="rtab-run" aria-controls="center" aria-selected="true" data-panel="center">Run</button>
+      <button class="railtab" role="tab" id="rtab-met" aria-controls="rail-right" aria-selected="false" data-panel="rail-right">Meters</button>
+    </div>
+
+    <!-- Left rail: scenarios -->
+    <aside class="rail rail-left" id="rail-left" role="tabpanel" aria-labelledby="rtab-scn">
+      <div class="rail-head">
+        <span class="eyebrow">SCENARIOS</span>
+        <p class="caption" id="queue-note" style="margin-top:6px">One job at a time &middot; FIFO queue</p>
+      </div>
+      <div class="scn" id="scenarios" aria-busy="true"></div>
+    </aside>
+
+    <!-- Center: run view -->
+    <main class="center" id="center" role="tabpanel" aria-labelledby="rtab-run">
+      <div class="run-head" id="run-head">
+        <span class="rh-title" id="rh-title">Run view</span>
+        <span class="rh-id" id="rh-id"></span>
+        <span class="spacer" style="margin-left:auto"></span>
+        <span class="timer" id="rh-timer">0.0s</span>
+        <span class="state-badge" id="rh-state">idle</span>
+      </div>
+
+      <!-- empty state -->
+      <div id="empty-state" style="padding:var(--s3)">
+        <div class="empty" style="min-height:320px">
+          <div class="empty-h">Pick a scenario</div>
+          <div>Everything you see here is a real browser driven by Argus on this server.</div>
+        </div>
+      </div>
+
+      <!-- run view -->
+      <div id="run-view" hidden>
+        <div class="subhead"><span class="eyebrow">FILMSTRIP &mdash; live screenshots</span></div>
+        <div class="filmstrip" id="filmstrip"></div>
+
+        <div class="subhead"><span class="eyebrow">STEPS</span></div>
+        <div class="steplist" id="steplist" aria-live="polite" aria-relevant="additions"></div>
+
+        <div class="subhead"><span class="eyebrow">VERDICTS</span></div>
+        <div class="verdicts" id="verdicts"></div>
+      </div>
+    </main>
+
+    <!-- Right rail: meters -->
+    <aside class="rail rail-right" id="rail-right" role="tabpanel" aria-labelledby="rtab-met">
+      <div class="rail-head"><span class="eyebrow">METERS</span></div>
+      <div class="meters" id="meters">
+        <div class="meter big"><span class="m-l">steps</span><span class="m-v" id="m-steps">—</span></div>
+        <div class="meter"><span class="m-l">replayed (T0)</span><span class="m-v" id="m-replayed">—</span></div>
+        <div class="meter"><span class="m-l">self-healed</span><span class="m-v" id="m-healed">—</span></div>
+        <div class="meter"><span class="m-l">LLM calls</span><span class="m-v" id="m-llm">—</span></div>
+        <div class="meter"><span class="m-l">tokens</span><span class="m-v" id="m-tokens">—</span></div>
+        <div class="meter"><span class="m-l">cost (actual)</span><span class="m-v" id="m-cost">—</span></div>
+        <div class="meter"><span class="m-l">list price</span><span class="m-v" id="m-list">—</span></div>
+        <div class="meter"><span class="m-l">tokens avoided <small>(est.)</small></span><span class="m-v" id="m-avoided">—</span></div>
+        <div class="meter"><span class="m-l">elapsed</span><span class="m-v" id="m-elapsed">0.0s</span></div>
+        <div class="rail-head" style="position:static;background:transparent;border-top:1px solid var(--line);border-bottom:0;margin-top:8px"><span class="eyebrow">LLM CALLS BY PROVIDER</span></div>
+        <div class="panel" id="m-prov" style="border-radius:var(--r-ctrl)"></div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- ===================== Bottom drawer ===================== -->
+  <div class="drawer">
+    <div class="drawer-tabs" role="tablist" aria-label="Run output">
+      <button class="dtab" role="tab" id="dtab-term" aria-controls="tab-terminal" aria-selected="true">Terminal</button>
+      <button class="dtab" role="tab" id="dtab-mcp" aria-controls="tab-mcp" aria-selected="false">MCP</button>
+      <button class="dtab" role="tab" id="dtab-evt" aria-controls="tab-events" aria-selected="false">Events</button>
+      <span class="spacer" style="margin-left:auto"></span>
+      <button class="btn btn-quiet btn-sm" id="clear-out" style="margin:6px 8px" type="button">Clear</button>
+    </div>
+    <div class="drawer-body" id="tab-terminal" role="tabpanel" aria-labelledby="dtab-term"><pre class="term-out" id="term-out"></pre></div>
+    <div class="drawer-body" id="tab-mcp" role="tabpanel" aria-labelledby="dtab-mcp" hidden></div>
+    <div class="drawer-body" id="tab-events" role="tabpanel" aria-labelledby="dtab-evt" hidden></div>
+  </div>
+</div>
+
+<!-- lightbox -->
+<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Screenshot">
+  <div class="lb-card">
+    <img id="lb-img" alt="">
+    <div class="lb-bar"><span id="lb-cap"></span><button class="btn btn-quiet btn-sm" id="lb-close" type="button">Close (Esc)</button></div>
+  </div>
+</div>
+
+<script src="assets/live.js"></script>
+</body>
+</html>

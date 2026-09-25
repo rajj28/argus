@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Shadow DOM fixture</title>
+</head>
+<body>
+  <h1>Settings</h1>
+  <p>Everything below lives in an open shadow root.</p>
+  <my-widget></my-widget>
+  <script>
+    class MyWidget extends HTMLElement {
+      connectedCallback() {
+        const root = this.attachShadow({ mode: "open" });
+        root.innerHTML = `
+          <div class="panel">
+            <h2>Notifications</h2>
+            <button id="toggle">Enable SMS</button>
+            <input type="text" placeholder="Phone number">
+          </div>`;
+      }
+    }
+    customElements.define("my-widget", MyWidget);
+  </script>
+</body>
+</html>

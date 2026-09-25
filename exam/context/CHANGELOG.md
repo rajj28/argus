@@ -1,0 +1,6 @@
+# Changelog
+
+## r1
+# MediQueue r1
+
+Initial clinic operations release with doctor discovery, appointment booking, schedule management, billing, and clinic settings.

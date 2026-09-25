@@ -1,0 +1,878 @@
+[
+  {
+    "type": "state",
+    "state": "queued"
+  },
+  {
+    "type": "state",
+    "state": "running"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "──────────────── Argus run  recorded demo run (mock) ────────────────"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "app http://skyops:8000   run 20260924-175006-9945   build 1.2   home /data/.argus-live"
+  },
+  {
+    "type": "mcp",
+    "dir": "->",
+    "frame": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "method": "initialize",
+      "params": {
+        "protocolVersion": "2024-11-05",
+        "capabilities": {},
+        "clientInfo": {
+          "name": "coding-agent",
+          "version": "1.0"
+        }
+      }
+    }
+  },
+  {
+    "type": "mcp",
+    "dir": "<-",
+    "frame": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "result": {
+        "protocolVersion": "2024-11-05",
+        "capabilities": {
+          "tools": {}
+        },
+        "serverInfo": {
+          "name": "argus",
+          "version": "0.1"
+        }
+      }
+    }
+  },
+  {
+    "type": "mcp",
+    "dir": "->",
+    "frame": {
+      "jsonrpc": "2.0",
+      "method": "notifications/initialized"
+    }
+  },
+  {
+    "type": "mcp",
+    "dir": "->",
+    "frame": {
+      "jsonrpc": "2.0",
+      "id": 2,
+      "method": "tools/list"
+    }
+  },
+  {
+    "type": "mcp",
+    "dir": "<-",
+    "frame": {
+      "jsonrpc": "2.0",
+      "id": 2,
+      "result": {
+        "tools": [
+          {
+            "name": "run_tests",
+            "description": "Run the full suite and return verdicts per test (JSON).",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": []
+            }
+          },
+          {
+            "name": "verify_change",
+            "description": "Verify a change you just made; description is your intent (like a PR description).",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "description"
+              ]
+            }
+          },
+          {
+            "name": "explore_and_generate",
+            "description": "For an app with no tests: explore it and generate a baselined suite.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "max_tests": {
+                  "type": "integer"
+                }
+              },
+              "required": []
+            }
+          },
+          {
+            "name": "last_report",
+            "description": "Verdicts of the most recent run.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {},
+              "required": []
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "mcp",
+    "dir": "->",
+    "frame": {
+      "jsonrpc": "2.0",
+      "id": 3,
+      "method": "tools/call",
+      "params": {
+        "name": "verify_change",
+        "arguments": {
+          "description": "Mission planner v2: parameters before drone selection; new required Pilot in command field"
+        }
+      }
+    }
+  },
+  {
+    "type": "mcp",
+    "dir": "<-",
+    "frame": {
+      "jsonrpc": "2.0",
+      "id": 3,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"run_id\": \"20260924-175006-9945\",\n  \"verdicts\": {\n    \"PASS\": 1,\n    \"INTENDED_CHANGE\": 1,\n    \"COSMETIC_DRIFT\": 1,\n    \"FEATURE_REMOVED\": 1,\n    \"BUG\": 2\n  },\n  \"llm_calls\": 0,\n  \"healed_steps\": 1,\n  \"tests\": [\n    {\n      \"test\": \"Pilot signs in\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Plan and launch a survey mission\",\n      \"verdict\": \"INTENDED_CHANGE\",\n      \"confidence\": 0.85,\n      \"why\": \"2 flow change(s), each naming fields/screens that the release notes describe; business oracles still hold.\",\n      \"changelog_refs\": [\n        \"New required field \\\"Pilot in command\\\" on Mission details step (DGCA compliance requirement).\"\n      ],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Cancel an appointment with explicit confirmation\",\n      \"verdict\": \"COSMETIC_DRIFT\",\n      \"confidence\": 1.0,\n      \"why\": \"1 element(s) moved/renamed and were re-identified (tiers [1]); all expectations and business oracles still hold.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Filter flight logs by drone\",\n      \"verdict\": \"FEATURE_REMOVED\",\n      \"confidence\": 0.85,\n      \"why\": \"/logs no longer exists and the release notes retire it.\",\n      \"changelog_refs\": [\n        \"The /logs URL returns 404.\"\n      ],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Pilot updates display name\",\n      \"verdict\": \"BUG\",\n      \"confidence\": 0.92,\n      \"why\": \"Hard failure signals (network_error): PUT /api/settings returned 500 (baseline 200)\",\n      \"changelog_refs\": [],\n      \"bug_report\": \"## BUG: Pilot updates display name\\n\\n**Verdict:** Hard failure signals (network_error): PUT /api/settings returned 500 (baseline 200)\\n\\n**Business goal:** Profile settings are saved and persisted (business rule R7)\\n\\n**Reproduce:**\\n1. Open /settings\\n2. Change the display name = 'Pilot 99452'\\n3. Save the settings\\n\\n**Expected vs actual:**\\n- `network_error` PUT /api/settings returned 500 (baseline 200)\\n- `assertion_failed` Settings are persisted by the API: PUT /api/settings [2xx] NOT observed (recent calls: PUT /api/settings 500)\\n- `assertion_failed` Confirmation is shown: expected text \\\"Settings saved\\\" not found on /settings\\n\\n**Release notes check:** none of the release notes explain this behaviour.\\n\\n**Evidence:** screenshots/save-settings_01.jpg, screenshots/save-settings_02.jpg\"\n    },\n    {\n      \"test\": \"Pilot signs out\",\n      \"verdict\": \"BUG\",\n      \"confidence\": 0.92,\n      \"why\": \"Hard failure signals (page_error): uncaught exception: Cannot read properties of undefined (reading 'crash')\",\n      \"changelog_refs\": [],\n      \"bug_report\": \"## BUG: Pilot signs out\\n\\n**Verdict:** Hard failure signals (page_error): uncaught exception: Cannot read properties of undefined (reading 'crash')\\n\\n**Business goal:** Signing out returns the pilot to the login page\\n\\n**Reproduce:**\\n1. Open /dashboard\\n2. Sign out\\n\\n**Expected vs actual:**\\n- `effect_mismatch` expected POST /api/logout (200) was not called\\n- `effect_mismatch` expected navigation to /login but stayed on /dashboard\\n- `page_error` uncaught exception: Cannot read properties of undefined (reading 'crash')\\n- `assertion_failed` Pilot is back on the login page: url /dashboard does not match //login/\\n\\n**Release notes check:** none of the release notes explain this behaviour.\\n\\n**Evidence:** screenshots/logout_01.jpg\"\n    }\n  ]\n}"
+          }
+        ],
+        "isError": false
+      }
+    }
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "PASS             Pilot signs in                             {'T0': 3}  llm=0  3.1s"
+  },
+  {
+    "type": "shot",
+    "name": "login_01.jpg",
+    "test": "login",
+    "url": "/api/runs/20260924-175006-9945/shots/login_01.jpg"
+  },
+  {
+    "type": "step",
+    "test": "login",
+    "step_id": "s1",
+    "intent": "Enter the pilot email",
+    "status": "passed",
+    "tier": 0,
+    "score": 1.0
+  },
+  {
+    "type": "shot",
+    "name": "login_02.jpg",
+    "test": "login",
+    "url": "/api/runs/20260924-175006-9945/shots/login_02.jpg"
+  },
+  {
+    "type": "step",
+    "test": "login",
+    "step_id": "s2",
+    "intent": "Enter the password",
+    "status": "passed",
+    "tier": 0,
+    "score": 1.0
+  },
+  {
+    "type": "shot",
+    "name": "login_03.jpg",
+    "test": "login",
+    "url": "/api/runs/20260924-175006-9945/shots/login_03.jpg"
+  },
+  {
+    "type": "step",
+    "test": "login",
+    "step_id": "s3",
+    "intent": "Submit the sign-in form",
+    "status": "passed",
+    "tier": 0,
+    "score": 1.0
+  },
+  {
+    "type": "verdict",
+    "test": "login",
+    "category": "PASS",
+    "rationale": "Replayed exactly; every step and oracle held.",
+    "changelog_refs": [],
+    "bug_report": null
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "INTENDED_CHANGE  Plan and launch a survey mission           {'T0': 11, 'T4': 2}  llm=0  11.6s -> v3"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "      2 flow change(s), each naming fields/screens that the release notes describe; business oracles still hold."
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "      cites: \"New required field \"Pilot in command\" on Mission details step (DGCA compliance requirement).\""
+  },
+  {
+    "type": "shot",
+    "name": "create-mission_01.jpg",
+    "test": "create-mission",
+    "url": "/api/runs/20260924-175006-9945/shots/create-mission_01.jpg"
+  },
+  {
+    "type": "step",
+    "test": "create-mission",
+    "step_id": "s1",
+    "intent": "Name the mission",
+    "status": "passed",
+    "tier": 0,
+    "score": 0.966
+  },
+  {
+    "type": "shot",
+    "name": "create-mission_02.jpg",
+    "test": "create-mission",
+    "url": "/api/runs/20260924-175006-9945/shots/create-mission_02.jpg"
+  },
+  {
+    "type": "step",
+    "test": "create-mission",
+    "step_id": "s2",
+    "intent": "Choose mission type Survey",
+    "status": "passed",
+    "tier": 0,
+    "score": 0.953
+  },
+  {
+    "type": "shot",
+    "name": "create-mission_03.jpg",
+    "test": "create-mission",
+    "url": "/api/runs/20260924-175006-9945/shots/create-mission_03.jpg"
+  },
+  {
+    "type": "step",
+    "test": "create-mission",
+    "step_id": "s3",
+    "intent": "Choose the Pune Depot site",
+    "status": "passed",
+    "tier": 0,
+    "score": 0.951
+  },
+  {
+    "type": "step",
+    "test": "create-mission",
+    "step_id": "s4",
+    "intent": "Continue from mission details",
+    "status": "passed",
+    "tier": 0,
+    "score": 0.934
+  },
+  {
+    "type": "step",
+    "test": "create-mission",
+    "step_id": "s5-h1",
+    "intent": "Fill new required field 'Pilot in command'",
+    "status": "added",
+    "tier": 4,
+    "score": 1.0
+  },
+  {
+    "type": "step",
+    "test": "create-mission",
+    "step_id": "s5-h0",
+    "intent": "Continue with 'Continue'",
+    "status": "added",
+    "tier": 4,
+    "score": 1.0
+  },
+  {
+    "type": "step",
+    "test": "create-mission",
+    "step_id": "s5",
+    "intent": "Assign drone Falcon-1",
+    "status": "passed",
+    "tier": 0,
+    "score": 1.0
+  },
+  {
+    "type": "step",
+    "test": "create-mission",
+    "step_id": "s6",
+    "intent": "Continue from drone selection",
+    "status": "passed",
+    "tier": 0,
+    "score": 1.0
+  },
+  {
+    "type": "step",
+    "test": "create-mission",
+    "step_id": "s7",
+    "intent": "Set altitude to 80 m",
+    "status": "passed",
+    "tier": 0,
+    "score": 1.0
+  },
+  {
+    "type": "step",
+    "test": "create-mission",
+    "step_id": "s8",
+    "intent": "Set speed to 8 m/s",
+    "status": "passed",
+    "tier": 0,
+    "score": 1.0
+  },
+  {
+    "type": "step",
+    "test": "create-mission",
+    "step_id": "s9",
+    "intent": "Continue from flight parameters",
+    "status": "passed",
+    "tier": 0,
+    "score": 1.0
+  },
+  {
+    "type": "step",
+    "test": "create-mission",
+    "step_id": "s10",
+    "intent": "Launch the mission",
+    "status": "passed",
+    "tier": 0,
+    "score": 0.997
+  },
+  {
+    "type": "step",
+    "test": "create-mission",
+    "step_id": "s11",
+    "intent": "Open the Missions list",
+    "status": "passed",
+    "tier": 0,
+    "score": 0.963
+  },
+  {
+    "type": "verdict",
+    "test": "create-mission",
+    "category": "INTENDED_CHANGE",
+    "rationale": "2 flow change(s), each naming fields/screens that the release notes describe; business oracles still hold.",
+    "changelog_refs": [
+      "New required field \"Pilot in command\" on Mission details step (DGCA compliance requirement)."
+    ],
+    "bug_report": null
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "COSMETIC_DRIFT   Cancel an appointment with explicit confirmation {'T0': 9, 'T1': 1}  llm=0  12.4s -> v2"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "      1 element(s) moved/renamed and were re-identified (tiers [1]); all expectations and business oracles still hold."
+  },
+  {
+    "type": "shot",
+    "name": "cancel-appointment_01.jpg",
+    "test": "cancel-appointment",
+    "url": "/api/runs/20260924-175006-9945/shots/cancel-appointment_01.jpg"
+  },
+  {
+    "type": "step",
+    "test": "cancel-appointment",
+    "step_id": "s1",
+    "intent": "Enter the front-desk email to sign in",
+    "status": "passed",
+    "tier": 0,
+    "score": 1.0
+  },
+  {
+    "type": "shot",
+    "name": "cancel-appointment_02.jpg",
+    "test": "cancel-appointment",
+    "url": "/api/runs/20260924-175006-9945/shots/cancel-appointment_02.jpg"
+  },
+  {
+    "type": "step",
+    "test": "cancel-appointment",
+    "step_id": "s2",
+    "intent": "Enter the password",
+    "status": "passed",
+    "tier": 0,
+    "score": 1.0
+  },
+  {
+    "type": "shot",
+    "name": "cancel-appointment_03.jpg",
+    "test": "cancel-appointment",
+    "url": "/api/runs/20260924-175006-9945/shots/cancel-appointment_03.jpg"
+  },
+  {
+    "type": "step",
+    "test": "cancel-appointment",
+    "step_id": "s3",
+    "intent": "Click the sign-in button",
+    "status": "passed",
+    "tier": 0,
+    "score": 1.0
+  },
+  {
+    "type": "step",
+    "test": "cancel-appointment",
+    "step_id": "s4",
+    "intent": "Wait for the overview to load",
+    "status": "passed",
+    "tier": 0,
+    "score": null
+  },
+  {
+    "type": "step",
+    "test": "cancel-appointment",
+    "step_id": "s5",
+    "intent": "Navigate to the appointments page",
+    "status": "passed",
+    "tier": 0,
+    "score": 1.0
+  },
+  {
+    "type": "step",
+    "test": "cancel-appointment",
+    "step_id": "s6",
+    "intent": "Wait for the appointment list to render",
+    "status": "passed",
+    "tier": 0,
+    "score": null
+  },
+  {
+    "type": "step",
+    "test": "cancel-appointment",
+    "step_id": "s7",
+    "intent": "Click Cancel on the first appointment in the list",
+    "status": "healed",
+    "tier": 1,
+    "score": 1.0
+  },
+  {
+    "type": "step",
+    "test": "cancel-appointment",
+    "step_id": "s8",
+    "intent": "Wait for the confirmation dialog to appear",
+    "status": "passed",
+    "tier": 0,
+    "score": null
+  },
+  {
+    "type": "step",
+    "test": "cancel-appointment",
+    "step_id": "s9",
+    "intent": "Confirm the cancellation in the dialog",
+    "status": "passed",
+    "tier": 0,
+    "score": 1.0
+  },
+  {
+    "type": "step",
+    "test": "cancel-appointment",
+    "step_id": "s10",
+    "intent": "Wait for the row to be removed",
+    "status": "passed",
+    "tier": 0,
+    "score": null
+  },
+  {
+    "type": "verdict",
+    "test": "cancel-appointment",
+    "category": "COSMETIC_DRIFT",
+    "rationale": "1 element(s) moved/renamed and were re-identified (tiers [1]); all expectations and business oracles still hold.",
+    "changelog_refs": [],
+    "bug_report": null
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "FEATURE_REMOVED  Filter flight logs by drone                {}  llm=0  3.5s -> v2"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "      /logs no longer exists and the release notes retire it."
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "      cites: \"The /logs URL returns 404.\""
+  },
+  {
+    "type": "verdict",
+    "test": "flight-logs",
+    "category": "FEATURE_REMOVED",
+    "rationale": "/logs no longer exists and the release notes retire it.",
+    "changelog_refs": [
+      "The /logs URL returns 404."
+    ],
+    "bug_report": null
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "BUG              Pilot updates display name                 {'T0': 2}  llm=0  5.1s"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "      Hard failure signals (network_error): PUT /api/settings returned 500 (baseline 200)"
+  },
+  {
+    "type": "shot",
+    "name": "save-settings_01.jpg",
+    "test": "save-settings",
+    "url": "/api/runs/20260924-175006-9945/shots/save-settings_01.jpg"
+  },
+  {
+    "type": "step",
+    "test": "save-settings",
+    "step_id": "s1",
+    "intent": "Change the display name",
+    "status": "passed",
+    "tier": 0,
+    "score": 1.0
+  },
+  {
+    "type": "shot",
+    "name": "save-settings_02.jpg",
+    "test": "save-settings",
+    "url": "/api/runs/20260924-175006-9945/shots/save-settings_02.jpg"
+  },
+  {
+    "type": "step",
+    "test": "save-settings",
+    "step_id": "s2",
+    "intent": "Save the settings",
+    "status": "passed",
+    "tier": 0,
+    "score": 1.0
+  },
+  {
+    "type": "verdict",
+    "test": "save-settings",
+    "category": "BUG",
+    "rationale": "Hard failure signals (network_error): PUT /api/settings returned 500 (baseline 200)",
+    "changelog_refs": [],
+    "bug_report": "## BUG: Pilot updates display name\n\n**Verdict:** Hard failure signals (network_error): PUT /api/settings returned 500 (baseline 200)\n\n**Business goal:** Profile settings are saved and persisted (business rule R7)\n\n**Reproduce:**\n1. Open /settings\n2. Change the display name = 'Pilot 99452'\n3. Save the settings\n\n**Expected vs actual:**\n- `network_error` PUT /api/settings returned 500 (baseline 200)\n- `assertion_failed` Settings are persisted by the API: PUT /api/settings [2xx] NOT observed (recent calls: PUT /api/settings 500)\n- `assertion_failed` Confirmation is shown: expected text \"Settings saved\" not found on /settings\n\n**Release notes check:** none of the release notes explain this behaviour.\n\n**Evidence:** screenshots/save-settings_01.jpg, screenshots/save-settings_02.jpg"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "BUG              Pilot signs out                            {'T0': 1}  llm=0  1.8s"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "      Hard failure signals (page_error): uncaught exception: Cannot read properties of undefined (reading 'crash')"
+  },
+  {
+    "type": "shot",
+    "name": "logout_01.jpg",
+    "test": "logout",
+    "url": "/api/runs/20260924-175006-9945/shots/logout_01.jpg"
+  },
+  {
+    "type": "step",
+    "test": "logout",
+    "step_id": "s1",
+    "intent": "Sign out",
+    "status": "passed",
+    "tier": 0,
+    "score": 0.994
+  },
+  {
+    "type": "verdict",
+    "test": "logout",
+    "category": "BUG",
+    "rationale": "Hard failure signals (page_error): uncaught exception: Cannot read properties of undefined (reading 'crash')",
+    "changelog_refs": [],
+    "bug_report": "## BUG: Pilot signs out\n\n**Verdict:** Hard failure signals (page_error): uncaught exception: Cannot read properties of undefined (reading 'crash')\n\n**Business goal:** Signing out returns the pilot to the login page\n\n**Reproduce:**\n1. Open /dashboard\n2. Sign out\n\n**Expected vs actual:**\n- `effect_mismatch` expected POST /api/logout (200) was not called\n- `effect_mismatch` expected navigation to /login but stayed on /dashboard\n- `page_error` uncaught exception: Cannot read properties of undefined (reading 'crash')\n- `assertion_failed` Pilot is back on the login page: url /dashboard does not match //login/\n\n**Release notes check:** none of the release notes explain this behaviour.\n\n**Evidence:** screenshots/logout_01.jpg"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": ""
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "tests                6    verdicts        PASS:1, INTENDED_CHANGE:1, COSMETIC_DRIFT:1, FEATURE_REMOVED:1, BUG:2"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "steps replayed (T0)  26/29    self-healed     1"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "LLM calls            0 (+0 cached)    tokens          0"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "cost                 $0.0000 (list $0.0000)    tokens avoided  22,118 (100%)"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "duration             37.5s    run             20260924-175006-9945"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": ""
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "## BUG: Pilot updates display name"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": ""
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "**Verdict:** Hard failure signals (network_error): PUT /api/settings returned 500 (baseline 200)"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": ""
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "**Business goal:** Profile settings are saved and persisted (business rule R7)"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": ""
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "**Reproduce:**"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "1. Open /settings"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "2. Change the display name = 'Pilot 99452'"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "3. Save the settings"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": ""
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "**Expected vs actual:**"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "- `network_error` PUT /api/settings returned 500 (baseline 200)"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "- `assertion_failed` Settings are persisted by the API: PUT /api/settings [2xx] NOT observed (recent calls: PUT /api/settings 500)"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "- `assertion_failed` Confirmation is shown: expected text \"Settings saved\" not found on /settings"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": ""
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "**Release notes check:** none of the release notes explain this behaviour."
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": ""
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "**Evidence:** screenshots/save-settings_01.jpg, screenshots/save-settings_02.jpg"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": ""
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "## BUG: Pilot signs out"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": ""
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "**Verdict:** Hard failure signals (page_error): uncaught exception: Cannot read properties of undefined (reading 'crash')"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": ""
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "**Business goal:** Signing out returns the pilot to the login page"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": ""
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "**Reproduce:**"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "1. Open /dashboard"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "2. Sign out"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": ""
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "**Expected vs actual:**"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "- `effect_mismatch` expected POST /api/logout (200) was not called"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "- `effect_mismatch` expected navigation to /login but stayed on /dashboard"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "- `page_error` uncaught exception: Cannot read properties of undefined (reading 'crash')"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "- `assertion_failed` Pilot is back on the login page: url /dashboard does not match //login/"
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": ""
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "**Release notes check:** none of the release notes explain this behaviour."
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": ""
+  },
+  {
+    "type": "log",
+    "stream": "stdout",
+    "line": "**Evidence:** screenshots/logout_01.jpg"
+  },
+  {
+    "type": "meters",
+    "tests": 6,
+    "passed": 3,
+    "failed": 2,
+    "healed_steps": 1,
+    "replayed_steps": 26,
+    "llm_calls": 0,
+    "llm_calls_cached": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": 0.0,
+    "list_cost_usd": 0.0,
+    "naive_tokens_estimate": 22118,
+    "verdicts": {
+      "PASS": 1,
+      "INTENDED_CHANGE": 1,
+      "COSMETIC_DRIFT": 1,
+      "FEATURE_REMOVED": 1,
+      "BUG": 2
+    },
+    "tiers": {
+      "0": 26,
+      "4": 2,
+      "1": 1
+    },
+    "duration_ms": 37524
+  },
+  {
+    "type": "state",
+    "state": "done"
+  }
+]

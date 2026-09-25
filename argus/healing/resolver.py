@@ -5,13 +5,14 @@ asks a small model to choose among the top-5 candidates.
 """
 from __future__ import annotations
 
+import re
 from typing import Any, Literal, Optional
 
 from pydantic import BaseModel, Field
 
-from argus.healing.similarity import rank
+from argus.healing.similarity import rank, text_sim
 from argus.llm import prompts as P
-from argus.models import ElementInfo, PageSnapshot, Step
+from argus.models import ElementInfo, Fingerprint, PageSnapshot, Step
 
 
 class Resolution(BaseModel):
@@ -43,6 +44,39 @@ def describe(e: ElementInfo) -> str:
         extra.append("disabled")
     ctx = f" (in: {e.context[:60]})" if e.context else ""
     return f'[{e.ref}] {e.role or e.tag} "{label[:60]}"{ctx}' + (f" {{{', '.join(extra)}}}" if extra else "")
+
+
+def _identity(e: ElementInfo) -> tuple[str, str]:
+    return (e.role or e.tag, re.sub(r"\s+", " ", (e.name or "")).strip().lower())
+
+
+def _sibling_tiebreak(t: Fingerprint, ranked: list[tuple[ElementInfo, float, dict]],
+                      gate: float) -> Optional[tuple[ElementInfo, float, str]]:
+    """Deterministic pick among near-identical siblings (same role+name, scores within `gate`).
+
+    (a) best `context` text similarity when decisive, else (b) the recorded `ordinal`
+    (index among identical siblings at record time). Returns (element, score, how) or None.
+    """
+    e1, s1, _ = ranked[0]
+    id1 = _identity(e1)
+    same = [(e, s) for e, s, _ in ranked if s1 - s < gate and _identity(e) == id1]
+    if len(same) < 2:
+        return None
+    if t.context:
+        scored = sorted(((text_sim(t.context, e.context or ""), e, s) for e, s in same),
+                        key=lambda x: -x[0])
+        best = scored[0][0]
+        runner_up = scored[1][0] if len(scored) > 1 else 0.0
+        decisive = best >= 0.6 and best - runner_up >= 0.05 and \
+            sum(1 for x in scored if x[0] == best) == 1
+        if decisive:
+            return scored[0][1], scored[0][2], f"context '{t.context[:40]}' identifies the sibling"
+    want = (t.attrs or {}).get("ordinal")
+    if want is not None:
+        hits = [(e, s) for e, s in same if (e.attrs or {}).get("ordinal") == want]
+        if len(hits) == 1:
+            return hits[0][0], hits[0][1], f"ordinal {want} among identical siblings"
+    return None
 
 
 async def resolve(snap: PageSnapshot, step: Step, weights: dict[str, float], llm: Any, cfg: Any, *,
@@ -81,6 +115,16 @@ async def resolve(snap: PageSnapshot, step: Step, weights: dict[str, float], llm
     if (s1 >= th.accept and margin >= th.margin) or (s1 >= 0.92 and margin >= 0.05) or same_identity or equivalent:
         return Resolution(element=e1, tier=1, method="similarity",
                           reason=f"multi-attribute match {s1:.2f} (runner-up {s2:.2f})", **base)
+
+    # identical siblings (e.g. three "Cancel" buttons in a list): scores cluster within the
+    # margin gate, so break the tie deterministically by context text, then recorded ordinal
+    if margin < th.margin and s1 >= th.accept:
+        tie = _sibling_tiebreak(t, ranked, th.margin)
+        if tie is not None:
+            te, ts, how = tie
+            return Resolution(element=te, tier=1, method="similarity", score=round(ts, 3),
+                              margin=round(margin, 3), candidates=cands,
+                              reason=f"identical-sibling tie-break: {how}")
 
     if allow_llm and llm is not None and s1 >= th.llm_min:
         user = P.HEAL_USER.format(intent=step.intent, action=step.action, original=t.describe(),

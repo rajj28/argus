@@ -1,0 +1,56 @@
+{
+  "login": [
+    "Open the MediQueue sign-in screen.",
+    "Enter the demo front-desk email and password.",
+    "Sign in and confirm that the clinic overview appears.",
+    "Confirm that the transition after login does not perform a full-page reload."
+  ],
+  "book-consultation": [
+    "Open the doctor directory and wait for all eight doctors to appear.",
+    "Choose any doctor and start a consultation booking.",
+    "Enter a patient name, age 35, and a valid phone number.",
+    "Choose Consultation, continue, and select a future appointment time.",
+    "Review the doctor fee, GST, and total, then confirm the booking.",
+    "Verify that an appointment-confirmed message appears and the new patient is in the appointment schedule."
+  ],
+  "age-validation": [
+    "Start a consultation booking for any doctor.",
+    "Enter age 150 with otherwise valid patient details.",
+    "Choose Consultation, continue, and attempt to confirm the future time.",
+    "Verify that age 150 is rejected and no appointment is confirmed."
+  ],
+  "emergency-fee-zero": [
+    "Start a booking and enter valid patient details.",
+    "Choose Emergency as the visit type and continue.",
+    "Select a future time and review the fee breakdown.",
+    "Verify that both the doctor fee and total are zero before confirming."
+  ],
+  "invoice-total-correct": [
+    "Open Billing.",
+    "Read every amount in the invoice line items.",
+    "Add the line-item amounts and compare the exact result with the displayed total."
+  ],
+  "cancel-appointment": [
+    "Open Appointments and scroll well down the virtualized schedule to Rahul Iyer.",
+    "Start cancellation for Rahul Iyer’s appointment.",
+    "Verify that no row is removed before explicit confirmation.",
+    "Confirm the cancellation and verify that Rahul Iyer’s row is gone."
+  ],
+  "reschedule-appointment": [
+    "Open Appointments and locate an existing confirmed visit.",
+    "Start rescheduling that appointment from the available appointment actions.",
+    "Choose a different future time and confirm the change.",
+    "Verify that the appointment remains present and displays the new time."
+  ],
+  "toggle-sms-reminders": [
+    "Open Settings after signing in.",
+    "Locate the SMS reminders preference and its custom switch.",
+    "Change the switch and verify that the preference is saved.",
+    "Reload and confirm that the new preference remains active."
+  ],
+  "doctor-list-loads": [
+    "Open the doctor directory from clinic navigation.",
+    "Verify that a loading state is shown instead of the complete directory immediately.",
+    "Wait for loading to finish and verify that all eight doctor cards appear."
+  ]
+}

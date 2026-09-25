@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Tour overlay</title>
+</head>
+<body>
+  <h1>Appointments</h1>
+  <div id="backdrop" style="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50">
+    <div id="panel" role="dialog" aria-modal="true"
+         style="position:absolute;top:30%;left:30%;width:40%;background:#fff;padding:16px">
+      <h2>Quick tour</h2>
+      <p>Let us show you around.</p>
+      <button id="next">Next</button>
+    </div>
+  </div>
+  <script>
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") document.getElementById("backdrop").remove();
+    });
+  </script>
+</body>
+</html>

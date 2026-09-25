@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>MediQueue · Clinic operations</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div id="{% if initial_release == 'r1' %}app-shell{% else %}care-shell{% endif %}" class="{% if initial_release == 'r1' %}mq-frame{% else %}refresh-frame{% endif %}" data-initial-release="{{ initial_release }}">
+    <main id="main-content" class="{% if initial_release == 'r1' %}mq-main{% else %}refresh-main{% endif %}" tabindex="-1">
+      <div class="loading-card" role="status">Opening MediQueue…</div>
+    </main>
+  </div>
+  <div id="{% if initial_release == 'r1' %}toast-region{% else %}notice-stack{% endif %}" class="{% if initial_release == 'r1' %}toast-region{% else %}notice-stack{% endif %}" aria-live="polite" aria-atomic="true"></div>
+  <div id="{% if initial_release == 'r1' %}modal-region{% else %}dialog-host{% endif %}"></div>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>

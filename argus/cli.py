@@ -361,5 +361,26 @@ def mcp(home: str = HOME):
     serve(home)
 
 
+@app.command()
+def boundary(test: str = typer.Option(..., "--test", help="Existing test whose rule input gets edge cases"),
+             home: str = HOME):
+    """Attack one test's business rules at their boundaries (1 LLM call)."""
+    from argus.explore.boundary import generate_boundary_tests
+    s = load_settings(home)
+    try:
+        tests = asyncio.run(generate_boundary_tests(s, test, log=console.print))
+    except LookupError as exc:
+        console.print(f"[red]{exc}[/]")
+        raise typer.Exit(1)
+    table = Table("test", "rule", "expect", "value", "steps", "oracles")
+    for t in tests:
+        rule = next((o.rule_ref or "?" for o in t.oracles if o.rule_ref), "-")
+        expect = "accept" if "-accept-" in t.id else "reject"
+        table.add_row(t.id, rule, expect, t.id.rsplit("-", 1)[-1],
+                      str(len(t.steps)), ", ".join(o.kind for o in t.oracles))
+    console.print(table)
+    console.print(f"[green]{len(tests)} boundary test(s) baselined in {s.home}[/]")
+
+
 if __name__ == "__main__":
     app()

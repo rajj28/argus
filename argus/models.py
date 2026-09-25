@@ -137,6 +137,7 @@ AssertionKind = Literal[
     "no_page_errors",     # params: {}
     "value_equals",       # params: {fingerprint, value}
     "element_state",      # params: {fingerprint, enabled?: bool, checked?: bool}
+    "sum_equals",         # params: {items_selector_text?: str, total_label: str} - total == sum(line items)
     "llm_check",          # params: {question}  - semantic check, used sparingly (costs a call)
 ]
 
@@ -204,6 +205,7 @@ class TestSpec(BaseModel):
 
 ObservationKind = Literal[
     "locator_healed",     # target found by similarity/LLM/vision instead of replay
+    "interrupt_dismissed",  # a popup/modal/banner blocking the flow was dismissed (cosmetic)
     "step_reordered",     # executed a later step out of order (flow reordered)
     "step_added",         # replanner inserted a new step (new required field / new screen)
     "step_missing",       # step's target no longer exists and was skipped

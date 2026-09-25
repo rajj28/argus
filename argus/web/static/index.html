@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Argus — the tireless hand in the browser</title>
+<meta name="description" content="Argus tests your app like a user, heals when it changes, and knows a bug from a feature. It compiles each journey once and replays it deterministically, so the 10th run costs nothing.">
+<!-- backend may inject: deployment region + public repo url -->
+<meta name="argus-region" content="">
+<meta name="argus-repo" content="">
+<link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@600;700&family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/argus.css">
+</head>
+<body>
+
+<!-- ===================== Nav ===================== -->
+<header class="nav">
+  <div class="container nav-in">
+    <a class="wordmark" href="/" aria-label="Argus home">
+      <span class="light" aria-hidden="true"></span>Argus
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#how">How it works</a>
+      <a href="#results">Results</a>
+      <a href="#cli">CLI &amp; MCP</a>
+      <a href="#limits">Limits</a>
+      <a id="nav-gh" href="#" data-repo-link aria-disabled="true" title="Source not published yet">GitHub</a>
+    </nav>
+    <a class="btn btn-primary nav-cta" href="live.html">Watch it run live&nbsp;&rarr;</a>
+    <a class="btn btn-quiet btn-sm nav-toggle" href="live.html">Live&nbsp;&rarr;</a>
+  </div>
+</header>
+
+<main>
+<!-- ===================== Hero ===================== -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <p class="eyebrow">AUTONOMOUS UI TESTING</p>
+      <h1 class="t-64">Tests your app like a user. Heals when it changes. Knows a bug from a feature.</h1>
+      <p class="sub">Argus compiles each journey once, replays it deterministically, and only calls a model when something is genuinely new &mdash; so the 10th run costs nothing.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="live.html">Watch it run live</a>
+        <a class="btn-link" href="#how">How it works</a>
+      </div>
+    </div>
+
+    <!-- Live product frame: fed by /api/overview + /api/runs/latest -->
+    <div class="frame-wrap">
+      <div class="frame card console" id="hero-frame" aria-busy="true">
+        <div class="console-top">
+          <span class="console-title" id="hero-app"><span class="sk" style="display:inline-block;width:180px;height:16px">&nbsp;</span></span>
+          <span class="console-meta" id="hero-ago"></span>
+          <span class="chip chip-mono" id="hero-build" style="margin-left:auto"></span>
+        </div>
+        <div class="kpis" id="hero-kpis">
+          <div class="kpi"><div class="kpi-n sk" style="height:24px">&nbsp;</div><div class="kpi-l">steps</div></div>
+          <div class="kpi"><div class="kpi-n sk" style="height:24px">&nbsp;</div><div class="kpi-l">replayed t0</div></div>
+          <div class="kpi"><div class="kpi-n sk" style="height:24px">&nbsp;</div><div class="kpi-l">healed</div></div>
+          <div class="kpi"><div class="kpi-n sk" style="height:24px">&nbsp;</div><div class="kpi-l">llm calls</div></div>
+          <div class="kpi" style="grid-column:span 2"><div class="kpi-l" style="margin:0 0 8px">verdicts</div><div id="hero-verdicts" class="stack" style="gap:6px"></div></div>
+        </div>
+        <table class="steprows" id="hero-steps">
+          <thead><tr><th style="width:34%">intent</th><th style="width:20%">tier</th><th style="width:16%">status</th><th class="num">score</th><th class="num">ms</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div class="card-head" style="border-top:1px solid var(--line);border-bottom:0">
+          <span class="caption" id="hero-label">Latest real run</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== Proof strip ===================== -->
+<section class="section" id="results">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">RESULTS</p>
+      <h2 class="t-32">The product is the proof</h2>
+      <p class="sub" style="font-size:16px;margin-top:8px">Every number below comes from a real run, labelled with what it measured and when.</p>
+    </div>
+    <div class="proof" id="proof" aria-busy="true">
+      <!-- 4 cells injected by landing.js -->
+      <div class="proof-cell"><div class="proof-n sk" style="height:44px">&nbsp;</div><div class="proof-l sk" style="height:16px;width:60%">&nbsp;</div><div class="proof-c sk" style="height:12px;width:90%">&nbsp;</div></div>
+      <div class="proof-cell"><div class="proof-n sk" style="height:44px">&nbsp;</div><div class="proof-l sk" style="height:16px;width:60%">&nbsp;</div><div class="proof-c sk" style="height:12px;width:90%">&nbsp;</div></div>
+      <div class="proof-cell"><div class="proof-n sk" style="height:44px">&nbsp;</div><div class="proof-l sk" style="height:16px;width:60%">&nbsp;</div><div class="proof-c sk" style="height:12px;width:90%">&nbsp;</div></div>
+      <div class="proof-cell"><div class="proof-n sk" style="height:44px">&nbsp;</div><div class="proof-l sk" style="height:16px;width:60%">&nbsp;</div><div class="proof-c sk" style="height:12px;width:90%">&nbsp;</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== How it works ===================== -->
+<section class="section" id="how">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">HOW IT WORKS</p>
+      <h2 class="t-32">A resolution cascade that stops at the first success</h2>
+      <p class="sub" style="font-size:16px;margin-top:8px">Each step runs the tiers in order and only T3&ndash;T5 spend tokens. Bar widths are the real share of steps from the latest aggregate.</p>
+    </div>
+    <div class="cascade-grid">
+      <div>
+        <div id="cascade" class="card card-pad" aria-busy="true" style="min-height:220px">
+          <div class="sk" style="height:200px">&nbsp;</div>
+        </div>
+        <p class="caption" id="cascade-cap" style="margin-top:10px"></p>
+      </div>
+      <div class="cascade-notes stack">
+        <div>
+          <h3>Step contracts</h3>
+          <p class="muted t-14">Every step carries a falsifiable contract captured from the green run: the API calls it makes, where it navigates, which screen appears. A mismatch becomes evidence with no model involved.</p>
+        </div>
+        <div>
+          <h3>Immutable intent vs per-build plans</h3>
+          <p class="muted t-14">A test&rsquo;s intent is frozen the first time it is saved and can never be rewritten by healing. The runtime mutates only the compiled plan, versioned per build, so evidence is always compared against a trusted baseline.</p>
+        </div>
+        <div>
+          <h3>Verified-only memory</h3>
+          <p class="muted t-14">Whatever Argus learns is written to git-friendly JSON &mdash; but nothing is learned from a failed run. The same situation costs $0 next time.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== Bug or feature ===================== -->
+<section class="section" id="bug-or-feature">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">BUG OR FEATURE?</p>
+      <h2 class="t-32">Two real verdicts, side by side</h2>
+      <p class="sub" style="font-size:16px;margin-top:8px">Pulled from a recorded run. An intended change is accepted only with a verbatim release-note citation; without one, a change is never silently accepted.</p>
+    </div>
+    <div class="verdict-grid" id="verdict-cards" aria-busy="true">
+      <div class="card vcard"><div class="vcard-body"><div class="sk" style="height:160px">&nbsp;</div></div></div>
+      <div class="card vcard"><div class="vcard-body"><div class="sk" style="height:160px">&nbsp;</div></div></div>
+    </div>
+    <p class="muted t-14" style="margin-top:var(--s3);max-width:75ch">
+      Ambiguous cases go to a <strong>jury of models</strong>; a change is split to <span class="mono">NEEDS_REVIEW</span> rather than guessed.
+      When there is no changelog at all, <span class="mono">argus diff</span> runs the same immutable intents against two live builds and compares behaviour traces.
+    </p>
+  </div>
+</section>
+
+<!-- ===================== The 10th run ===================== -->
+<section class="section" id="ten-runs">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">THE 10TH RUN</p>
+      <h2 class="t-32">Steady state costs nothing</h2>
+      <p class="sub" style="font-size:16px;margin-top:8px">Ten replays across releases 1.0 &rarr; 1.2 with the LLM off. Bars are LLM calls; the line is the share of steps replayed at T0.</p>
+    </div>
+    <div class="card chart-wrap">
+      <div id="tenrun-chart" aria-busy="true" style="min-height:260px"><div class="sk" style="height:240px">&nbsp;</div></div>
+      <div class="legend" id="tenrun-legend"></div>
+      <p class="caption" id="tenrun-cap" style="margin-top:12px"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CLI & MCP ===================== -->
+<section class="section" id="cli">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">CLI &amp; MCP</p>
+      <h2 class="t-32">Run it from a terminal, or from your coding agent</h2>
+      <p class="sub" style="font-size:16px;margin-top:8px">Real recorded <span class="mono">argus run</span> output, and a real <span class="mono">verify_change</span> response over MCP.</p>
+    </div>
+    <div class="duo">
+      <div>
+        <p class="eyebrow" style="margin-bottom:10px">TERMINAL</p>
+        <div class="terminal" id="terminal" aria-busy="true" style="min-height:320px"><div class="sk" style="height:300px">&nbsp;</div></div>
+      </div>
+      <div>
+        <p class="eyebrow" style="margin-bottom:10px">MCP &mdash; tools/call verify_change</p>
+        <div class="toollist" id="mcp-tools"></div>
+        <pre class="json" id="mcp-json" aria-busy="true" style="min-height:240px"><div class="sk" style="height:220px">&nbsp;</div></pre>
+      </div>
+    </div>
+    <p style="margin-top:var(--s3)"><a class="btn-link" href="live.html">Run them live&nbsp;&rarr;</a></p>
+  </div>
+</section>
+
+<!-- ===================== Limits ===================== -->
+<section class="section" id="limits">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">LIMITS</p>
+      <h2 class="t-32">What Argus can&rsquo;t do yet</h2>
+      <p class="sub" style="font-size:16px;margin-top:8px">From the blind hold-out exam failure list &mdash; honest about where it still needs a human.</p>
+    </div>
+    <ul class="limits" id="limits-list" aria-busy="true">
+      <li><span class="sk" style="height:16px;width:100%;display:block">&nbsp;</span></li>
+      <li><span class="sk" style="height:16px;width:100%;display:block">&nbsp;</span></li>
+      <li><span class="sk" style="height:16px;width:100%;display:block">&nbsp;</span></li>
+    </ul>
+  </div>
+</section>
+</main>
+
+<!-- ===================== Footer ===================== -->
+<footer class="footer">
+  <div class="container footer-in">
+    <span>Built for FlytBase &ldquo;The Tireless Hand&rdquo;</span>
+    <span class="sep">&middot;</span>
+    <a id="foot-gh" href="#" data-repo-link aria-disabled="true" title="Source not published yet">GitHub</a>
+    <span class="sep">&middot;</span>
+    <a href="live.html">Live console</a>
+    <span class="sep" style="margin-left:auto"></span>
+    <span class="caption" id="foot-stamp"></span>
+  </div>
+</footer>
+
+<script src="assets/landing.js"></script>
+</body>
+</html>

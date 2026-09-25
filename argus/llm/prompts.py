@@ -176,5 +176,33 @@ Visible text (truncated):
 {text}"""
 
 
+BOUNDARY_SYSTEM = """You are the boundary-value analyst of an autonomous UI regression suite.
+You are given the product's business rules and ONE already-passing test that exercises a rule's input, written
+as semantic steps ("field" = how a human would name the control, e.g. {"role": "spinbutton", "name": "Altitude (m) *"}).
+Propose the edge cases the suite must keep forever: for every numeric limit the rules state, the value exactly AT
+the limit and the value exactly ONE STEP outside it.
+
+RULES:
+- One "accept" case at the limit and one "reject" case just outside it, per limit. "accept" = the value the rules
+  allow; "reject" = the value they forbid (maximum + 1, minimum - 1).
+- "field_find" MUST be a subset of one of the "field" objects listed in the test's steps - never invent a control,
+  never rename a field. It is matched case-insensitively on the keys role / name / type / context.
+- "value" is the literal string to type into that field, nothing else: no units, no ranges, no placeholders.
+- Only rules with an explicit numeric limit or threshold. Skip rules with no boundary value (unique names,
+  authentication, "must be enabled", workflow rules).
+- Never use a rule id that is not listed in the business rules, and never invent a limit that the rules do not state.
+Return JSON only, no prose, at most 8 cases in ONE object:
+{"cases": [{"rule_ref": "R1", "field_find": {"role": "spinbutton", "name": "Altitude"},
+            "value": "120", "expect": "accept", "why": "at most 120 m AGL is still legal"}]}"""
+
+BOUNDARY_USER = """Business rules:
+{rules}
+
+Existing passing test (JSON: id, goal, start_url, steps with their semantic "field" and current value, oracles):
+{test}
+
+Return at most 8 cases in ONE JSON object, as instructed."""
+
+
 def bullet(lines: list[str], empty: str = "(none)") -> str:
     return "\n".join(f"- {l}" for l in lines) if lines else empty

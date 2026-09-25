@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Clinic dashboard</title>
+</head>
+<body>
+  <h1>Appointments</h1>
+  <ul>
+    <li>Mon 10:00 - Anita Desai <button>Cancel</button></li>
+  </ul>
+  <dialog id="whatsnew" open>
+    <h2>What's new in v2.4</h2>
+    <p>A smoother booking journey.</p>
+    <button id="tour">Take the tour</button>
+    <button id="gotit">Got it</button>
+  </dialog>
+  <script>
+    document.getElementById("gotit").addEventListener("click", () => {
+      document.getElementById("whatsnew").close();
+    });
+  </script>
+</body>
+</html>

@@ -7,10 +7,12 @@ After the test: business oracles -> triage -> verified-only memory updates.
 from __future__ import annotations
 
 import difflib
+import json
 import re
 import time
 from pathlib import Path
 from typing import Any, Optional
+from urllib.parse import urlparse
 
 from playwright.async_api import Browser, async_playwright
 
@@ -18,11 +20,12 @@ from argus.browser.effects import EffectRecorder, wait_for_settle
 from argus.browser.snapshot import compact_for_llm, element_handle, normalize_path, take_snapshot
 from argus.config import Settings
 from argus.healing.resolver import Resolution, describe, resolve
-from argus.healing.similarity import DEFAULT_WEIGHTS, effective_weights
+from argus.healing.similarity import DEFAULT_WEIGHTS, effective_weights, text_sim
 from argus.llm import prompts as P
 from argus.memory.store import Memory
-from argus.models import (Assertion, Effects, Fingerprint, NetCall, Observation, RunReport, RunTotals, Step,
-                          StepExpect, StepResult, TestChange, TestResult, TestSpec, Verdict)
+from argus.models import (Assertion, Effects, ElementInfo, Fingerprint, NetCall, Observation, RunReport,
+                          RunTotals, Step, StepExpect, StepResult, TestChange, TestResult, TestSpec, Verdict,
+                          now_iso)
 from argus.runner.assertions import check, interpolate, network_match, path_matches, status_class
 from argus.triage.triage import all_observations, deviation_signature, triage
 
@@ -43,6 +46,7 @@ class RunContext:
         self.vars: dict[str, str] = {}
         self.weights = effective_weights(dict(DEFAULT_WEIGHTS), memory.stability())
         self.naive_tokens = 0
+        self.interrupts: list[Observation] = []   # pending "interrupt_dismissed" observations
         self._n = 0
 
     def memory_weights(self) -> dict[str, float]:
@@ -179,6 +183,214 @@ async def _shot(page: Any, ctx: RunContext, name: str) -> Optional[str]:
         return rel
     except Exception:
         return None
+
+
+# ----------------------------------------------------------------------------------------------
+# interrupt handling: popups / modals / cookie banners that block the flow
+# ----------------------------------------------------------------------------------------------
+
+# Safest dismiss labels, best first (exact match wins over "contains").
+_DISMISS_PRIORITY = ("got it", "close", "dismiss", "skip", "not now", "no thanks",
+                     "maybe later", "ok", "×", "✕", "continue")
+_DESTRUCTIVE_WORDS = re.compile(
+    r"\b(delete|remove|destroy|erase|reset|log ?out|sign ?out|unsubscribe|uninstall|buy|purchase|"
+    r"pay|order|subscribe|install|upgrade|downgrade|account|confirm|accept all|allow)\b", re.I)
+
+
+def _dismiss_rank(label: str) -> Optional[int]:
+    """Priority of `label` as a dismiss control, or None if it is not a dismiss-like name."""
+    stripped = label.strip().lower()
+    core = re.sub(r"\s+", " ", re.sub(r"[^a-z0-9 ]", "", stripped)).strip()
+    for i, want in enumerate(_DISMISS_PRIORITY):
+        if core == want or stripped == want:
+            return i
+    if core and len(core.split()) <= 3:
+        for i, want in enumerate(_DISMISS_PRIORITY):
+            if re.search(rf"\b{re.escape(want)}\b", core):
+                return len(_DISMISS_PRIORITY) + i
+    return None
+
+
+def _is_dialogish(e: ElementInfo) -> bool:
+    return (e.role in ("dialog", "alertdialog") or e.tag == "dialog"
+            or e.attrs.get("aria-modal") == "true")
+
+
+def _blocking_overlay(snap: Any) -> Optional[ElementInfo]:
+    """The visible blocking overlay in the snapshot: dialog / aria-modal / fixed full-viewport layer.
+
+    Dialogish overlays win over plain fixed layers (a backdrop is usually a sibling/parent of the
+    dialog panel and has no dismiss control of its own).
+    """
+    best_dialog: Optional[ElementInfo] = None
+    best_layer: Optional[ElementInfo] = None
+    for e in snap.elements:
+        if not e.visible:
+            continue
+        dialogish = _is_dialogish(e)
+        if not (dialogish or e.attrs.get("data-argus-overlay")):
+            continue
+        if not dialogish and snap.headings and all(h in (e.text or "") for h in snap.headings):
+            continue  # fixed layer wrapping the whole app = layout shell, not an interrupt
+        cur = best_dialog if dialogish else best_layer
+        if cur is None or (e.bbox and cur.bbox and e.bbox.w * e.bbox.h > cur.bbox.w * cur.bbox.h):
+            if dialogish:
+                best_dialog = e
+            else:
+                best_layer = e
+    return best_dialog or best_layer
+
+
+def _in_overlay(e: ElementInfo, overlay: ElementInfo) -> bool:
+    """Whether `e` sits inside `overlay` (bbox containment, or in_dialog for dialog-ish overlays)."""
+    if e.ref == overlay.ref:
+        return False
+    if e.bbox and overlay.bbox and overlay.bbox.w and overlay.bbox.h:
+        cx, cy = e.bbox.x + e.bbox.w / 2, e.bbox.y + e.bbox.h / 2
+        return (overlay.bbox.x <= cx <= overlay.bbox.x + overlay.bbox.w
+                and overlay.bbox.y <= cy <= overlay.bbox.y + overlay.bbox.h)
+    dialogish = overlay.role in ("dialog", "alertdialog") or overlay.tag == "dialog" \
+        or overlay.attrs.get("aria-modal") == "true"
+    return bool(e.in_dialog and dialogish)
+
+
+def _overlay_is_target(snap: Any, overlay: ElementInfo, step: Optional[Step]) -> bool:
+    """True when the step's own target lives inside the overlay: the modal IS the step's business."""
+    if step is None or step.target is None:
+        return False
+    t = step.target
+    for e in snap.elements:
+        if not e.interactive or not _in_overlay(e, overlay):
+            continue
+        if (e.role or e.tag) == (t.role or t.tag) and text_sim(e.name or "", t.name or "") >= 0.85:
+            return True
+    return False
+
+
+def _overlay_heading(snap: Any, overlay: ElementInfo) -> str:
+    """Stable identity of an overlay across runs: its dialog heading (or trimmed text)."""
+    text = overlay.text or overlay.name or ""
+    for h in snap.headings:
+        if h and h in text:
+            return h
+    return _norm(overlay.name or text)[:60] or f"{overlay.role or overlay.tag}-overlay"
+
+
+def _dismiss_control(snap: Any, overlay: ElementInfo, known: str = "") -> Optional[ElementInfo]:
+    """Safest dismiss control inside the overlay; `known` = control name remembered from a past run."""
+    best: Optional[tuple[int, ElementInfo]] = None
+    for e in snap.elements:
+        if not (e.interactive and e.visible and e.enabled) or e.editable:
+            continue
+        if not _in_overlay(e, overlay):
+            continue
+        label = (e.name or e.text or "").strip()
+        if not label or _DESTRUCTIVE_WORDS.search(label):
+            continue
+        r = _dismiss_rank(label)
+        if r is None:
+            continue
+        if known and text_sim(label, known) >= 0.9:
+            r = -1  # dismissed via this control before: instant
+        if best is None or r < best[0]:
+            best = (r, e)
+    return best[1] if best else None
+
+
+def _interrupt_knowledge(ctx: RunContext) -> Optional[dict]:
+    kn = getattr(ctx.memory, "_knowledge", None)
+    return kn if isinstance(kn, dict) else None
+
+
+def _remember_interrupt(ctx: RunContext, heading: str, control: str) -> None:
+    """Persist dismissed overlays (by heading) in knowledge.json so next runs dismiss instantly."""
+    kn = _interrupt_knowledge(ctx)
+    if kn is None:
+        return
+    kn.setdefault("interrupts", {})[_norm(heading)] = {"control": control, "at": now_iso()}
+    try:
+        ctx.memory._save_knowledge()
+    except Exception:
+        pass
+
+
+def _known_interrupt(ctx: RunContext, heading: str) -> str:
+    kn = _interrupt_knowledge(ctx)
+    if kn is None:
+        return ""
+    entry = kn.get("interrupts", {}).get(_norm(heading))
+    return str(entry.get("control", "")) if isinstance(entry, dict) else ""
+
+
+async def _overlay_gone(page: Any, ref: str) -> bool:
+    """Whether the overlay element is detached or no longer visible (dismissal actually worked)."""
+    try:
+        idx = int(ref[1:])
+        return bool(await page.evaluate(
+            "(i) => { const el = window.__argus && window.__argus.refs && window.__argus.refs[i];"
+            " if (!el || !el.isConnected) return true;"
+            " try { return !el.checkVisibility({checkOpacity: true, checkVisibilityCSS: true}); }"
+            " catch (_) { const s = window.getComputedStyle(el);"
+            " return s.display === 'none' || s.visibility === 'hidden'; } }", idx))
+    except Exception:
+        return True
+
+
+async def _dismiss_interrupts(ctx: RunContext, page: Any, rec: EffectRecorder, snap: Any,
+                              step: Optional[Step] = None) -> bool:
+    """Dismiss a blocking overlay ("What's new", cookie banner, tour) that is not the step's target.
+
+    Clicks the safest dismiss control (got it / close / skip / ... - never destructive) or presses
+    Escape. Records an `interrupt_dismissed` observation on `ctx.interrupts` (cosmetic for triage)
+    and remembers the overlay in knowledge.json. Returns True when something was dismissed.
+    """
+    overlay = _blocking_overlay(snap)
+    if overlay is None or _overlay_is_target(snap, overlay, step):
+        return False
+    heading = _overlay_heading(snap, overlay)
+    control = _dismiss_control(snap, overlay, _known_interrupt(ctx, heading))
+    if control is None and not _is_dialogish(overlay):
+        return False  # a plain fixed layer with no dismiss control: don't guess (Escape won't help)
+    await rec.begin()
+    how = ""
+    try:
+        if control is not None:
+            handle = await element_handle(page, control.ref)
+            if handle is not None:
+                await handle.click(timeout=3000)
+                how = f"clicked '{(control.name or control.text)[:40]}'"
+        if not how:
+            await page.keyboard.press("Escape")
+            how = "pressed Escape"
+    except Exception:
+        try:
+            await page.keyboard.press("Escape")
+            how = "pressed Escape"
+        except Exception:
+            await rec.end()
+            return False
+    await rec.end()
+    try:
+        await page.wait_for_timeout(150)
+    except Exception:
+        pass
+    if not await _overlay_gone(page, overlay.ref):
+        return False
+    _remember_interrupt(ctx, heading, (control.name or control.text).strip() if control else "escape")
+    ctx.interrupts.append(Observation(
+        kind="interrupt_dismissed", step_id=step.id if step else None,
+        detail=f"dismissed interrupt '{heading}' ({how})",
+        evidence={"overlay": describe(overlay), "heading": heading}))
+    return True
+
+
+def _drain_interrupts(ctx: RunContext, result: TestResult, step_id: Optional[str] = None) -> None:
+    """Move pending interrupt observations onto the test result (triage treats them as cosmetic)."""
+    for o in ctx.interrupts:
+        if o.step_id is None:
+            o.step_id = step_id
+        result.observations.append(o)
+    ctx.interrupts.clear()
 
 
 class _Exec:
@@ -408,7 +620,7 @@ def _is_commit(step: Step) -> bool:
 
 async def _save_trace(context: Any, ctx: RunContext, test: TestSpec, result: TestResult) -> None:
     """Keep a Playwright trace (open with `playwright show-trace`) only for runs with real deviations."""
-    deviating = any(o.kind != "locator_healed" for o in all_observations(result))
+    deviating = any(o.kind not in ("locator_healed", "interrupt_dismissed") for o in all_observations(result))
     try:
         if deviating:
             rel = f"traces/{test.id}.zip"
@@ -465,6 +677,7 @@ async def run_test(test: TestSpec, ctx: RunContext, browser: Browser, auth_state
                         verdict=Verdict(category="PASS"))
     context = await browser.new_context(viewport=ctx.settings.viewport,
                                         storage_state=auth_state if (test.requires_login and auth_state) else None)
+    await _inject_session_storage(context, ctx)
     try:
         await context.tracing.start(screenshots=True, snapshots=True)
     except Exception:
@@ -523,6 +736,9 @@ async def run_test(test: TestSpec, ctx: RunContext, browser: Browser, auth_state
                                                               "on the canvas (V0-V3)"))
                 break
             snap = await take_snapshot(page)
+            if await _dismiss_interrupts(ctx, page, rec, snap, step):
+                _drain_interrupts(ctx, result, step.id)
+                snap = await take_snapshot(page)
             res = await resolve(snap, step, ctx.weights, ctx.llm, ctx.settings)
             if res.found:
                 sr = await _execute(ctx, page, rec, st, step, res, snap, "orig")
@@ -534,6 +750,16 @@ async def run_test(test: TestSpec, ctx: RunContext, browser: Browser, auth_state
                         heuristic_rounds += 1
                         await _complete_required(ctx, page, rec, st, step, after)
                 continue
+
+            # an interrupt that appeared after the first check may still hide the target (T2/T4 guard)
+            if await _dismiss_interrupts(ctx, page, rec, snap, step):
+                _drain_interrupts(ctx, result, step.id)
+                snap = await take_snapshot(page)
+                res = await resolve(snap, step, ctx.weights, ctx.llm, ctx.settings)
+                if res.found:
+                    await _execute(ctx, page, rec, st, step, res, snap, "orig")
+                    pending.pop(0)
+                    continue
 
             # T2: the flow may have been reordered - is a later step's target here? (no LLM)
             moved = False
@@ -740,6 +966,7 @@ async def record_baseline(test: TestSpec, ctx: RunContext, browser: Browser,
     st = _Exec(test)
     context = await browser.new_context(viewport=ctx.settings.viewport,
                                         storage_state=auth_state if (test.requires_login and auth_state) else None)
+    await _inject_session_storage(context, ctx)
     page = await context.new_page()
     rec = EffectRecorder(page)
     try:
@@ -757,6 +984,9 @@ async def record_baseline(test: TestSpec, ctx: RunContext, browser: Browser,
                 st.trace.append((step, "orig"))
                 continue
             snap = await take_snapshot(page)
+            if await _dismiss_interrupts(ctx, page, rec, snap, step):
+                ctx.interrupts.clear()  # baseline authoring: no observations to report
+                snap = await take_snapshot(page)
             res = await resolve(snap, step, ctx.weights, ctx.llm, ctx.settings)
             if not res.found:
                 return None
@@ -782,6 +1012,48 @@ async def record_baseline(test: TestSpec, ctx: RunContext, browser: Browser,
 
 _LOGIN_WORDS = re.compile(r"\b(log ?in|sign ?in|continue|submit|enter)\b", re.I)
 
+_SESSION_DUMP_JS = ("() => { const o = {}; try { for (let i = 0; i < sessionStorage.length; i++)"
+                    " { const k = sessionStorage.key(i); o[k] = sessionStorage.getItem(k); } }"
+                    " catch (_) {} return o; }")
+
+
+def _origin_of(url: str) -> str:
+    """App origin for session re-injection; empty for file:// and other opaque origins."""
+    p = urlparse(url or "")
+    if not p.netloc or p.scheme not in ("http", "https"):
+        return ""
+    return f"{p.scheme}://{p.netloc}"
+
+
+async def _capture_session_storage(page: Any) -> dict[str, str]:
+    try:
+        data = await page.evaluate(_SESSION_DUMP_JS)
+        return {str(k): str(v) for k, v in (data or {}).items() if v is not None}
+    except Exception:
+        return {}
+
+
+async def _inject_session_storage(context: Any, ctx: RunContext) -> None:
+    """Re-inject captured sessionStorage (token auth) into a new context, guarded by app origin."""
+    path = ctx.settings.home / "auth" / "session.json"
+    if not path.exists():
+        return
+    try:
+        blob = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return
+    data = blob.get("data") if isinstance(blob, dict) else None
+    if not isinstance(data, dict) or not data:
+        return
+    origin = str(blob.get("origin", ""))
+    script = ("(() => { const d = " + json.dumps(data) + ", o = " + json.dumps(origin) + ";"
+              " try { if (!o || location.origin === o)"
+              " { for (const k in d) sessionStorage.setItem(k, d[k]); } } catch (_) {} })();")
+    try:
+        await context.add_init_script(script)
+    except Exception:
+        pass
+
 
 async def ensure_auth(browser: Browser, ctx: RunContext) -> Optional[str]:
     """Heuristic, model-free login with configured credentials; returns a storage_state path."""
@@ -795,6 +1067,9 @@ async def ensure_auth(browser: Browser, ctx: RunContext) -> Optional[str]:
         await page.goto(ctx.url(creds.get("login_path", "/login")), wait_until="domcontentloaded")
         await wait_for_settle(page, rec)
         snap = await take_snapshot(page)
+        if await _dismiss_interrupts(ctx, page, rec, snap):
+            ctx.interrupts.clear()
+            snap = await take_snapshot(page)
         pw = next((e for e in snap.elements if e.attrs.get("type") == "password" and e.editable), None)
         if pw is None:
             return None
@@ -816,6 +1091,11 @@ async def ensure_auth(browser: Browser, ctx: RunContext) -> Optional[str]:
         path = ctx.settings.home / "auth" / "state.json"
         path.parent.mkdir(parents=True, exist_ok=True)
         await context.storage_state(path=str(path))
+        session = await _capture_session_storage(page)
+        if session:
+            spath = ctx.settings.home / "auth" / "session.json"
+            spath.write_text(json.dumps({"origin": _origin_of(page.url), "data": session}, indent=2),
+                             encoding="utf-8")
         return str(path)
     finally:
         await context.close()

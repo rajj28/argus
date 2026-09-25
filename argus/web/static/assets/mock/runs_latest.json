@@ -1,0 +1,1333 @@
+{
+  "run_id": "20260924-175006-9945",
+  "started_at": "2026-09-24T13:18:26+00:00",
+  "app_url": "http://skyops:8000",
+  "label": "recorded demo run (mock)",
+  "results": [
+    {
+      "test_id": "login",
+      "test_name": "Pilot signs in",
+      "test_version": 2,
+      "status": "passed",
+      "verdict": {
+        "category": "PASS",
+        "confidence": 1.0,
+        "rationale": "Replayed exactly; every step and oracle held.",
+        "evidence_refs": [],
+        "changelog_refs": [],
+        "decided_by": "rules",
+        "action": "none"
+      },
+      "steps": [
+        {
+          "step_id": "s1",
+          "intent": "Enter the pilot email",
+          "status": "passed",
+          "tier": 0,
+          "score": 1.0,
+          "duration_ms": 749,
+          "screenshot": "screenshots/login_01.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8002/login",
+            "url_after": "http://127.0.0.1:8002/login",
+            "url_changed": false,
+            "title_after": "SkyOps — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s2",
+          "intent": "Enter the password",
+          "status": "passed",
+          "tier": 0,
+          "score": 1.0,
+          "duration_ms": 716,
+          "screenshot": "screenshots/login_02.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8002/login",
+            "url_after": "http://127.0.0.1:8002/login",
+            "url_changed": false,
+            "title_after": "SkyOps — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s3",
+          "intent": "Submit the sign-in form",
+          "status": "passed",
+          "tier": 0,
+          "score": 1.0,
+          "duration_ms": 757,
+          "screenshot": "screenshots/login_03.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8002/login",
+            "url_after": "http://127.0.0.1:8002/dashboard",
+            "url_changed": true,
+            "title_after": "Dashboard — Drone Operations Console",
+            "new_headings": [
+              "Fleet overview"
+            ],
+            "new_alerts": [],
+            "network": [
+              {
+                "method": "POST",
+                "path": "/api/login",
+                "status": 200,
+                "resource_type": "fetch"
+              },
+              {
+                "method": "GET",
+                "path": "/dashboard",
+                "status": 200,
+                "resource_type": "document"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        }
+      ],
+      "observations": [],
+      "duration_ms": 3076,
+      "llm_calls": [],
+      "updated_to_version": null,
+      "bug_report": null,
+      "trace": null
+    },
+    {
+      "test_id": "create-mission",
+      "test_name": "Plan and launch a survey mission",
+      "test_version": 2,
+      "status": "passed",
+      "verdict": {
+        "category": "INTENDED_CHANGE",
+        "confidence": 0.85,
+        "rationale": "2 flow change(s), each naming fields/screens that the release notes describe; business oracles still hold.",
+        "evidence_refs": [],
+        "changelog_refs": [
+          "New required field \"Pilot in command\" on Mission details step (DGCA compliance requirement)."
+        ],
+        "decided_by": "rules",
+        "action": "test_updated"
+      },
+      "steps": [
+        {
+          "step_id": "s1",
+          "intent": "Name the mission",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.966,
+          "duration_ms": 775,
+          "screenshot": "screenshots/create-mission_01.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8002/missions/new#step-details",
+            "url_after": "http://127.0.0.1:8002/missions/new#step-details",
+            "url_changed": false,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s2",
+          "intent": "Choose mission type Survey",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.953,
+          "duration_ms": 745,
+          "screenshot": "screenshots/create-mission_02.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8002/missions/new#step-details",
+            "url_after": "http://127.0.0.1:8002/missions/new#step-details",
+            "url_changed": false,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s3",
+          "intent": "Choose the Pune Depot site",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.951,
+          "duration_ms": 733,
+          "screenshot": "screenshots/create-mission_03.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8002/missions/new#step-details",
+            "url_after": "http://127.0.0.1:8002/missions/new#step-details",
+            "url_changed": false,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s4",
+          "intent": "Continue from mission details",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.934,
+          "duration_ms": 781,
+          "screenshot": "screenshots/create-mission_04.jpg",
+          "observations": [
+            {
+              "kind": "effect_mismatch",
+              "step_id": "s4",
+              "detail": "POST /api/missions/validate returned 422 (baseline 200)",
+              "evidence": {
+                "expected": {
+                  "method": "POST",
+                  "path": "/api/missions/validate",
+                  "status": 200,
+                  "resource_type": "fetch"
+                },
+                "observed": {
+                  "method": "POST",
+                  "path": "/api/missions/validate",
+                  "status": 422,
+                  "resource_type": "fetch"
+                }
+              },
+              "tier": null,
+              "confidence": null
+            }
+          ],
+          "effects": {
+            "url_before": "http://127.0.0.1:8002/missions/new#step-details",
+            "url_after": "http://127.0.0.1:8002/missions/new#",
+            "url_changed": true,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [
+              "Pilot in command is required (DGCA)",
+              "Pilot in command is required (DGCA)"
+            ],
+            "network": [
+              {
+                "method": "POST",
+                "path": "/api/missions/validate",
+                "status": 422,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [
+              "Failed to load resource: the server responded with a status of 422 (Unprocessable Entity)"
+            ],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s5-h1",
+          "intent": "Fill new required field 'Pilot in command'",
+          "status": "added",
+          "tier": 4,
+          "score": 1.0,
+          "duration_ms": 731,
+          "screenshot": "screenshots/create-mission_05.jpg",
+          "observations": [
+            {
+              "kind": "step_added",
+              "step_id": "s5-h1",
+              "detail": "new step: Fill new required field 'Pilot in command' -> [e9] textbox \"Pilot in command *\" (in: Mission details) = 'Argus test'",
+              "evidence": {
+                "label": "Pilot in command *",
+                "context": "Mission details",
+                "action": "fill",
+                "method": "heuristic"
+              },
+              "tier": 4,
+              "confidence": null
+            }
+          ],
+          "effects": {
+            "url_before": "http://127.0.0.1:8002/missions/new#",
+            "url_after": "http://127.0.0.1:8002/missions/new#",
+            "url_changed": false,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s5-h0",
+          "intent": "Continue with 'Continue'",
+          "status": "added",
+          "tier": 4,
+          "score": 1.0,
+          "duration_ms": 761,
+          "screenshot": "screenshots/create-mission_06.jpg",
+          "observations": [
+            {
+              "kind": "step_added",
+              "step_id": "s5-h0",
+              "detail": "new step: Continue with 'Continue' -> [e12] button \"Continue\" (in: Mission details)",
+              "evidence": {
+                "label": "Continue",
+                "context": "Mission details",
+                "action": "click",
+                "method": "heuristic"
+              },
+              "tier": 4,
+              "confidence": null
+            }
+          ],
+          "effects": {
+            "url_before": "http://127.0.0.1:8002/missions/new#",
+            "url_after": "http://127.0.0.1:8002/missions/new#step-drone",
+            "url_changed": true,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [
+              "Select drone"
+            ],
+            "new_alerts": [
+              "Battery 12% — below 30%",
+              "Currently In mission",
+              "Currently Maintenance"
+            ],
+            "network": [
+              {
+                "method": "POST",
+                "path": "/api/missions/validate",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s5",
+          "intent": "Assign drone Falcon-1",
+          "status": "passed",
+          "tier": 0,
+          "score": 1.0,
+          "duration_ms": 765,
+          "screenshot": "screenshots/create-mission_07.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8002/missions/new#step-drone",
+            "url_after": "http://127.0.0.1:8002/missions/new#step-drone",
+            "url_changed": false,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s6",
+          "intent": "Continue from drone selection",
+          "status": "passed",
+          "tier": 0,
+          "score": 1.0,
+          "duration_ms": 759,
+          "screenshot": "screenshots/create-mission_08.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8002/missions/new#step-drone",
+            "url_after": "http://127.0.0.1:8002/missions/new#step-params",
+            "url_changed": true,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [
+              "Flight parameters"
+            ],
+            "new_alerts": [],
+            "network": [
+              {
+                "method": "POST",
+                "path": "/api/missions/validate",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s7",
+          "intent": "Set altitude to 80 m",
+          "status": "passed",
+          "tier": 0,
+          "score": 1.0,
+          "duration_ms": 718,
+          "screenshot": "screenshots/create-mission_09.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8002/missions/new#step-params",
+            "url_after": "http://127.0.0.1:8002/missions/new#step-params",
+            "url_changed": false,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s8",
+          "intent": "Set speed to 8 m/s",
+          "status": "passed",
+          "tier": 0,
+          "score": 1.0,
+          "duration_ms": 748,
+          "screenshot": "screenshots/create-mission_10.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8002/missions/new#step-params",
+            "url_after": "http://127.0.0.1:8002/missions/new#step-params",
+            "url_changed": false,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s9",
+          "intent": "Continue from flight parameters",
+          "status": "passed",
+          "tier": 0,
+          "score": 1.0,
+          "duration_ms": 789,
+          "screenshot": "screenshots/create-mission_11.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8002/missions/new#step-params",
+            "url_after": "http://127.0.0.1:8002/missions/new#step-review",
+            "url_changed": true,
+            "title_after": "Plan a mission — Drone Operations Console",
+            "new_headings": [
+              "Review & launch"
+            ],
+            "new_alerts": [],
+            "network": [
+              {
+                "method": "POST",
+                "path": "/api/missions/validate",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s10",
+          "intent": "Launch the mission",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.997,
+          "duration_ms": 767,
+          "screenshot": "screenshots/create-mission_12.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8002/missions/new#step-review",
+            "url_after": "http://127.0.0.1:8002/missions/m4",
+            "url_changed": true,
+            "title_after": "Survey f1d31 — Drone Operations Console",
+            "new_headings": [
+              "Survey f1d31"
+            ],
+            "new_alerts": [
+              "🚀 Mission launched successfully!",
+              "Mission launched"
+            ],
+            "network": [
+              {
+                "method": "POST",
+                "path": "/api/missions",
+                "status": 201,
+                "resource_type": "fetch"
+              },
+              {
+                "method": "GET",
+                "path": "/missions/:id",
+                "status": 200,
+                "resource_type": "document"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s11",
+          "intent": "Open the Missions list",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.963,
+          "duration_ms": 859,
+          "screenshot": "screenshots/create-mission_13.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8002/missions/m4",
+            "url_after": "http://127.0.0.1:8002/missions",
+            "url_changed": true,
+            "title_after": "Missions — Drone Operations Console",
+            "new_headings": [
+              "Missions"
+            ],
+            "new_alerts": [],
+            "network": [
+              {
+                "method": "GET",
+                "path": "/missions",
+                "status": 200,
+                "resource_type": "document"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        }
+      ],
+      "observations": [],
+      "duration_ms": 11558,
+      "llm_calls": [],
+      "updated_to_version": 3,
+      "bug_report": null,
+      "trace": "traces/create-mission.zip"
+    },
+    {
+      "test_id": "cancel-appointment",
+      "test_name": "Cancel an appointment with explicit confirmation",
+      "test_version": 1,
+      "status": "passed",
+      "verdict": {
+        "category": "COSMETIC_DRIFT",
+        "confidence": 1.0,
+        "rationale": "1 element(s) moved/renamed and were re-identified (tiers [1]); all expectations and business oracles still hold.",
+        "evidence_refs": [],
+        "changelog_refs": [],
+        "decided_by": "rules",
+        "action": "test_healed"
+      },
+      "steps": [
+        {
+          "step_id": "s1",
+          "intent": "Enter the front-desk email to sign in",
+          "status": "passed",
+          "tier": 0,
+          "score": 1.0,
+          "duration_ms": 747,
+          "screenshot": "screenshots/cancel-appointment_01.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/login",
+            "url_after": "http://127.0.0.1:8010/#/login",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s2",
+          "intent": "Enter the password",
+          "status": "passed",
+          "tier": 0,
+          "score": 1.0,
+          "duration_ms": 792,
+          "screenshot": "screenshots/cancel-appointment_02.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/login",
+            "url_after": "http://127.0.0.1:8010/#/login",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s3",
+          "intent": "Click the sign-in button",
+          "status": "passed",
+          "tier": 0,
+          "score": 1.0,
+          "duration_ms": 754,
+          "screenshot": "screenshots/cancel-appointment_03.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/login",
+            "url_after": "http://127.0.0.1:8010/#/app/home",
+            "url_changed": true,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [
+              "Good morning, Front Desk"
+            ],
+            "new_alerts": [],
+            "network": [
+              {
+                "method": "POST",
+                "path": "/api/login",
+                "status": 200,
+                "resource_type": "fetch"
+              },
+              {
+                "method": "GET",
+                "path": "/api/appointments",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s4",
+          "intent": "Wait for the overview to load",
+          "status": "passed",
+          "tier": 0,
+          "score": null,
+          "duration_ms": 0,
+          "screenshot": null,
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/home",
+            "url_after": "http://127.0.0.1:8010/#/app/home",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s5",
+          "intent": "Navigate to the appointments page",
+          "status": "passed",
+          "tier": 0,
+          "score": 1.0,
+          "duration_ms": 747,
+          "screenshot": "screenshots/cancel-appointment_04.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/home",
+            "url_after": "http://127.0.0.1:8010/#/app/appointments",
+            "url_changed": true,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [
+              "Appointments",
+              "Upcoming schedule"
+            ],
+            "new_alerts": [],
+            "network": [
+              {
+                "method": "GET",
+                "path": "/api/appointments",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s6",
+          "intent": "Wait for the appointment list to render",
+          "status": "passed",
+          "tier": 0,
+          "score": null,
+          "duration_ms": 0,
+          "screenshot": null,
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/appointments",
+            "url_after": "http://127.0.0.1:8010/#/app/appointments",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s7",
+          "intent": "Click Cancel on the first appointment in the list",
+          "status": "healed",
+          "tier": 1,
+          "score": 1.0,
+          "duration_ms": 806,
+          "screenshot": "screenshots/cancel-appointment_05.jpg",
+          "observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s7",
+              "detail": "button \"Cancel\" (in: Appointments) -> [e10] button \"Cancel\" (in: Appointments) via similarity (score 1.00, margin 0.04)",
+              "evidence": {
+                "candidates": [
+                  {
+                    "ref": "e10",
+                    "desc": "[e10] button \"Cancel\" (in: Appointments)",
+                    "score": 1.0,
+                    "breakdown": {
+                      "name": 1.0,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 1.0,
+                      "tag": 1.0,
+                      "type": 1.0,
+                      "neighbor_text": 1.0,
+                      "class": 1.0,
+                      "xpath": 1.0,
+                      "css": 1.0,
+                      "position": 1.0,
+                      "size": 1.0,
+                      "full_score": 1.0,
+                      "semantic_score": 1.0
+                    }
+                  },
+                  {
+                    "ref": "e19",
+                    "desc": "[e19] button \"Cancel\" (in: Appointments)",
+                    "score": 0.957,
+                    "breakdown": {
+                      "name": 1.0,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 1.0,
+                      "tag": 1.0,
+                      "type": 1.0,
+                      "neighbor_text": 0.7,
+                      "class": 1.0,
+                      "xpath": 0.99,
+                      "css": 0.99,
+                      "position": 0.57,
+                      "size": 1.0,
+                      "full_score": 0.96,
+                      "semantic_score": 0.96
+                    }
+                  },
+                  {
+                    "ref": "e13",
+                    "desc": "[e13] button \"Cancel\" (in: Appointments)",
+                    "score": 0.955,
+                    "breakdown": {
+                      "name": 1.0,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 1.0,
+                      "tag": 1.0,
+                      "type": 1.0,
+                      "neighbor_text": 0.54,
+                      "class": 1.0,
+                      "xpath": 0.99,
+                      "css": 0.99,
+                      "position": 0.86,
+                      "size": 1.0,
+                      "full_score": 0.96,
+                      "semantic_score": 0.94
+                    }
+                  },
+                  {
+                    "ref": "e16",
+                    "desc": "[e16] button \"Cancel\" (in: Appointments)",
+                    "score": 0.948,
+                    "breakdown": {
+                      "name": 1.0,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 1.0,
+                      "tag": 1.0,
+                      "type": 1.0,
+                      "neighbor_text": 0.52,
+                      "class": 1.0,
+                      "xpath": 0.99,
+                      "css": 0.99,
+                      "position": 0.71,
+                      "size": 1.0,
+                      "full_score": 0.95,
+                      "semantic_score": 0.94
+                    }
+                  },
+                  {
+                    "ref": "e28",
+                    "desc": "[e28] button \"Cancel\" (in: Appointments)",
+                    "score": 0.936,
+                    "breakdown": {
+                      "name": 1.0,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 1.0,
+                      "tag": 1.0,
+                      "type": 1.0,
+                      "neighbor_text": 0.66,
+                      "class": 1.0,
+                      "xpath": 0.99,
+                      "css": 0.99,
+                      "position": 0.14,
+                      "size": 1.0,
+                      "full_score": 0.94,
+                      "semantic_score": 0.96
+                    }
+                  }
+                ],
+                "reason": "multi-attribute match 1.00 (runner-up 0.96)"
+              },
+              "tier": 1,
+              "confidence": 1.0
+            }
+          ],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/appointments",
+            "url_after": "http://127.0.0.1:8010/#/app/appointments",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [
+              "Cancel this appointment?"
+            ],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s8",
+          "intent": "Wait for the confirmation dialog to appear",
+          "status": "passed",
+          "tier": 0,
+          "score": null,
+          "duration_ms": 0,
+          "screenshot": null,
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/appointments",
+            "url_after": "http://127.0.0.1:8010/#/app/appointments",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s9",
+          "intent": "Confirm the cancellation in the dialog",
+          "status": "passed",
+          "tier": 0,
+          "score": 1.0,
+          "duration_ms": 763,
+          "screenshot": "screenshots/cancel-appointment_06.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/appointments",
+            "url_after": "http://127.0.0.1:8010/#/app/appointments",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [
+              "Appointment cancelled",
+              "Appointment cancelled"
+            ],
+            "network": [
+              {
+                "method": "DELETE",
+                "path": "/api/appointments/:id",
+                "status": 200,
+                "resource_type": "fetch"
+              },
+              {
+                "method": "GET",
+                "path": "/api/appointments",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s10",
+          "intent": "Wait for the row to be removed",
+          "status": "passed",
+          "tier": 0,
+          "score": null,
+          "duration_ms": 0,
+          "screenshot": null,
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/appointments",
+            "url_after": "http://127.0.0.1:8010/#/app/appointments",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        }
+      ],
+      "observations": [],
+      "duration_ms": 12444,
+      "llm_calls": [],
+      "updated_to_version": 2,
+      "bug_report": null,
+      "trace": null
+    },
+    {
+      "test_id": "flight-logs",
+      "test_name": "Filter flight logs by drone",
+      "test_version": 1,
+      "status": "retired",
+      "verdict": {
+        "category": "FEATURE_REMOVED",
+        "confidence": 0.85,
+        "rationale": "/logs no longer exists and the release notes retire it.",
+        "evidence_refs": [],
+        "changelog_refs": [
+          "The /logs URL returns 404."
+        ],
+        "decided_by": "rules",
+        "action": "test_retired"
+      },
+      "steps": [],
+      "observations": [
+        {
+          "kind": "effect_mismatch",
+          "step_id": null,
+          "detail": "start page /logs returned HTTP 404",
+          "evidence": {},
+          "tier": null,
+          "confidence": null
+        },
+        {
+          "kind": "goal_unreachable",
+          "step_id": "s1",
+          "detail": "cannot find 'Filter logs to drone Falcon-1' (no compatible candidates on page); page /logs headings [] alerts []",
+          "evidence": {
+            "candidates": []
+          },
+          "tier": null,
+          "confidence": null
+        },
+        {
+          "kind": "assertion_failed",
+          "step_id": null,
+          "detail": "Falcon-1 flights are listed: expected text \"Falcon-1\" not found on /logs",
+          "evidence": {
+            "oracle_index": 0,
+            "rule_ref": null,
+            "assertion": {
+              "kind": "text_visible",
+              "params": {
+                "text": "Falcon-1"
+              },
+              "description": "Falcon-1 flights are listed",
+              "rule_ref": null
+            },
+            "screenshot": "screenshots/flight-logs_final.jpg"
+          },
+          "tier": null,
+          "confidence": null
+        }
+      ],
+      "duration_ms": 3533,
+      "llm_calls": [],
+      "updated_to_version": 2,
+      "bug_report": null,
+      "trace": "traces/flight-logs.zip"
+    },
+    {
+      "test_id": "save-settings",
+      "test_name": "Pilot updates display name",
+      "test_version": 2,
+      "status": "failed",
+      "verdict": {
+        "category": "BUG",
+        "confidence": 0.92,
+        "rationale": "Hard failure signals (network_error): PUT /api/settings returned 500 (baseline 200)",
+        "evidence_refs": [
+          "network_error"
+        ],
+        "changelog_refs": [],
+        "decided_by": "rules",
+        "action": "bug_reported"
+      },
+      "steps": [
+        {
+          "step_id": "s1",
+          "intent": "Change the display name",
+          "status": "passed",
+          "tier": 0,
+          "score": 1.0,
+          "duration_ms": 752,
+          "screenshot": "screenshots/save-settings_01.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8000/settings",
+            "url_after": "http://127.0.0.1:8000/settings",
+            "url_changed": false,
+            "title_after": "Settings — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s2",
+          "intent": "Save the settings",
+          "status": "passed",
+          "tier": 0,
+          "score": 1.0,
+          "duration_ms": 731,
+          "screenshot": "screenshots/save-settings_02.jpg",
+          "observations": [
+            {
+              "kind": "network_error",
+              "step_id": "s2",
+              "detail": "PUT /api/settings returned 500 (baseline 200)",
+              "evidence": {
+                "expected": {
+                  "method": "PUT",
+                  "path": "/api/settings",
+                  "status": 200,
+                  "resource_type": "fetch"
+                },
+                "observed": {
+                  "method": "PUT",
+                  "path": "/api/settings",
+                  "status": 500,
+                  "resource_type": "fetch"
+                }
+              },
+              "tier": null,
+              "confidence": null
+            }
+          ],
+          "effects": {
+            "url_before": "http://127.0.0.1:8000/settings",
+            "url_after": "http://127.0.0.1:8000/settings",
+            "url_changed": false,
+            "title_after": "Settings — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [
+              "Something went wrong"
+            ],
+            "network": [
+              {
+                "method": "PUT",
+                "path": "/api/settings",
+                "status": 500,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [
+              "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+            ],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        }
+      ],
+      "observations": [
+        {
+          "kind": "assertion_failed",
+          "step_id": null,
+          "detail": "Settings are persisted by the API: PUT /api/settings [2xx] NOT observed (recent calls: PUT /api/settings 500)",
+          "evidence": {
+            "oracle_index": 0,
+            "rule_ref": "R7",
+            "assertion": {
+              "kind": "network_called",
+              "params": {
+                "method": "PUT",
+                "path": "/api/settings",
+                "status_class": "2xx"
+              },
+              "description": "Settings are persisted by the API",
+              "rule_ref": "R7"
+            }
+          },
+          "tier": null,
+          "confidence": null
+        },
+        {
+          "kind": "assertion_failed",
+          "step_id": null,
+          "detail": "Confirmation is shown: expected text \"Settings saved\" not found on /settings",
+          "evidence": {
+            "oracle_index": 1,
+            "rule_ref": null,
+            "assertion": {
+              "kind": "text_visible",
+              "params": {
+                "text": "Settings saved"
+              },
+              "description": "Confirmation is shown",
+              "rule_ref": null
+            },
+            "screenshot": "screenshots/save-settings_final.jpg"
+          },
+          "tier": null,
+          "confidence": null
+        }
+      ],
+      "duration_ms": 5144,
+      "llm_calls": [],
+      "updated_to_version": null,
+      "bug_report": "## BUG: Pilot updates display name\n\n**Verdict:** Hard failure signals (network_error): PUT /api/settings returned 500 (baseline 200)\n\n**Business goal:** Profile settings are saved and persisted (business rule R7)\n\n**Reproduce:**\n1. Open /settings\n2. Change the display name = 'Pilot 99452'\n3. Save the settings\n\n**Expected vs actual:**\n- `network_error` PUT /api/settings returned 500 (baseline 200)\n- `assertion_failed` Settings are persisted by the API: PUT /api/settings [2xx] NOT observed (recent calls: PUT /api/settings 500)\n- `assertion_failed` Confirmation is shown: expected text \"Settings saved\" not found on /settings\n\n**Release notes check:** none of the release notes explain this behaviour.\n\n**Evidence:** screenshots/save-settings_01.jpg, screenshots/save-settings_02.jpg",
+      "trace": "traces/save-settings.zip"
+    },
+    {
+      "test_id": "logout",
+      "test_name": "Pilot signs out",
+      "test_version": 2,
+      "status": "failed",
+      "verdict": {
+        "category": "BUG",
+        "confidence": 0.92,
+        "rationale": "Hard failure signals (page_error): uncaught exception: Cannot read properties of undefined (reading 'crash')",
+        "evidence_refs": [
+          "page_error"
+        ],
+        "changelog_refs": [],
+        "decided_by": "rules",
+        "action": "bug_reported"
+      },
+      "steps": [
+        {
+          "step_id": "s1",
+          "intent": "Sign out",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.994,
+          "duration_ms": 783,
+          "screenshot": "screenshots/logout_01.jpg",
+          "observations": [
+            {
+              "kind": "effect_mismatch",
+              "step_id": "s1",
+              "detail": "expected POST /api/logout (200) was not called",
+              "evidence": {
+                "expected": {
+                  "method": "POST",
+                  "path": "/api/logout",
+                  "status": 200,
+                  "resource_type": "fetch"
+                },
+                "observed": []
+              },
+              "tier": null,
+              "confidence": null
+            },
+            {
+              "kind": "effect_mismatch",
+              "step_id": "s1",
+              "detail": "expected navigation to /login but stayed on /dashboard",
+              "evidence": {
+                "alerts": []
+              },
+              "tier": null,
+              "confidence": null
+            },
+            {
+              "kind": "page_error",
+              "step_id": "s1",
+              "detail": "uncaught exception: Cannot read properties of undefined (reading 'crash')",
+              "evidence": {},
+              "tier": null,
+              "confidence": null
+            }
+          ],
+          "effects": {
+            "url_before": "http://127.0.0.1:8000/dashboard",
+            "url_after": "http://127.0.0.1:8000/dashboard",
+            "url_changed": false,
+            "title_after": "Dashboard — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [
+              "Cannot read properties of undefined (reading 'crash')"
+            ],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        }
+      ],
+      "observations": [
+        {
+          "kind": "assertion_failed",
+          "step_id": null,
+          "detail": "Pilot is back on the login page: url /dashboard does not match //login/",
+          "evidence": {
+            "oracle_index": 0,
+            "rule_ref": "R5",
+            "assertion": {
+              "kind": "url_matches",
+              "params": {
+                "pattern": "/login"
+              },
+              "description": "Pilot is back on the login page",
+              "rule_ref": "R5"
+            },
+            "screenshot": "screenshots/logout_final.jpg"
+          },
+          "tier": null,
+          "confidence": null
+        }
+      ],
+      "duration_ms": 1769,
+      "llm_calls": [],
+      "updated_to_version": null,
+      "bug_report": "## BUG: Pilot signs out\n\n**Verdict:** Hard failure signals (page_error): uncaught exception: Cannot read properties of undefined (reading 'crash')\n\n**Business goal:** Signing out returns the pilot to the login page\n\n**Reproduce:**\n1. Open /dashboard\n2. Sign out\n\n**Expected vs actual:**\n- `effect_mismatch` expected POST /api/logout (200) was not called\n- `effect_mismatch` expected navigation to /login but stayed on /dashboard\n- `page_error` uncaught exception: Cannot read properties of undefined (reading 'crash')\n- `assertion_failed` Pilot is back on the login page: url /dashboard does not match //login/\n\n**Release notes check:** none of the release notes explain this behaviour.\n\n**Evidence:** screenshots/logout_01.jpg",
+      "trace": "traces/logout.zip"
+    }
+  ],
+  "totals": {
+    "tests": 6,
+    "passed": 3,
+    "failed": 2,
+    "healed_steps": 1,
+    "replayed_steps": 26,
+    "llm_calls": 0,
+    "llm_calls_cached": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": 0.0,
+    "list_cost_usd": 0.0,
+    "naive_tokens_estimate": 22118,
+    "verdicts": {
+      "PASS": 1,
+      "INTENDED_CHANGE": 1,
+      "COSMETIC_DRIFT": 1,
+      "FEATURE_REMOVED": 1,
+      "BUG": 2
+    },
+    "tiers": {
+      "0": 26,
+      "4": 2,
+      "1": 1
+    },
+    "duration_ms": 37524
+  },
+  "learned": {
+    "stability": {
+      "id": 0.867,
+      "name_attr": 0.933,
+      "testid": 0.933,
+      "class": 0.867,
+      "text": 0.133,
+      "name": 0.2,
+      "label": 0.933,
+      "xpath": 0.067,
+      "css": 0.067,
+      "role": 0.933,
+      "tag": 0.133,
+      "context": 0.8,
+      "placeholder": 0.933,
+      "href": 0.133
+    }
+  }
+}

@@ -16,6 +16,7 @@ from argus.models import Observation, TestResult, TestSpec, Verdict
 
 HARD_KINDS = {"page_error", "network_error", "console_error"}
 STRUCTURAL_KINDS = {"step_reordered", "step_added", "step_missing"}
+COSMETIC_KINDS = {"locator_healed", "interrupt_dismissed"}   # never affect the verdict
 SEVERITY = ["PASS", "COSMETIC_DRIFT", "INTENDED_CHANGE", "FEATURE_REMOVED", "NEEDS_REVIEW", "INFRA", "BUG"]
 
 
@@ -37,7 +38,7 @@ def all_observations(result: TestResult) -> list[Observation]:
 
 def deviation_signature(test_id: str, observations: list[Observation]) -> str:
     parts = sorted(f"{o.kind}|{o.step_id or ''}|{_stable(o.detail)[:80]}"
-                   for o in observations if o.kind != "locator_healed")
+                   for o in observations if o.kind not in COSMETIC_KINDS)
     return hashlib.sha1((test_id + "\n" + "\n".join(parts)).encode("utf-8")).hexdigest()[:16]
 
 
@@ -139,7 +140,8 @@ def _verdict(category: str, confidence: float, rationale: str, decided_by: str =
 
 async def triage(test: TestSpec, result: TestResult, ctx: Any) -> Verdict:
     """Classify one test run. `ctx` provides .llm, .memory, .product_context, .changelog."""
-    obs = all_observations(result)
+    # dismissed popups/banners are cosmetic noise: they never affect the verdict
+    obs = [o for o in all_observations(result) if o.kind != "interrupt_dismissed"]
     pre = [o for o in obs if o.evidence.get("precondition")]
     if pre:
         return _verdict("PRECONDITION_FAILURE", 0.9, f"Starting state not established: {pre[0].detail[:200]}")

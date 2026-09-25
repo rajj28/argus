@@ -1,0 +1,10 @@
+{
+  "calls": 36,
+  "cached": 45,
+  "tokens_in": 42338,
+  "tokens_out": 21675,
+  "by_purpose": {
+    "generate": 1
+  },
+  "budget": 60
+}

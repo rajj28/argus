@@ -1,0 +1,1002 @@
+[
+  {
+    "id": "login",
+    "name": "Front desk signs in",
+    "tags": [
+      "auth",
+      "smoke"
+    ],
+    "requires_login": false,
+    "goal": "A front-desk user with valid credentials reaches the clinic overview without a full-page reload",
+    "start_url": "/#/login",
+    "steps": [
+      {
+        "intent": "Enter the demo front-desk email",
+        "action": "fill",
+        "find": {
+          "role": "textbox",
+          "name": "email"
+        },
+        "value": "${creds.user}"
+      },
+      {
+        "intent": "Enter the password",
+        "action": "fill",
+        "find": {
+          "type": "password"
+        },
+        "value": "${creds.password}"
+      },
+      {
+        "intent": "Submit the sign-in form",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "sign in"
+        }
+      },
+      {
+        "intent": "Wait for the clinic overview to load",
+        "action": "wait",
+        "value": "1500"
+      }
+    ],
+    "oracles": [
+      {
+        "kind": "network_called",
+        "params": {
+          "method": "POST",
+          "path": "/api/login",
+          "status_class": "2xx"
+        },
+        "description": "A session is created by the API rather than a full page reload"
+      },
+      {
+        "kind": "url_matches",
+        "params": {
+          "pattern": "app/home"
+        },
+        "description": "Clinic overview page is shown after login"
+      },
+      {
+        "kind": "text_visible",
+        "params": {
+          "text": "Clinic pulse"
+        },
+        "description": "Clinic pulse overview heading is visible"
+      }
+    ]
+  },
+  {
+    "id": "book-consultation",
+    "name": "Book a consultation for a new patient",
+    "tags": [
+      "critical",
+      "booking"
+    ],
+    "requires_login": false,
+    "goal": "A front-desk user books a consultation for the first listed doctor, confirms it, and the API records the new appointment (the app exposes the same wizard from the 'New appointment' desk, which is used here because the doctor directory renders only after a client-side delay that the baseline recorder cannot observe)",
+    "start_url": "/#/login",
+    "steps": [
+      {
+        "intent": "Enter the front-desk email to sign in",
+        "action": "fill",
+        "find": {
+          "role": "textbox",
+          "name": "email"
+        },
+        "value": "${creds.user}"
+      },
+      {
+        "intent": "Enter the password",
+        "action": "fill",
+        "find": {
+          "type": "password"
+        },
+        "value": "${creds.password}"
+      },
+      {
+        "intent": "Click the sign-in button",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "sign in"
+        }
+      },
+      {
+        "intent": "Wait for the overview to load",
+        "action": "wait",
+        "value": "1500"
+      },
+      {
+        "intent": "Open the appointment desk from clinic navigation",
+        "action": "click",
+        "find": {
+          "role": "link",
+          "name": "new appointment"
+        }
+      },
+      {
+        "intent": "Wait for the booking wizard to load the doctor and open slots",
+        "action": "wait",
+        "value": "800"
+      },
+      {
+        "intent": "Enter the patient name",
+        "action": "fill",
+        "find": {
+          "role": "textbox",
+          "name": "patient name"
+        },
+        "value": "Exam Patient",
+        "save_as": "patient_name"
+      },
+      {
+        "intent": "Enter the patient age 35",
+        "action": "fill",
+        "find": {
+          "role": "textbox",
+          "name": "age"
+        },
+        "value": "35"
+      },
+      {
+        "intent": "Enter a valid phone number",
+        "action": "fill",
+        "find": {
+          "role": "textbox",
+          "name": "phone"
+        },
+        "value": "+91 9876543210"
+      },
+      {
+        "intent": "Open the visit type selector",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "choose visit type"
+        }
+      },
+      {
+        "intent": "Select Consultation as the visit type",
+        "action": "click",
+        "find": {
+          "role": "option",
+          "name": "consultation"
+        }
+      },
+      {
+        "intent": "Continue to slot selection",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "next"
+        }
+      },
+      {
+        "intent": "Wait for the slot list to appear",
+        "action": "wait",
+        "value": "500"
+      },
+      {
+        "intent": "Select the first available future appointment slot",
+        "action": "click",
+        "find": {
+          "role": "radio",
+          "context": "choose a time"
+        }
+      },
+      {
+        "intent": "Continue to the confirm step",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "next"
+        }
+      },
+      {
+        "intent": "Wait for the confirm page to appear",
+        "action": "wait",
+        "value": "500"
+      },
+      {
+        "intent": "Confirm the booking",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "confirm booking"
+        }
+      },
+      {
+        "intent": "Wait for navigation to appointments list",
+        "action": "wait",
+        "value": "1500"
+      }
+    ],
+    "oracles": [
+      {
+        "kind": "network_called",
+        "params": {
+          "method": "POST",
+          "path": "/api/appointments",
+          "status_class": "2xx"
+        },
+        "description": "Appointment is created via the API",
+        "rule_ref": "B4"
+      },
+      {
+        "kind": "url_matches",
+        "params": {
+          "pattern": "app/appointments"
+        },
+        "description": "Redirected to the appointments list after confirmation"
+      },
+      {
+        "kind": "text_visible",
+        "params": {
+          "text": "Appointment confirmed"
+        },
+        "description": "The booking wizard confirms the new appointment was saved"
+      }
+    ]
+  },
+  {
+    "id": "age-validation",
+    "name": "Age 150 is rejected by the booking form",
+    "tags": [
+      "negative",
+      "validation"
+    ],
+    "requires_login": false,
+    "goal": "Entering age 150 in the booking form is rejected: the step-1 validation fires before any slot or confirmation (business rule B1)",
+    "start_url": "/#/login",
+    "steps": [
+      {
+        "intent": "Enter the front-desk email to sign in",
+        "action": "fill",
+        "find": {
+          "role": "textbox",
+          "name": "email"
+        },
+        "value": "${creds.user}"
+      },
+      {
+        "intent": "Enter the password",
+        "action": "fill",
+        "find": {
+          "type": "password"
+        },
+        "value": "${creds.password}"
+      },
+      {
+        "intent": "Click the sign-in button",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "sign in"
+        }
+      },
+      {
+        "intent": "Wait for the overview to load",
+        "action": "wait",
+        "value": "1500"
+      },
+      {
+        "intent": "Open the appointment desk from clinic navigation",
+        "action": "click",
+        "find": {
+          "role": "link",
+          "name": "new appointment"
+        }
+      },
+      {
+        "intent": "Wait for the booking wizard to load the doctor and open slots",
+        "action": "wait",
+        "value": "800"
+      },
+      {
+        "intent": "Enter a patient name",
+        "action": "fill",
+        "find": {
+          "role": "textbox",
+          "name": "patient name"
+        },
+        "value": "Age Test Patient"
+      },
+      {
+        "intent": "Enter the invalid age 150",
+        "action": "fill",
+        "find": {
+          "role": "textbox",
+          "name": "age"
+        },
+        "value": "150"
+      },
+      {
+        "intent": "Enter a valid phone number",
+        "action": "fill",
+        "find": {
+          "role": "textbox",
+          "name": "phone"
+        },
+        "value": "+91 9876543210"
+      },
+      {
+        "intent": "Open the visit type selector",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "choose visit type"
+        }
+      },
+      {
+        "intent": "Select Consultation as the visit type",
+        "action": "click",
+        "find": {
+          "role": "option",
+          "name": "consultation"
+        }
+      },
+      {
+        "intent": "Click Next to attempt advancing past the patient details step",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "next"
+        }
+      },
+      {
+        "intent": "Wait for the age validation response",
+        "action": "wait",
+        "value": "500"
+      }
+    ],
+    "oracles": [
+      {
+        "kind": "network_absent",
+        "params": {
+          "method": "POST",
+          "path": "/api/appointments",
+          "status_class": "2xx"
+        },
+        "description": "No appointment is created when age 150 is entered",
+        "rule_ref": "B1"
+      },
+      {
+        "kind": "text_visible",
+        "params": {
+          "text": "Age must be between"
+        },
+        "description": "Age validation error message is shown",
+        "rule_ref": "B1"
+      }
+    ]
+  },
+  {
+    "id": "emergency-fee-zero",
+    "name": "Emergency visit shows zero doctor fee and zero total",
+    "tags": [
+      "negative",
+      "fees"
+    ],
+    "requires_login": false,
+    "goal": "An emergency visit review screen shows a doctor fee of INR 0.00 and a total of INR 0.00 (business rule B2)",
+    "start_url": "/#/login",
+    "steps": [
+      {
+        "intent": "Enter the front-desk email to sign in",
+        "action": "fill",
+        "find": {
+          "role": "textbox",
+          "name": "email"
+        },
+        "value": "${creds.user}"
+      },
+      {
+        "intent": "Enter the password",
+        "action": "fill",
+        "find": {
+          "type": "password"
+        },
+        "value": "${creds.password}"
+      },
+      {
+        "intent": "Click the sign-in button",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "sign in"
+        }
+      },
+      {
+        "intent": "Wait for the overview to load",
+        "action": "wait",
+        "value": "1500"
+      },
+      {
+        "intent": "Open the appointment desk from clinic navigation",
+        "action": "click",
+        "find": {
+          "role": "link",
+          "name": "new appointment"
+        }
+      },
+      {
+        "intent": "Wait for the booking wizard to load the doctor and open slots",
+        "action": "wait",
+        "value": "800"
+      },
+      {
+        "intent": "Enter a valid patient name",
+        "action": "fill",
+        "find": {
+          "role": "textbox",
+          "name": "patient name"
+        },
+        "value": "Emergency Patient"
+      },
+      {
+        "intent": "Enter patient age",
+        "action": "fill",
+        "find": {
+          "role": "textbox",
+          "name": "age"
+        },
+        "value": "30"
+      },
+      {
+        "intent": "Enter a valid phone number",
+        "action": "fill",
+        "find": {
+          "role": "textbox",
+          "name": "phone"
+        },
+        "value": "+91 9876543210"
+      },
+      {
+        "intent": "Open the visit type selector",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "choose visit type"
+        }
+      },
+      {
+        "intent": "Select Emergency as the visit type",
+        "action": "click",
+        "find": {
+          "role": "option",
+          "name": "emergency"
+        }
+      },
+      {
+        "intent": "Continue to slot selection",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "next"
+        }
+      },
+      {
+        "intent": "Wait for slot list to appear",
+        "action": "wait",
+        "value": "500"
+      },
+      {
+        "intent": "Select the first available slot",
+        "action": "click",
+        "find": {
+          "role": "radio",
+          "context": "choose a time"
+        }
+      },
+      {
+        "intent": "Continue to the confirm step to review fees",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "next"
+        }
+      },
+      {
+        "intent": "Wait for the confirm page with fee breakdown",
+        "action": "wait",
+        "value": "500"
+      }
+    ],
+    "oracles": [
+      {
+        "kind": "text_visible",
+        "params": {
+          "text": "Emergency"
+        },
+        "description": "Visit type Emergency is shown in the confirmation",
+        "rule_ref": "B2"
+      },
+      {
+        "kind": "text_visible",
+        "params": {
+          "text": "doctor fee ₹0.00"
+        },
+        "description": "Doctor fee is zero for an emergency visit",
+        "rule_ref": "B2"
+      },
+      {
+        "kind": "text_visible",
+        "params": {
+          "text": "total ₹0.00"
+        },
+        "description": "Total is zero for an emergency visit",
+        "rule_ref": "B2"
+      },
+      {
+        "kind": "network_absent",
+        "params": {
+          "method": "POST",
+          "path": "/api/appointments",
+          "status_class": "2xx"
+        },
+        "description": "No appointment is confirmed while the fee is being reviewed",
+        "rule_ref": "B2"
+      }
+    ]
+  },
+  {
+    "id": "invoice-total-correct",
+    "name": "Invoice total equals the sum of all line items",
+    "tags": [
+      "billing",
+      "accuracy"
+    ],
+    "requires_login": false,
+    "goal": "The billing invoice TOTAL exactly equals the sum of all displayed line-item amounts (business rule B3)",
+    "start_url": "/#/login",
+    "steps": [
+      {
+        "intent": "Enter the front-desk email to sign in",
+        "action": "fill",
+        "find": {
+          "role": "textbox",
+          "name": "email"
+        },
+        "value": "${creds.user}"
+      },
+      {
+        "intent": "Enter the password",
+        "action": "fill",
+        "find": {
+          "type": "password"
+        },
+        "value": "${creds.password}"
+      },
+      {
+        "intent": "Click the sign-in button",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "sign in"
+        }
+      },
+      {
+        "intent": "Wait for the overview to load",
+        "action": "wait",
+        "value": "1500"
+      },
+      {
+        "intent": "Navigate to the billing page",
+        "action": "click",
+        "find": {
+          "role": "link",
+          "name": "billing"
+        }
+      },
+      {
+        "intent": "Wait for the billing page to load",
+        "action": "wait",
+        "value": "500"
+      }
+    ],
+    "oracles": [
+      {
+        "kind": "text_visible",
+        "params": {
+          "text": "Specialist consultation"
+        },
+        "description": "Line item 'Specialist consultation' is visible"
+      },
+      {
+        "kind": "text_visible",
+        "params": {
+          "text": "₹620.00"
+        },
+        "description": "Line item amounts are rendered with two decimals"
+      },
+      {
+        "kind": "text_visible",
+        "params": {
+          "text": "₹380.00"
+        },
+        "description": "Line item amounts are rendered with two decimals"
+      },
+      {
+        "kind": "text_visible",
+        "params": {
+          "text": "₹180.00"
+        },
+        "description": "Line item amounts are rendered with two decimals"
+      },
+      {
+        "kind": "text_visible",
+        "params": {
+          "text": "total ₹1,180.00"
+        },
+        "description": "TOTAL ₹1,180.00 equals 620.00 + 380.00 + 180.00",
+        "rule_ref": "B3"
+      }
+    ]
+  },
+  {
+    "id": "cancel-appointment",
+    "name": "Cancel an appointment with explicit confirmation",
+    "tags": [
+      "critical",
+      "cancel"
+    ],
+    "requires_login": false,
+    "goal": "Cancel an appointment; verify confirmation dialog appears before removal and row is removed after confirming (B6)",
+    "start_url": "/#/login",
+    "steps": [
+      {
+        "intent": "Enter the front-desk email to sign in",
+        "action": "fill",
+        "find": {
+          "role": "textbox",
+          "name": "email"
+        },
+        "value": "${creds.user}"
+      },
+      {
+        "intent": "Enter the password",
+        "action": "fill",
+        "find": {
+          "type": "password"
+        },
+        "value": "${creds.password}"
+      },
+      {
+        "intent": "Click the sign-in button",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "sign in"
+        }
+      },
+      {
+        "intent": "Wait for the overview to load",
+        "action": "wait",
+        "value": "1500"
+      },
+      {
+        "intent": "Navigate to the appointments page",
+        "action": "click",
+        "find": {
+          "role": "link",
+          "name": "appointments"
+        }
+      },
+      {
+        "intent": "Wait for the appointment list to render",
+        "action": "wait",
+        "value": "500"
+      },
+      {
+        "intent": "Click Cancel on the first appointment in the list",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "cancel"
+        }
+      },
+      {
+        "intent": "Wait for the confirmation dialog to appear",
+        "action": "wait",
+        "value": "500"
+      },
+      {
+        "intent": "Confirm the cancellation in the dialog",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "yes, cancel"
+        }
+      },
+      {
+        "intent": "Wait for the row to be removed",
+        "action": "wait",
+        "value": "1000"
+      }
+    ],
+    "oracles": [
+      {
+        "kind": "network_called",
+        "params": {
+          "method": "DELETE",
+          "path": "/api/appointments/:id",
+          "status_class": "2xx"
+        },
+        "description": "Cancellation API call succeeded",
+        "rule_ref": "B6"
+      },
+      {
+        "kind": "text_absent",
+        "params": {
+          "text": "Cancel this appointment?"
+        },
+        "description": "The confirmation dialog is closed once the cancellation is applied",
+        "rule_ref": "B6"
+      }
+    ]
+  },
+  {
+    "id": "reschedule-appointment",
+    "name": "Reschedule an existing appointment to a different time",
+    "tags": [
+      "booking"
+    ],
+    "requires_login": false,
+    "goal": "Reschedule an existing confirmed appointment to a different future time and verify the new time is retained",
+    "start_url": "/#/login",
+    "steps": [
+      {
+        "intent": "Enter the front-desk email to sign in",
+        "action": "fill",
+        "find": {
+          "role": "textbox",
+          "name": "email"
+        },
+        "value": "${creds.user}"
+      },
+      {
+        "intent": "Enter the password",
+        "action": "fill",
+        "find": {
+          "type": "password"
+        },
+        "value": "${creds.password}"
+      },
+      {
+        "intent": "Click the sign-in button",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "sign in"
+        }
+      },
+      {
+        "intent": "Wait for the overview to load",
+        "action": "wait",
+        "value": "1500"
+      },
+      {
+        "intent": "Navigate to the appointments page",
+        "action": "click",
+        "find": {
+          "role": "link",
+          "name": "appointments"
+        }
+      },
+      {
+        "intent": "Wait for the appointment list to render",
+        "action": "wait",
+        "value": "500"
+      },
+      {
+        "intent": "Click Reschedule on the first appointment",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "reschedule"
+        }
+      },
+      {
+        "intent": "Wait for the reschedule modal to open",
+        "action": "wait",
+        "value": "500"
+      },
+      {
+        "intent": "Select a new time slot in the reschedule dialog",
+        "action": "click",
+        "find": {
+          "role": "radio",
+          "context": "reschedule appointment"
+        }
+      },
+      {
+        "intent": "Confirm the new appointment time",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "confirm new time"
+        }
+      },
+      {
+        "intent": "Wait for the reschedule to complete",
+        "action": "wait",
+        "value": "1000"
+      }
+    ],
+    "oracles": [
+      {
+        "kind": "network_called",
+        "params": {
+          "method": "PUT",
+          "path": "/api/appointments/:id/reschedule",
+          "status_class": "2xx"
+        },
+        "description": "Reschedule API call succeeded"
+      },
+      {
+        "kind": "text_visible",
+        "params": {
+          "text": "Appointment rescheduled"
+        },
+        "description": "The app confirms the appointment kept the new time"
+      }
+    ]
+  },
+  {
+    "id": "doctor-list-loads",
+    "name": "Doctor directory loads asynchronously showing all eight doctors",
+    "tags": [
+      "smoke",
+      "async"
+    ],
+    "requires_login": false,
+    "goal": "Navigate to the doctor directory after login, observe the loading skeleton state, wait, and verify all eight doctors are shown",
+    "start_url": "/#/login",
+    "steps": [
+      {
+        "intent": "Enter the front-desk email to sign in",
+        "action": "fill",
+        "find": {
+          "role": "textbox",
+          "name": "email"
+        },
+        "value": "${creds.user}"
+      },
+      {
+        "intent": "Enter the password",
+        "action": "fill",
+        "find": {
+          "type": "password"
+        },
+        "value": "${creds.password}"
+      },
+      {
+        "intent": "Click the sign-in button",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "sign in"
+        }
+      },
+      {
+        "intent": "Wait for the overview to load",
+        "action": "wait",
+        "value": "1500"
+      },
+      {
+        "intent": "Navigate to the doctor directory",
+        "action": "click",
+        "find": {
+          "role": "link",
+          "name": "doctors"
+        }
+      },
+      {
+        "intent": "Wait briefly to observe the loading skeleton state",
+        "action": "wait",
+        "value": "300"
+      },
+      {
+        "intent": "Wait for the async loading of all eight doctor cards to complete",
+        "action": "wait",
+        "value": "3000"
+      }
+    ],
+    "oracles": [
+      {
+        "kind": "text_visible",
+        "params": {
+          "text": "8 doctors available"
+        },
+        "description": "Status shows all eight doctors loaded"
+      },
+      {
+        "kind": "text_visible",
+        "params": {
+          "text": "Dr. Aarav Mehta"
+        },
+        "description": "At least one doctor card is visible"
+      }
+    ]
+  },
+  {
+    "id": "toggle-sms-reminders",
+    "name": "Toggle SMS reminders preference and verify it is saved",
+    "tags": [
+      "settings"
+    ],
+    "requires_login": false,
+    "goal": "Change the SMS reminders custom toggle switch and verify the preference is saved via the API",
+    "start_url": "/#/login",
+    "steps": [
+      {
+        "intent": "Enter the front-desk email to sign in",
+        "action": "fill",
+        "find": {
+          "role": "textbox",
+          "name": "email"
+        },
+        "value": "${creds.user}"
+      },
+      {
+        "intent": "Enter the password",
+        "action": "fill",
+        "find": {
+          "type": "password"
+        },
+        "value": "${creds.password}"
+      },
+      {
+        "intent": "Click the sign-in button",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "sign in"
+        }
+      },
+      {
+        "intent": "Wait for the overview to load",
+        "action": "wait",
+        "value": "1500"
+      },
+      {
+        "intent": "Navigate to the settings page",
+        "action": "click",
+        "find": {
+          "role": "link",
+          "name": "settings"
+        }
+      },
+      {
+        "intent": "Wait for the settings page to load",
+        "action": "wait",
+        "value": "500"
+      },
+      {
+        "intent": "Click the SMS reminders toggle switch (custom mq-toggle element, aria-label 'SMS reminders')",
+        "action": "click",
+        "find": {
+          "name": "sms reminders"
+        }
+      },
+      {
+        "intent": "Wait for the API call to complete",
+        "action": "wait",
+        "value": "1000"
+      }
+    ],
+    "oracles": [
+      {
+        "kind": "network_called",
+        "params": {
+          "method": "PUT",
+          "path": "/api/settings",
+          "status_class": "2xx"
+        },
+        "description": "Settings preference saved via API after toggle"
+      }
+    ]
+  }
+]

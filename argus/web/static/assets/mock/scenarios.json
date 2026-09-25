@@ -1,0 +1,65 @@
+[
+  {
+    "id": "replay",
+    "title": "Replay suite (v1.0)",
+    "description": "Deploy 1.0, replay the baselined suite deterministically.",
+    "expected_cost": "$0 · 0 LLM calls",
+    "uses_llm": false
+  },
+  {
+    "id": "refresh",
+    "title": "Deploy design refresh (v1.1) & run",
+    "description": "Ids renamed, classes hashed, nav to sidebar; Argus self-heals.",
+    "expected_cost": "$0 · 0 LLM calls",
+    "uses_llm": false
+  },
+  {
+    "id": "redesign",
+    "title": "Deploy Mission planner v2 (v1.2) & run",
+    "description": "Wizard reordered, new required field, Flight logs retired.",
+    "expected_cost": "$0 · 0 LLM calls",
+    "uses_llm": false
+  },
+  {
+    "id": "hidden-bugs",
+    "title": "Deploy hidden-bug release (v1.3) & run",
+    "description": "Five silent regressions behind \"performance improvements\".",
+    "expected_cost": "$0 · 0 LLM calls",
+    "uses_llm": false
+  },
+  {
+    "id": "chaos",
+    "title": "Random chaos refactor & run",
+    "description": "Random-seed DOM mutations across the app, then replay.",
+    "expected_cost": "$0 · 0 LLM calls",
+    "uses_llm": false
+  },
+  {
+    "id": "diff",
+    "title": "Differential diff v1.0 <-> v1.3",
+    "description": "Same intents on two live builds; no changelog, no LLM.",
+    "expected_cost": "$0 · 0 LLM calls",
+    "uses_llm": false
+  },
+  {
+    "id": "generate",
+    "title": "Generate a suite from zero",
+    "description": "Explore the app, author journeys + negative tests, baseline.",
+    "expected_cost": "~2k tokens · LLM",
+    "uses_llm": true
+  },
+  {
+    "id": "mcp",
+    "title": "MCP: verify_change",
+    "description": "Stream the JSON-RPC frames a coding agent sends Argus.",
+    "expected_cost": "1 LLM call",
+    "uses_llm": true
+  },
+  {
+    "id": "cli",
+    "title": "CLI: doctor / models / status",
+    "description": "Run the three read-only CLI commands in sequence.",
+    "expected_cost": "$0 · 0 LLM calls",
+    "uses_llm": false
+  }
+]

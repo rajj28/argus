@@ -46,6 +46,84 @@ def network_match(calls: list[NetCall], method: str, path: str, status_cls: str 
     return out
 
 
+# ── sum_equals: arithmetic invariant (total == sum of line items), currency-generic ──────────
+
+# Amounts with a currency symbol/code (any decimals), or bare numbers that are unambiguously
+# money (thousands separators or exactly two decimals) so quantities/dates are not picked up.
+_AMOUNT_RE = re.compile(
+    r"(?:[$€£¥₹]|(?:INR|USD|EUR|GBP|Rs)\.?\s)\s*(-?\d[\d,]*(?:\.\d+)?)"
+    r"|(?<![\w.,])(-?\d{1,3}(?:,\d{3})+(?:\.\d+)?|-?\d+\.\d{2})(?![\w.,])"
+)
+
+_SUM_EQUALS_JS = """
+([label, itemsSel]) => {
+  const txt = el => (el.innerText || el.textContent || "").replace(/\\s+/g, " ").trim();
+  const ROWS = "tr, li, [role=row]";
+  let deepest = null, deepestLen = Infinity;
+  for (const el of document.querySelectorAll("body *")) {
+    const t = txt(el);
+    if (t.includes(label) && t.length < deepestLen) { deepest = el; deepestLen = t.length; }
+  }
+  if (!deepest) return null;
+  let container = deepest;
+  while (container && container !== document.body && container.parentElement) {
+    const own = itemsSel
+      ? container.querySelectorAll(itemsSel).length
+      : Array.from(container.querySelectorAll(ROWS)).filter(r => /\\d/.test(txt(r))).length;
+    if (own >= 2) break;
+    container = container.parentElement;
+  }
+  if (!container) container = document.body;
+  let items;
+  if (itemsSel) {
+    items = Array.from(container.querySelectorAll(itemsSel)).map(txt);
+  } else {
+    items = Array.from(container.querySelectorAll(ROWS)).map(txt).filter(t => t && /\\d/.test(t));
+    if (items.length < 2) {
+      items = Array.from(container.children).map(txt).filter(t => t && /\\d/.test(t));
+    }
+  }
+  const row = deepest.closest(ROWS) || deepest;
+  return { total_line: txt(row), items };
+}
+"""
+
+
+def parse_amounts(text: str) -> list[float]:
+    """All currency/number amounts in `text` (INR/USD/EUR symbols, thousands commas)."""
+    out: list[float] = []
+    for m in _AMOUNT_RE.finditer(text or ""):
+        s = (m.group(1) or m.group(2) or "").replace(",", "")
+        try:
+            out.append(float(s))
+        except ValueError:
+            continue
+    return out
+
+
+def sum_equals_from_texts(total_label: str, total_line: str, item_lines: list[str],
+                          tolerance: float = 0.005) -> tuple[bool, str]:
+    """Pure check: last amount on the total line == sum of last amounts of the item lines."""
+    totals = parse_amounts(total_line)
+    if not totals:
+        return False, f"no amount found on the '{total_label}' line"
+    total = totals[-1]
+    items: list[float] = []
+    for line in item_lines:
+        if total_label and total_label.lower() in line.lower():
+            continue
+        amts = parse_amounts(line)
+        if amts:
+            items.append(amts[-1])
+    if not items:
+        return False, f"no line-item amounts found near '{total_label}'"
+    s = sum(items)
+    ok = abs(s - total) <= tolerance
+    detail = (f"sum of {len(items)} line items = {s:.2f}; '{total_label}' = {total:.2f}"
+              + ("" if ok else f" (off by {s - total:+.2f})"))
+    return ok, detail
+
+
 async def _body_text(page) -> str:
     try:
         return await page.evaluate("() => document.body ? document.body.innerText : ''")
@@ -113,6 +191,27 @@ async def check(a: Assertion, page: Any, ctx: Any, calls: list[NetCall], page_er
         if "checked" in p and el.checked is not None and bool(p["checked"]) != el.checked:
             problems.append(f"checked={el.checked} (expected {p['checked']})")
         return (not problems), f"{fp.describe()}: " + ("; ".join(problems) if problems else "state as expected")
+    if kind == "sum_equals":
+        total_label = re.sub(r"\s+", " ", str(p.get("total_label", ""))).strip()
+        if not total_label:
+            return False, "sum_equals requires params.total_label"
+        items_sel = str(p.get("items_selector_text") or "").strip() or None
+        last: tuple[bool, str] = (False, f"'{total_label}' not found on {normalize_path(page.url)}")
+        waited, deadline = 0, wait_ms
+        while True:
+            try:
+                data = await page.evaluate(_SUM_EQUALS_JS, [total_label, items_sel])
+            except Exception:
+                data = None
+            if data:
+                last = sum_equals_from_texts(total_label, str(data.get("total_line", "")),
+                                             [str(i) for i in (data.get("items") or [])])
+                if last[0]:
+                    return last
+            if waited >= deadline:
+                return last
+            await asyncio.sleep(0.25)
+            waited += 250
     if kind == "llm_check":
         llm = getattr(ctx, "llm", None)
         if llm is None:

@@ -152,7 +152,7 @@
   // ── Context computation ───────────────────────────────────────────────────────
 
   function getDialogTitle(el) {
-    const dlg = el.closest('dialog[open], [role="dialog"]');
+    const dlg = el.closest('dialog[open], [role="dialog"], [role="alertdialog"], [aria-modal="true"]');
     if (!dlg) return "";
     const h = dlg.querySelector("h1,h2,h3,h4,h5,h6,[role=heading]");
     if (h) return trunc((h.innerText || h.textContent || "").trim(), 60);
@@ -171,18 +171,18 @@
   }
 
   function getNearestHeading(el) {
-    let node = el.parentElement;
+    let node = hostAwareParent(el);
     while (node && node !== document.body) {
       const heading = node.querySelector(":scope > h1,:scope > h2,:scope > h3,:scope > h4,:scope > h5,:scope > h6,:scope > legend,:scope > [role=heading]");
       if (heading) return trunc((heading.innerText || heading.textContent || "").trim(), 60);
-      node = node.parentElement;
+      node = hostAwareParent(node);
     }
     return "";
   }
 
   function getNearestLandmark(el) {
     const landmarks = ["nav", "header", "main", "aside", "footer", "form", 'section[aria-label]'];
-    let node = el.parentElement;
+    let node = hostAwareParent(el);
     while (node && node !== document.body) {
       for (const sel of landmarks) {
         if (node.matches && node.matches(sel)) {
@@ -191,7 +191,7 @@
           return node.tagName.toLowerCase();
         }
       }
-      node = node.parentElement;
+      node = hostAwareParent(node);
     }
     return "";
   }
@@ -203,7 +203,7 @@
     if (rowCtx) return rowCtx;
     // nearest card/section/li/form ancestor's first heading
     const cardSelectors = ["[class*=card]", "[class*=Card]", "section", "li", "form", "article"];
-    let node = el.parentElement;
+    let node = hostAwareParent(el);
     while (node && node !== document.body) {
       const isCard = cardSelectors.some(sel => { try { return node.matches(sel); } catch (_) { return false; } });
       if (isCard) {
@@ -214,7 +214,7 @@
           if (t) return t;
         }
       }
-      node = node.parentElement;
+      node = hostAwareParent(node);
     }
     return getNearestLandmark(el) || "";
   }
@@ -246,19 +246,30 @@
 
   // ── XPath computation ─────────────────────────────────────────────────────────
 
+  // Parent walk that survives shadow boundaries: ShadowRoot/DocumentFragment parents
+  // have no tagName, so jump to the fragment's host element instead of crashing.
+  function hostAwareParent(node) {
+    const parent = node.parentNode;
+    if (!parent) return null;
+    if (parent.nodeType === Node.ELEMENT_NODE) return parent;
+    if (parent.nodeType === Node.DOCUMENT_FRAGMENT_NODE) return parent.host || null;
+    return null; // Document
+  }
+
   function getXPath(el) {
     const parts = [];
     let node = el;
     while (node && node.nodeType === Node.ELEMENT_NODE) {
-      const tag = node.tagName.toLowerCase();
+      const tag = (node.tagName || "").toLowerCase();
+      if (!tag) break;
       let idx = 1;
       let sib = node.previousSibling;
       while (sib) {
-        if (sib.nodeType === Node.ELEMENT_NODE && sib.tagName.toLowerCase() === tag) idx++;
+        if (sib.nodeType === Node.ELEMENT_NODE && (sib.tagName || "").toLowerCase() === tag) idx++;
         sib = sib.previousSibling;
       }
       parts.unshift(`${tag}[${idx}]`);
-      node = node.parentNode;
+      node = hostAwareParent(node);
     }
     return "/" + parts.join("/");
   }
@@ -266,24 +277,28 @@
   // ── CSS path computation ──────────────────────────────────────────────────────
 
   function getCSSPath(el) {
-    // id-anchored if ancestor has unique id
+    // id-anchored if ancestor has unique id; walks through shadow hosts (no tagName there)
     let node = el;
     const path = [];
-    while (node && node !== document.documentElement) {
+    while (node && node.nodeType === Node.ELEMENT_NODE && node !== document.documentElement) {
       const id = node.getAttribute && node.getAttribute("id");
       if (id && document.querySelectorAll(`#${CSS.escape(id)}`).length === 1) {
         path.unshift(`#${CSS.escape(id)}`);
         return path.join(" > ");
       }
-      const tag = node.tagName.toLowerCase();
-      const siblings = Array.from(node.parentNode ? node.parentNode.children : []).filter(s => s.tagName === node.tagName);
+      const tag = (node.tagName || "").toLowerCase();
+      if (!tag) break;
+      const parent = node.parentNode;
+      const siblings = parent && parent.children
+        ? Array.from(parent.children).filter(s => s.tagName === node.tagName)
+        : [node];
       if (siblings.length > 1) {
         const idx = siblings.indexOf(node) + 1;
         path.unshift(`${tag}:nth-of-type(${idx})`);
       } else {
         path.unshift(tag);
       }
-      node = node.parentNode;
+      node = hostAwareParent(node);
     }
     return path.join(" > ");
   }
@@ -295,7 +310,7 @@
     "aria-label", "title", "alt", "value",
     "data-testid", "data-test", "data-test-id", "data-cy", "data-qa",
     "for", "required", "min", "max", "maxlength", "pattern",
-    "disabled", "readonly", "aria-expanded", "aria-selected", "aria-checked",
+    "disabled", "readonly", "aria-expanded", "aria-selected", "aria-checked", "aria-modal",
   ]);
 
   function getAttrs(el) {
@@ -354,7 +369,31 @@
   }
 
   function isInDialog(el) {
-    return !!(el.closest('dialog[open]') || el.closest('[role="dialog"]'));
+    // closest() cannot cross shadow boundaries: walk up through shadow hosts too
+    let node = el;
+    while (node) {
+      if (node.closest && node.closest('dialog[open], [role="dialog"], [role="alertdialog"], [aria-modal="true"]')) {
+        return true;
+      }
+      const root = node.getRootNode ? node.getRootNode() : null;
+      node = root && root.host ? root.host : null;
+    }
+    return false;
+  }
+
+  // Fixed/sticky layer covering (almost) the whole viewport = modal backdrop / full-screen interrupt
+  function isFullViewportRect(el) {
+    const r = el.getBoundingClientRect();
+    return r.width >= window.innerWidth * 0.9 && r.height >= window.innerHeight * 0.9;
+  }
+
+  function isFixedFullViewport(el) {
+    try {
+      if (!isFullViewportRect(el)) return false;
+      return window.getComputedStyle(el).position === "fixed";
+    } catch (_) {
+      return false;
+    }
   }
 
   // ── Interactive selector ──────────────────────────────────────────────────────
@@ -395,7 +434,7 @@
   const ANCHOR_SELECTORS = [
     'h1', 'h2', 'h3', 'h4',
     '[role=alert]', '[role=status]', '[aria-live]',
-    'dialog[open]', '[role=dialog]',
+    'dialog[open]', '[role=dialog]', '[role=alertdialog]', '[aria-modal=true]',
   ];
 
   function collectFromRoot(root, refs, elements) {
@@ -437,11 +476,15 @@
       }
     } catch (_) {}
 
-    // Shadow roots
+    // Shadow roots + fixed full-viewport layers (modal backdrops / full-screen interrupts)
     const allEls = Array.from(root.querySelectorAll("*"));
     for (const el of allEls) {
       if (el.shadowRoot) {
         collectFromRoot(el.shadowRoot, refs, elements);
+      }
+      if (isFixedFullViewport(el)) {
+        refs.push(el);
+        elements.push({ el, interactive: false });
       }
     }
   }
@@ -495,6 +538,7 @@
     const name = getAccessibleName(el);
     const text = trunc((el.innerText || el.textContent || "").replace(/\s+/g, " ").trim(), 80);
     const attrs = getAttrs(el);
+    if (isFixedFullViewport(el)) attrs["data-argus-overlay"] = "fixed-full-viewport";
     const label = getLabelText(el);
     const context = getContext(el);
     const neighbor_text = getNeighborText(el);
@@ -514,6 +558,16 @@
       checked: checked === null ? undefined : checked,
       interactive, in_dialog,
     });
+  }
+
+  // ── Ordinal among identical siblings (role+name), for deterministic tie-breaks ──
+
+  const ordinalSeen = new Map();
+  for (const e of resultElements) {
+    const key = (e.role || e.tag) + "|" + (e.name || "");
+    const n = ordinalSeen.get(key) || 0;
+    ordinalSeen.set(key, n + 1);
+    e.attrs["ordinal"] = String(n);
   }
 
   // ── Page-level data ───────────────────────────────────────────────────────────
