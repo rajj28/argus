@@ -501,6 +501,130 @@ async def load_and_long_run(c: Ctx) -> None:
 
 
 
+# --- map geospatial probes: read the live Cesium viewer ---
+MAP_POS = r"""() => {
+  const host=document.querySelector('[data-testid="map-canvas"]'); if(!host) return {error:'no map'};
+  let viewer=null; for(const el of [host,...host.querySelectorAll('*')].slice(0,40)){
+    const k=Object.keys(el).find(k=>k.startsWith('__reactFiber')); let f=k?el[k]:null;
+    for(let i=0;f&&i<60&&!viewer;i++,f=f.return){let st=f.memoizedState;
+      for(let j=0;st&&j<40;j++,st=st.next){const v=st.memoizedState; if(v&&v.current&&v.current.scene&&v.current.entities){viewer=v.current;break;}}}
+    if(viewer)break;}
+  if(!viewer) return {error:'no viewer'};
+  const now=viewer.clock.currentTime, ell=viewer.scene.globe.ellipsoid, out={};
+  viewer.entities.values.forEach(e=>{ if(!/^drone-\d+$/.test(e.id)||!e.position) return;
+    const pos=e.position.getValue(now); if(!pos) return; const c=ell.cartesianToCartographic(pos);
+    out[e.id]={lat:c.latitude*180/Math.PI, lon:c.longitude*180/Math.PI, h:c.height}; });
+  return out;
+}"""
+
+MAP_TRACK = r"""(id) => {
+  const host=document.querySelector('[data-testid="map-canvas"]'); if(!host) return {error:'no map'};
+  let viewer=null; for(const el of [host,...host.querySelectorAll('*')].slice(0,40)){
+    const k=Object.keys(el).find(k=>k.startsWith('__reactFiber')); let f=k?el[k]:null;
+    for(let i=0;f&&i<60&&!viewer;i++,f=f.return){let st=f.memoizedState;
+      for(let j=0;st&&j<40;j++,st=st.next){const v=st.memoizedState; if(v&&v.current&&v.current.scene&&v.current.entities){viewer=v.current;break;}}}
+    if(viewer)break;}
+  if(!viewer) return {error:'no viewer'};
+  const now=viewer.clock.currentTime, ell=viewer.scene.globe.ellipsoid;
+  const e=viewer.entities.getById('track:'+id); if(!e||!e.polyline) return {error:'no track'};
+  const pos=e.polyline.positions.getValue(now); if(!pos||!pos.length) return {error:'empty track'};
+  return {points: pos.map(c=>{const g=ell.cartesianToCartographic(c); return [g.latitude*180/Math.PI, g.longitude*180/Math.PI];})};
+}"""
+
+
+def _haversine(a, b, c, d):
+    import math
+    R = 6371000.0; p1, p2 = math.radians(a), math.radians(c)
+    dp = math.radians(c - a); dl = math.radians(d - b)
+    x = math.sin(dp / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dl / 2) ** 2
+    return 2 * R * math.asin(math.sqrt(x))
+
+
+# 11 ------------------------------------------------------------------------------------------------------------
+async def map_stale_position(c: Ctx) -> None:
+    t = c.truth
+    await c.step("Start: Drone 1 takes off; operator watches it move on the map")
+    t.takeoff("drone-1")
+    p = await c.operator("operator", "desktop")
+    await _wait_ui_status(p, 1, "in_flight")
+    await p.wait_for_timeout(3000)
+    m = await p.evaluate(MAP_POS)
+    if "error" in m or "drone-1" not in m:
+        await c.note("info", f"map probe unavailable: {m.get('error')}"); return
+    d = t.drone("drone-1"); base = _haversine(m["drone-1"]["lat"], m["drone-1"]["lon"], d["latitude"], d["longitude"])
+    await c.hud(p, compare=[["Map marker", f"{m['drone-1']['lat']:.5f}, {m['drone-1']['lon']:.5f}", f"{d['latitude']:.5f}, {d['longitude']:.5f}"],
+                            ["Marker vs true position", f"{base:.0f} m", "0 m (tracking)"]])
+    await c.note("pass", f"baseline: map tracks the drone within {base:.0f} m")
+    await c.shot(p, "0-map-accurate")
+    await c.step("Condition: telemetry is delayed 8 s (a slow/unstable network)")
+    t.fault("socket-delay", value=8000)
+    peak = 0; honest = False; samples = 0
+    for i in range(6):
+        await p.wait_for_timeout(2500)
+        m = await p.evaluate(MAP_POS); d = t.drone("drone-1")
+        if "drone-1" not in m:
+            continue
+        gap = _haversine(m["drone-1"]["lat"], m["drone-1"]["lon"], d["latitude"], d["longitude"])
+        peak = max(peak, gap); samples += 1
+        honest = honest or bool(NOT_LIVE.search(await _freshness_text(p)))
+        c.sample(condition="socket-delay", marker_lat=round(m["drone-1"]["lat"], 5), true_lat=round(d["latitude"], 5),
+                 gap_m=round(gap))
+        await c.hud(p, compare=[["Map marker", f"{m['drone-1']['lat']:.5f}, {m['drone-1']['lon']:.5f}", f"{d['latitude']:.5f}, {d['longitude']:.5f}"],
+                                ["Displayed position is off by", f"{gap:.0f} m", "0 m if live"],
+                                ["Stale/delayed indicator", "none" if not honest else "shown", "should warn"]])
+    t.clear_faults()
+    await c.shot(p, "1-map-stale")
+    if peak > 40 and not honest and samples >= 2:
+        c.find(Finding(title="The map shows an old drone position as current",
+                       category="Map & geospatial / live data", level="L2", severity="High",
+                       detail=f"Under an 8 s telemetry delay the marker read {peak:.0f} m from the drone's true position, "
+                              "with no stale or delayed indicator. An operator directing ground crews to the shown "
+                              "location would be off by that distance. Baseline (live) tracking was within a metre.",
+                       symptoms=[f"marker up to {peak:.0f} m behind the true position, still presented as current",
+                                 "no 'delayed'/'stale' marker anywhere in the UI"],
+                       evidence={"baseline_gap_m": round(base), "peak_gap_m": round(peak)}))
+        await c.note("bug", f"map position {peak:.0f} m stale, shown as current")
+    else:
+        await c.note("pass", f"map stayed accurate (peak {peak:.0f} m) or warned of delay")
+
+
+# 12 ------------------------------------------------------------------------------------------------------------
+async def movement_trail(c: Ctx) -> None:
+    t = c.truth
+    await c.step("Start: Drone 1 flies; the map draws its movement trail (a bonus capability)")
+    t.takeoff("drone-1")
+    p = await c.operator("operator", "desktop")
+    await _wait_ui_status(p, 1, "in_flight")
+    truth_path = []
+    for _ in range(14):
+        d = t.drone("drone-1"); truth_path.append((d["latitude"], d["longitude"]))
+        await p.wait_for_timeout(1000)
+    trk = await p.evaluate(MAP_TRACK, "drone-1")
+    if "error" in trk:
+        await c.note("info", f"trail unavailable: {trk['error']}"); return
+    pts = trk["points"]
+    # every true position the drone passed should lie on the drawn trail (nearest trail point within tolerance)
+    worst = 0
+    for (la, lo) in truth_path:
+        near = min(_haversine(la, lo, tp[0], tp[1]) for tp in pts)
+        worst = max(worst, near)
+    endpoint_gap = _haversine(truth_path[-1][0], truth_path[-1][1], pts[-1][0], pts[-1][1])
+    c.sample(trail_points=len(pts), truth_samples=len(truth_path), worst_deviation_m=round(worst), endpoint_gap_m=round(endpoint_gap))
+    await c.hud(p, compare=[["Trail points drawn", str(len(pts)), f"{len(truth_path)}+ path samples"],
+                            ["Trail vs true path (max)", f"{worst:.0f} m", "< 15 m"],
+                            ["Trail endpoint vs drone", f"{endpoint_gap:.0f} m", "at the drone"]])
+    await c.shot(p, "1-trail")
+    if worst > 30 or endpoint_gap > 30 or len(pts) < 3:
+        c.find(Finding(title="The drone movement trail does not match the real flight path",
+                       category="Map & geospatial / bonus: movement trails", level="L2", severity="Medium",
+                       detail=f"The drawn trail deviates up to {worst:.0f} m from the path the drone actually flew.",
+                       symptoms=[f"max deviation {worst:.0f} m", f"endpoint {endpoint_gap:.0f} m from the drone"]))
+        await c.note("bug", f"trail off by up to {worst:.0f} m")
+    else:
+        await c.note("pass", f"trail faithfully records the path (within {worst:.0f} m, endpoint {endpoint_gap:.0f} m)")
+
+
+
 SCENARIOS = [
     Scenario("S1-freshness", "Stale, delayed or offline drone data shown as live", "L2", "Telemetry / freshness",
              "An operator relies on the cockpit to know whether a drone's position and status are current. When the telemetry "
@@ -548,4 +672,16 @@ SCENARIOS = [
              "The cockpit must stay usable when many drones fly and data keeps streaming for a long time.",
              "Argus measures frames per second, long tasks, click-to-paint latency and JS heap at rest, then adds 12 drones, "
              "flies all 16 at 5x simulator speed and samples the same metrics four times.", load_and_long_run),
+    Scenario("S11-map-stale", "The map shows an old drone position as current", "L2", "Map & geospatial",
+             "An operator reads a drone's location from the map to direct ground crews. When telemetry is delayed the "
+             "map must not present an old position as if it were current.",
+             "Argus flies the drone, reads the marker's real latitude/longitude from the live Cesium map and compares it "
+             "with the simulator's true position (baseline gap ~0 m). It then delays telemetry 8 s and measures how far "
+             "the displayed marker falls behind reality, and whether the UI warns of the delay.", map_stale_position),
+    Scenario("S12-movement-trail", "The drone movement trail matches the real flight path", "L2",
+             "Map & geospatial (bonus: movement trails)",
+             "The cockpit draws each drone's movement trail. The trail is only useful if it records where the drone "
+             "actually flew.",
+             "Argus samples the drone's true positions during a flight, reads the drawn trail polyline from the live Cesium "
+             "map, and checks that every true position lies on the trail and the trail ends at the drone.", movement_trail),
 ]
