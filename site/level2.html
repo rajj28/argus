@@ -70,6 +70,7 @@ th{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:up
 tr:last-child td{border-bottom:0}
 .note{font-size:13px;color:var(--faint);margin-top:12px}
 svg{max-width:100%;height:auto;display:block}
+.scv{width:100%;aspect-ratio:16/9;border-radius:10px;margin-top:16px;border:1px solid var(--line);background:#0d1118;display:block}
 footer{padding-block:38px;border-top:1px solid var(--line);color:var(--faint);font-size:13px}
 </style>
 </head>
@@ -164,7 +165,7 @@ gap <span style="color:#d63b3b">110 m</span> · stale indicator: <span style="co
     <div class="field"><div class="lbl">Expects</div><div class="val">The map marker reflects where the drone actually is; if data is delayed, the UI says so.</div></div>
     <div class="field"><div class="lbl">Approach</div><div class="val">Fly the drone; read the marker's real lat/lon off the live Cesium map and confirm it matches truth to a metre; delay telemetry 8 s and measure how far the marker falls behind, and whether the UI warns.</div></div>
     <div class="field"><div class="lbl">Result</div><div class="val res">Marker drifted to <b>110 m</b> behind the true position, still shown as current, with no stale indicator. Maps to the brief's <em>“an old position looks current.”</em></div></div>
-    <div class="ev"><span class="u">UI marker 18.56179, 73.69496</span> · <span class="t">truth 18.56247, 73.69572</span> · <span class="b">gap 25→50→75→100→110 m</span> · baseline (live) <span class="g">within 1 m</span></div>
+    <div class="ev"><span class="u">UI marker 18.56179, 73.69496</span> · <span class="t">truth 18.56247, 73.69572</span> · <span class="b">gap 25→50→75→100→110 m</span> · baseline (live) <span class="g">within 1 m</span></div>    <video class="scv" controls preload="none" playsinline src="videos/S11-map-stale.mp4"></video>
   </div>
 
   <div class="sc buggy">
@@ -173,7 +174,7 @@ gap <span style="color:#d63b3b">110 m</span> · stale indicator: <span style="co
     <div class="field"><div class="lbl">Expects</div><div class="val">If the stream freezes, the operator is not told the picture is live.</div></div>
     <div class="field"><div class="lbl">Approach</div><div class="val">Measure decoded frames per second on the real video element and read the tile's label every second after freezing the stream.</div></div>
     <div class="field"><div class="lbl">Result</div><div class="val res"><b>0 frames/second for 5 seconds while labelled “live.”</b> Maps to <em>“a dropped stream still looks live.”</em></div></div>
-    <div class="ev"><span class="u">label “live”</span> · <span class="b">0 fps decoded</span> · fault active: video‑freeze</div>
+    <div class="ev"><span class="u">label “live”</span> · <span class="b">0 fps decoded</span> · fault active: video‑freeze</div>    <video class="scv" controls preload="none" playsinline src="videos/S2-frozen-video.mp4"></video>
   </div>
 
   <div class="sc passy">
@@ -181,7 +182,7 @@ gap <span style="color:#d63b3b">110 m</span> · stale indicator: <span style="co
     <h3>The drone movement trail matches the real flight path</h3>
     <div class="field"><div class="lbl">Expects</div><div class="val">The drawn trail records where the drone actually flew.</div></div>
     <div class="field"><div class="lbl">Approach</div><div class="val">Sample the drone's true positions through a flight; read the trail polyline from the live map; check every true position lies on the trail and the trail ends at the drone.</div></div>
-    <div class="field"><div class="lbl">Result</div><div class="val res">49 trail points, <b>0 m</b> worst deviation, endpoint 10 m from the drone — <b>PASS.</b> Verifies a bonus capability's correctness, not just faults.</div></div>
+    <div class="field"><div class="lbl">Result</div><div class="val res">49 trail points, <b>0 m</b> worst deviation, endpoint 10 m from the drone — <b>PASS.</b> Verifies a bonus capability's correctness, not just faults.</div></div>    <video class="scv" controls preload="none" playsinline src="videos/S12-movement-trail.mp4"></video>
   </div>
 
   <div class="sc passy">
@@ -189,7 +190,7 @@ gap <span style="color:#d63b3b">110 m</span> · stale indicator: <span style="co
     <h3>Selecting a drone switches map, video and telemetry together</h3>
     <div class="field"><div class="lbl">Expects</div><div class="val">Selecting a drone shows that drone's state everywhere at once.</div></div>
     <div class="field"><div class="lbl">Approach</div><div class="val">Select Drone 2; check the video frame changes to a distinct feed (perceptual hash), the telemetry battery matches Drone 2's true battery, and the label follows the selection.</div></div>
-    <div class="field"><div class="lbl">Result</div><div class="val res">All three switched consistently — <b>PASS.</b> Connects behaviour across related parts of the product with no false positive.</div></div>
+    <div class="field"><div class="lbl">Result</div><div class="val res">All three switched consistently — <b>PASS.</b> Connects behaviour across related parts of the product with no false positive.</div></div>    <video class="scv" controls preload="none" playsinline src="videos/S8-switch-drone.mp4"></video>
   </div>
 
   <div class="sc passy">
@@ -197,7 +198,7 @@ gap <span style="color:#d63b3b">110 m</span> · stale indicator: <span style="co
     <h3>Responsive with 16 flying drones over ~10 simulated minutes</h3>
     <div class="field"><div class="lbl">Expects</div><div class="val">The cockpit stays usable when many drones fly and data streams for a long time.</div></div>
     <div class="field"><div class="lbl">Approach</div><div class="val">Measure frame timing, Long‑Task blocking, click‑to‑paint latency and JS heap at rest, then add 12 drones, fly all 16 at 5× speed and re‑measure across the run.</div></div>
-    <div class="field"><div class="lbl">Result</div><div class="val res">Click‑to‑paint 28–123 ms (under 250 ms), no long‑task stalls, heap garbage‑collected (no leak) — <b>PASS.</b> Proves the product scales, measured not assumed.</div></div>
+    <div class="field"><div class="lbl">Result</div><div class="val res">Click‑to‑paint 28–123 ms (under 250 ms), no long‑task stalls, heap garbage‑collected (no leak) — <b>PASS.</b> Proves the product scales, measured not assumed.</div></div>    <video class="scv" controls preload="none" playsinline src="videos/S10-load-long-run.mp4"></video>
   </div>
 </section>
 
