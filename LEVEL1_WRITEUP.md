@@ -8,8 +8,9 @@ drone simulator's actual state — so it catches mutations by *meaning*, not by 
 near‑zero false positives.
 
 **Video (all Level‑1 scenarios, real time):** _[paste your Google Drive link here]_
-The single recording below runs each scenario back to back; timestamps are given per scenario. A HUD overlay in
-the video shows, at every moment, what the UI claims next to the ground truth and the verdict.
+One recording runs each scenario in real time, introduced by a title card. A HUD overlay in the video shows, at
+every moment, what the UI claims next to the ground truth and the verdict. Per‑scenario start times:
+**0:03** Scenario 1 · **0:20** Scenario 2 · **1:30** Scenario 3 · **1:47** Scenario 4 · **2:00** Scenario 5.
 
 ---
 
