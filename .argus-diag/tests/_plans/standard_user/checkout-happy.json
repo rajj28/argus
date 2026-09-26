@@ -1,0 +1,483 @@
+{
+  "id": "checkout-happy",
+  "name": "Complete checkout to the order confirmation",
+  "goal": "A shopper checks out and reaches the Thank you for your order! confirmation",
+  "tags": [
+    "critical",
+    "checkout"
+  ],
+  "start_url": "/",
+  "steps": [
+    {
+      "id": "s1",
+      "intent": "Enter the username",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Username",
+        "text": "",
+        "attrs": {
+          "class": "input_error form_input",
+          "placeholder": "Username",
+          "aria-label": "Username",
+          "data-test": "username",
+          "id": "user-name",
+          "type": "text",
+          "name": "user-name"
+        },
+        "label": "",
+        "context": "Login",
+        "neighbor_text": "",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/form[1]/div[1]/input[1]",
+        "css": "#user-name",
+        "bbox": {
+          "x": 494.0,
+          "y": 154.0,
+          "w": 292.0,
+          "h": 39.0
+        }
+      },
+      "value": "${creds.user}",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s2",
+      "intent": "Enter the password",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Password",
+        "text": "",
+        "attrs": {
+          "class": "input_error form_input",
+          "placeholder": "Password",
+          "aria-label": "Password",
+          "data-test": "password",
+          "id": "password",
+          "type": "password",
+          "name": "password"
+        },
+        "label": "",
+        "context": "Login",
+        "neighbor_text": "",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/form[1]/div[2]/input[1]",
+        "css": "#password",
+        "bbox": {
+          "x": 494.0,
+          "y": 208.0,
+          "w": 292.0,
+          "h": 39.0
+        }
+      },
+      "value": "${creds.password}",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s3",
+      "intent": "Sign in",
+      "action": "click",
+      "target": {
+        "tag": "input",
+        "role": "button",
+        "name": "Login",
+        "text": "",
+        "attrs": {
+          "class": "submit-button btn_action",
+          "data-test": "login-button",
+          "id": "login-button",
+          "type": "submit",
+          "value": "Login",
+          "name": "login-button"
+        },
+        "label": "",
+        "context": "Login",
+        "neighbor_text": "",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/form[1]/input[1]",
+        "css": "#login-button",
+        "bbox": {
+          "x": 494.0,
+          "y": 302.0,
+          "w": 292.0,
+          "h": 49.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": true,
+        "url_pattern": "/inventory.html",
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s4",
+      "intent": "Add the first product to the cart",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Add to cart",
+        "text": "Add to cart",
+        "attrs": {
+          "class": "btn btn_primary btn_small btn_inventory ",
+          "data-test": "add-to-cart-sauce-labs-backpack",
+          "id": "add-to-cart-sauce-labs-backpack",
+          "name": "add-to-cart-sauce-labs-backpack"
+        },
+        "label": "",
+        "context": "",
+        "neighbor_text": "$29.99 | Sauce Labs Backpack carry.allTheThings() with the sleek, streamlined Sl",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[2]/button[1]",
+        "css": "#add-to-cart-sauce-labs-backpack",
+        "bbox": {
+          "x": 420.0,
+          "y": 339.0,
+          "w": 160.0,
+          "h": 34.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s5",
+      "intent": "Open the cart",
+      "action": "goto",
+      "target": null,
+      "value": "/cart.html",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s6",
+      "intent": "Start the checkout",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Checkout",
+        "text": "Checkout",
+        "attrs": {
+          "class": "btn btn_action btn_medium checkout_button ",
+          "data-test": "checkout",
+          "id": "checkout",
+          "name": "checkout"
+        },
+        "label": "",
+        "context": "",
+        "neighbor_text": "Continue Shopping | QTYDescription 1 Sauce Labs Backpack carry.allTheThings() wi",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/button[2]",
+        "css": "#checkout",
+        "bbox": {
+          "x": 1045.0,
+          "y": 412.0,
+          "w": 220.0,
+          "h": 34.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": true,
+        "url_pattern": "/checkout-step-one.html",
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s7",
+      "intent": "Enter the first name",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "First Name",
+        "text": "",
+        "attrs": {
+          "class": "input_error form_input",
+          "placeholder": "First Name",
+          "aria-label": "First Name",
+          "data-test": "firstName",
+          "id": "first-name",
+          "type": "text",
+          "name": "firstName"
+        },
+        "label": "",
+        "context": "Checkout information",
+        "neighbor_text": "",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[1]/form[1]/div[1]/div[1]/input[1]",
+        "css": "#first-name",
+        "bbox": {
+          "x": 450.0,
+          "y": 255.0,
+          "w": 380.0,
+          "h": 39.0
+        }
+      },
+      "value": "Ada",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s8",
+      "intent": "Enter the last name",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Last Name",
+        "text": "",
+        "attrs": {
+          "class": "input_error form_input",
+          "placeholder": "Last Name",
+          "aria-label": "Last Name",
+          "data-test": "lastName",
+          "id": "last-name",
+          "type": "text",
+          "name": "lastName"
+        },
+        "label": "",
+        "context": "Checkout information",
+        "neighbor_text": "",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[1]/form[1]/div[1]/div[2]/input[1]",
+        "css": "#last-name",
+        "bbox": {
+          "x": 450.0,
+          "y": 309.0,
+          "w": 380.0,
+          "h": 39.0
+        }
+      },
+      "value": "Lovelace",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s9",
+      "intent": "Enter the ZIP code",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Zip/Postal Code",
+        "text": "",
+        "attrs": {
+          "class": "input_error form_input",
+          "placeholder": "Zip/Postal Code",
+          "aria-label": "Zip/Postal Code",
+          "data-test": "postalCode",
+          "id": "postal-code",
+          "type": "text",
+          "name": "postalCode"
+        },
+        "label": "",
+        "context": "Checkout information",
+        "neighbor_text": "",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[1]/form[1]/div[1]/div[3]/input[1]",
+        "css": "#postal-code",
+        "bbox": {
+          "x": 450.0,
+          "y": 363.0,
+          "w": 380.0,
+          "h": 39.0
+        }
+      },
+      "value": "94107",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s10",
+      "intent": "Continue to the overview",
+      "action": "click",
+      "target": {
+        "tag": "input",
+        "role": "button",
+        "name": "Continue",
+        "text": "",
+        "attrs": {
+          "class": "submit-button btn btn_primary cart_button btn_action",
+          "data-test": "continue",
+          "id": "continue",
+          "type": "submit",
+          "value": "Continue",
+          "name": "continue"
+        },
+        "label": "",
+        "context": "Checkout information",
+        "neighbor_text": "Cancel",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[1]/form[1]/div[2]/input[1]",
+        "css": "#continue",
+        "bbox": {
+          "x": 1045.0,
+          "y": 599.0,
+          "w": 220.0,
+          "h": 41.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": true,
+        "url_pattern": "/checkout-step-two.html",
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s11",
+      "intent": "Place the order",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Finish",
+        "text": "Finish",
+        "attrs": {
+          "class": "btn btn_action btn_medium cart_button",
+          "data-test": "finish",
+          "id": "finish",
+          "name": "finish"
+        },
+        "label": "",
+        "context": "",
+        "neighbor_text": "Cancel | Payment Information: | SauceCard #31337",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[9]/button[2]",
+        "css": "#finish",
+        "bbox": {
+          "x": 1045.0,
+          "y": 682.0,
+          "w": 220.0,
+          "h": 34.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": true,
+        "url_pattern": "/checkout-complete.html",
+        "network": [],
+        "headings_any": [
+          "Thank you for your order!"
+        ],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    }
+  ],
+  "oracles": [
+    {
+      "kind": "url_matches",
+      "params": {
+        "pattern": "/checkout-complete"
+      },
+      "description": "The confirmation page opens",
+      "rule_ref": "R7"
+    },
+    {
+      "kind": "text_visible",
+      "params": {
+        "text": "Thank you for your order!"
+      },
+      "description": "The order is confirmed",
+      "rule_ref": "R7"
+    }
+  ],
+  "version": 1,
+  "status": "active",
+  "origin": "manual",
+  "history": [
+    {
+      "version": 1,
+      "at": "2026-09-24T12:59:21+00:00",
+      "kind": "created",
+      "summary": "Authored (manual); baseline recorded",
+      "diff": "",
+      "verdict_ref": null
+    }
+  ],
+  "requires_login": false
+}

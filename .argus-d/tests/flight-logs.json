@@ -1,0 +1,73 @@
+{
+  "id": "flight-logs",
+  "name": "Filter flight logs by drone",
+  "goal": "An ops manager filters the flight history for one drone",
+  "tags": [
+    "reporting"
+  ],
+  "start_url": "/logs",
+  "steps": [
+    {
+      "id": "s1",
+      "intent": "Filter logs to drone Falcon-1",
+      "action": "select",
+      "target": {
+        "tag": "select",
+        "role": "combobox",
+        "name": "Filter by drone",
+        "text": "All drones Falcon-1 Falcon-2 Hawk-7 Osprey-3 Kite-5 Raven-9",
+        "attrs": {
+          "id": "log-drone-filter",
+          "aria-label": "Filter by drone",
+          "value": "all"
+        },
+        "label": "Filter by drone",
+        "context": "main",
+        "neighbor_text": "Filter by drone | Flight logs Recent flight history Export CSV | DATE DRONE DURA",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[2]/select[1]",
+        "css": "#log-drone-filter",
+        "bbox": {
+          "x": 130.0,
+          "y": 170.0,
+          "w": 220.0,
+          "h": 37.0
+        }
+      },
+      "value": "Falcon-1",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    }
+  ],
+  "oracles": [
+    {
+      "kind": "text_visible",
+      "params": {
+        "text": "Falcon-1"
+      },
+      "description": "Falcon-1 flights are listed",
+      "rule_ref": null
+    }
+  ],
+  "version": 1,
+  "status": "active",
+  "origin": "manual",
+  "history": [
+    {
+      "version": 1,
+      "at": "2026-09-24T12:18:33+00:00",
+      "kind": "created",
+      "summary": "Authored (manual); baseline recorded",
+      "diff": "",
+      "verdict_ref": null
+    }
+  ],
+  "requires_login": true
+}

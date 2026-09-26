@@ -1,0 +1,370 @@
+{
+  "id": "cancel-appointment",
+  "name": "Cancel an appointment with explicit confirmation",
+  "goal": "Cancel an appointment; verify confirmation dialog appears before removal and row is removed after confirming (B6)",
+  "tags": [
+    "critical",
+    "cancel"
+  ],
+  "start_url": "/#/login",
+  "steps": [
+    {
+      "id": "s1",
+      "intent": "Enter the front-desk email to sign in",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Email address",
+        "text": "",
+        "attrs": {
+          "class": "mq-input",
+          "name": "email",
+          "type": "email",
+          "placeholder": "you@clinic.in",
+          "required": "",
+          "ordinal": "0"
+        },
+        "label": "Email address",
+        "context": "Calmer clinics start with a clear queue.",
+        "neighbor_text": "Email address | Password | Sign in to MediQueue",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/section[1]/div[2]/div[1]/form[1]/label[1]/input[1]",
+        "css": "#mq-login-form > label:nth-of-type(1) > input",
+        "bbox": {
+          "x": 708.0,
+          "y": 333.0,
+          "w": 440.0,
+          "h": 48.0
+        }
+      },
+      "value": "${creds.user}",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s2",
+      "intent": "Enter the password",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Password",
+        "text": "",
+        "attrs": {
+          "class": "mq-input",
+          "name": "password",
+          "type": "password",
+          "placeholder": "Enter your password",
+          "required": "",
+          "ordinal": "0"
+        },
+        "label": "Password",
+        "context": "Calmer clinics start with a clear queue.",
+        "neighbor_text": "Password | Email address | Sign in to MediQueue",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/section[1]/div[2]/div[1]/form[1]/label[2]/input[1]",
+        "css": "#mq-login-form > label:nth-of-type(2) > input",
+        "bbox": {
+          "x": 708.0,
+          "y": 426.0,
+          "w": 440.0,
+          "h": 48.0
+        }
+      },
+      "value": "${creds.password}",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s3",
+      "intent": "Click the sign-in button",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Sign in to MediQueue",
+        "text": "Sign in to MediQueue",
+        "attrs": {
+          "class": "mq-primary",
+          "type": "submit",
+          "ordinal": "0"
+        },
+        "label": "",
+        "context": "Calmer clinics start with a clear queue.",
+        "neighbor_text": "Email address | Password | FRONT DESK PORTAL",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/section[1]/div[2]/div[1]/form[1]/button[1]",
+        "css": "#mq-login-form > button",
+        "bbox": {
+          "x": 708.0,
+          "y": 494.0,
+          "w": 440.0,
+          "h": 43.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": true,
+        "url_pattern": "/",
+        "network": [
+          {
+            "method": "POST",
+            "path": "/api/login",
+            "status": 200,
+            "resource_type": "fetch"
+          }
+        ],
+        "headings_any": [
+          "Good morning, Front Desk"
+        ],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s4",
+      "intent": "Wait for the overview to load",
+      "action": "wait",
+      "target": null,
+      "value": "1500",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s5",
+      "intent": "Navigate to the appointments page",
+      "action": "click",
+      "target": {
+        "tag": "a",
+        "role": "link",
+        "name": "Appointments",
+        "text": "Appointments",
+        "attrs": {
+          "class": "mq-nav-link",
+          "href": "#/app/appointments",
+          "ordinal": "0"
+        },
+        "label": "",
+        "context": "Main navigation",
+        "neighbor_text": "Overview | Doctors | New appointment",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/header[1]/nav[1]/a[4]",
+        "css": "#mq-main > header > nav > a:nth-of-type(4)",
+        "bbox": {
+          "x": 569.0,
+          "y": 12.0,
+          "w": 122.0,
+          "h": 49.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": true,
+        "url_pattern": "/",
+        "network": [],
+        "headings_any": [
+          "Appointments",
+          "Upcoming schedule"
+        ],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s6",
+      "intent": "Wait for the appointment list to render",
+      "action": "wait",
+      "target": null,
+      "value": "500",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s7",
+      "intent": "Click Cancel on the first appointment in the list",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Cancel",
+        "text": "Cancel",
+        "attrs": {
+          "class": "mq-danger",
+          "type": "button",
+          "ordinal": "0"
+        },
+        "label": "",
+        "context": "Appointments",
+        "neighbor_text": "Reschedule | AS Aarav Sharma Consultation · 18 yrs | Dr. Aarav Mehta General Med",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/section[1]/div[3]/div[1]/div[1]/article[1]/div[4]/button[1]",
+        "css": "#mq-content > div:nth-of-type(3) > div > div > article:nth-of-type(1) > div:nth-of-type(4) > button:nth-of-type(1)",
+        "bbox": {
+          "x": 1058.0,
+          "y": 355.0,
+          "w": 73.0,
+          "h": 38.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [
+          "Cancel this appointment?"
+        ],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s8",
+      "intent": "Wait for the confirmation dialog to appear",
+      "action": "wait",
+      "target": null,
+      "value": "500",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s9",
+      "intent": "Confirm the cancellation in the dialog",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Yes, cancel",
+        "text": "Yes, cancel",
+        "attrs": {
+          "class": "mq-danger",
+          "type": "button",
+          "ordinal": "0"
+        },
+        "label": "",
+        "context": "Cancel this appointment?",
+        "neighbor_text": "Keep appointment | ! | Cancel this appointment?",
+        "xpath": "/html[1]/body[1]/div[3]/div[1]/section[1]/div[2]/button[2]",
+        "css": "#mq-modal-region > div > section > div:nth-of-type(2) > button:nth-of-type(2)",
+        "bbox": {
+          "x": 746.0,
+          "y": 468.0,
+          "w": 116.0,
+          "h": 43.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [
+          {
+            "method": "DELETE",
+            "path": "/api/appointments/:id",
+            "status": 200,
+            "resource_type": "fetch"
+          }
+        ],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s10",
+      "intent": "Wait for the row to be removed",
+      "action": "wait",
+      "target": null,
+      "value": "1000",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    }
+  ],
+  "oracles": [
+    {
+      "kind": "network_called",
+      "params": {
+        "method": "DELETE",
+        "path": "/api/appointments/:id",
+        "status_class": "2xx"
+      },
+      "description": "Cancellation API call succeeded",
+      "rule_ref": "B6"
+    },
+    {
+      "kind": "text_absent",
+      "params": {
+        "text": "Cancel this appointment?"
+      },
+      "description": "The confirmation dialog is closed once the cancellation is applied",
+      "rule_ref": "B6"
+    }
+  ],
+  "version": 1,
+  "status": "active",
+  "origin": "manual",
+  "history": [],
+  "requires_login": false
+}

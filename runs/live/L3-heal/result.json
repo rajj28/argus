@@ -1,0 +1,37 @@
+{
+  "id": "L3-heal",
+  "title": "Self-healing: a UI refactor renames a control, the JEV mesh re-identifies it",
+  "level": "L3",
+  "category": "Self-healing (LLM-assisted)",
+  "description": "Real UIs get refactored, and brittle tests break on renamed selectors. A resilient tester should recover on its own instead of going red.",
+  "approach": "A test recorded the Drone 2 control on a previous build; that selector no longer exists. Argus asks the JEV mesh to re-identify the control from its recorded intent and the current DOM, clicks the healed control, and confirms against the simulator that the right (flying) drone was selected.",
+  "verdict": "PASS",
+  "findings": [],
+  "steps": [
+    "[  3.8s] A test was recorded on an earlier build; Drone 2 is airborne; Argus opens today's cockpit",
+    "[ 12.4s] The UI was refactored since: that selector no longer exists \u2014 a brittle test breaks here",
+    "[ 14.5s] Argus self-heals: it asks the JEV mesh to re-identify the control from its intent",
+    "[ 21.4s] Argus clicks the healed control and checks the result against the simulator"
+  ],
+  "samples": [
+    {
+      "recorded_selector": "fleet-aircraft-2",
+      "healed_to": "device-row-drone-2",
+      "confidence": 0.95,
+      "ui_status": "in_flight",
+      "ui_distance": 120.0,
+      "truth_status": "in_flight",
+      "truth_distance": 120,
+      "verified": true,
+      "t": 26.1
+    }
+  ],
+  "videos": [
+    "video.mp4"
+  ],
+  "shots": [
+    "shots/1-self-healed.png"
+  ],
+  "started": "2026-09-26 17:18:58",
+  "duration_s": 29.7
+}

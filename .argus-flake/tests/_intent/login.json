@@ -1,0 +1,164 @@
+{
+  "id": "login",
+  "name": "Shopper signs in",
+  "goal": "A shopper with valid store credentials reaches the Products catalogue",
+  "tags": [
+    "auth",
+    "smoke"
+  ],
+  "start_url": "/",
+  "steps": [
+    {
+      "id": "s1",
+      "intent": "Enter the username",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Username",
+        "text": "",
+        "attrs": {
+          "class": "input_error form_input",
+          "placeholder": "Username",
+          "aria-label": "Username",
+          "data-test": "username",
+          "id": "user-name",
+          "type": "text",
+          "name": "user-name"
+        },
+        "label": "",
+        "context": "Login",
+        "neighbor_text": "",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/form[1]/div[1]/input[1]",
+        "css": "#user-name",
+        "bbox": {
+          "x": 494.0,
+          "y": 154.0,
+          "w": 292.0,
+          "h": 39.0
+        }
+      },
+      "value": "${creds.user}",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s2",
+      "intent": "Enter the password",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Password",
+        "text": "",
+        "attrs": {
+          "class": "input_error form_input",
+          "placeholder": "Password",
+          "aria-label": "Password",
+          "data-test": "password",
+          "id": "password",
+          "type": "password",
+          "name": "password"
+        },
+        "label": "",
+        "context": "Login",
+        "neighbor_text": "",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/form[1]/div[2]/input[1]",
+        "css": "#password",
+        "bbox": {
+          "x": 494.0,
+          "y": 208.0,
+          "w": 292.0,
+          "h": 39.0
+        }
+      },
+      "value": "${creds.password}",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s3",
+      "intent": "Submit the sign-in form",
+      "action": "press",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Password",
+        "text": "",
+        "attrs": {
+          "class": "input_error form_input",
+          "placeholder": "Password",
+          "aria-label": "Password",
+          "data-test": "password",
+          "id": "password",
+          "type": "password",
+          "name": "password"
+        },
+        "label": "",
+        "context": "Login",
+        "neighbor_text": "",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/form[1]/div[2]/input[1]",
+        "css": "#password",
+        "bbox": {
+          "x": 494.0,
+          "y": 208.0,
+          "w": 292.0,
+          "h": 39.0
+        }
+      },
+      "value": "Enter",
+      "expect": {
+        "url_changed": true,
+        "url_pattern": "/inventory.html",
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    }
+  ],
+  "oracles": [
+    {
+      "kind": "url_matches",
+      "params": {
+        "pattern": "/inventory"
+      },
+      "description": "The Products catalogue opens",
+      "rule_ref": "R1"
+    },
+    {
+      "kind": "text_visible",
+      "params": {
+        "text": "Products"
+      },
+      "description": "The Products title is shown",
+      "rule_ref": "R1"
+    }
+  ],
+  "version": 1,
+  "status": "active",
+  "origin": "manual",
+  "history": [],
+  "requires_login": false
+}

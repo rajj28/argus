@@ -1,0 +1,1 @@
+{"cases": [{"rule_ref": "R1", "field_find": {"role": "spinbutton", "name": "altitude (m) *"}, "value": "120", "expect": "accept", "why": "at most 120 m AGL is still legal"}, {"rule_ref": "R1", "field_find": {"role": "spinbutton", "name": "altitude (m) *"}, "value": "121", "expect": "reject", "why": "above 120 m AGL violates the DGCA limit"}]}

@@ -1,0 +1,186 @@
+{
+  "id": "S5-map-labels",
+  "title": "Drone and dock labels overlap on the map",
+  "level": "L1",
+  "category": "Map / Visual",
+  "description": "The operator reads each drone's status from its map label.",
+  "approach": "Argus reads the map's real label entities from the running Cesium viewer (text, screen position, font) and measures overlap between label boxes.",
+  "verdict": "BUG",
+  "findings": [
+    {
+      "title": "Drone and dock labels are drawn on top of each other on the map",
+      "category": "Map and geospatial / Visual",
+      "level": "L1",
+      "severity": "Medium",
+      "detail": "Labels for a drone and its dock (same position) and the altitude labels overlap, so the drone's status text is unreadable at the default map view.",
+      "symptoms": [
+        "'Dock 1' overlaps 'Drone 1 standby' (75% of the smaller label)",
+        "'560 m ASL' overlaps '0 m' (100% of the smaller label)",
+        "'Dock 2' overlaps 'Drone 2 standby' (75% of the smaller label)",
+        "'560 m ASL' overlaps '0 m' (100% of the smaller label)",
+        "'Dock 3' overlaps 'Drone 3 standby' (75% of the smaller label)",
+        "'560 m ASL' overlaps '0 m' (100% of the smaller label)"
+      ],
+      "evidence": {
+        "labels": [
+          {
+            "id": "dock-1",
+            "text": "Dock 1",
+            "font": "13px Inter, sans-serif",
+            "x": 570.000000000234,
+            "y": 449.999528073226,
+            "ecef": [
+              1698295.5984305476,
+              5805611.566079926,
+              2017540.2287077466
+            ]
+          },
+          {
+            "id": "hlabel:dock-1",
+            "text": "560 m ASL",
+            "font": "12px Inter, sans-serif",
+            "x": 600.000000000234,
+            "y": 425.999528073226,
+            "ecef": [
+              1698295.5984305476,
+              5805611.566079926,
+              2017540.2287077466
+            ]
+          },
+          {
+            "id": "dock-2",
+            "text": "Dock 2",
+            "font": "13px Inter, sans-serif",
+            "x": 720.4797239000414,
+            "y": 449.9995244927106,
+            "ecef": [
+              1698150.5829463843,
+              5805650.917951268,
+              2017539.2396328608
+            ]
+          },
+          {
+            "id": "hlabel:dock-2",
+            "text": "560 m ASL",
+            "font": "12px Inter, sans-serif",
+            "x": 750.4797239000414,
+            "y": 425.9995244927106,
+            "ecef": [
+              1698150.5829463843,
+              5805650.917951268,
+              2017539.2396328608
+            ]
+          },
+          {
+            "id": "dock-3",
+            "text": "Dock 3",
+            "font": "13px Inter, sans-serif",
+            "x": 869.3372469424667,
+            "y": 449.99951382811014,
+            "ecef": [
+              1698004.9732545442,
+              5805688.237632654,
+              2017537.5396134555
+            ]
+          },
+          {
+            "id": "hlabel:dock-3",
+            "text": "560 m ASL",
+            "font": "12px Inter, sans-serif",
+            "x": 899.3372469424667,
+            "y": 425.99951382811014,
+            "ecef": [
+              1698004.9732545442,
+              5805688.237632654,
+              2017537.5396134555
+            ]
+          },
+          {
+            "id": "dock-4",
+            "text": "Dock 4",
+            "font": "13px Inter, sans-serif",
+            "x": 1016.3699356221236,
+            "y": 449.99949620979794,
+            "ecef": [
+              1697859.2279820542,
+              5805725.092809648,
+              2017535.6771194905
+            ]
+          },
+          {
+            "id": "hlabel:dock-4",
+            "text": "560 m ASL",
+            "font": "12px Inter, sans-serif",
+            "x": 1046.3699356221236,
+            "y": 425.99949620979794,
+            "ecef": [
+              1697859.2279820542,
+              5805725.092809648,
+              2017535.6771194905
+            ]
+          },
+          {
+            "id": "drone-1",
+            "text": "Drone 1 standby",
+            "font": "13px Inter, sans-serif",
+            "x": 570.000000000234,
+            "y": 453.999528073226,
+            "ecef": [
+              1698295.5984305476,
+              5805611.566079926,
+              2017540.2287077466
+            ]
+          },
+          {
+            "id": "hlabel:drone-1",
+            "text": "0 m",
+            "font": "12px Inter, sans-serif",
+            "x": 600.000000000234,
+            "y": 425.999528073226,
+            "ecef": [
+              1698295.5984305476,
+              5805611.566079926,
+              2017540.2287077466
+            ]
+          },
+          {
+            "id": "drone-2",
+            "text": "Drone 2 standby",
+            "font": "13px Inter, sans-serif",
+            "x": 720.4797239000414,
+            "y": 453.9995244927106,
+            "ecef": [
+              1698150.5829463843,
+              5805650.917951268,
+              2017539.2396328608
+            ]
+          },
+          {
+            "id": "hlabel:drone-2",
+            "text": "0 m",
+            "font": "12px Inter, sans-serif",
+            "x": 750.4797239000414,
+            "y": 425.9995244927106,
+            "ecef": [
+              1698150.5829463843,
+              5805650.917951268,
+              2017539.2396328608
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "steps": [
+    "[  0.6s] Start: operator scans the map to read each drone's status"
+  ],
+  "samples": [],
+  "videos": [
+    "video.mp4"
+  ],
+  "shots": [
+    "shots/1-map-labels.png"
+  ],
+  "started": "2026-09-26 13:41:04",
+  "duration_s": 14.2
+}

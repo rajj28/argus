@@ -1,0 +1,122 @@
+{
+  "id": "S2-frozen-video",
+  "title": "Frozen drone video still labelled 'live'",
+  "level": "L2",
+  "category": "Video and media",
+  "description": "When a drone's video stream freezes, the operator must not be told the picture is live.",
+  "approach": "Argus measures decoded frames per second on the real <video> element and the tile's label every second after injecting video-freeze for Drone 1, and records how long a frozen picture keeps the 'live' label.",
+  "verdict": "BUG",
+  "findings": [
+    {
+      "title": "Frozen drone video keeps the 'live' label for 3 s",
+      "category": "Video and media",
+      "level": "L2",
+      "severity": "High",
+      "detail": "While the stream was frozen (0 frames decoded), the tile still said 'live'; it only admitted the problem after 5 s.",
+      "symptoms": [
+        "3 consecutive seconds with 0-1 frames/s under a 'live' label"
+      ],
+      "evidence": {
+        "distinct_frames_seen": 2
+      }
+    }
+  ],
+  "steps": [
+    "[  0.6s] Start: operator opens the cockpit; Drone 1's FPV video is playing",
+    "[  9.9s] Condition: Drone 1's stream freezes (video-freeze, 15 s)"
+  ],
+  "samples": [
+    {
+      "second": 1,
+      "frames_per_s": 2,
+      "video_label": "live",
+      "t": 11.0
+    },
+    {
+      "second": 2,
+      "frames_per_s": 0,
+      "video_label": "live",
+      "t": 12.0
+    },
+    {
+      "second": 3,
+      "frames_per_s": 0,
+      "video_label": "live",
+      "t": 13.0
+    },
+    {
+      "second": 4,
+      "frames_per_s": 0,
+      "video_label": "live",
+      "t": 14.1
+    },
+    {
+      "second": 5,
+      "frames_per_s": 1,
+      "video_label": "reconnecting",
+      "t": 15.6
+    },
+    {
+      "second": 6,
+      "frames_per_s": 0,
+      "video_label": "reconnecting",
+      "t": 16.7
+    },
+    {
+      "second": 7,
+      "frames_per_s": 0,
+      "video_label": "reconnecting",
+      "t": 17.7
+    },
+    {
+      "second": 8,
+      "frames_per_s": 0,
+      "video_label": "reconnecting",
+      "t": 18.7
+    },
+    {
+      "second": 9,
+      "frames_per_s": 0,
+      "video_label": "reconnecting",
+      "t": 19.7
+    },
+    {
+      "second": 10,
+      "frames_per_s": 0,
+      "video_label": "reconnecting",
+      "t": 20.7
+    },
+    {
+      "second": 11,
+      "frames_per_s": 0,
+      "video_label": "reconnecting",
+      "t": 21.8
+    },
+    {
+      "second": 12,
+      "frames_per_s": 0,
+      "video_label": "reconnecting",
+      "t": 22.8
+    },
+    {
+      "second": 13,
+      "frames_per_s": 0,
+      "video_label": "reconnecting",
+      "t": 23.8
+    },
+    {
+      "second": 14,
+      "frames_per_s": 0,
+      "video_label": "reconnecting",
+      "t": 24.8
+    }
+  ],
+  "videos": [
+    "video.mp4"
+  ],
+  "shots": [
+    "shots/1-frozen-but-live.png"
+  ],
+  "started": "2026-09-26 16:28:08",
+  "duration_s": 27.8
+}

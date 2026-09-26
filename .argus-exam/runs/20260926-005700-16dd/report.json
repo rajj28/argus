@@ -1,0 +1,1722 @@
+{
+  "run_id": "20260926-005700-16dd",
+  "started_at": "2026-09-25T19:27:00+00:00",
+  "app_url": "http://127.0.0.1:8010",
+  "label": "r2-run",
+  "results": [
+    {
+      "test_id": "login",
+      "test_name": "Front desk signs in",
+      "test_version": 1,
+      "status": "passed",
+      "verdict": {
+        "category": "PASS",
+        "confidence": 1.0,
+        "rationale": "Replayed exactly; every step and oracle held.",
+        "evidence_refs": [],
+        "changelog_refs": [],
+        "decided_by": "rules",
+        "action": "none"
+      },
+      "steps": [
+        {
+          "step_id": "s1",
+          "intent": "Enter the demo front-desk email",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.977,
+          "duration_ms": 755,
+          "screenshot": "screenshots/login_01.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/login",
+            "url_after": "http://127.0.0.1:8010/#/login",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s2",
+          "intent": "Enter the password",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.977,
+          "duration_ms": 734,
+          "screenshot": "screenshots/login_02.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/login",
+            "url_after": "http://127.0.0.1:8010/#/login",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s3",
+          "intent": "Submit the sign-in form",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.972,
+          "duration_ms": 728,
+          "screenshot": "screenshots/login_03.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/login",
+            "url_after": "http://127.0.0.1:8010/#/app/home",
+            "url_changed": true,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [
+              "Good morning, Front Desk"
+            ],
+            "new_alerts": [],
+            "network": [
+              {
+                "method": "POST",
+                "path": "/api/login",
+                "status": 200,
+                "resource_type": "fetch"
+              },
+              {
+                "method": "GET",
+                "path": "/api/appointments",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s4",
+          "intent": "Wait for the clinic overview to load",
+          "status": "passed",
+          "tier": 0,
+          "score": null,
+          "duration_ms": 0,
+          "screenshot": null,
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/home",
+            "url_after": "http://127.0.0.1:8010/#/app/home",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        }
+      ],
+      "observations": [],
+      "duration_ms": 5338,
+      "llm_calls": [],
+      "updated_to_version": null,
+      "bug_report": null,
+      "trace": null
+    },
+    {
+      "test_id": "cancel-appointment",
+      "test_name": "Cancel an appointment with explicit confirmation",
+      "test_version": 2,
+      "status": "passed",
+      "verdict": {
+        "category": "COSMETIC_DRIFT",
+        "confidence": 0.97,
+        "rationale": "1 element(s) moved/renamed and were re-identified (tiers [1]); all expectations and business oracles still hold.",
+        "evidence_refs": [],
+        "changelog_refs": [],
+        "decided_by": "rules",
+        "action": "test_healed"
+      },
+      "steps": [
+        {
+          "step_id": "s1",
+          "intent": "Enter the front-desk email to sign in",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.977,
+          "duration_ms": 753,
+          "screenshot": "screenshots/cancel-appointment_01.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/login",
+            "url_after": "http://127.0.0.1:8010/#/login",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s2",
+          "intent": "Enter the password",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.977,
+          "duration_ms": 722,
+          "screenshot": "screenshots/cancel-appointment_02.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/login",
+            "url_after": "http://127.0.0.1:8010/#/login",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s3",
+          "intent": "Click the sign-in button",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.972,
+          "duration_ms": 794,
+          "screenshot": "screenshots/cancel-appointment_03.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/login",
+            "url_after": "http://127.0.0.1:8010/#/app/home",
+            "url_changed": true,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [
+              "Good morning, Front Desk"
+            ],
+            "new_alerts": [],
+            "network": [
+              {
+                "method": "POST",
+                "path": "/api/login",
+                "status": 200,
+                "resource_type": "fetch"
+              },
+              {
+                "method": "GET",
+                "path": "/api/appointments",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s4",
+          "intent": "Wait for the overview to load",
+          "status": "passed",
+          "tier": 0,
+          "score": null,
+          "duration_ms": 0,
+          "screenshot": null,
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/home",
+            "url_after": "http://127.0.0.1:8010/#/app/home",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s5",
+          "intent": "Navigate to the appointments page",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.979,
+          "duration_ms": 767,
+          "screenshot": "screenshots/cancel-appointment_04.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/home",
+            "url_after": "http://127.0.0.1:8010/#/app/appointments",
+            "url_changed": true,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [
+              "Appointments",
+              "Upcoming schedule"
+            ],
+            "new_alerts": [],
+            "network": [
+              {
+                "method": "GET",
+                "path": "/api/appointments",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s6",
+          "intent": "Wait for the appointment list to render",
+          "status": "passed",
+          "tier": 0,
+          "score": null,
+          "duration_ms": 0,
+          "screenshot": null,
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/appointments",
+            "url_after": "http://127.0.0.1:8010/#/app/appointments",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s7",
+          "intent": "Click Cancel on the first appointment in the list",
+          "status": "healed",
+          "tier": 1,
+          "score": 0.974,
+          "duration_ms": 794,
+          "screenshot": "screenshots/cancel-appointment_05.jpg",
+          "observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s7",
+              "detail": "button \"Cancel\" (in: Appointments) -> [e10] button \"Cancel\" (in: Appointments) via similarity (score 0.97, margin 0.05)",
+              "evidence": {
+                "candidates": [
+                  {
+                    "ref": "e10",
+                    "desc": "[e10] button \"Cancel\" (in: Appointments)",
+                    "score": 0.974,
+                    "breakdown": {
+                      "name": 1.0,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 1.0,
+                      "tag": 1.0,
+                      "type": 1.0,
+                      "neighbor_text": 1.0,
+                      "class": 0.33,
+                      "xpath": 1.0,
+                      "css": 0.98,
+                      "position": 1.0,
+                      "size": 1.0,
+                      "full_score": 0.97,
+                      "semantic_score": 1.0
+                    }
+                  },
+                  {
+                    "ref": "e19",
+                    "desc": "[e19] button \"Cancel\" (in: Appointments)",
+                    "score": 0.922,
+                    "breakdown": {
+                      "name": 1.0,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 1.0,
+                      "tag": 1.0,
+                      "type": 1.0,
+                      "neighbor_text": 0.7,
+                      "class": 0.33,
+                      "xpath": 0.99,
+                      "css": 0.97,
+                      "position": 0.57,
+                      "size": 1.0,
+                      "full_score": 0.92,
+                      "semantic_score": 0.95
+                    }
+                  },
+                  {
+                    "ref": "e13",
+                    "desc": "[e13] button \"Cancel\" (in: Appointments)",
+                    "score": 0.92,
+                    "breakdown": {
+                      "name": 1.0,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 1.0,
+                      "tag": 1.0,
+                      "type": 1.0,
+                      "neighbor_text": 0.54,
+                      "class": 0.33,
+                      "xpath": 0.99,
+                      "css": 0.97,
+                      "position": 0.86,
+                      "size": 1.0,
+                      "full_score": 0.92,
+                      "semantic_score": 0.93
+                    }
+                  },
+                  {
+                    "ref": "e16",
+                    "desc": "[e16] button \"Cancel\" (in: Appointments)",
+                    "score": 0.911,
+                    "breakdown": {
+                      "name": 1.0,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 1.0,
+                      "tag": 1.0,
+                      "type": 1.0,
+                      "neighbor_text": 0.52,
+                      "class": 0.33,
+                      "xpath": 0.99,
+                      "css": 0.97,
+                      "position": 0.71,
+                      "size": 1.0,
+                      "full_score": 0.91,
+                      "semantic_score": 0.93
+                    }
+                  },
+                  {
+                    "ref": "e28",
+                    "desc": "[e28] button \"Cancel\" (in: Appointments)",
+                    "score": 0.897,
+                    "breakdown": {
+                      "name": 1.0,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 1.0,
+                      "tag": 1.0,
+                      "type": 1.0,
+                      "neighbor_text": 0.66,
+                      "class": 0.33,
+                      "xpath": 0.99,
+                      "css": 0.97,
+                      "position": 0.14,
+                      "size": 1.0,
+                      "full_score": 0.9,
+                      "semantic_score": 0.95
+                    }
+                  }
+                ],
+                "reason": "multi-attribute match 0.97 (runner-up 0.92)"
+              },
+              "tier": 1,
+              "confidence": 0.974
+            }
+          ],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/appointments",
+            "url_after": "http://127.0.0.1:8010/#/app/appointments",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [
+              "Cancel this appointment?"
+            ],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s8",
+          "intent": "Wait for the confirmation dialog to appear",
+          "status": "passed",
+          "tier": 0,
+          "score": null,
+          "duration_ms": 0,
+          "screenshot": null,
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/appointments",
+            "url_after": "http://127.0.0.1:8010/#/app/appointments",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s9",
+          "intent": "Confirm the cancellation in the dialog",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.974,
+          "duration_ms": 790,
+          "screenshot": "screenshots/cancel-appointment_06.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/appointments",
+            "url_after": "http://127.0.0.1:8010/#/app/appointments",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [
+              "Appointment cancelled",
+              "Appointment cancelled"
+            ],
+            "network": [
+              {
+                "method": "DELETE",
+                "path": "/api/appointments/:id",
+                "status": 200,
+                "resource_type": "fetch"
+              },
+              {
+                "method": "GET",
+                "path": "/api/appointments",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s10",
+          "intent": "Wait for the row to be removed",
+          "status": "passed",
+          "tier": 0,
+          "score": null,
+          "duration_ms": 0,
+          "screenshot": null,
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/appointments",
+            "url_after": "http://127.0.0.1:8010/#/app/appointments",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        }
+      ],
+      "observations": [],
+      "duration_ms": 12349,
+      "llm_calls": [],
+      "updated_to_version": 3,
+      "bug_report": null,
+      "trace": null
+    },
+    {
+      "test_id": "doctor-list-loads",
+      "test_name": "Doctor directory loads asynchronously showing all eight doctors",
+      "test_version": 1,
+      "status": "passed",
+      "verdict": {
+        "category": "PASS",
+        "confidence": 1.0,
+        "rationale": "Replayed exactly; every step and oracle held.",
+        "evidence_refs": [],
+        "changelog_refs": [],
+        "decided_by": "rules",
+        "action": "none"
+      },
+      "steps": [
+        {
+          "step_id": "s1",
+          "intent": "Enter the front-desk email to sign in",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.977,
+          "duration_ms": 744,
+          "screenshot": "screenshots/doctor-list-loads_01.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/login",
+            "url_after": "http://127.0.0.1:8010/#/login",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s2",
+          "intent": "Enter the password",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.977,
+          "duration_ms": 707,
+          "screenshot": "screenshots/doctor-list-loads_02.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/login",
+            "url_after": "http://127.0.0.1:8010/#/login",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s3",
+          "intent": "Click the sign-in button",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.972,
+          "duration_ms": 727,
+          "screenshot": "screenshots/doctor-list-loads_03.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/login",
+            "url_after": "http://127.0.0.1:8010/#/app/home",
+            "url_changed": true,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [
+              "Good morning, Front Desk"
+            ],
+            "new_alerts": [],
+            "network": [
+              {
+                "method": "POST",
+                "path": "/api/login",
+                "status": 200,
+                "resource_type": "fetch"
+              },
+              {
+                "method": "GET",
+                "path": "/api/appointments",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s4",
+          "intent": "Wait for the overview to load",
+          "status": "passed",
+          "tier": 0,
+          "score": null,
+          "duration_ms": 0,
+          "screenshot": null,
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/home",
+            "url_after": "http://127.0.0.1:8010/#/app/home",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s5",
+          "intent": "Navigate to the doctor directory",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.979,
+          "duration_ms": 734,
+          "screenshot": "screenshots/doctor-list-loads_04.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/home",
+            "url_after": "http://127.0.0.1:8010/#/app/doctors",
+            "url_changed": true,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [
+              "Find the right specialist",
+              "Available doctors"
+            ],
+            "new_alerts": [
+              "Loading directory"
+            ],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s6",
+          "intent": "Wait briefly to observe the loading skeleton state",
+          "status": "passed",
+          "tier": 0,
+          "score": null,
+          "duration_ms": 0,
+          "screenshot": null,
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/doctors",
+            "url_after": "http://127.0.0.1:8010/#/app/doctors",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [
+              "Dr. Rohan Sen",
+              "Dr. Diya Shah",
+              "Dr. Zoya Khan",
+              "Dr. Aarav Mehta",
+              "Dr. Neel Joshi",
+              "Dr. Kabir Rao",
+              "Dr. Priya Nair",
+              "Dr. Meera Iyer"
+            ],
+            "new_alerts": [
+              "8 doctors available"
+            ],
+            "network": [
+              {
+                "method": "GET",
+                "path": "/api/doctors",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s7",
+          "intent": "Wait for the async loading of all eight doctor cards to complete",
+          "status": "passed",
+          "tier": 0,
+          "score": null,
+          "duration_ms": 0,
+          "screenshot": null,
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/doctors",
+            "url_after": "http://127.0.0.1:8010/#/app/doctors",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        }
+      ],
+      "observations": [],
+      "duration_ms": 10627,
+      "llm_calls": [],
+      "updated_to_version": null,
+      "bug_report": null,
+      "trace": null
+    },
+    {
+      "test_id": "invoice-total-correct",
+      "test_name": "Invoice total equals the sum of all line items",
+      "test_version": 1,
+      "status": "passed",
+      "verdict": {
+        "category": "PASS",
+        "confidence": 1.0,
+        "rationale": "Replayed exactly; every step and oracle held.",
+        "evidence_refs": [],
+        "changelog_refs": [],
+        "decided_by": "rules",
+        "action": "none"
+      },
+      "steps": [
+        {
+          "step_id": "s1",
+          "intent": "Enter the front-desk email to sign in",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.977,
+          "duration_ms": 757,
+          "screenshot": "screenshots/invoice-total-correct_01.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/login",
+            "url_after": "http://127.0.0.1:8010/#/login",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s2",
+          "intent": "Enter the password",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.977,
+          "duration_ms": 723,
+          "screenshot": "screenshots/invoice-total-correct_02.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/login",
+            "url_after": "http://127.0.0.1:8010/#/login",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s3",
+          "intent": "Click the sign-in button",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.972,
+          "duration_ms": 754,
+          "screenshot": "screenshots/invoice-total-correct_03.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/login",
+            "url_after": "http://127.0.0.1:8010/#/app/home",
+            "url_changed": true,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [
+              "Good morning, Front Desk"
+            ],
+            "new_alerts": [],
+            "network": [
+              {
+                "method": "POST",
+                "path": "/api/login",
+                "status": 200,
+                "resource_type": "fetch"
+              },
+              {
+                "method": "GET",
+                "path": "/api/appointments",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s4",
+          "intent": "Wait for the overview to load",
+          "status": "passed",
+          "tier": 0,
+          "score": null,
+          "duration_ms": 0,
+          "screenshot": null,
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/home",
+            "url_after": "http://127.0.0.1:8010/#/app/home",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s5",
+          "intent": "Navigate to the billing page",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.979,
+          "duration_ms": 736,
+          "screenshot": "screenshots/invoice-total-correct_04.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/home",
+            "url_after": "http://127.0.0.1:8010/#/app/billing",
+            "url_changed": true,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [
+              "Billing",
+              "Invoice MQ-2408-1180"
+            ],
+            "new_alerts": [],
+            "network": [
+              {
+                "method": "GET",
+                "path": "/api/billing",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s6",
+          "intent": "Wait for the billing page to load",
+          "status": "passed",
+          "tier": 0,
+          "score": null,
+          "duration_ms": 0,
+          "screenshot": null,
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/billing",
+            "url_after": "http://127.0.0.1:8010/#/app/billing",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        }
+      ],
+      "observations": [],
+      "duration_ms": 7188,
+      "llm_calls": [],
+      "updated_to_version": null,
+      "bug_report": null,
+      "trace": null
+    },
+    {
+      "test_id": "toggle-sms-reminders",
+      "test_name": "Toggle SMS reminders preference and verify it is saved",
+      "test_version": 1,
+      "status": "passed",
+      "verdict": {
+        "category": "PASS",
+        "confidence": 1.0,
+        "rationale": "Replayed exactly; every step and oracle held.",
+        "evidence_refs": [],
+        "changelog_refs": [],
+        "decided_by": "rules",
+        "action": "none"
+      },
+      "steps": [
+        {
+          "step_id": "s1",
+          "intent": "Enter the front-desk email to sign in",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.977,
+          "duration_ms": 746,
+          "screenshot": "screenshots/toggle-sms-reminders_01.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/login",
+            "url_after": "http://127.0.0.1:8010/#/login",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s2",
+          "intent": "Enter the password",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.977,
+          "duration_ms": 722,
+          "screenshot": "screenshots/toggle-sms-reminders_02.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/login",
+            "url_after": "http://127.0.0.1:8010/#/login",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s3",
+          "intent": "Click the sign-in button",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.972,
+          "duration_ms": 783,
+          "screenshot": "screenshots/toggle-sms-reminders_03.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/login",
+            "url_after": "http://127.0.0.1:8010/#/app/home",
+            "url_changed": true,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [
+              "Good morning, Front Desk"
+            ],
+            "new_alerts": [],
+            "network": [
+              {
+                "method": "POST",
+                "path": "/api/login",
+                "status": 200,
+                "resource_type": "fetch"
+              },
+              {
+                "method": "GET",
+                "path": "/api/appointments",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s4",
+          "intent": "Wait for the overview to load",
+          "status": "passed",
+          "tier": 0,
+          "score": null,
+          "duration_ms": 0,
+          "screenshot": null,
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/home",
+            "url_after": "http://127.0.0.1:8010/#/app/home",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s5",
+          "intent": "Navigate to the settings page",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.979,
+          "duration_ms": 751,
+          "screenshot": "screenshots/toggle-sms-reminders_04.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/home",
+            "url_after": "http://127.0.0.1:8010/#/app/settings",
+            "url_changed": true,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [
+              "Settings",
+              "Clinic name",
+              "SMS reminders"
+            ],
+            "new_alerts": [],
+            "network": [
+              {
+                "method": "GET",
+                "path": "/api/settings",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s6",
+          "intent": "Wait for the settings page to load",
+          "status": "passed",
+          "tier": 0,
+          "score": null,
+          "duration_ms": 0,
+          "screenshot": null,
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/settings",
+            "url_after": "http://127.0.0.1:8010/#/app/settings",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s7",
+          "intent": "Click the SMS reminders toggle switch (custom mq-toggle element, aria-label 'SMS reminders')",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.999,
+          "duration_ms": 766,
+          "screenshot": "screenshots/toggle-sms-reminders_05.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/settings",
+            "url_after": "http://127.0.0.1:8010/#/app/settings",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [
+              "SMS reminder preference saved",
+              "SMS reminder preference saved"
+            ],
+            "network": [
+              {
+                "method": "PUT",
+                "path": "/api/settings",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s8",
+          "intent": "Wait for the API call to complete",
+          "status": "passed",
+          "tier": 0,
+          "score": null,
+          "duration_ms": 0,
+          "screenshot": null,
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/settings",
+            "url_after": "http://127.0.0.1:8010/#/app/settings",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        }
+      ],
+      "observations": [],
+      "duration_ms": 9638,
+      "llm_calls": [],
+      "updated_to_version": null,
+      "bug_report": null,
+      "trace": null
+    },
+    {
+      "test_id": "age-validation",
+      "test_name": "Age 150 is rejected by the booking form",
+      "test_version": 1,
+      "status": "passed",
+      "verdict": {
+        "category": "COSMETIC_DRIFT",
+        "confidence": 0.83,
+        "rationale": "1 element(s) moved/renamed and were re-identified (tiers [1]); all expectations and business oracles still hold.",
+        "evidence_refs": [],
+        "changelog_refs": [],
+        "decided_by": "rules",
+        "action": "test_healed"
+      },
+      "steps": [
+        {
+          "step_id": "s1",
+          "intent": "Enter the front-desk email to sign in",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.977,
+          "duration_ms": 745,
+          "screenshot": "screenshots/age-validation_01.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/login",
+            "url_after": "http://127.0.0.1:8010/#/login",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s2",
+          "intent": "Enter the password",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.977,
+          "duration_ms": 783,
+          "screenshot": "screenshots/age-validation_02.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/login",
+            "url_after": "http://127.0.0.1:8010/#/login",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s3",
+          "intent": "Click the sign-in button",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.972,
+          "duration_ms": 738,
+          "screenshot": "screenshots/age-validation_03.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/login",
+            "url_after": "http://127.0.0.1:8010/#/app/home",
+            "url_changed": true,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [
+              "Good morning, Front Desk"
+            ],
+            "new_alerts": [],
+            "network": [
+              {
+                "method": "POST",
+                "path": "/api/login",
+                "status": 200,
+                "resource_type": "fetch"
+              },
+              {
+                "method": "GET",
+                "path": "/api/appointments",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s4",
+          "intent": "Wait for the overview to load",
+          "status": "passed",
+          "tier": 0,
+          "score": null,
+          "duration_ms": 0,
+          "screenshot": null,
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/home",
+            "url_after": "http://127.0.0.1:8010/#/app/home",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s5",
+          "intent": "Open the appointment desk from clinic navigation",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.979,
+          "duration_ms": 742,
+          "screenshot": "screenshots/age-validation_04.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/home",
+            "url_after": "http://127.0.0.1:8010/#/app/book",
+            "url_changed": true,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [
+              "Book an appointment",
+              "Patient details"
+            ],
+            "new_alerts": [],
+            "network": [
+              {
+                "method": "GET",
+                "path": "/api/doctors",
+                "status": 200,
+                "resource_type": "fetch"
+              },
+              {
+                "method": "GET",
+                "path": "/api/slots",
+                "status": 200,
+                "resource_type": "fetch"
+              }
+            ],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s6",
+          "intent": "Wait for the booking wizard to load the doctor and open slots",
+          "status": "passed",
+          "tier": 0,
+          "score": null,
+          "duration_ms": 0,
+          "screenshot": null,
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/book",
+            "url_after": "http://127.0.0.1:8010/#/app/book",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s7",
+          "intent": "Enter a patient name",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.9,
+          "duration_ms": 741,
+          "screenshot": "screenshots/age-validation_05.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/book",
+            "url_after": "http://127.0.0.1:8010/#/app/book",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s8",
+          "intent": "Enter the invalid age 150",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.9,
+          "duration_ms": 735,
+          "screenshot": "screenshots/age-validation_06.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/book",
+            "url_after": "http://127.0.0.1:8010/#/app/book",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s9",
+          "intent": "Enter a valid phone number",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.9,
+          "duration_ms": 719,
+          "screenshot": "screenshots/age-validation_07.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/book",
+            "url_after": "http://127.0.0.1:8010/#/app/book",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s10",
+          "intent": "Open the visit type selector",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.98,
+          "duration_ms": 783,
+          "screenshot": "screenshots/age-validation_08.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/book",
+            "url_after": "http://127.0.0.1:8010/#/app/book",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s11",
+          "intent": "Select Consultation as the visit type",
+          "status": "passed",
+          "tier": 0,
+          "score": 0.974,
+          "duration_ms": 773,
+          "screenshot": "screenshots/age-validation_09.jpg",
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/book",
+            "url_after": "http://127.0.0.1:8010/#/app/book",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": true
+          }
+        },
+        {
+          "step_id": "s12",
+          "intent": "Click Next to attempt advancing past the patient details step",
+          "status": "healed",
+          "tier": 1,
+          "score": 0.835,
+          "duration_ms": 776,
+          "screenshot": "screenshots/age-validation_10.jpg",
+          "observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s12",
+              "detail": "button \"Next\" (in: Patient details) -> [e16] button \"Proceed\" (in: Patient details) via similarity (score 0.83, margin 0.32)",
+              "evidence": {
+                "candidates": [
+                  {
+                    "ref": "e16",
+                    "desc": "[e16] button \"Proceed\" (in: Patient details)",
+                    "score": 0.835,
+                    "breakdown": {
+                      "name": 0.85,
+                      "id": 0.0,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 0.85,
+                      "tag": 1.0,
+                      "type": 1.0,
+                      "neighbor_text": 1.0,
+                      "class": 0.33,
+                      "xpath": 1.0,
+                      "css": 0.88,
+                      "position": 0.98,
+                      "size": 0.75,
+                      "full_score": 0.82,
+                      "semantic_score": 0.93
+                    }
+                  },
+                  {
+                    "ref": "e14",
+                    "desc": "[e14] button \"Consultation\" (in: Patient details)",
+                    "score": 0.513,
+                    "breakdown": {
+                      "name": 0.25,
+                      "id": 0.0,
+                      "role": 1.0,
+                      "context": 1.0,
+                      "text": 0.25,
+                      "tag": 1.0,
+                      "type": 1.0,
+                      "neighbor_text": 0.41,
+                      "class": 0.0,
+                      "xpath": 0.89,
+                      "css": 0.18,
+                      "position": 0.09,
+                      "size": 0.06,
+                      "full_score": 0.51,
+                      "semantic_score": 0.55
+                    }
+                  },
+                  {
+                    "ref": "e7",
+                    "desc": "[e7] button \"Sign out\" (in: header)",
+                    "score": 0.426,
+                    "breakdown": {
+                      "name": 0.17,
+                      "id": 0.0,
+                      "role": 1.0,
+                      "context": 0.29,
+                      "text": 0.17,
+                      "tag": 1.0,
+                      "type": 1.0,
+                      "neighbor_text": 0.31,
+                      "class": 0.0,
+                      "xpath": 0.79,
+                      "css": 0.38,
+                      "position": 0.0,
+                      "size": 0.87,
+                      "full_score": 0.43,
+                      "semantic_score": 0.36
+                    }
+                  },
+                  {
+                    "ref": "e4",
+                    "desc": "[e4] link \"Appointments\" (in: Main navigation)",
+                    "score": 0.368,
+                    "breakdown": {
+                      "name": 0.38,
+                      "id": 0.0,
+                      "role": 0.5,
+                      "context": 0.47,
+                      "text": 0.38,
+                      "tag": 0.0,
+                      "type": 0.0,
+                      "neighbor_text": 0.34,
+                      "class": 0.0,
+                      "xpath": 0.69,
+                      "css": 0.21,
+                      "position": 0.0,
+                      "size": 0.55,
+                      "full_score": 0.28,
+                      "semantic_score": 0.41
+                    }
+                  },
+                  {
+                    "ref": "e6",
+                    "desc": "[e6] link \"Settings\" (in: Main navigation)",
+                    "score": 0.349,
+                    "breakdown": {
+                      "name": 0.33,
+                      "id": 0.0,
+                      "role": 0.5,
+                      "context": 0.47,
+                      "text": 0.33,
+                      "tag": 0.0,
+                      "type": 0.0,
+                      "neighbor_text": 0.34,
+                      "class": 0.0,
+                      "xpath": 0.69,
+                      "css": 0.21,
+                      "position": 0.0,
+                      "size": 0.81,
+                      "full_score": 0.27,
+                      "semantic_score": 0.39
+                    }
+                  }
+                ],
+                "reason": "multi-attribute match 0.83 (runner-up 0.51)"
+              },
+              "tier": 1,
+              "confidence": 0.835
+            }
+          ],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/book",
+            "url_after": "http://127.0.0.1:8010/#/app/book",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [
+              "Age must be between 0 and 120"
+            ],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        },
+        {
+          "step_id": "s13",
+          "intent": "Wait for the age validation response",
+          "status": "passed",
+          "tier": 0,
+          "score": null,
+          "duration_ms": 0,
+          "screenshot": null,
+          "observations": [],
+          "effects": {
+            "url_before": "http://127.0.0.1:8010/#/app/book",
+            "url_after": "http://127.0.0.1:8010/#/app/book",
+            "url_changed": false,
+            "title_after": "MediQueue · Clinic operations",
+            "new_headings": [],
+            "new_alerts": [],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        }
+      ],
+      "observations": [],
+      "duration_ms": 13369,
+      "llm_calls": [],
+      "updated_to_version": 2,
+      "bug_report": null,
+      "trace": null
+    }
+  ],
+  "totals": {
+    "tests": 6,
+    "passed": 6,
+    "failed": 0,
+    "healed_steps": 2,
+    "replayed_steps": 46,
+    "llm_calls": 0,
+    "llm_calls_cached": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": 0.0,
+    "list_cost_usd": 0.0,
+    "naive_tokens_estimate": 18921,
+    "verdicts": {
+      "PASS": 4,
+      "COSMETIC_DRIFT": 2
+    },
+    "tiers": {
+      "0": 46,
+      "1": 2
+    },
+    "duration_ms": 58509
+  },
+  "learned": {
+    "stability": {
+      "id": 0.6,
+      "name_attr": 0.8,
+      "testid": 0.8,
+      "class": 0.4,
+      "text": 0.6,
+      "name": 0.6,
+      "label": 0.8,
+      "xpath": 0.8,
+      "css": 0.4,
+      "role": 0.8,
+      "tag": 0.8,
+      "context": 0.8,
+      "placeholder": 0.8,
+      "href": 0.8
+    }
+  }
+}

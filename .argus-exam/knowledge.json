@@ -1,0 +1,91 @@
+{
+  "stability": {
+    "id": {
+      "same": 3,
+      "changed": 1
+    },
+    "href": {
+      "same": 4,
+      "changed": 0
+    },
+    "name": {
+      "same": 3,
+      "changed": 1
+    },
+    "type": {
+      "same": 4,
+      "changed": 0
+    },
+    "role": {
+      "same": 4,
+      "changed": 0
+    },
+    "class": {
+      "same": 2,
+      "changed": 2
+    },
+    "xpath": {
+      "same": 4,
+      "changed": 0
+    },
+    "css": {
+      "same": 1,
+      "changed": 3
+    },
+    "label": {
+      "same": 4,
+      "changed": 0
+    },
+    "text": {
+      "same": 3,
+      "changed": 1
+    },
+    "testid": {
+      "same": 4,
+      "changed": 0
+    },
+    "tag": {
+      "same": 4,
+      "changed": 0
+    },
+    "placeholder": {
+      "same": 4,
+      "changed": 0
+    },
+    "name_attr": {
+      "same": 4,
+      "changed": 0
+    },
+    "neighbor_text": {
+      "same": 3,
+      "changed": 1
+    },
+    "alt": {
+      "same": 4,
+      "changed": 0
+    },
+    "context": {
+      "same": 4,
+      "changed": 0
+    },
+    "title": {
+      "same": 4,
+      "changed": 0
+    },
+    "position": {
+      "same": 2,
+      "changed": 2
+    },
+    "size": {
+      "same": 3,
+      "changed": 1
+    }
+  },
+  "decisions": {},
+  "interrupts": {
+    "a smoother booking journey": {
+      "control": "Got it",
+      "at": "2026-09-25T19:28:55+00:00"
+    }
+  }
+}

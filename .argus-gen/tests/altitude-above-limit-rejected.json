@@ -1,0 +1,474 @@
+{
+  "id": "altitude-above-limit-rejected",
+  "name": "ALTITUDE ABOVE LIMIT REJECTED",
+  "goal": "Verify that altitude >120 m is rejected per regulation",
+  "tags": [
+    "negative",
+    "negative"
+  ],
+  "start_url": "/missions/new",
+  "steps": [
+    {
+      "id": "s1",
+      "intent": "enter mission name",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Mission name *",
+        "text": "",
+        "attrs": {
+          "type": "text",
+          "id": "field-mission-name",
+          "name": "name",
+          "required": "",
+          "placeholder": "e.g. Morning patrol run"
+        },
+        "label": "Mission name *",
+        "context": "Mission details",
+        "neighbor_text": "Mission name * | Pilot in command * Required for DGCA compliance | Site * Select",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[2]/div[1]/input[1]",
+        "css": "#field-mission-name",
+        "bbox": {
+          "x": 273.0,
+          "y": 284.0,
+          "w": 954.0,
+          "h": 37.0
+        }
+      },
+      "value": "${unique}",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s2",
+      "intent": "select mission type",
+      "action": "select",
+      "target": {
+        "tag": "select",
+        "role": "combobox",
+        "name": "Mission type *",
+        "text": "Select type… Survey Inspection Delivery Patrol",
+        "attrs": {
+          "id": "field-mission-type",
+          "name": "type",
+          "required": ""
+        },
+        "label": "Mission type *",
+        "context": "Mission details",
+        "neighbor_text": "Mission type * | Mission name * | Pilot in command * Required for DGCA complianc",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[2]/div[4]/select[1]",
+        "css": "#field-mission-type",
+        "bbox": {
+          "x": 273.0,
+          "y": 574.0,
+          "w": 954.0,
+          "h": 37.0
+        }
+      },
+      "value": "Survey",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s3",
+      "intent": "select site",
+      "action": "select",
+      "target": {
+        "tag": "select",
+        "role": "combobox",
+        "name": "Site *",
+        "text": "Select site… Pune Depot Mumbai Port Bengaluru Solar Farm",
+        "attrs": {
+          "id": "field-mission-site",
+          "name": "site",
+          "required": ""
+        },
+        "label": "Site *",
+        "context": "Mission details",
+        "neighbor_text": "Site * | Mission name * | Pilot in command * Required for DGCA compliance",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[2]/div[3]/select[1]",
+        "css": "#field-mission-site",
+        "bbox": {
+          "x": 273.0,
+          "y": 485.0,
+          "w": 954.0,
+          "h": 37.0
+        }
+      },
+      "value": "Pune Depot",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s4",
+      "intent": "next to drone selection",
+      "action": "click",
+      "target": {
+        "tag": "a",
+        "role": "button",
+        "name": "Continue",
+        "text": "Continue",
+        "attrs": {
+          "href": "#",
+          "class": "btn btn-primary",
+          "aria-label": "Continue"
+        },
+        "label": "",
+        "context": "Mission details",
+        "neighbor_text": "Mission details | Mission name * Pilot in command * Required for DGCA compliance",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[3]/a[1]",
+        "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(3) > a",
+        "bbox": {
+          "x": 273.0,
+          "y": 662.0,
+          "w": 92.0,
+          "h": 36.0
+        }
+      },
+      "value": "",
+      "expect": {
+        "url_changed": true,
+        "url_pattern": "/missions/new",
+        "network": [
+          {
+            "method": "POST",
+            "path": "/api/missions/validate",
+            "status": 422,
+            "resource_type": "fetch"
+          }
+        ],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s5-h1",
+      "intent": "Fill new required field 'Pilot in command'",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Pilot in command *",
+        "text": "",
+        "attrs": {
+          "type": "text",
+          "id": "field-pilot",
+          "name": "pilot",
+          "required": "",
+          "placeholder": "e.g. Capt. Sharma"
+        },
+        "label": "Pilot in command *",
+        "context": "Mission details",
+        "neighbor_text": "Pilot in command * | Required for DGCA compliance | Pilot in command is required",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[2]/div[2]/input[1]",
+        "css": "#field-pilot",
+        "bbox": {
+          "x": 273.0,
+          "y": 436.0,
+          "w": 954.0,
+          "h": 37.0
+        }
+      },
+      "value": "Argus test",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s5-h0",
+      "intent": "Continue with 'Continue'",
+      "action": "click",
+      "target": {
+        "tag": "a",
+        "role": "button",
+        "name": "Continue",
+        "text": "Continue",
+        "attrs": {
+          "href": "#",
+          "class": "btn btn-primary",
+          "aria-label": "Continue"
+        },
+        "label": "",
+        "context": "Mission details",
+        "neighbor_text": "Mission details | Pilot in command is required (DGCA) | Mission name * Pilot in ",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[3]/a[1]",
+        "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(3) > a",
+        "bbox": {
+          "x": 273.0,
+          "y": 743.0,
+          "w": 92.0,
+          "h": 36.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": true,
+        "url_pattern": "/missions/new",
+        "network": [
+          {
+            "method": "POST",
+            "path": "/api/missions/validate",
+            "status": 200,
+            "resource_type": "fetch"
+          }
+        ],
+        "headings_any": [
+          "Select drone"
+        ],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s5",
+      "intent": "select Falcon-1",
+      "action": "click",
+      "target": {
+        "tag": "input",
+        "role": "radio",
+        "name": "Falcon-1",
+        "text": "",
+        "attrs": {
+          "type": "radio",
+          "id": "drone-d1",
+          "name": "drone_id",
+          "value": "d1",
+          "aria-label": "Falcon-1"
+        },
+        "label": "Falcon-1 DJI M350 92%",
+        "context": "Select drone",
+        "neighbor_text": "Falcon-1 | DJI M350 | 92%",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/fieldset[1]/div[1]/label[1]/input[1]",
+        "css": "#drone-d1",
+        "bbox": {
+          "x": 476.0,
+          "y": 303.0,
+          "w": 13.0,
+          "h": 13.0
+        }
+      },
+      "value": "",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s6",
+      "intent": "next to flight parameters",
+      "action": "click",
+      "target": {
+        "tag": "a",
+        "role": "button",
+        "name": "Continue",
+        "text": "Continue",
+        "attrs": {
+          "href": "#",
+          "class": "btn btn-primary"
+        },
+        "label": "",
+        "context": "Select drone",
+        "neighbor_text": "Back | Select drone | Select an available drone for this mission Falcon-1 DJI M3",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/div[2]/a[2]",
+        "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(2) > div:nth-of-type(2) > a:nth-of-type(2)",
+        "bbox": {
+          "x": 349.0,
+          "y": 612.0,
+          "w": 92.0,
+          "h": 36.0
+        }
+      },
+      "value": "",
+      "expect": {
+        "url_changed": true,
+        "url_pattern": "/missions/new",
+        "network": [
+          {
+            "method": "POST",
+            "path": "/api/missions/validate",
+            "status": 200,
+            "resource_type": "fetch"
+          }
+        ],
+        "headings_any": [
+          "Flight parameters"
+        ],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s7",
+      "intent": "enter altitude above limit",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "spinbutton",
+        "name": "Altitude (m) *",
+        "text": "",
+        "attrs": {
+          "type": "number",
+          "id": "field-altitude",
+          "name": "altitude",
+          "min": "10",
+          "max": "120",
+          "value": "60",
+          "required": ""
+        },
+        "label": "Altitude (m) *",
+        "context": "Flight parameters",
+        "neighbor_text": "Altitude (m) * | 10–120 m AGL (DGCA limit) | Speed (m/s) * 1–15 m/s",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[3]/div[2]/div[1]/input[1]",
+        "css": "#field-altitude",
+        "bbox": {
+          "x": 273.0,
+          "y": 284.0,
+          "w": 954.0,
+          "h": 37.0
+        }
+      },
+      "value": "150",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s8",
+      "intent": "attempt to proceed",
+      "action": "click",
+      "target": {
+        "tag": "a",
+        "role": "button",
+        "name": "Continue",
+        "text": "Continue",
+        "attrs": {
+          "href": "#",
+          "class": "btn btn-primary"
+        },
+        "label": "",
+        "context": "Flight parameters",
+        "neighbor_text": "Back | Flight parameters | Altitude (m) * 10–120 m AGL (DGCA limit) Speed (m/s) ",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[3]/div[3]/a[2]",
+        "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(3) > div:nth-of-type(3) > a:nth-of-type(2)",
+        "bbox": {
+          "x": 349.0,
+          "y": 550.0,
+          "w": 92.0,
+          "h": 36.0
+        }
+      },
+      "value": "",
+      "expect": {
+        "url_changed": true,
+        "url_pattern": "/missions/new",
+        "network": [
+          {
+            "method": "POST",
+            "path": "/api/missions/validate",
+            "status": 422,
+            "resource_type": "fetch"
+          }
+        ],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    }
+  ],
+  "oracles": [
+    {
+      "kind": "text_visible",
+      "params": {
+        "text": "at most 120 m"
+      },
+      "description": "Error message about altitude limit",
+      "rule_ref": "R1"
+    }
+  ],
+  "version": 2,
+  "status": "active",
+  "origin": "generated",
+  "history": [
+    {
+      "version": 1,
+      "at": "2026-09-24T19:34:54+00:00",
+      "kind": "created",
+      "summary": "Generated 8-step test with 1 oracles",
+      "diff": "",
+      "verdict_ref": null
+    },
+    {
+      "version": 2,
+      "at": "2026-09-24T19:36:05+00:00",
+      "kind": "updated",
+      "summary": "Adapted to intended change: 2 flow change(s), each naming fields/screens that the release notes describe; business oracles still hold.",
+      "diff": "--- before\n+++ after\n@@ -4 +4,3 @@\n-click button \"Next\" (in: Mission details) :: next to drone selection\n+click button \"Continue\" (in: Mission details) :: next to drone selection\n+fill textbox \"Pilot in command *\" (in: Mission details) :: Fill new required field 'Pilot in command'\n+click button \"Continue\" (in: Mission details) :: Continue with 'Continue'\n@@ -6 +8 @@\n-click button \"Next\" (in: Select drone) :: next to flight parameters\n+click button \"Continue\" (in: Select drone) :: next to flight parameters\n@@ -8 +10 @@\n-click button \"Next\" (in: Flight parameters) :: attempt to proceed\n+click button \"Continue\" (in: Flight parameters) :: attempt to proceed",
+      "verdict_ref": "20260925-010536-9f97"
+    }
+  ],
+  "requires_login": true
+}

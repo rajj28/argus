@@ -1,0 +1,349 @@
+{
+  "id": "wizard_launch",
+  "name": "Launch a mission via the wizard",
+  "goal": "A valid mission launch creates a mission and lands on its detail page",
+  "tags": [
+    "critical"
+  ],
+  "start_url": "/missions/new",
+  "steps": [
+    {
+      "id": "s1",
+      "intent": "fill 'Mission name *'",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Mission name *",
+        "text": "",
+        "attrs": {
+          "type": "text",
+          "id": "field-mission-name",
+          "name": "name",
+          "required": "",
+          "placeholder": "e.g. Morning patrol run"
+        },
+        "label": "Mission name *",
+        "context": "Mission details",
+        "neighbor_text": "Mission name * | Mission type * Select type… Survey Inspection Delivery Patrol |",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[2]/div[1]/input[1]",
+        "css": "#field-mission-name",
+        "bbox": {
+          "x": 53.0,
+          "y": 340.0,
+          "w": 1174.0,
+          "h": 37.0
+        }
+      },
+      "value": "Argus ${unique}",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    },
+    {
+      "id": "s2",
+      "intent": "select 'Survey' in 'Mission type *'",
+      "action": "select",
+      "target": {
+        "tag": "select",
+        "role": "combobox",
+        "name": "Mission type *",
+        "text": "Select type… Survey Inspection Delivery Patrol",
+        "attrs": {
+          "id": "field-mission-type",
+          "name": "type",
+          "required": ""
+        },
+        "label": "Mission type *",
+        "context": "Mission details",
+        "neighbor_text": "Mission type * | Mission name * | Site * Select site… Pune Depot Mumbai Port Ben",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[2]/div[2]/select[1]",
+        "css": "#field-mission-type",
+        "bbox": {
+          "x": 53.0,
+          "y": 429.0,
+          "w": 1174.0,
+          "h": 37.0
+        }
+      },
+      "value": "Survey",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    },
+    {
+      "id": "s3",
+      "intent": "select 'Pune Depot' in 'Site *'",
+      "action": "select",
+      "target": {
+        "tag": "select",
+        "role": "combobox",
+        "name": "Site *",
+        "text": "Select site… Pune Depot Mumbai Port Bengaluru Solar Farm",
+        "attrs": {
+          "id": "field-mission-site",
+          "name": "site",
+          "required": ""
+        },
+        "label": "Site *",
+        "context": "Mission details",
+        "neighbor_text": "Site * | Mission name * | Mission type * Select type… Survey Inspection Delivery",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[2]/div[3]/select[1]",
+        "css": "#field-mission-site",
+        "bbox": {
+          "x": 53.0,
+          "y": 517.0,
+          "w": 1174.0,
+          "h": 37.0
+        }
+      },
+      "value": "Pune Depot",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    },
+    {
+      "id": "s4",
+      "intent": "click 'Next'",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Next",
+        "text": "Next",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-primary"
+        },
+        "label": "",
+        "context": "Mission details",
+        "neighbor_text": "Mission details | Mission name * Mission type * Select type… Survey Inspection D",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[3]/button[1]",
+        "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(3) > button",
+        "bbox": {
+          "x": 53.0,
+          "y": 605.0,
+          "w": 64.0,
+          "h": 36.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    },
+    {
+      "id": "s5",
+      "intent": "select 'Falcon-1'",
+      "action": "click",
+      "target": {
+        "tag": "input",
+        "role": "radio",
+        "name": "Falcon-1",
+        "text": "",
+        "attrs": {
+          "type": "radio",
+          "id": "drone-d1",
+          "name": "drone_id",
+          "value": "d1",
+          "aria-label": "Falcon-1"
+        },
+        "label": "Falcon-1 DJI M350 92%",
+        "context": "Select drone",
+        "neighbor_text": "Falcon-1 | DJI M350 | 92%",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/fieldset[1]/div[1]/label[1]/input[1]",
+        "css": "#drone-d1",
+        "bbox": {
+          "x": 251.0,
+          "y": 359.0,
+          "w": 13.0,
+          "h": 13.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    },
+    {
+      "id": "s6",
+      "intent": "click 'Next'",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Next",
+        "text": "Next",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-primary"
+        },
+        "label": "",
+        "context": "Select drone",
+        "neighbor_text": "Back | Select drone | Select an available drone for this mission Falcon-1 DJI M3",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/div[2]/button[2]",
+        "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(2) > div:nth-of-type(2) > button:nth-of-type(2)",
+        "bbox": {
+          "x": 129.0,
+          "y": 668.0,
+          "w": 64.0,
+          "h": 36.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    },
+    {
+      "id": "s7",
+      "intent": "click 'Next'",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Next",
+        "text": "Next",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-primary"
+        },
+        "label": "",
+        "context": "Flight parameters",
+        "neighbor_text": "Back | Flight parameters | Altitude (m) * 10–120 m AGL (DGCA limit) Speed (m/s) ",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[3]/div[3]/button[2]",
+        "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(3) > div:nth-of-type(3) > button:nth-of-type(2)",
+        "bbox": {
+          "x": 129.0,
+          "y": 606.0,
+          "w": 64.0,
+          "h": 36.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    },
+    {
+      "id": "s8",
+      "intent": "click 'Launch mission'",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Launch mission",
+        "text": "Launch mission",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-primary"
+        },
+        "label": "",
+        "context": "Review & launch",
+        "neighbor_text": "Back | Review & launch | Review your mission parameters before launching.",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[4]/div[1]/button[2]",
+        "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(4) > div > button:nth-of-type(2)",
+        "bbox": {
+          "x": 129.0,
+          "y": 590.0,
+          "w": 131.0,
+          "h": 36.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "Plan a mission",
+      "save_as": null
+    }
+  ],
+  "oracles": [
+    {
+      "kind": "network_called",
+      "params": {
+        "method": "POST",
+        "path": "/api/missions",
+        "status_class": "2xx"
+      },
+      "description": "Mission is created via the API",
+      "rule_ref": "R4"
+    },
+    {
+      "kind": "url_matches",
+      "params": {
+        "pattern": "missions/[a-z0-9]+"
+      },
+      "description": "Redirected to the new mission page",
+      "rule_ref": null
+    }
+  ],
+  "version": 1,
+  "status": "active",
+  "origin": "generated",
+  "history": [
+    {
+      "version": 1,
+      "at": "2026-09-24T10:51:12+00:00",
+      "kind": "created",
+      "summary": "Deterministic test from exploration",
+      "diff": "",
+      "verdict_ref": null
+    }
+  ],
+  "requires_login": true
+}

@@ -1,0 +1,257 @@
+{
+  "summary": {
+    "mutation_trials": 3,
+    "heal_success_rate": 1.0,
+    "false_alarm_rate": 0.0,
+    "bug_trials": 5,
+    "bug_recall": 1.0,
+    "avg_llm_calls_per_run": 0.0,
+    "steps_healed_total": 106
+  },
+  "trials": [
+    {
+      "kind": "mutation",
+      "seed": 101,
+      "bug": "",
+      "verdicts": {
+        "login": "COSMETIC_DRIFT",
+        "create-mission": "COSMETIC_DRIFT",
+        "drone-detail": "COSMETIC_DRIFT",
+        "flight-logs": "PASS",
+        "logout": "COSMETIC_DRIFT",
+        "save-settings": "COSMETIC_DRIFT",
+        "altitude-limit": "COSMETIC_DRIFT",
+        "low-battery-drone": "COSMETIC_DRIFT"
+      },
+      "passed": 8,
+      "tests": 8,
+      "false_alarms": [],
+      "caught": null,
+      "bug_tests": [],
+      "healed": 15,
+      "replayed": 17,
+      "tiers": {
+        "1": 15,
+        "0": 17
+      },
+      "llm_calls": 0,
+      "duration_s": 31.3,
+      "run_id": "20260924-175056-5de6"
+    },
+    {
+      "kind": "mutation",
+      "seed": 102,
+      "bug": "",
+      "verdicts": {
+        "login": "COSMETIC_DRIFT",
+        "create-mission": "COSMETIC_DRIFT",
+        "drone-detail": "COSMETIC_DRIFT",
+        "flight-logs": "PASS",
+        "logout": "COSMETIC_DRIFT",
+        "save-settings": "COSMETIC_DRIFT",
+        "altitude-limit": "COSMETIC_DRIFT",
+        "low-battery-drone": "PASS"
+      },
+      "passed": 8,
+      "tests": 8,
+      "false_alarms": [],
+      "caught": null,
+      "bug_tests": [],
+      "healed": 10,
+      "replayed": 22,
+      "tiers": {
+        "1": 10,
+        "0": 22
+      },
+      "llm_calls": 0,
+      "duration_s": 31.5,
+      "run_id": "20260924-175130-39b7"
+    },
+    {
+      "kind": "mutation",
+      "seed": 103,
+      "bug": "",
+      "verdicts": {
+        "login": "COSMETIC_DRIFT",
+        "create-mission": "COSMETIC_DRIFT",
+        "drone-detail": "COSMETIC_DRIFT",
+        "flight-logs": "PASS",
+        "logout": "COSMETIC_DRIFT",
+        "save-settings": "COSMETIC_DRIFT",
+        "altitude-limit": "COSMETIC_DRIFT",
+        "low-battery-drone": "COSMETIC_DRIFT"
+      },
+      "passed": 8,
+      "tests": 8,
+      "false_alarms": [],
+      "caught": null,
+      "bug_tests": [],
+      "healed": 15,
+      "replayed": 17,
+      "tiers": {
+        "1": 15,
+        "0": 17
+      },
+      "llm_calls": 0,
+      "duration_s": 31.3,
+      "run_id": "20260924-175204-14a3"
+    },
+    {
+      "kind": "bug",
+      "seed": 9522,
+      "bug": "altitude_limit",
+      "verdicts": {
+        "login": "COSMETIC_DRIFT",
+        "create-mission": "COSMETIC_DRIFT",
+        "drone-detail": "COSMETIC_DRIFT",
+        "flight-logs": "PASS",
+        "logout": "COSMETIC_DRIFT",
+        "save-settings": "COSMETIC_DRIFT",
+        "altitude-limit": "BUG",
+        "low-battery-drone": "COSMETIC_DRIFT"
+      },
+      "passed": 7,
+      "tests": 8,
+      "false_alarms": [],
+      "caught": true,
+      "bug_tests": [
+        "altitude-limit"
+      ],
+      "healed": 14,
+      "replayed": 18,
+      "tiers": {
+        "1": 14,
+        "0": 18
+      },
+      "llm_calls": 0,
+      "duration_s": 34.2,
+      "run_id": "20260924-175237-9d07"
+    },
+    {
+      "kind": "bug",
+      "seed": 3191,
+      "bug": "low_battery_assignable",
+      "verdicts": {
+        "login": "COSMETIC_DRIFT",
+        "create-mission": "COSMETIC_DRIFT",
+        "drone-detail": "COSMETIC_DRIFT",
+        "flight-logs": "PASS",
+        "logout": "COSMETIC_DRIFT",
+        "save-settings": "COSMETIC_DRIFT",
+        "altitude-limit": "COSMETIC_DRIFT",
+        "low-battery-drone": "BUG"
+      },
+      "passed": 7,
+      "tests": 8,
+      "false_alarms": [],
+      "caught": true,
+      "bug_tests": [
+        "low-battery-drone"
+      ],
+      "healed": 15,
+      "replayed": 17,
+      "tiers": {
+        "1": 15,
+        "0": 17
+      },
+      "llm_calls": 0,
+      "duration_s": 31.6,
+      "run_id": "20260924-175314-1d30"
+    },
+    {
+      "kind": "bug",
+      "seed": 8835,
+      "bug": "missing_mission",
+      "verdicts": {
+        "login": "COSMETIC_DRIFT",
+        "create-mission": "BUG",
+        "drone-detail": "COSMETIC_DRIFT",
+        "flight-logs": "PASS",
+        "logout": "COSMETIC_DRIFT",
+        "save-settings": "COSMETIC_DRIFT",
+        "altitude-limit": "COSMETIC_DRIFT",
+        "low-battery-drone": "COSMETIC_DRIFT"
+      },
+      "passed": 7,
+      "tests": 8,
+      "false_alarms": [],
+      "caught": true,
+      "bug_tests": [
+        "create-mission"
+      ],
+      "healed": 15,
+      "replayed": 17,
+      "tiers": {
+        "1": 15,
+        "0": 17
+      },
+      "llm_calls": 0,
+      "duration_s": 34.1,
+      "run_id": "20260924-175348-8c5e"
+    },
+    {
+      "kind": "bug",
+      "seed": 5877,
+      "bug": "settings_500",
+      "verdicts": {
+        "login": "COSMETIC_DRIFT",
+        "create-mission": "COSMETIC_DRIFT",
+        "drone-detail": "COSMETIC_DRIFT",
+        "flight-logs": "PASS",
+        "logout": "COSMETIC_DRIFT",
+        "save-settings": "BUG",
+        "altitude-limit": "COSMETIC_DRIFT",
+        "low-battery-drone": "COSMETIC_DRIFT"
+      },
+      "passed": 7,
+      "tests": 8,
+      "false_alarms": [],
+      "caught": true,
+      "bug_tests": [
+        "save-settings"
+      ],
+      "healed": 15,
+      "replayed": 17,
+      "tiers": {
+        "1": 15,
+        "0": 17
+      },
+      "llm_calls": 0,
+      "duration_s": 34.0,
+      "run_id": "20260924-175424-d85b"
+    },
+    {
+      "kind": "bug",
+      "seed": 7654,
+      "bug": "logout_crash",
+      "verdicts": {
+        "login": "COSMETIC_DRIFT",
+        "create-mission": "COSMETIC_DRIFT",
+        "drone-detail": "COSMETIC_DRIFT",
+        "flight-logs": "PASS",
+        "logout": "BUG",
+        "save-settings": "COSMETIC_DRIFT",
+        "altitude-limit": "PASS",
+        "low-battery-drone": "PASS"
+      },
+      "passed": 7,
+      "tests": 8,
+      "false_alarms": [],
+      "caught": true,
+      "bug_tests": [
+        "logout"
+      ],
+      "healed": 7,
+      "replayed": 25,
+      "tiers": {
+        "1": 7,
+        "0": 25
+      },
+      "llm_calls": 0,
+      "duration_s": 31.5,
+      "run_id": "20260924-175500-bb43"
+    }
+  ],
+  "measured_at": "2026-09-24T17:55:00+00:00",
+  "source": ".argus/gauntlet.json"
+}

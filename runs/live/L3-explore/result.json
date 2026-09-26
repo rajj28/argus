@@ -1,0 +1,46 @@
+{
+  "id": "L3-explore",
+  "title": "Autonomous exploration: the JEV mesh designs its own test plan",
+  "level": "L3",
+  "category": "Autonomous exploration (self-authored)",
+  "description": "A tireless tester should not need a hand-written script; it should look at the product and decide what is worth testing.",
+  "approach": "With no script, Argus inventories the live cockpit's affordances, asks the JEV mesh to design four ground-truth test scenarios for what it found, then executes a grounded one: every drone the simulator reports must appear in the cockpit, with none invented.",
+  "verdict": "PASS",
+  "findings": [],
+  "steps": [
+    "[  3.7s] Argus opens the cockpit with no script and inventories its affordances",
+    "[ 11.7s] Argus asks the JEV mesh to design ground-truth test scenarios for what it found",
+    "[ 29.0s] Argus executes a grounded check from its own plan: does the cockpit's fleet match reality?"
+  ],
+  "samples": [
+    {
+      "self_authored": [],
+      "t": 28.2
+    },
+    {
+      "ui_fleet": [
+        "drone-1",
+        "drone-2",
+        "drone-3",
+        "drone-4"
+      ],
+      "truth_fleet": [
+        "drone-1",
+        "drone-2",
+        "drone-3",
+        "drone-4"
+      ],
+      "fleet_matches": true,
+      "t": 29.1
+    }
+  ],
+  "videos": [
+    "video.mp4"
+  ],
+  "shots": [
+    "shots/1-self-authored-plan.png",
+    "shots/2-grounded-execution.png"
+  ],
+  "started": "2026-09-26 17:20:14",
+  "duration_s": 32.6
+}

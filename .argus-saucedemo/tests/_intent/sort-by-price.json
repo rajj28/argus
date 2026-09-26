@@ -1,0 +1,235 @@
+{
+  "id": "sort-by-price",
+  "name": "Sort the catalogue by price low to high",
+  "goal": "The shopper sorts the catalogue by Price (low to high)",
+  "tags": [
+    "catalogue"
+  ],
+  "start_url": "/",
+  "steps": [
+    {
+      "id": "s1",
+      "intent": "Open the Products catalogue",
+      "action": "goto",
+      "target": null,
+      "value": "/inventory.html",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s2",
+      "intent": "Open the sort options",
+      "action": "click",
+      "target": {
+        "tag": "select",
+        "role": "combobox",
+        "name": "Sort products",
+        "text": "Name (A to Z) Name (Z to A) Price (low to high) Price (high to low)",
+        "attrs": {
+          "class": "product_sort_container",
+          "aria-label": "Sort products",
+          "data-test": "product-sort-container",
+          "value": "az"
+        },
+        "label": "",
+        "context": "header",
+        "neighbor_text": "Name (A to Z)",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/header[1]/div[2]/div[1]/span[1]/select[1]",
+        "css": "#header_container > div:nth-of-type(2) > div > span > select",
+        "bbox": {
+          "x": 1036.0,
+          "y": 70.0,
+          "w": 223.0,
+          "h": 30.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s3",
+      "intent": "Move the sort selection to the Price (low to high) option",
+      "action": "press",
+      "target": {
+        "tag": "select",
+        "role": "combobox",
+        "name": "Sort products",
+        "text": "Name (A to Z) Name (Z to A) Price (low to high) Price (high to low)",
+        "attrs": {
+          "class": "product_sort_container",
+          "aria-label": "Sort products",
+          "data-test": "product-sort-container",
+          "value": "az"
+        },
+        "label": "",
+        "context": "header",
+        "neighbor_text": "Name (A to Z)",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/header[1]/div[2]/div[1]/span[1]/select[1]",
+        "css": "#header_container > div:nth-of-type(2) > div > span > select",
+        "bbox": {
+          "x": 1036.0,
+          "y": 70.0,
+          "w": 223.0,
+          "h": 30.0
+        }
+      },
+      "value": "ArrowDown",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s4",
+      "intent": "Move the sort selection to the Price (low to high) option",
+      "action": "press",
+      "target": {
+        "tag": "select",
+        "role": "combobox",
+        "name": "Sort products",
+        "text": "Name (A to Z) Name (Z to A) Price (low to high) Price (high to low)",
+        "attrs": {
+          "class": "product_sort_container",
+          "aria-label": "Sort products",
+          "data-test": "product-sort-container",
+          "value": "az"
+        },
+        "label": "",
+        "context": "header",
+        "neighbor_text": "Name (A to Z)",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/header[1]/div[2]/div[1]/span[1]/select[1]",
+        "css": "#header_container > div:nth-of-type(2) > div > span > select",
+        "bbox": {
+          "x": 1036.0,
+          "y": 70.0,
+          "w": 223.0,
+          "h": 30.0
+        }
+      },
+      "value": "ArrowDown",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s5",
+      "intent": "Confirm the Price (low to high) sort",
+      "action": "press",
+      "target": {
+        "tag": "select",
+        "role": "combobox",
+        "name": "Sort products",
+        "text": "Name (A to Z) Name (Z to A) Price (low to high) Price (high to low)",
+        "attrs": {
+          "class": "product_sort_container",
+          "aria-label": "Sort products",
+          "data-test": "product-sort-container",
+          "value": "az"
+        },
+        "label": "",
+        "context": "header",
+        "neighbor_text": "Name (A to Z)",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/header[1]/div[2]/div[1]/span[1]/select[1]",
+        "css": "#header_container > div:nth-of-type(2) > div > span > select",
+        "bbox": {
+          "x": 1036.0,
+          "y": 70.0,
+          "w": 223.0,
+          "h": 30.0
+        }
+      },
+      "value": "Enter",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    }
+  ],
+  "oracles": [
+    {
+      "kind": "text_visible",
+      "params": {
+        "text": "Sauce Labs Onesie"
+      },
+      "description": "The catalogue list is populated",
+      "rule_ref": "R2"
+    },
+    {
+      "kind": "value_equals",
+      "params": {
+        "value": "lohi",
+        "fingerprint": {
+          "tag": "select",
+          "role": "combobox",
+          "name": "Sort products",
+          "text": "Name (A to Z) Name (Z to A) Price (low to high) Price (high to low)",
+          "attrs": {
+            "class": "product_sort_container",
+            "aria-label": "Sort products",
+            "data-test": "product-sort-container",
+            "value": "lohi"
+          },
+          "label": "",
+          "context": "header",
+          "neighbor_text": "Price (low to high)",
+          "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/header[1]/div[2]/div[1]/span[1]/select[1]",
+          "css": "#header_container > div:nth-of-type(2) > div > span > select",
+          "bbox": {
+            "x": 1036.0,
+            "y": 70.0,
+            "w": 223.0,
+            "h": 30.0
+          }
+        }
+      },
+      "description": "The sort dropdown actually selected Price (low to high)",
+      "rule_ref": "R2"
+    }
+  ],
+  "version": 1,
+  "status": "active",
+  "origin": "manual",
+  "history": [],
+  "requires_login": true
+}

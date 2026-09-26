@@ -1,85 +1,119 @@
 {
   "stability": {
     "tag": {
-      "same": 0,
-      "changed": 8
+      "same": 1,
+      "changed": 12
     },
-    "name": {
-      "same": 2,
-      "changed": 6
-    },
-    "placeholder": {
-      "same": 8,
-      "changed": 0
-    },
-    "label": {
-      "same": 8,
-      "changed": 0
+    "context": {
+      "same": 11,
+      "changed": 2
     },
     "neighbor_text": {
-      "same": 5,
-      "changed": 3
-    },
-    "type": {
-      "same": 0,
-      "changed": 8
-    },
-    "name_attr": {
       "same": 8,
-      "changed": 0
+      "changed": 5
     },
-    "href": {
-      "same": 0,
-      "changed": 8
-    },
-    "class": {
-      "same": 7,
+    "id": {
+      "same": 12,
       "changed": 1
     },
     "testid": {
-      "same": 8,
+      "same": 13,
       "changed": 0
-    },
-    "css": {
-      "same": 0,
-      "changed": 8
-    },
-    "id": {
-      "same": 7,
-      "changed": 1
     },
     "role": {
-      "same": 8,
+      "same": 13,
       "changed": 0
     },
-    "context": {
-      "same": 7,
-      "changed": 1
+    "name_attr": {
+      "same": 13,
+      "changed": 0
+    },
+    "title": {
+      "same": 13,
+      "changed": 0
     },
     "text": {
       "same": 1,
-      "changed": 7
+      "changed": 12
     },
-    "title": {
-      "same": 8,
+    "label": {
+      "same": 13,
       "changed": 0
     },
-    "alt": {
-      "same": 8,
-      "changed": 0
+    "href": {
+      "same": 1,
+      "changed": 12
+    },
+    "name": {
+      "same": 2,
+      "changed": 11
+    },
+    "css": {
+      "same": 0,
+      "changed": 13
+    },
+    "class": {
+      "same": 12,
+      "changed": 1
     },
     "xpath": {
       "same": 0,
-      "changed": 8
+      "changed": 13
+    },
+    "placeholder": {
+      "same": 13,
+      "changed": 0
+    },
+    "alt": {
+      "same": 13,
+      "changed": 0
+    },
+    "type": {
+      "same": 1,
+      "changed": 12
     },
     "position": {
       "same": 1,
-      "changed": 7
+      "changed": 12
     },
     "size": {
       "same": 3,
-      "changed": 5
+      "changed": 10
     }
   },
-  "decisions": {}
+  "decisions": {
+    "6aee154fd247ebfd": {
+      "category": "INTENDED_CHANGE",
+      "confidence": 0.85,
+      "rationale": "2 flow change(s), each naming fields/screens that the release notes describe; business oracles still hold.",
+      "evidence_refs": [],
+      "changelog_refs": [
+        "New required field \"Pilot in command\" on Mission details step (DGCA compliance requirement)."
+      ],
+      "decided_by": "rules",
+      "action": "test_updated"
+    },
+    "7fc76532b1806d32": {
+      "category": "INTENDED_CHANGE",
+      "confidence": 0.85,
+      "rationale": "2 flow change(s), each naming fields/screens that the release notes describe; business oracles still hold.",
+      "evidence_refs": [],
+      "changelog_refs": [
+        "New required field \"Pilot in command\" on Mission details step (DGCA compliance requirement)."
+      ],
+      "decided_by": "rules",
+      "action": "test_updated"
+    },
+    "aec363cdcf289953": {
+      "category": "INTENDED_CHANGE",
+      "confidence": 0.85,
+      "rationale": "2 flow change(s), each naming fields/screens that the release notes describe; business oracles still hold.",
+      "evidence_refs": [],
+      "changelog_refs": [
+        "New required field \"Pilot in command\" on Mission details step (DGCA compliance requirement)."
+      ],
+      "decided_by": "rules",
+      "action": "test_updated"
+    }
+  }
 }

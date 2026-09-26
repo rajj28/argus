@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Argus Live — Evaluation Document</title><style>body{background:#fff;color:#1c2430;font:15px/1.6 -apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:0}main{max-width:920px;margin:0 auto;padding:32px 24px 64px}h1{font-size:26px;border-bottom:2px solid #e6e9ef;padding-bottom:10px}h2{font-size:20px;margin-top:36px}h3{font-size:17px;margin-bottom:4px}code{background:#f2f4f8;padding:1px 5px;border-radius:4px;font-size:13px}pre{background:#f7f8fa;border:1px solid #e6e9ef;border-radius:8px;padding:14px;overflow-x:auto;font-size:13px;line-height:1.45}.meta{color:#5a6675;font-size:13.5px}.verdict{color:#fff;border-radius:5px;padding:1px 8px;font-weight:700;font-size:12px}.scenario{border:1px solid #e6e9ef;border-radius:10px;padding:14px 18px;margin:18px 0}.finding{border-left:3px solid #c0392b;padding-left:12px;margin:8px 0}table.samples{border-collapse:collapse;font-size:13px;margin:8px 0}table.samples th,table.samples td{border:1px solid #dfe4ea;padding:4px 9px;text-align:left}table.samples th{background:#f2f4f8}.shots img{max-width:210px;border:1px solid #dfe4ea;border-radius:6px;margin:3px}video{width:100%;max-width:860px;border-radius:8px;border:1px solid #dfe4ea;margin:6px 0}.todo{color:#9a6b00;font-size:13px}p.result-bug b{color:#c0392b}p.result-pass b{color:#1e8e5a}p.result-error b{color:#b8860b}</style></head><body><main>
+<h1>Argus Live — Evaluation Document</h1>
+<p>Argus Live ran 10 scenario(s) against the FlytBase cockpit starter kit with real Chrome browsers, independent ground truth from the simulator and control API, and narrated recordings as evidence. It found 5 genuine issue(s) across 5 scenario(s) (verdict BUG) and confirmed 5 scenario(s) PASS with no false positives, covering level(s) L1, L2, L3 and categories: Functional / Video; Map / Visual; Network and recovery; Performance / Long-running; Real-time and multi-user; Responsive UI; Responsive UI / Visual; Security and permissions; Telemetry / freshness; Video and media. Every issue is reported once, with its grouped symptoms, timed samples, screenshots and a real-time video in which the HUD shows the UI&#x27;s claim next to the ground truth.</p>
+<h2>System design</h2>
+<p>Argus Live tests the cockpit the way an operator would and decides with independent evidence. It is built on Playwright driving real Chrome with Chrome DevTools Protocol access, and reuses Argus&#x27;s self-healing semantic engine: the UI is read by meaning, so small markup changes do not break the probes.</p>
+<p><b>Operators.</b> Real Chrome browsers at desktop, tablet and phone viewports, with touch and mobile emulation; a scenario can open several independent users, each in its own browser context, so multi-user behaviour is genuine.</p>
+<p><b>Scenario engine.</b> Each scenario declares a starting state (simulator reset, drones airborne) and steps, then changes conditions through the starter kit&#x27;s control API: socket-drop / socket-delay, sim-offline, video faults (freeze, black, wrong source), socket-refuse / kick, device emulation and multi-user sessions.</p>
+<p><b>Probes.</b> Probes read only what the user can see: the UI by meaning (labels and visible text, anchored to data-testids); the video element (decoded-frame counters and a perceptual frame hash drawn to a canvas); the Cesium map (entities, label text and screen positions found by walking the React fiber to the live viewer); and layout geometry (bounding boxes, elementFromPoint occlusion, scrollability).</p>
+<p><b>Ground truth.</b> Simulator state, backend health and the active fault list come from the control API plus a socket feed that subscribes exactly like the cockpit does — never from the UI under test.</p>
+<p><b>Oracles.</b> Compare the two sides: UI versus truth within tolerance, freshness honesty (stale or delayed data must say so), reachability, occlusion, map-label overlap, multi-user propagation lag, and recovery after outages.</p>
+<p><b>Triage.</b> Verdicts are deterministic, and symptoms that share a root cause are grouped into one issue. Precision guards prevent false positives — for example a control is scrolled into view before it may be called unreachable.</p>
+<p><b>Evidence.</b> Every run records each operator in real time with a HUD overlay narrating the step, the UI&#x27;s claim, the ground truth and the verdict, alongside screenshots, timed samples and a machine-readable result.json. The recording is the report.</p>
+<pre>Operators  (real Chrome: desktop / tablet / phone, independent users)
+    |
+    v
+Scenario engine  --(control API)--&gt;  changing conditions
+  starting state, steps              socket-drop/delay, sim-offline,
+    |                                video faults, socket-refuse/kick
+    v
+Probes  --&gt;  UI claims: text by meaning + test ids, video frame
+    |        counters &amp; frame hashes, Cesium entities via React
+    |        fiber, layout / occlusion geometry
+    v
+Oracles  &lt;--  Ground truth (simulator state, backend health, active faults)
+    |         UI vs truth, freshness honesty, reachability, occlusion,
+    |         overlap, propagation lag, recovery
+    v
+Triage  (deterministic verdicts, root-cause grouping, precision guards)
+    |
+    v
+Evidence  (HUD-narrated recordings, screenshots, samples, result.json
+           --&gt; EVALUATION.md + runs/live/index.html)</pre>
+<h2>Scenarios</h2>
+<section class="scenario" id="S1-freshness">
+<h3>1. Stale, delayed or offline drone data shown as live <code>S1-freshness</code></h3>
+<p class="meta">Level <b>L2</b> · Telemetry / freshness · <span class="verdict" style="background:#c0392b">BUG</span> · 68.1 s</p>
+<p><b>Description.</b> An operator relies on the cockpit to know whether a drone&#x27;s position and status are current. When the telemetry feed is lost, delayed or its source goes offline, the cockpit should say so instead of presenting old data as live.</p>
+<p><b>Approach.</b> Argus flies Drone 1 via the control API, proves the cockpit updates live, then injects three conditions (socket-drop 100%, socket-delay 6 s, sim-offline). Every 2 s it compares the on-screen distance, status and link badge with the simulator&#x27;s true position and the backend&#x27;s health, and looks for any stale/delayed wording. Symptoms with the same root cause are grouped into one issue.</p>
+<p><b>Starting state.</b> simulator reset, Drone 1 takes off, operator opens the cockpit</p>
+<p><b>Steps.</b></p><ol><li>Condition 1/3 - feed lost: 100% of telemetry dropped</li><li>Condition 2/3 - feed delayed by 6 s</li><li>Condition 3/3 - data source offline: simulator disconnected</li></ol>
+<p class="result-bug"><b>Result: BUG</b></p>
+<div class="finding"><p><b>Stale, delayed or offline drone data is presented as live</b> — severity <b>High</b></p>
+<p>The cockpit has no per-device freshness state. The only signal is the socket badge, which describes the browser-to-backend socket, not whether drone data is current. Argus grouped 3 symptoms under this one root cause.</p>
+<p>Grouped symptoms (3, one root cause):</p><ul><li>Feed lost: distance frozen at 75 m for 10 s while the drone actually moved +105 m; badge still &#x27;socket connected&#x27;, no stale warning</li><li>Feed delayed: positions shown ~58 m behind reality (≈6 s old) with no &#x27;delayed&#x27; indication</li><li>Source offline: backend reports the simulator disconnected, but Drone 1 is still shown &#x27;in_flight&#x27; under a &#x27;socket connected&#x27; badge</li></ul>
+</div>
+<p><b>Evidence.</b> Key samples (UI claim vs ground truth):</p>
+<table class="samples"><tr><th>condition</th><th>ui_distance</th><th>truth_distance</th><th>socket_badge</th><th>ui_status</th><th>simulator</th><th>t</th></tr>
+<tr><td>socket-drop</td><td>75</td><td>95</td><td>socket connected</td><td>in_flight</td><td>connected</td><td>20.5</td></tr>
+<tr><td>socket-delay</td><td>245</td><td>265</td><td>socket connected</td><td>in_flight</td><td>connected</td><td>37.4</td></tr>
+<tr><td>sim-offline</td><td>355</td><td>435</td><td>socket connected</td><td>in_flight</td><td>disconnected</td><td>54.4</td></tr>
+<tr><td>sim-offline</td><td>375</td><td>540</td><td>socket connected</td><td>in_flight</td><td>disconnected</td><td>64.7</td></tr>
+</table>
+<p class="shots"><a href="S1-freshness/shots/0-baseline-live.png"><img src="S1-freshness/shots/0-baseline-live.png" alt="shots/0-baseline-live.png" loading="lazy"></a> <a href="S1-freshness/shots/1-socket-drop.png"><img src="S1-freshness/shots/1-socket-drop.png" alt="shots/1-socket-drop.png" loading="lazy"></a> <a href="S1-freshness/shots/2-socket-delay.png"><img src="S1-freshness/shots/2-socket-delay.png" alt="shots/2-socket-delay.png" loading="lazy"></a> <a href="S1-freshness/shots/3-sim-offline.png"><img src="S1-freshness/shots/3-sim-offline.png" alt="shots/3-sim-offline.png" loading="lazy"></a></p>
+<p><b>Video.</b> <code>S1-freshness/video.mp4</code> <span class="todo">(TODO: upload and link)</span></p>
+<video controls preload="metadata" src="S1-freshness/video.mp4"></video>
+</section>
+<section class="scenario" id="S2-frozen-video">
+<h3>2. Frozen drone video still labelled &#x27;live&#x27; <code>S2-frozen-video</code></h3>
+<p class="meta">Level <b>L2</b> · Video and media · <span class="verdict" style="background:#c0392b">BUG</span> · 26.8 s</p>
+<p><b>Description.</b> When a drone&#x27;s video stream freezes, the operator must not be told the picture is live.</p>
+<p><b>Approach.</b> Argus measures decoded frames per second on the real &lt;video&gt; element and the tile&#x27;s label every second after injecting video-freeze for Drone 1, and records how long a frozen picture keeps the &#x27;live&#x27; label.</p>
+<p><b>Starting state.</b> operator opens the cockpit; Drone 1&#x27;s FPV video is playing</p>
+<p><b>Steps.</b></p><ol><li>Condition: Drone 1&#x27;s stream freezes (video-freeze, 15 s)</li></ol>
+<p class="result-bug"><b>Result: BUG</b></p>
+<div class="finding"><p><b>Frozen drone video keeps the &#x27;live&#x27; label for 5 s</b> — severity <b>High</b></p>
+<p>While the stream was frozen (0 frames decoded), the tile still said &#x27;live&#x27;; it only admitted the problem after 6 s.</p>
+<p>Grouped symptoms (1, one root cause):</p><ul><li>5 consecutive seconds with 0-1 frames/s under a &#x27;live&#x27; label</li></ul>
+</div>
+<p><b>Evidence.</b> Key samples (UI claim vs ground truth):</p>
+<table class="samples"><tr><th>second</th><th>frames_per_s</th><th>video_label</th><th>t</th></tr>
+<tr><td>1</td><td>1</td><td>live</td><td>10.1</td></tr>
+<tr><td>6</td><td>1</td><td>reconnecting</td><td>15.7</td></tr>
+<tr><td>14</td><td>0</td><td>reconnecting</td><td>23.9</td></tr>
+</table>
+<p class="shots"><a href="S2-frozen-video/shots/1-frozen-but-live.png"><img src="S2-frozen-video/shots/1-frozen-but-live.png" alt="shots/1-frozen-but-live.png" loading="lazy"></a></p>
+<p><b>Video.</b> <code>S2-frozen-video/video.mp4</code> <span class="todo">(TODO: upload and link)</span></p>
+<video controls preload="metadata" src="S2-frozen-video/video.mp4"></video>
+</section>
+<section class="scenario" id="S4-phone-map-toggle">
+<h3>3. Video tile covers the map&#x27;s 2D/3D switch on a phone <code>S4-phone-map-toggle</code></h3>
+<p class="meta">Level <b>L1</b> · Responsive UI / Visual · <span class="verdict" style="background:#c0392b">BUG</span> · 11.4 s</p>
+<p><b>Description.</b> An operator on a phone switches the map to 2D.</p>
+<p><b>Approach.</b> Argus finds the 2D button, checks what element is actually on top at its centre, taps it with a real touch and verifies whether the map mode changed.</p>
+<p><b>Starting state.</b> operator on a phone wants to switch the map to 2D</p>
+<p><b>Steps.</b></p><ol><li>Tap the 2D button where it is drawn</li></ol>
+<p class="result-bug"><b>Result: BUG</b></p>
+<div class="finding"><p><b>On a phone the video tile covers the 2D/3D map switch, so tapping 2D does nothing</b> — severity <b>Medium</b></p>
+<p>The 2D button&#x27;s centre is covered by video-player; a real tap on it did not change the map mode.</p>
+<p>Grouped symptoms (1, one root cause):</p><ul><li>2D button rect [151, 802, 44, 29] covered by video-player</li></ul>
+</div>
+<p class="shots"><a href="S4-phone-map-toggle/shots/1-toggle-covered.png"><img src="S4-phone-map-toggle/shots/1-toggle-covered.png" alt="shots/1-toggle-covered.png" loading="lazy"></a></p>
+<p><b>Video.</b> <code>S4-phone-map-toggle/video.mp4</code> <span class="todo">(TODO: upload and link)</span></p>
+<video controls preload="metadata" src="S4-phone-map-toggle/video.mp4"></video>
+</section>
+<section class="scenario" id="S5-map-labels">
+<h3>4. Drone and dock labels overlap on the map <code>S5-map-labels</code></h3>
+<p class="meta">Level <b>L1</b> · Map / Visual · <span class="verdict" style="background:#c0392b">BUG</span> · 14.2 s</p>
+<p><b>Description.</b> The operator reads each drone&#x27;s status from its map label.</p>
+<p><b>Approach.</b> Argus reads the map&#x27;s real label entities from the running Cesium viewer (text, screen position, font) and measures overlap between label boxes.</p>
+<p><b>Starting state.</b> operator scans the map to read each drone&#x27;s status</p>
+<p class="result-bug"><b>Result: BUG</b></p>
+<div class="finding"><p><b>Drone and dock labels are drawn on top of each other on the map</b> — severity <b>Medium</b></p>
+<p>Labels for a drone and its dock (same position) and the altitude labels overlap, so the drone&#x27;s status text is unreadable at the default map view.</p>
+<p>Grouped symptoms (6, one root cause):</p><ul><li>&#x27;Dock 1&#x27; overlaps &#x27;Drone 1 standby&#x27; (75% of the smaller label)</li><li>&#x27;560 m ASL&#x27; overlaps &#x27;0 m&#x27; (100% of the smaller label)</li><li>&#x27;Dock 2&#x27; overlaps &#x27;Drone 2 standby&#x27; (75% of the smaller label)</li><li>&#x27;560 m ASL&#x27; overlaps &#x27;0 m&#x27; (100% of the smaller label)</li><li>&#x27;Dock 3&#x27; overlaps &#x27;Drone 3 standby&#x27; (75% of the smaller label)</li><li>&#x27;560 m ASL&#x27; overlaps &#x27;0 m&#x27; (100% of the smaller label)</li></ul>
+</div>
+<p class="shots"><a href="S5-map-labels/shots/1-map-labels.png"><img src="S5-map-labels/shots/1-map-labels.png" alt="shots/1-map-labels.png" loading="lazy"></a></p>
+<p><b>Video.</b> <code>S5-map-labels/video.mp4</code> <span class="todo">(TODO: upload and link)</span></p>
+<video controls preload="metadata" src="S5-map-labels/video.mp4"></video>
+</section>
+<section class="scenario" id="S9-unauth-control">
+<h3>5. Anyone can command drones without signing in <code>S9-unauth-control</code></h3>
+<p class="meta">Level <b>L1</b> · Security and permissions · <span class="verdict" style="background:#c0392b">BUG</span> · 14.0 s</p>
+<p><b>Description.</b> Only authorised incident staff should be able to fly or land drones.</p>
+<p><b>Approach.</b> Argus acts as a stranger with a fresh browser (no session): follows the cockpit&#x27;s own Control panel link and presses Take off, then sends the same command from a page on a different origin. The simulator confirms whether each drone really took off.</p>
+<p><b>Starting state.</b> a stranger with no account or session opens the cockpit URL</p>
+<p><b>Steps.</b></p><ol><li>They follow the cockpit&#x27;s own &#x27;Control panel&#x27; link</li><li>...and press &#x27;Take off&#x27; on Drone 3</li><li>Second check: read the control API&#x27;s CORS policy from its response headers (no command sent)</li></ol>
+<p class="result-bug"><b>Result: BUG</b></p>
+<div class="finding"><p><b>Flight commands need no sign-in and the control API trusts any origin</b> — severity <b>Critical</b></p>
+<p>Take off / land require no authentication or authorization, and the API&#x27;s CORS policy is open, so access is not restricted to trusted operators. (The starter kit disables auth for the hackathon; for a real incident product this is a critical gap that the tester flags.)</p>
+<p>Grouped symptoms (2, one root cause):</p><ul><li>A visitor with no sign-in opened the control panel from the cockpit link and took off Drone 3</li><li>The control API replies with Access-Control-Allow-Origin: * and requires no auth token, so any origin is trusted to send flight commands</li></ul>
+</div>
+<p><b>Evidence.</b> Key samples (UI claim vs ground truth):</p>
+<table class="samples"><tr><th>stranger_took_off_drone3</th><th>control_api_cors</th><th>t</th></tr>
+<tr><td>True</td><td>{&quot;ok&quot;:true,&quot;status&quot;:200,&quot;access_control_allow_origin&quot;:&quot;*&quot;}</td><td>10.5</td></tr>
+</table>
+<p class="shots"><a href="S9-unauth-control/shots/1-stranger-took-off-drone-3.png"><img src="S9-unauth-control/shots/1-stranger-took-off-drone-3.png" alt="shots/1-stranger-took-off-drone-3.png" loading="lazy"></a> <a href="S9-unauth-control/shots/2-cors-policy.png"><img src="S9-unauth-control/shots/2-cors-policy.png" alt="shots/2-cors-policy.png" loading="lazy"></a></p>
+<p><b>Video.</b> <code>S9-unauth-control/video.mp4</code> <span class="todo">(TODO: upload and link)</span></p>
+<video controls preload="metadata" src="S9-unauth-control/video.mp4"></video>
+</section>
+<section class="scenario" id="S10-load-long-run">
+<h3>6. Responsiveness with 16 flying drones over about 10 simulated minutes <code>S10-load-long-run</code></h3>
+<p class="meta">Level <b>L3</b> · Performance / Long-running · <span class="verdict" style="background:#1e8e5a">PASS</span> · 66.3 s</p>
+<p><b>Description.</b> The cockpit must stay usable when many drones fly and data keeps streaming for a long time.</p>
+<p><b>Approach.</b> Argus measures frames per second, long tasks, click-to-paint latency and JS heap at rest, then adds 12 drones, flies all 16 at 5x simulator speed and samples the same metrics four times.</p>
+<p><b>Starting state.</b> reset to 4 drones on their docks; measure the cockpit at rest</p>
+<p><b>Steps.</b></p><ol><li>Condition: 12 more drones join, all fly, simulator runs 5x faster (~10 simulated minutes)</li></ol>
+<p class="result-pass"><b>Result: PASS</b> — verified: The cockpit must stay usable when many drones fly and data keeps streaming for a long time. Every probe matched ground truth; no finding was raised.</p>
+<p><b>Evidence.</b> Key samples (UI claim vs ground truth):</p>
+<table class="samples"><tr><th>phase</th><th>fps</th><th>long_task_ms</th><th>long_tasks</th><th>click_to_paint_ms</th><th>heap_mb</th><th>rows</th><th>t</th></tr>
+<tr><td>at rest</td><td>60.2</td><td>0</td><td>0</td><td>36.4</td><td>60.4</td><td>4</td><td>13</td></tr>
+<tr><td>load 1</td><td>29.8</td><td>0</td><td>0</td><td>36.9</td><td>102</td><td>16</td><td>29.4</td></tr>
+<tr><td>load 2</td><td>34.2</td><td>0</td><td>0</td><td>33.3</td><td>151.6</td><td>16</td><td>45.5</td></tr>
+<tr><td>load 3</td><td>30.5</td><td>0</td><td>0</td><td>27.1</td><td>82.5</td><td>16</td><td>61.6</td></tr>
+</table>
+<p class="shots"><a href="S10-load-long-run/shots/1-under-load.png"><img src="S10-load-long-run/shots/1-under-load.png" alt="shots/1-under-load.png" loading="lazy"></a></p>
+<p><b>Video.</b> <code>S10-load-long-run/video.mp4</code> <span class="todo">(TODO: upload and link)</span></p>
+<video controls preload="metadata" src="S10-load-long-run/video.mp4"></video>
+</section>
+<section class="scenario" id="S3-phone-telemetry">
+<h3>7. Battery and altitude unreachable on a phone <code>S3-phone-telemetry</code></h3>
+<p class="meta">Level <b>L1</b> · Responsive UI · <span class="verdict" style="background:#1e8e5a">PASS</span> · 10.6 s</p>
+<p><b>Description.</b> A field operator on a phone needs the selected drone&#x27;s battery and altitude.</p>
+<p><b>Approach.</b> Argus opens the cockpit at 390×844 with touch, locates every telemetry field by its meaning, tries to scroll to it and checks whether each field is inside the screen and not covered by another element.</p>
+<p><b>Starting state.</b> field operator opens the cockpit on a phone (390×844)</p>
+<p><b>Steps.</b></p><ol><li>Look for the selected drone&#x27;s battery, altitude and speed</li><li>Try to scroll the page to reach the telemetry panel</li></ol>
+<p class="result-pass"><b>Result: PASS</b> — verified: A field operator on a phone needs the selected drone&#x27;s battery and altitude. Every probe matched ground truth; no finding was raised.</p>
+<p class="shots"><a href="S3-phone-telemetry/shots/1-phone-no-telemetry.png"><img src="S3-phone-telemetry/shots/1-phone-no-telemetry.png" alt="shots/1-phone-no-telemetry.png" loading="lazy"></a></p>
+<p><b>Video.</b> <code>S3-phone-telemetry/video.mp4</code> <span class="todo">(TODO: upload and link)</span></p>
+<video controls preload="metadata" src="S3-phone-telemetry/video.mp4"></video>
+</section>
+<section class="scenario" id="S6-reconnect">
+<h3>8. Connection loss and recovery <code>S6-reconnect</code></h3>
+<p class="meta">Level <b>L3</b> · Network and recovery · <span class="verdict" style="background:#1e8e5a">PASS</span> · 42.3 s</p>
+<p><b>Description.</b> When the server connection drops, the operator should be told, and the cockpit should recover and catch up.</p>
+<p><b>Approach.</b> Argus kicks every socket and refuses reconnects for 10 s via the control API, records the link badge during the outage, then measures how long the cockpit takes to match the simulator again and whether rows duplicate.</p>
+<p><b>Starting state.</b> Drone 1 in flight, operator watching telemetry</p>
+<p><b>Steps.</b></p><ol><li>Condition: server drops every cockpit socket and refuses reconnects for 10 s</li><li>Server accepts connections again - does the cockpit recover and catch up?</li></ol>
+<p class="result-pass"><b>Result: PASS</b> — verified: When the server connection drops, the operator should be told, and the cockpit should recover and catch up. Every probe matched ground truth; no finding was raised.</p>
+<p><b>Evidence.</b> Key samples (UI claim vs ground truth):</p>
+<table class="samples"><tr><th>phase</th><th>badge</th><th>t</th><th>second</th><th>ui_distance</th><th>truth_distance</th></tr>
+<tr><td>outage</td><td>socket reconnecting</td><td>12.7</td><td></td><td></td><td></td></tr>
+<tr><td>outage</td><td>socket connected</td><td>22.8</td><td></td><td></td><td></td></tr>
+<tr><td>recovery</td><td>socket connected</td><td>24.3</td><td>1</td><td>140</td><td>140</td></tr>
+<tr><td>recovery</td><td>socket connected</td><td>38.8</td><td>15</td><td>285</td><td>285</td></tr>
+</table>
+<p class="shots"><a href="S6-reconnect/shots/1-outage.png"><img src="S6-reconnect/shots/1-outage.png" alt="shots/1-outage.png" loading="lazy"></a> <a href="S6-reconnect/shots/2-recovered.png"><img src="S6-reconnect/shots/2-recovered.png" alt="shots/2-recovered.png" loading="lazy"></a></p>
+<p><b>Video.</b> <code>S6-reconnect/video.mp4</code> <span class="todo">(TODO: upload and link)</span></p>
+<video controls preload="metadata" src="S6-reconnect/video.mp4"></video>
+</section>
+<section class="scenario" id="S7-two-operators">
+<h3>9. Two operators see the same take-off <code>S7-two-operators</code></h3>
+<p class="meta">Level <b>L3</b> · Real-time and multi-user · <span class="verdict" style="background:#1e8e5a">PASS</span> · 28.1 s</p>
+<p><b>Description.</b> Several people watch the same incident; a change must reach every screen promptly.</p>
+<p><b>Approach.</b> Argus opens two independent operators (desktop and tablet), takes off Drone 2 through the control API and times when each screen shows it in flight relative to the simulator.</p>
+<p><b>Starting state.</b> two operators have the cockpit open at the same time</p>
+<p><b>Steps.</b></p><ol><li>Drone 2 takes off (issued from the control API) - both screens must agree with the simulator</li></ol>
+<p class="result-pass"><b>Result: PASS</b> — verified: Several people watch the same incident; a change must reach every screen promptly. Every probe matched ground truth; no finding was raised.</p>
+<p><b>Evidence.</b> Key samples (UI claim vs ground truth):</p>
+<table class="samples"><tr><th>truth_in_flight_at</th><th>operator_A_at</th><th>operator_B_at</th><th>lag</th><th>t</th></tr>
+<tr><td>9.5</td><td>9.5</td><td>9.5</td><td>{&quot;A&quot;:0.0,&quot;B&quot;:0.0}</td><td>23.9</td></tr>
+</table>
+<p class="shots"><a href="S7-two-operators/shots/1-operator-A.png"><img src="S7-two-operators/shots/1-operator-A.png" alt="shots/1-operator-A.png" loading="lazy"></a> <a href="S7-two-operators/shots/1-operator-B.png"><img src="S7-two-operators/shots/1-operator-B.png" alt="shots/1-operator-B.png" loading="lazy"></a></p>
+<p><b>Video.</b> <code>S7-two-operators/video.mp4</code> <span class="todo">(TODO: upload and link)</span></p>
+<video controls preload="metadata" src="S7-two-operators/video.mp4"></video>
+</section>
+<section class="scenario" id="S8-switch-drone">
+<h3>10. Selecting another drone switches telemetry and video together <code>S8-switch-drone</code></h3>
+<p class="meta">Level <b>L2</b> · Functional / Video · <span class="verdict" style="background:#1e8e5a">PASS</span> · 18.6 s</p>
+<p><b>Description.</b> Selecting a drone should show that drone&#x27;s state and video together.</p>
+<p><b>Approach.</b> Argus selects Drone 2, compares telemetry with the simulator and compares a perceptual hash of the video frame before and after the switch.</p>
+<p><b>Starting state.</b> operator watches Drone 1, then selects Drone 2</p>
+<p class="result-pass"><b>Result: PASS</b> — verified: Selecting a drone should show that drone&#x27;s state and video together. Every probe matched ground truth; no finding was raised.</p>
+<p><b>Evidence.</b> Key samples (UI claim vs ground truth):</p>
+<table class="samples"><tr><th>frame_hash_distance</th><th>battery_ui</th><th>battery_truth</th><th>title_before</th><th>title_after</th><th>t</th></tr>
+<tr><td>47</td><td>100</td><td>100</td><td>2D 3D FPV · Drone 1 live</td><td>2D 3D FPV · Drone 2 live</td><td>15.6</td></tr>
+</table>
+<p class="shots"><a href="S8-switch-drone/shots/1-drone-2-selected.png"><img src="S8-switch-drone/shots/1-drone-2-selected.png" alt="shots/1-drone-2-selected.png" loading="lazy"></a></p>
+<p><b>Video.</b> <code>S8-switch-drone/video.mp4</code> <span class="todo">(TODO: upload and link)</span></p>
+<video controls preload="metadata" src="S8-switch-drone/video.mp4"></video>
+</section>
+<h2>How to reproduce</h2>
+<pre># 1. Start the cockpit starter kit (Docker):
+cd flytbase-ahc-swe-qa-hackathon &amp;&amp; docker compose up --build
+#    cockpit UI http://localhost:4010, backend + control API http://localhost:4000/api
+
+# 2. Run the scenarios (real Chrome, recordings on):
+argus live run                # everything
+argus live run --only S1      # one scenario by id prefix
+argus live run --only S1 --only S6 --headless
+
+# 3. Regenerate this evaluation document from the stored results:
+argus live report
+
+# 4. Browse the evidence (videos embedded for local viewing):
+#    runs/live/index.html</pre>
+</main></body></html>

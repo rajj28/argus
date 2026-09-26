@@ -1,0 +1,72 @@
+{
+  "id": "map-select-drone",
+  "name": "Pick a drone on the live map",
+  "goal": "An operator selects drone Falcon-2 directly on the canvas fleet map",
+  "tags": [
+    "canvas",
+    "vision"
+  ],
+  "start_url": "/map",
+  "steps": [
+    {
+      "id": "s1",
+      "intent": "Click the Falcon-2 marker on the map",
+      "action": "click",
+      "target": null,
+      "value": null,
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": {
+        "state_key": "/map@1280x800",
+        "bbox": [
+          32.0,
+          169.0,
+          880.0,
+          520.8125
+        ],
+        "center_norm": [
+          0.64,
+          0.23991362763915544
+        ],
+        "canvas_selector": "[data-js=fleet-map]",
+        "crop_png_b64": "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",
+        "phash": "acd25b4d7325a43288da369d73254962ac9a529d5325ad62a9da52b5dd758dca",
+        "nearby_labels": [],
+        "hint": "drone marker Falcon-2",
+        "mask_png_b64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAAAAACPAi4CAAAAaklEQVR4nO2QORLAMAwCgf//WSmSmcSFY2y1bOcDpFkghBCCTS3eacR//8gYX8cFhTW08hxu3hP3CsbzU0Yn/03sSTSEqGXQ36D2C8prhutg2kd3UneDKUITpQBxgDhAHMTBjdBEKUAcABekqRNH4TBxywAAAABJRU5ErkJggg=="
+      },
+      "save_as": null
+    }
+  ],
+  "oracles": [
+    {
+      "kind": "text_visible",
+      "params": {
+        "text": "Selected drone: Falcon-2"
+      },
+      "description": "Falcon-2 is selected",
+      "rule_ref": null
+    }
+  ],
+  "version": 1,
+  "status": "active",
+  "origin": "manual",
+  "history": [
+    {
+      "version": 1,
+      "at": "2026-09-24T13:15:19+00:00",
+      "kind": "created",
+      "summary": "Authored (manual); baseline recorded",
+      "diff": "",
+      "verdict_ref": null
+    }
+  ],
+  "requires_login": true
+}

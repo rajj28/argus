@@ -1,0 +1,81 @@
+{
+  "id": "logout",
+  "name": "Pilot signs out",
+  "goal": "Signing out returns the pilot to the login page",
+  "tags": [
+    "auth-exit"
+  ],
+  "start_url": "/dashboard",
+  "steps": [
+    {
+      "id": "s1",
+      "intent": "Sign out",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Log out",
+        "text": "Log out",
+        "attrs": {
+          "class": "btn btn-secondary btn-sm",
+          "type": "button"
+        },
+        "label": "",
+        "context": "header",
+        "neighbor_text": "v1.0 | 🛸 SkyOps | Dashboard Missions Flight logs Settings",
+        "xpath": "/html[1]/body[1]/div[1]/header[1]/div[1]/button[1]",
+        "css": "body > div > header > div > button",
+        "bbox": {
+          "x": 1192.0,
+          "y": 14.0,
+          "w": 64.0,
+          "h": 27.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": true,
+        "url_pattern": "/login",
+        "network": [
+          {
+            "method": "POST",
+            "path": "/api/logout",
+            "status": 200,
+            "resource_type": "fetch"
+          }
+        ],
+        "headings_any": [
+          "Drone Operations Console"
+        ],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    }
+  ],
+  "oracles": [
+    {
+      "kind": "url_matches",
+      "params": {
+        "pattern": "/login"
+      },
+      "description": "Pilot is back on the login page",
+      "rule_ref": "R5"
+    }
+  ],
+  "version": 1,
+  "status": "active",
+  "origin": "manual",
+  "history": [
+    {
+      "version": 1,
+      "at": "2026-09-24T12:13:19+00:00",
+      "kind": "created",
+      "summary": "Authored (manual); baseline recorded",
+      "diff": "",
+      "verdict_ref": null
+    }
+  ],
+  "requires_login": true
+}

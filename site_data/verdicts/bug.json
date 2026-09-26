@@ -1,0 +1,234 @@
+{
+  "category": "BUG",
+  "run_id": "20260924-175424-d85b",
+  "label": "gauntlet bug=settings_500",
+  "app_url": "http://127.0.0.1:8000",
+  "build": null,
+  "started_at": "2026-09-24T12:24:24+00:00",
+  "test_id": "save-settings",
+  "test_name": "Pilot updates display name",
+  "test_version": 1,
+  "status": "failed",
+  "duration_ms": 5130,
+  "verdict": {
+    "category": "BUG",
+    "confidence": 0.92,
+    "rationale": "Hard failure signals (network_error): PUT /api/settings returned 500 (baseline 200)",
+    "evidence_refs": [
+      "network_error"
+    ],
+    "changelog_refs": [],
+    "decided_by": "rules",
+    "action": "bug_reported"
+  },
+  "bug_report": "## BUG: Pilot updates display name\n\n**Verdict:** Hard failure signals (network_error): PUT /api/settings returned 500 (baseline 200)\n\n**Business goal:** Profile settings are saved and persisted (business rule R7)\n\n**Reproduce:**\n1. Open /settings\n2. Change the display name = 'Pilot d85b2'\n3. Save the settings\n\n**Expected vs actual:**\n- `network_error` PUT /api/settings returned 500 (baseline 200)\n- `assertion_failed` Settings are persisted by the API: PUT /api/settings [2xx] NOT observed (recent calls: PUT /api/settings 500)\n- `assertion_failed` Confirmation is shown: expected text \"Settings saved\" not found on /settings\n\n**Release notes check:** none of the release notes explain this behaviour.\n\n**Evidence:** screenshots/save-settings_01.jpg, screenshots/save-settings_02.jpg",
+  "citation": null,
+  "shots": [
+    {
+      "name": "save-settings_02.jpg",
+      "file": "shots/20260924-175424-d85b-save-settings-save-settings_02.jpg",
+      "source": ".argus/runs/20260924-175424-d85b/screenshots/save-settings_02.jpg",
+      "bytes": 21672
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "s1",
+      "intent": "Change the display name",
+      "status": "passed",
+      "tier": 0,
+      "score": 0.998,
+      "duration_ms": 742,
+      "screenshot": "screenshots/save-settings_01.jpg",
+      "observations": [],
+      "effects": {
+        "url_before": "http://127.0.0.1:8000/settings",
+        "url_after": "http://127.0.0.1:8000/settings",
+        "url_changed": false,
+        "title_after": "Settings — Drone Operations Console",
+        "new_headings": [],
+        "new_alerts": [],
+        "network": [],
+        "console_errors": [],
+        "page_errors": [],
+        "dialogs": [],
+        "dom_changed": false
+      }
+    },
+    {
+      "step_id": "s2",
+      "intent": "Save the settings",
+      "status": "healed",
+      "tier": 1,
+      "score": 0.788,
+      "duration_ms": 751,
+      "screenshot": "screenshots/save-settings_02.jpg",
+      "observations": [
+        {
+          "kind": "locator_healed",
+          "step_id": "s2",
+          "detail": "button \"Save settings\" (in: form) -> [e11] button \"Apply\" (in: form) via similarity (score 0.79, margin 0.34)",
+          "evidence": {
+            "candidates": [
+              {
+                "ref": "e11",
+                "desc": "[e11] button \"Apply\" (in: form)",
+                "score": 0.788,
+                "breakdown": {
+                  "name": 0.62,
+                  "role": 1.0,
+                  "context": 1.0,
+                  "text": 0.62,
+                  "tag": 0.0,
+                  "type": 0.0,
+                  "neighbor_text": 1.0,
+                  "class": 0.2,
+                  "xpath": 0.93,
+                  "css": 0.94,
+                  "position": 0.93,
+                  "size": 0.18,
+                  "full_score": 0.67,
+                  "semantic_score": 0.88
+                }
+              },
+              {
+                "ref": "e2",
+                "desc": "[e2] link \"Settings\" (in: Main navigation)",
+                "score": 0.448,
+                "breakdown": {
+                  "name": 0.88,
+                  "role": 0.5,
+                  "context": 0.11,
+                  "text": 0.88,
+                  "tag": 0.0,
+                  "type": 0.0,
+                  "neighbor_text": 0.3,
+                  "class": 0.0,
+                  "xpath": 0.69,
+                  "css": 0.52,
+                  "position": 0.14,
+                  "size": 0.59,
+                  "full_score": 0.37,
+                  "semantic_score": 0.5
+                }
+              },
+              {
+                "ref": "e6",
+                "desc": "[e6] textbox \"Display name\" (in: form)",
+                "score": 0.428,
+                "breakdown": {
+                  "name": 0.32,
+                  "role": 0.0,
+                  "context": 1.0,
+                  "text": 0.0,
+                  "tag": 0.0,
+                  "type": 0.0,
+                  "neighbor_text": 0.97,
+                  "class": 0.0,
+                  "xpath": 0.79,
+                  "css": 0.22,
+                  "position": 0.41,
+                  "size": 0.22,
+                  "full_score": 0.36,
+                  "semantic_score": 0.48
+                }
+              },
+              {
+                "ref": "e7",
+                "desc": "[e7] textbox \"Email address (read-only)\" (in: form) {label='Email'}",
+                "score": 0.415,
+                "breakdown": {
+                  "name": 0.33,
+                  "role": 0.0,
+                  "context": 1.0,
+                  "text": 0.0,
+                  "tag": 0.0,
+                  "type": 0.0,
+                  "neighbor_text": 0.88,
+                  "class": 0.0,
+                  "xpath": 0.81,
+                  "css": 0.21,
+                  "position": 0.52,
+                  "size": 0.22,
+                  "full_score": 0.36,
+                  "semantic_score": 0.46
+                }
+              },
+              {
+                "ref": "e10",
+                "desc": "[e10] checkbox \"Email me flight reports\" (in: form)",
+                "score": 0.408,
+                "breakdown": {
+                  "name": 0.33,
+                  "role": 0.0,
+                  "context": 1.0,
+                  "text": 0.0,
+                  "tag": 0.0,
+                  "type": 0.0,
+                  "neighbor_text": 0.83,
+                  "class": 0.0,
+                  "xpath": 0.79,
+                  "css": 0.24,
+                  "position": 0.86,
+                  "size": 0.04,
+                  "full_score": 0.37,
+                  "semantic_score": 0.45
+                }
+              }
+            ],
+            "reason": "multi-attribute match 0.79 (runner-up 0.45)"
+          },
+          "tier": 1,
+          "confidence": 0.788
+        },
+        {
+          "kind": "network_error",
+          "step_id": "s2",
+          "detail": "PUT /api/settings returned 500 (baseline 200)",
+          "evidence": {
+            "expected": {
+              "method": "PUT",
+              "path": "/api/settings",
+              "status": 200,
+              "resource_type": "fetch"
+            },
+            "observed": {
+              "method": "PUT",
+              "path": "/api/settings",
+              "status": 500,
+              "resource_type": "fetch"
+            }
+          },
+          "tier": null,
+          "confidence": null
+        }
+      ],
+      "effects": {
+        "url_before": "http://127.0.0.1:8000/settings",
+        "url_after": "http://127.0.0.1:8000/settings",
+        "url_changed": false,
+        "title_after": "Settings — Drone Operations Console",
+        "new_headings": [],
+        "new_alerts": [
+          "Something went wrong"
+        ],
+        "network": [
+          {
+            "method": "PUT",
+            "path": "/api/settings",
+            "status": 500,
+            "resource_type": "fetch"
+          }
+        ],
+        "console_errors": [
+          "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+        ],
+        "page_errors": [],
+        "dialogs": [],
+        "dom_changed": false
+      }
+    }
+  ],
+  "measured_at": "2026-09-24T12:25:00+00:00",
+  "source": ".argus/runs/20260924-175424-d85b/report.json#save-settings"
+}

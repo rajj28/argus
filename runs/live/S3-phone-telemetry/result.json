@@ -1,0 +1,24 @@
+{
+  "id": "S3-phone-telemetry",
+  "title": "Battery and altitude unreachable on a phone",
+  "level": "L1",
+  "category": "Responsive UI",
+  "description": "A field operator on a phone needs the selected drone's battery and altitude.",
+  "approach": "Argus opens the cockpit at 390\u00d7844 with touch, locates every telemetry field by its meaning, tries to scroll to it and checks whether each field is inside the screen and not covered by another element.",
+  "verdict": "PASS",
+  "findings": [],
+  "steps": [
+    "[  0.6s] Start: field operator opens the cockpit on a phone (390\u00d7844)",
+    "[  6.9s] Look for the selected drone's battery, altitude and speed",
+    "[  6.9s] Try to scroll the page to reach the telemetry panel"
+  ],
+  "samples": [],
+  "videos": [
+    "video.mp4"
+  ],
+  "shots": [
+    "shots/1-phone-no-telemetry.png"
+  ],
+  "started": "2026-09-26 13:40:40",
+  "duration_s": 10.6
+}

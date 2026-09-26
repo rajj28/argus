@@ -1,0 +1,63 @@
+# Argus on one Azure VM (docs/WEB_SPEC.md): caddy (TLS via sslip.io) -> web :8080, skyops :8000.
+# Run from the repo root:  docker compose -f deploy/docker-compose.yml up -d --build
+# Required env (shell or a .env next to this file): ARGUS_HOST, SKYOPS_HOST.
+# Keys (JEV_API, JEV2_API, GROK_API) come from the shell env / project .env at runtime - never baked
+# into an image, never committed. deploy/push.sh wires this up on the VM (/opt/argus/.env).
+name: argus
+
+x-skyops-image: &skyops-image
+  build:
+    context: ..
+    dockerfile: deploy/Dockerfile.web
+  image: argus-web:local
+
+services:
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      ARGUS_HOST: ${ARGUS_HOST:?set ARGUS_HOST, e.g. argus.<public-ip>.sslip.io}
+      SKYOPS_HOST: ${SKYOPS_HOST:?set SKYOPS_HOST, e.g. skyops.<public-ip>.sslip.io}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - web
+      - skyops
+
+  web:
+    <<: *skyops-image
+    restart: unless-stopped
+    environment:
+      ARGUS_LIVE_HOME: /data/.argus-live
+      SKYOPS_URL: http://skyops:8000
+      SKYOPS_B_URL: http://skyops-b:8000
+      ARGUS_SKYOPS_PUBLIC_URL: https://${SKYOPS_HOST:-localhost}
+      JEV_API: ${JEV_API:-}
+      JEV2_API: ${JEV2_API:-}
+      GROK_API: ${GROK_API:-}
+    volumes:
+      - argus-live:/data
+    depends_on:
+      - skyops
+      - skyops-b
+
+  skyops:
+    <<: *skyops-image
+    restart: unless-stopped
+    command: ["python", "-m", "demo_app.server", "--host", "0.0.0.0", "--port", "8000"]
+
+  # Second instance for the `diff` scenario, pinned to v1.3 at startup.
+  skyops-b:
+    <<: *skyops-image
+    restart: unless-stopped
+    command: ["bash", "-c", "python -m demo_app.server --host 0.0.0.0 --port 8000 & bash deploy/pin_version.sh 1.3 http://127.0.0.1:8000; wait"]
+
+volumes:
+  caddy-data:
+  caddy-config:
+  argus-live:

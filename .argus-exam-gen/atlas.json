@@ -1,0 +1,202 @@
+{
+  "meta": {
+    "app": "http://127.0.0.1:8010",
+    "start_url": "/",
+    "start_state": "S1",
+    "login_state": "S0",
+    "counts": {
+      "states": 2,
+      "actions": 1,
+      "transitions": 1
+    }
+  },
+  "states": {
+    "S0": {
+      "id": "S0",
+      "url": "/login",
+      "entry_url": "http://127.0.0.1:8010/login",
+      "path": [],
+      "signature": "c42c80aa06113268fddf90dfdc871fb7318ff5cf",
+      "title": "",
+      "headings": [],
+      "alerts": [],
+      "elements": [],
+      "forms": []
+    },
+    "S1": {
+      "id": "S1",
+      "url": "/",
+      "entry_url": "http://127.0.0.1:8010/#/login",
+      "path": [],
+      "signature": "491a17850afac0db6e9300c58a4383b2048b2fb7",
+      "title": "MediQueue · Clinic operations",
+      "headings": [
+        "Calmer clinics start with a clear queue.",
+        "Welcome back"
+      ],
+      "alerts": [],
+      "elements": [
+        {
+          "id": "S1.e0",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Skip to content",
+            "text": "Skip to content",
+            "attrs": {
+              "class": "skip-link",
+              "href": "#main-content",
+              "ordinal": "0"
+            },
+            "label": "",
+            "context": "",
+            "neighbor_text": "M MediQueue Calmer clinics start with a clear queue. Appointments, billing, and ",
+            "xpath": "/html[1]/body[1]/a[1]",
+            "css": "body > a",
+            "bbox": {
+              "x": 8.0,
+              "y": -58.0,
+              "w": 135.0,
+              "h": 41.0
+            }
+          },
+          "desc": "link \"Skip to content\"",
+          "enabled": true
+        },
+        {
+          "id": "S1.e1",
+          "fp": {
+            "tag": "input",
+            "role": "textbox",
+            "name": "Email address",
+            "text": "",
+            "attrs": {
+              "class": "mq-input",
+              "name": "email",
+              "type": "email",
+              "placeholder": "you@clinic.in",
+              "required": "",
+              "ordinal": "0"
+            },
+            "label": "Email address",
+            "context": "Calmer clinics start with a clear queue.",
+            "neighbor_text": "Email address | Password | Sign in to MediQueue",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/section[1]/div[2]/div[1]/form[1]/label[1]/input[1]",
+            "css": "#mq-login-form > label:nth-of-type(1) > input",
+            "bbox": {
+              "x": 708.0,
+              "y": 333.0,
+              "w": 440.0,
+              "h": 48.0
+            }
+          },
+          "desc": "textbox \"Email address\" (in: Calmer clinics start with a clear queue.)",
+          "enabled": true
+        },
+        {
+          "id": "S1.e2",
+          "fp": {
+            "tag": "input",
+            "role": "textbox",
+            "name": "Password",
+            "text": "",
+            "attrs": {
+              "class": "mq-input",
+              "name": "password",
+              "type": "password",
+              "placeholder": "Enter your password",
+              "required": "",
+              "ordinal": "0"
+            },
+            "label": "Password",
+            "context": "Calmer clinics start with a clear queue.",
+            "neighbor_text": "Password | Email address | Sign in to MediQueue",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/section[1]/div[2]/div[1]/form[1]/label[2]/input[1]",
+            "css": "#mq-login-form > label:nth-of-type(2) > input",
+            "bbox": {
+              "x": 708.0,
+              "y": 426.0,
+              "w": 440.0,
+              "h": 48.0
+            }
+          },
+          "desc": "textbox \"Password\" (in: Calmer clinics start with a clear queue.)",
+          "enabled": true
+        },
+        {
+          "id": "S1.e3",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "Sign in to MediQueue",
+            "text": "Sign in to MediQueue",
+            "attrs": {
+              "class": "mq-primary",
+              "type": "submit",
+              "ordinal": "0"
+            },
+            "label": "",
+            "context": "Calmer clinics start with a clear queue.",
+            "neighbor_text": "Email address | Password | FRONT DESK PORTAL",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/section[1]/div[2]/div[1]/form[1]/button[1]",
+            "css": "#mq-login-form > button",
+            "bbox": {
+              "x": 708.0,
+              "y": 494.0,
+              "w": 440.0,
+              "h": 43.0
+            }
+          },
+          "desc": "button \"Sign in to MediQueue\" (in: Calmer clinics start with a clear queue.)",
+          "enabled": true
+        }
+      ],
+      "forms": []
+    }
+  },
+  "transitions": [
+    {
+      "from": "S1",
+      "to": "S1",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Sign in to MediQueue",
+        "text": "Sign in to MediQueue",
+        "attrs": {
+          "class": "mq-primary",
+          "type": "submit",
+          "ordinal": "0"
+        },
+        "label": "",
+        "context": "Calmer clinics start with a clear queue.",
+        "neighbor_text": "Email address | Password | FRONT DESK PORTAL",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/section[1]/div[2]/div[1]/form[1]/button[1]",
+        "css": "#mq-login-form > button",
+        "bbox": {
+          "x": 708.0,
+          "y": 494.0,
+          "w": 440.0,
+          "h": 43.0
+        }
+      },
+      "intent": "click 'Sign in to MediQueue'",
+      "network": [
+        "POST /api/login 401"
+      ]
+    }
+  ],
+  "login": {
+    "id": "S0",
+    "url": "/login",
+    "entry_url": "http://127.0.0.1:8010/login",
+    "path": [],
+    "signature": "c42c80aa06113268fddf90dfdc871fb7318ff5cf",
+    "title": "",
+    "headings": [],
+    "alerts": [],
+    "elements": [],
+    "forms": []
+  }
+}

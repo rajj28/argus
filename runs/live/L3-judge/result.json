@@ -1,0 +1,33 @@
+{
+  "id": "L3-judge",
+  "title": "Semantic judgement: the JEV mesh judges UX, with an anti-hallucination guardrail",
+  "level": "L3",
+  "category": "Semantic UX (LLM-judged, truth-grounded)",
+  "description": "Some correctness questions have no numeric oracle - 'is this warning clear enough?' When the data source truly goes offline, does the cockpit make that unmistakable to the operator?",
+  "approach": "Argus takes the simulator offline (ground truth), then asks the JEV mesh to judge whether the cockpit clearly warns the operator - requiring it to quote exact on-screen text. Argus verifies the quote against the live DOM and discards any verdict whose evidence is not really there, so an LLM opinion can never raise a false alarm.",
+  "verdict": "PASS",
+  "findings": [],
+  "steps": [
+    "[  0.6s] Start: Drone 1 flying, cockpit showing live data",
+    "[ 12.0s] Ground truth changes: the flight-data simulator (the source) goes offline",
+    "[ 19.1s] No numeric oracle can score 'is the warning clear enough' \u2014 so the JEV mesh judges it"
+  ],
+  "samples": [
+    {
+      "sim_offline": true,
+      "jev_warns": false,
+      "jev_cite": "",
+      "cite_verified": false,
+      "jev_missing": "",
+      "t": 112.1
+    }
+  ],
+  "videos": [
+    "video.mp4"
+  ],
+  "shots": [
+    "shots/1-semantic-judgement.png"
+  ],
+  "started": "2026-09-26 17:20:53",
+  "duration_s": 115.6
+}

@@ -1,0 +1,259 @@
+{
+  "schema": "argus-exam-scorecard-v2",
+  "mode": "b_llm",
+  "title": "Mode B - zero-knowledge (explore + generate, LLM on)",
+  "llm_on": true,
+  "generated_at": "2026-09-25T18:00:18+00:00",
+  "home": ".argus-exam-gen",
+  "intents": [
+    "login",
+    "book-consultation",
+    "age-validation",
+    "emergency-fee-zero",
+    "invoice-total-correct",
+    "cancel-appointment",
+    "reschedule-appointment",
+    "doctor-list-loads",
+    "toggle-sms-reminders"
+  ],
+  "authored": [],
+  "author_failures": [],
+  "overall": {
+    "correct": 0,
+    "total": 0,
+    "accuracy": 0.0
+  },
+  "per_release": {},
+  "scored": {},
+  "failures": [],
+  "criteria": {
+    "Reliability": {
+      "detail": "r2 is a design-only refresh: PASS or COSMETIC_DRIFT everywhere",
+      "correct": 0,
+      "total": 0,
+      "accuracy": 0.0,
+      "memory_probe_heals": 0
+    },
+    "Context": {
+      "detail": "r3-r6: intended change, banner reflow, masked 500 bug, feature removal",
+      "correct": 0,
+      "total": 0,
+      "accuracy": 0.0,
+      "per_release": {
+        "r3": 0.0,
+        "r4": 0.0,
+        "r5": 0.0,
+        "r6": 0.0
+      }
+    },
+    "Cost": {
+      "detail": "steady-state LLM cost of a full suite run",
+      "llm_calls_total": 0,
+      "tokens_total": 0,
+      "per_run": [
+        {
+          "label": "r1-gen-baseline",
+          "llm_calls": 0,
+          "cached": 0,
+          "tokens": 0,
+          "cost_usd": 0.0
+        },
+        {
+          "label": "r2-gen-run",
+          "llm_calls": 0,
+          "cached": 0,
+          "tokens": 0,
+          "cost_usd": 0.0
+        },
+        {
+          "label": "r3-gen-run",
+          "llm_calls": 0,
+          "cached": 0,
+          "tokens": 0,
+          "cost_usd": 0.0
+        },
+        {
+          "label": "r4-gen-run",
+          "llm_calls": 0,
+          "cached": 0,
+          "tokens": 0,
+          "cost_usd": 0.0
+        },
+        {
+          "label": "r5-gen-run",
+          "llm_calls": 0,
+          "cached": 0,
+          "tokens": 0,
+          "cost_usd": 0.0
+        },
+        {
+          "label": "r6-gen-run",
+          "llm_calls": 0,
+          "cached": 0,
+          "tokens": 0,
+          "cost_usd": 0.0
+        }
+      ]
+    },
+    "Memory": {
+      "detail": "heals when the same release is run again (r2 x3)",
+      "runs": [],
+      "heals_first_run": 0,
+      "heals_repeat_runs": 0
+    },
+    "Generation": {
+      "detail": "zero-knowledge coverage (mode B) and how much of it baselined",
+      "coverage": 0.0,
+      "baseline_success": {
+        "authored": 0,
+        "requested": 0,
+        "dropped": 0,
+        "dropped_reasons": []
+      },
+      "atlas": {
+        "states": 2,
+        "actions": 1,
+        "transitions": 1
+      },
+      "login_wall": true,
+      "generate_log": [
+        "[generate] proposal failed (LLMUnavailable); using deterministic tests",
+        "[generate] proposal attempt 1 had no 'tests' wrapper; retrying",
+        "[generate] proposal failed (LLMUnavailable); using deterministic tests"
+      ],
+      "authored": 0,
+      "intents": 9
+    }
+  },
+  "runs": [
+    {
+      "label": "r1-gen-baseline",
+      "release": "r1",
+      "update": true,
+      "started_at": "2026-09-25T18:00:14+00:00",
+      "run_id": "20260925-233014-b1ca",
+      "wall_s": 0.7,
+      "tests_run": 0,
+      "healed_steps": 0,
+      "replayed_steps": 0,
+      "tiers": {},
+      "llm_calls": 0,
+      "llm_calls_cached": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": 0.0,
+      "verdicts": {}
+    },
+    {
+      "label": "r2-gen-run",
+      "release": "r2",
+      "update": true,
+      "started_at": "2026-09-25T18:00:14+00:00",
+      "run_id": "20260925-233014-0586",
+      "wall_s": 0.6,
+      "tests_run": 0,
+      "healed_steps": 0,
+      "replayed_steps": 0,
+      "tiers": {},
+      "llm_calls": 0,
+      "llm_calls_cached": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": 0.0,
+      "verdicts": {}
+    },
+    {
+      "label": "r3-gen-run",
+      "release": "r3",
+      "update": true,
+      "started_at": "2026-09-25T18:00:15+00:00",
+      "run_id": "20260925-233015-b896",
+      "wall_s": 0.6,
+      "tests_run": 0,
+      "healed_steps": 0,
+      "replayed_steps": 0,
+      "tiers": {},
+      "llm_calls": 0,
+      "llm_calls_cached": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": 0.0,
+      "verdicts": {}
+    },
+    {
+      "label": "r4-gen-run",
+      "release": "r4",
+      "update": true,
+      "started_at": "2026-09-25T18:00:16+00:00",
+      "run_id": "20260925-233016-09de",
+      "wall_s": 0.6,
+      "tests_run": 0,
+      "healed_steps": 0,
+      "replayed_steps": 0,
+      "tiers": {},
+      "llm_calls": 0,
+      "llm_calls_cached": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": 0.0,
+      "verdicts": {}
+    },
+    {
+      "label": "r5-gen-run",
+      "release": "r5",
+      "update": true,
+      "started_at": "2026-09-25T18:00:16+00:00",
+      "run_id": "20260925-233016-2a62",
+      "wall_s": 0.6,
+      "tests_run": 0,
+      "healed_steps": 0,
+      "replayed_steps": 0,
+      "tiers": {},
+      "llm_calls": 0,
+      "llm_calls_cached": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": 0.0,
+      "verdicts": {}
+    },
+    {
+      "label": "r6-gen-run",
+      "release": "r6",
+      "update": true,
+      "started_at": "2026-09-25T18:00:17+00:00",
+      "run_id": "20260925-233017-9a23",
+      "wall_s": 0.6,
+      "tests_run": 0,
+      "healed_steps": 0,
+      "replayed_steps": 0,
+      "tiers": {},
+      "llm_calls": 0,
+      "llm_calls_cached": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": 0.0,
+      "verdicts": {}
+    }
+  ],
+  "config": {
+    "heal_margin": 0.04,
+    "jury_enabled": false,
+    "reset_before_each_run": true
+  },
+  "intent_map": {},
+  "generated": [],
+  "measured_at": "2026-09-25T18:00:18+00:00",
+  "source": "exam/results/scorecard.json#modes.b_llm",
+  "derived": true,
+  "derived_note": "The exam recorded no separate after-scorecard; this is the 'b_llm' (zero-knowledge, LLM on) block of the same real scorecard, with llm_budget from exam/results/llm_budget.json.",
+  "llm_budget": {
+    "calls": 36,
+    "cached": 45,
+    "tokens_in": 42338,
+    "tokens_out": 21675,
+    "by_purpose": {
+      "generate": 1
+    },
+    "budget": 60
+  }
+}

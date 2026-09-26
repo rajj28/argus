@@ -1,0 +1,34 @@
+{
+  "id": "visit_settings",
+  "name": "Open Settings",
+  "goal": "The Settings page opens and shows its heading",
+  "tags": [
+    "smoke"
+  ],
+  "start_url": "/settings",
+  "steps": [],
+  "oracles": [
+    {
+      "kind": "text_visible",
+      "params": {
+        "text": "Settings"
+      },
+      "description": "Main heading is visible",
+      "rule_ref": null
+    }
+  ],
+  "version": 1,
+  "status": "active",
+  "origin": "generated",
+  "history": [
+    {
+      "version": 1,
+      "at": "2026-09-24T10:51:12+00:00",
+      "kind": "created",
+      "summary": "Deterministic test from exploration",
+      "diff": "",
+      "verdict_ref": null
+    }
+  ],
+  "requires_login": true
+}

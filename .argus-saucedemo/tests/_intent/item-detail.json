@@ -1,0 +1,92 @@
+{
+  "id": "item-detail",
+  "name": "Open the Sauce Labs Backpack detail page",
+  "goal": "Opening the Backpack title link navigates to the Backpack's detail page",
+  "tags": [
+    "catalogue"
+  ],
+  "start_url": "/",
+  "steps": [
+    {
+      "id": "s1",
+      "intent": "Open the Products catalogue",
+      "action": "goto",
+      "target": null,
+      "value": "/inventory.html",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s2",
+      "intent": "Open the Sauce Labs Backpack details",
+      "action": "click",
+      "target": {
+        "tag": "a",
+        "role": "button",
+        "name": "View details for Sauce Labs Backpack",
+        "text": "",
+        "attrs": {
+          "href": "#",
+          "id": "item_4_img_link",
+          "data-test": "item-4-img-link",
+          "aria-label": "View details for Sauce Labs Backpack"
+        },
+        "label": "",
+        "context": "",
+        "neighbor_text": "Sauce Labs Backpack carry.allTheThings() with the sleek, streamlined Sly Pack th",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/a[1]",
+        "css": "#item_4_img_link",
+        "bbox": {
+          "x": 111.0,
+          "y": 155.0,
+          "w": 150.0,
+          "h": 238.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": true,
+        "url_pattern": "/inventory-item.html",
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    }
+  ],
+  "oracles": [
+    {
+      "kind": "url_matches",
+      "params": {
+        "pattern": "/inventory-item"
+      },
+      "description": "A product detail page opens",
+      "rule_ref": "R9"
+    },
+    {
+      "kind": "text_visible",
+      "params": {
+        "text": "Sauce Labs Backpack"
+      },
+      "description": "The detail page is for the clicked product",
+      "rule_ref": "R9"
+    }
+  ],
+  "version": 1,
+  "status": "active",
+  "origin": "manual",
+  "history": [],
+  "requires_login": true
+}

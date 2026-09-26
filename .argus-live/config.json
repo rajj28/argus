@@ -1,0 +1,45 @@
+{
+  "home": ".argus-live",
+  "base_url": "http://127.0.0.1:8000",
+  "context_dir": "C:\\Users\\Acer\\tireless hackathon\\demo_app\\context",
+  "credentials": {
+    "user": "pilot@skyops.io",
+    "password": "flysafe123"
+  },
+  "headless": true,
+  "llm_base_url": "https://openrouter.ai/api/v1",
+  "reference_prices": {
+    "fast": [
+      0.1,
+      0.4
+    ],
+    "smart": [
+      0.3,
+      2.5
+    ],
+    "vision": [
+      0.3,
+      2.5
+    ]
+  },
+  "llm_cache": true,
+  "max_llm_calls_per_run": 30,
+  "jury": [
+    "nvidia/nemotron-3-super-120b-a12b:free",
+    "qwen/qwen3.8-27b:free",
+    "google/gemma-4-31b-it:free"
+  ],
+  "jury_enabled": true,
+  "thresholds": {
+    "replay": 0.9,
+    "accept": 0.72,
+    "margin": 0.12,
+    "strict": 0.85,
+    "llm_min": 0.35,
+    "llm_confidence": 0.6
+  },
+  "viewport": {
+    "width": 1280,
+    "height": 800
+  }
+}

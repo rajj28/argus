@@ -1,0 +1,530 @@
+[
+  {
+    "id": "login",
+    "name": "Pilot signs in",
+    "tags": [
+      "auth",
+      "smoke"
+    ],
+    "requires_login": false,
+    "goal": "A pilot with valid credentials reaches the fleet overview",
+    "start_url": "/login",
+    "steps": [
+      {
+        "intent": "Enter the pilot email",
+        "action": "fill",
+        "find": {
+          "role": "textbox",
+          "name": "email"
+        },
+        "value": "${creds.user}"
+      },
+      {
+        "intent": "Enter the password",
+        "action": "fill",
+        "find": {
+          "type": "password"
+        },
+        "value": "${creds.password}"
+      },
+      {
+        "intent": "Submit the sign-in form",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "log in"
+        }
+      }
+    ],
+    "oracles": [
+      {
+        "kind": "url_matches",
+        "params": {
+          "pattern": "/dashboard"
+        },
+        "description": "Pilot lands on the dashboard",
+        "rule_ref": "R5"
+      },
+      {
+        "kind": "text_visible",
+        "params": {
+          "text": "Fleet overview"
+        },
+        "description": "Fleet overview is shown"
+      }
+    ]
+  },
+  {
+    "id": "create-mission",
+    "name": "Plan and launch a survey mission",
+    "tags": [
+      "critical"
+    ],
+    "goal": "An operator plans a mission with an available drone and it appears in the Missions list as Scheduled",
+    "start_url": "/missions/new",
+    "steps": [
+      {
+        "intent": "Name the mission",
+        "action": "fill",
+        "find": {
+          "role": "textbox",
+          "name": "mission name"
+        },
+        "value": "Survey ${unique}",
+        "save_as": "mission_name"
+      },
+      {
+        "intent": "Choose mission type Survey",
+        "action": "select",
+        "find": {
+          "role": "combobox",
+          "name": "mission type"
+        },
+        "value": "Survey"
+      },
+      {
+        "intent": "Choose the Pune Depot site",
+        "action": "select",
+        "find": {
+          "role": "combobox",
+          "name": "site"
+        },
+        "value": "Pune Depot"
+      },
+      {
+        "intent": "Continue from mission details",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "next",
+          "context": "mission details"
+        }
+      },
+      {
+        "intent": "Assign drone Falcon-1",
+        "action": "check",
+        "find": {
+          "role": "radio",
+          "name": "falcon-1"
+        }
+      },
+      {
+        "intent": "Continue from drone selection",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "next",
+          "context": "select drone"
+        }
+      },
+      {
+        "intent": "Set altitude to 80 m",
+        "action": "fill",
+        "find": {
+          "name": "altitude"
+        },
+        "value": "80"
+      },
+      {
+        "intent": "Set speed to 8 m/s",
+        "action": "fill",
+        "find": {
+          "name": "speed"
+        },
+        "value": "8"
+      },
+      {
+        "intent": "Continue from flight parameters",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "next",
+          "context": "flight parameters"
+        }
+      },
+      {
+        "intent": "Launch the mission",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "launch"
+        }
+      },
+      {
+        "intent": "Open the Missions list",
+        "action": "click",
+        "find": {
+          "role": "link",
+          "name": "missions",
+          "context": "navigation"
+        }
+      }
+    ],
+    "oracles": [
+      {
+        "kind": "network_called",
+        "params": {
+          "method": "POST",
+          "path": "/api/missions",
+          "status_class": "2xx"
+        },
+        "description": "Mission is created by the API"
+      },
+      {
+        "kind": "text_visible",
+        "params": {
+          "text": "${vars.mission_name}"
+        },
+        "description": "The launched mission appears in the Missions list",
+        "rule_ref": "R4"
+      }
+    ]
+  },
+  {
+    "id": "altitude-limit",
+    "name": "Altitude above 120 m is rejected",
+    "tags": [
+      "negative",
+      "compliance"
+    ],
+    "goal": "The planner must reject an altitude above the 120 m DGCA limit (business rule R1)",
+    "start_url": "/missions/new",
+    "steps": [
+      {
+        "intent": "Name the mission",
+        "action": "fill",
+        "find": {
+          "role": "textbox",
+          "name": "mission name"
+        },
+        "value": "Altitude check ${unique}"
+      },
+      {
+        "intent": "Choose mission type Inspection",
+        "action": "select",
+        "find": {
+          "role": "combobox",
+          "name": "mission type"
+        },
+        "value": "Inspection"
+      },
+      {
+        "intent": "Choose the Mumbai Port site",
+        "action": "select",
+        "find": {
+          "role": "combobox",
+          "name": "site"
+        },
+        "value": "Mumbai Port"
+      },
+      {
+        "intent": "Continue from mission details",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "next",
+          "context": "mission details"
+        }
+      },
+      {
+        "intent": "Assign drone Falcon-2",
+        "action": "check",
+        "find": {
+          "role": "radio",
+          "name": "falcon-2"
+        }
+      },
+      {
+        "intent": "Continue from drone selection",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "next",
+          "context": "select drone"
+        }
+      },
+      {
+        "intent": "Enter an illegal altitude of 500 m",
+        "action": "fill",
+        "find": {
+          "name": "altitude"
+        },
+        "value": "500"
+      },
+      {
+        "intent": "Set speed to 8 m/s",
+        "action": "fill",
+        "find": {
+          "name": "speed"
+        },
+        "value": "8"
+      },
+      {
+        "intent": "Try to continue from flight parameters",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "next",
+          "context": "flight parameters"
+        }
+      }
+    ],
+    "oracles": [
+      {
+        "kind": "text_visible",
+        "params": {
+          "text": "Altitude must be at most 120 m"
+        },
+        "description": "Altitude limit error is shown",
+        "rule_ref": "R1"
+      },
+      {
+        "kind": "network_absent",
+        "params": {
+          "method": "POST",
+          "path": "/api/missions",
+          "status_class": "2xx"
+        },
+        "description": "No mission is created",
+        "rule_ref": "R1"
+      }
+    ]
+  },
+  {
+    "id": "low-battery-drone",
+    "name": "Low-battery drone cannot be assigned",
+    "tags": [
+      "negative",
+      "safety"
+    ],
+    "goal": "Drones below 30% battery must not be selectable for a mission (business rule R2)",
+    "start_url": "/missions/new",
+    "steps": [
+      {
+        "intent": "Name the mission",
+        "action": "fill",
+        "find": {
+          "role": "textbox",
+          "name": "mission name"
+        },
+        "value": "Battery check ${unique}"
+      },
+      {
+        "intent": "Choose mission type Patrol",
+        "action": "select",
+        "find": {
+          "role": "combobox",
+          "name": "mission type"
+        },
+        "value": "Patrol"
+      },
+      {
+        "intent": "Choose the Pune Depot site",
+        "action": "select",
+        "find": {
+          "role": "combobox",
+          "name": "site"
+        },
+        "value": "Pune Depot"
+      },
+      {
+        "intent": "Continue from mission details",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "next",
+          "context": "mission details"
+        }
+      }
+    ],
+    "oracles": [
+      {
+        "kind": "element_state",
+        "params": {
+          "find": {
+            "role": "radio",
+            "name": "hawk-7"
+          },
+          "enabled": false
+        },
+        "description": "Hawk-7 (12% battery) is disabled",
+        "rule_ref": "R2"
+      }
+    ]
+  },
+  {
+    "id": "save-settings",
+    "name": "Pilot updates display name",
+    "tags": [
+      "settings"
+    ],
+    "goal": "Profile settings are saved and persisted (business rule R7)",
+    "start_url": "/settings",
+    "steps": [
+      {
+        "intent": "Change the display name",
+        "action": "fill",
+        "find": {
+          "role": "textbox",
+          "name": "display name"
+        },
+        "value": "Pilot ${unique}",
+        "save_as": "display_name"
+      },
+      {
+        "intent": "Save the settings",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "save"
+        }
+      }
+    ],
+    "oracles": [
+      {
+        "kind": "network_called",
+        "params": {
+          "method": "PUT",
+          "path": "/api/settings",
+          "status_class": "2xx"
+        },
+        "description": "Settings are persisted by the API",
+        "rule_ref": "R7"
+      },
+      {
+        "kind": "text_visible",
+        "params": {
+          "text": "Settings saved"
+        },
+        "description": "Confirmation is shown"
+      }
+    ]
+  },
+  {
+    "id": "flight-logs",
+    "name": "Filter flight logs by drone",
+    "tags": [
+      "reporting"
+    ],
+    "goal": "An ops manager filters the flight history for one drone",
+    "start_url": "/logs",
+    "steps": [
+      {
+        "intent": "Filter logs to drone Falcon-1",
+        "action": "select",
+        "find": {
+          "role": "combobox",
+          "name": "drone"
+        },
+        "value": "Falcon-1"
+      }
+    ],
+    "oracles": [
+      {
+        "kind": "text_visible",
+        "params": {
+          "text": "Falcon-1"
+        },
+        "description": "Falcon-1 flights are listed"
+      }
+    ]
+  },
+  {
+    "id": "drone-detail",
+    "name": "Inspect a drone from the fleet table",
+    "tags": [
+      "smoke"
+    ],
+    "goal": "An operator opens the detail page of drone Kite-5 from the fleet overview",
+    "start_url": "/dashboard",
+    "steps": [
+      {
+        "intent": "Open Kite-5 details",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "view",
+          "context": "kite-5"
+        }
+      }
+    ],
+    "oracles": [
+      {
+        "kind": "url_matches",
+        "params": {
+          "pattern": "/drones/"
+        },
+        "description": "Drone detail page opens"
+      },
+      {
+        "kind": "text_visible",
+        "params": {
+          "text": "Kite-5"
+        },
+        "description": "It is the Kite-5 page"
+      }
+    ]
+  },
+  {
+    "id": "map-select-drone",
+    "name": "Pick a drone on the live map",
+    "tags": [
+      "canvas",
+      "vision"
+    ],
+    "goal": "An operator selects drone Falcon-2 directly on the canvas fleet map",
+    "start_url": "/map",
+    "steps": [
+      {
+        "intent": "Click the Falcon-2 marker on the map",
+        "action": "click",
+        "visual": {
+          "canvas": "[data-js=fleet-map]",
+          "at": [
+            0.64,
+            0.24
+          ],
+          "hint": "drone marker Falcon-2"
+        }
+      }
+    ],
+    "oracles": [
+      {
+        "kind": "text_visible",
+        "params": {
+          "text": "Selected drone: Falcon-2"
+        },
+        "description": "Falcon-2 is selected"
+      }
+    ]
+  },
+  {
+    "id": "logout",
+    "name": "Pilot signs out",
+    "tags": [
+      "auth-exit"
+    ],
+    "goal": "Signing out returns the pilot to the login page",
+    "start_url": "/dashboard",
+    "steps": [
+      {
+        "intent": "Sign out",
+        "action": "click",
+        "find": {
+          "role": "button",
+          "name": "log out"
+        }
+      }
+    ],
+    "oracles": [
+      {
+        "kind": "url_matches",
+        "params": {
+          "pattern": "/login"
+        },
+        "description": "Pilot is back on the login page",
+        "rule_ref": "R5"
+      }
+    ]
+  }
+]

@@ -1,0 +1,14 @@
+ proposal failed (LLMUnavailable); using deterministic tests
+ visit_dashboard 'Open Fleet overview' (0 steps)
+ visit_missions 'Open Missions' (0 steps)
+ visit_logs 'Open Flight logs' (0 steps)
+ visit_settings 'Open Settings' (0 steps)
+ wizard_launch 'Launch a mission via the wizard' (8 steps)
+ login 'Log in with demo credentials'
+  login Log in with demo credentials - 3 steps, 1 oracles ['auth']
+  visit_dashboard Open Fleet overview - 0 steps, 1 oracles ['smoke']
+  visit_missions Open Missions - 0 steps, 1 oracles ['smoke']
+  visit_logs Open Flight logs - 0 steps, 1 oracles ['smoke']
+  visit_settings Open Settings - 0 steps, 1 oracles ['smoke']
+  wizard_launch Launch a mission via the wizard - 8 steps, 2 oracles 
+['critical']

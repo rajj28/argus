@@ -1,0 +1,82 @@
+{
+  "schema": "argus-site-data-v1",
+  "generated_at": "2026-09-25T19:12:55+00:00",
+  "exported_by": "scripts/export_site_data.py",
+  "entries": {
+    "recorded": {
+      "gauntlet": {
+        "source": ".argus/gauntlet.json",
+        "measured_at": "2026-09-24T17:55:00+00:00"
+      },
+      "ten_runs": {
+        "source": ".argus-10/ten_runs.json",
+        "measured_at": "2026-09-24T13:21:47+00:00"
+      },
+      "saucedemo": {
+        "source": ".argus-saucedemo/realworld.json",
+        "measured_at": "2026-09-24T17:51:46.998364+00:00"
+      },
+      "diff": {
+        "source": ".argus-d/diff.json",
+        "measured_at": "2026-09-24T12:20:07+00:00"
+      },
+      "exam_before": {
+        "source": "exam/results/scorecard.json",
+        "measured_at": "2026-09-25T19:11:08+00:00"
+      },
+      "exam_after": {
+        "source": "exam/results/scorecard.json#modes.b_llm",
+        "measured_at": "2026-09-25T18:00:18+00:00"
+      }
+    },
+    "verdicts": {
+      "intended_change": {
+        "test_id": "create-mission",
+        "run_id": "20260924-174925-62ce",
+        "source": ".argus/runs/20260924-174925-62ce/report.json#create-mission"
+      },
+      "bug": {
+        "test_id": "save-settings",
+        "run_id": "20260924-175424-d85b",
+        "shots": 1,
+        "source": ".argus/runs/20260924-175424-d85b/report.json#save-settings"
+      }
+    },
+    "transcripts": {
+      "argus_run": {
+        "file": "transcripts/argus_run.txt",
+        "run_id": "20260926-004302-7e3f",
+        "exit_code": 0,
+        "build": "1.1",
+        "events": 66,
+        "measured_at": "2026-09-25T19:13:34+00:00"
+      },
+      "mcp_session": {
+        "file": "transcripts/mcp_session.json",
+        "frames": 9,
+        "methods": [
+          "initialize",
+          "notifications/initialized",
+          "tools/list",
+          "tools/call",
+          "tools/call"
+        ],
+        "measured_at": "2026-09-25T19:14:29+00:00"
+      }
+    }
+  },
+  "files": [
+    "diff.json",
+    "exam_after.json",
+    "exam_before.json",
+    "gauntlet.json",
+    "saucedemo.json",
+    "shots/20260924-175424-d85b-save-settings-save-settings_02.jpg",
+    "ten_runs.json",
+    "transcripts/argus_run.txt",
+    "transcripts/mcp_session.json",
+    "transcripts/mcp_session.txt",
+    "verdicts/bug.json",
+    "verdicts/intended_change.json"
+  ]
+}

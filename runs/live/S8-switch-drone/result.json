@@ -1,0 +1,31 @@
+{
+  "id": "S8-switch-drone",
+  "title": "Selecting another drone switches telemetry and video together",
+  "level": "L2",
+  "category": "Functional / Video",
+  "description": "Selecting a drone should show that drone's state and video together.",
+  "approach": "Argus selects Drone 2, compares telemetry with the simulator and compares a perceptual hash of the video frame before and after the switch.",
+  "verdict": "PASS",
+  "findings": [],
+  "steps": [
+    "[  0.5s] Start: operator watches Drone 1, then selects Drone 2"
+  ],
+  "samples": [
+    {
+      "frame_hash_distance": 39,
+      "battery_ui": 100.0,
+      "battery_truth": 100,
+      "title_before": "2D 3D FPV \u00b7 Drone 1 live",
+      "title_after": "2D 3D FPV \u00b7 Drone 2 live",
+      "t": 15.6
+    }
+  ],
+  "videos": [
+    "video.mp4"
+  ],
+  "shots": [
+    "shots/1-drone-2-selected.png"
+  ],
+  "started": "2026-09-26 16:28:40",
+  "duration_s": 18.5
+}

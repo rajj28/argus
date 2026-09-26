@@ -1,0 +1,28 @@
+# Argus web console + live job runner (docs/WEB_SPEC.md).
+# Build from the repo root:   docker build -f deploy/Dockerfile.web -t argus-web .
+# The repo-root .dockerignore keeps .env, .venv, .argus* and .git out of the image.
+FROM mcr.microsoft.com/playwright/python:v1.63.0-noble
+
+ENV PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PYTHONDONTWRITEBYTECODE=1
+
+WORKDIR /app
+
+# Dependencies first so code edits do not bust the pip layer.
+COPY pyproject.toml README.md ./
+COPY argus ./argus
+RUN pip install -e .
+
+# Everything else the console needs at runtime (CLI, SkyOps demo app, scripts, exported site data).
+COPY . .
+RUN pip install -e .
+
+ENV ARGUS_LIVE_HOME=/data/.argus-live \
+    SKYOPS_URL=http://skyops:8000 \
+    SKYOPS_B_URL=http://skyops-b:8000
+
+VOLUME ["/data"]
+EXPOSE 8080
+
+CMD ["bash", "deploy/start_web.sh"]

@@ -1,0 +1,229 @@
+{
+  "id": "cart-contents",
+  "name": "Cart lists the added item with its price",
+  "goal": "The cart shows the added item at its price",
+  "tags": [
+    "cart"
+  ],
+  "start_url": "/",
+  "steps": [
+    {
+      "id": "s1",
+      "intent": "Enter the username",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Username",
+        "text": "",
+        "attrs": {
+          "class": "input_error form_input",
+          "placeholder": "Username",
+          "aria-label": "Username",
+          "data-test": "username",
+          "id": "user-name",
+          "type": "text",
+          "name": "user-name"
+        },
+        "label": "",
+        "context": "Login",
+        "neighbor_text": "",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/form[1]/div[1]/input[1]",
+        "css": "#user-name",
+        "bbox": {
+          "x": 494.0,
+          "y": 154.0,
+          "w": 292.0,
+          "h": 39.0
+        }
+      },
+      "value": "${creds.user}",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s2",
+      "intent": "Enter the password",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Password",
+        "text": "",
+        "attrs": {
+          "class": "input_error form_input",
+          "placeholder": "Password",
+          "aria-label": "Password",
+          "data-test": "password",
+          "id": "password",
+          "type": "password",
+          "name": "password"
+        },
+        "label": "",
+        "context": "Login",
+        "neighbor_text": "",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/form[1]/div[2]/input[1]",
+        "css": "#password",
+        "bbox": {
+          "x": 494.0,
+          "y": 208.0,
+          "w": 292.0,
+          "h": 39.0
+        }
+      },
+      "value": "${creds.password}",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s3",
+      "intent": "Sign in",
+      "action": "click",
+      "target": {
+        "tag": "input",
+        "role": "button",
+        "name": "Login",
+        "text": "",
+        "attrs": {
+          "class": "submit-button btn_action",
+          "data-test": "login-button",
+          "id": "login-button",
+          "type": "submit",
+          "value": "Login",
+          "name": "login-button"
+        },
+        "label": "",
+        "context": "Login",
+        "neighbor_text": "",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/form[1]/input[1]",
+        "css": "#login-button",
+        "bbox": {
+          "x": 494.0,
+          "y": 302.0,
+          "w": 292.0,
+          "h": 49.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": true,
+        "url_pattern": "/inventory.html",
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s4",
+      "intent": "Add the first product to the cart",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Add to cart",
+        "text": "Add to cart",
+        "attrs": {
+          "class": "btn btn_primary btn_small btn_inventory ",
+          "data-test": "add-to-cart-sauce-labs-backpack",
+          "id": "add-to-cart-sauce-labs-backpack",
+          "name": "add-to-cart-sauce-labs-backpack"
+        },
+        "label": "",
+        "context": "",
+        "neighbor_text": "$29.99 | Sauce Labs Backpack carry.allTheThings() with the sleek, streamlined Sl",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[2]/button[1]",
+        "css": "#add-to-cart-sauce-labs-backpack",
+        "bbox": {
+          "x": 420.0,
+          "y": 339.0,
+          "w": 160.0,
+          "h": 34.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s5",
+      "intent": "Open the cart",
+      "action": "goto",
+      "target": null,
+      "value": "/cart.html",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    }
+  ],
+  "oracles": [
+    {
+      "kind": "text_visible",
+      "params": {
+        "text": "Sauce Labs Backpack"
+      },
+      "description": "The added item is listed",
+      "rule_ref": "R4"
+    },
+    {
+      "kind": "text_visible",
+      "params": {
+        "text": "29.99"
+      },
+      "description": "The item's price is shown",
+      "rule_ref": "R4"
+    }
+  ],
+  "version": 1,
+  "status": "active",
+  "origin": "manual",
+  "history": [
+    {
+      "version": 1,
+      "at": "2026-09-24T12:58:53+00:00",
+      "kind": "created",
+      "summary": "Authored (manual); baseline recorded",
+      "diff": "",
+      "verdict_ref": null
+    }
+  ],
+  "requires_login": false
+}

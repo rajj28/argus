@@ -1,0 +1,120 @@
+INFO:     Started server process [22200]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8003 (Press CTRL+C to quit)
+INFO:     127.0.0.1:60221 - "GET /missions HTTP/1.1" 302 Found
+INFO:     127.0.0.1:60222 - "GET /login HTTP/1.1" 200 OK
+Exception in callback _ProactorBasePipeTransport._call_connection_lost(None)
+handle: <Handle _ProactorBasePipeTransport._call_connection_lost(None)>
+Traceback (most recent call last):
+  File "C:\Python311\Lib\asyncio\events.py", line 84, in _run
+    self._context.run(self._callback, *self._args)
+  File "C:\Python311\Lib\asyncio\proactor_events.py", line 165, in _call_connection_lost
+    self._sock.shutdown(socket.SHUT_RDWR)
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+INFO:     127.0.0.1:50826 - "POST /__admin/version HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50827 - "POST /__admin/chaos HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50828 - "POST /__admin/reset HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51451 - "GET /__admin/state HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65313 - "GET /login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65313 - "GET /static/app.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49543 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62093 - "GET /login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62093 - "GET /static/app.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56923 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62093 - "POST /api/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62093 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58130 - "GET / HTTP/1.1" 302 Found
+INFO:     127.0.0.1:58130 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61584 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58130 - "GET /static/app.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62957 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62957 - "GET /static/app.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51935 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51935 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51935 - "GET /missions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51935 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51935 - "GET /map HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51935 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51935 - "GET /logs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51935 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51935 - "GET /settings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51935 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51935 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51935 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51935 - "GET /drones/d3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51935 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51935 - "GET /drones/d4 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51935 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51935 - "GET /drones/d5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51935 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51935 - "GET /drones/d6 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50416 - "GET /missions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50416 - "GET /static/app.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60855 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60855 - "GET /missions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60855 - "GET /missions/new HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60855 - "GET /missions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60855 - "GET /missions/m1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64704 - "GET /map HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64704 - "GET /static/app.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56194 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53766 - "GET /logs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53766 - "GET /static/app.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56864 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53033 - "GET /settings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53033 - "GET /static/app.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65048 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65048 - "GET /settings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65048 - "PUT /api/settings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49847 - "GET /drones/d3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60654 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49847 - "GET /static/app.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54041 - "GET /missions/new HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54041 - "GET /static/app.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58019 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58019 - "GET /missions/new HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58019 - "POST /api/missions/validate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52277 - "GET /missions/m1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52277 - "GET /static/app.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61410 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54528 - "GET /missions/new HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54528 - "GET /static/app.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62545 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54528 - "POST /api/missions/validate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54528 - "GET /missions/new HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54528 - "POST /api/missions/validate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54528 - "GET /missions/new HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54528 - "POST /api/missions/validate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54528 - "POST /api/missions/validate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62596 - "GET /missions/new HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62596 - "GET /static/app.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60239 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60239 - "POST /api/missions/validate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60239 - "POST /api/missions/validate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60239 - "GET /missions/new HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60239 - "POST /api/missions/validate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60239 - "POST /api/missions/validate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60239 - "GET /missions/new HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60239 - "POST /api/missions/validate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60239 - "POST /api/missions/validate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60239 - "POST /api/missions/validate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62142 - "GET /missions/new HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62142 - "GET /static/app.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62639 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62639 - "POST /api/missions/validate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62639 - "POST /api/missions/validate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62639 - "POST /api/missions/validate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62639 - "GET /missions/new HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62639 - "POST /api/missions/validate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62639 - "POST /api/missions/validate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62639 - "POST /api/missions/validate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62639 - "GET /missions/new HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62639 - "POST /api/missions/validate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62639 - "POST /api/missions/validate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62639 - "POST /api/missions/validate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62639 - "POST /api/missions HTTP/1.1" 201 Created
+INFO:     127.0.0.1:62639 - "GET /missions/m4?launched=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53327 - "GET /missions/m4 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53327 - "GET /static/app.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55613 - "GET /static/app.js HTTP/1.1" 200 OK

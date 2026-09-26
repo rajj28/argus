@@ -1,0 +1,18 @@
+# Caddyfile - TLS via sslip.io (deploy/docker-compose.yml passes ARGUS_HOST / SKYOPS_HOST).
+#   argus.<IP>.sslip.io  -> the web console
+#   skyops.<IP>.sslip.io -> the SkyOps app under test, with /__admin* blocked from the public
+# (the web container reaches SkyOps over the compose network, so the block costs nothing)
+
+{$ARGUS_HOST} {
+	encode zstd gzip
+	reverse_proxy web:8080
+}
+
+{$SKYOPS_HOST} {
+	encode zstd gzip
+
+	@admin path /__admin /__admin/*
+	respond @admin "forbidden" 403
+
+	reverse_proxy skyops:8000
+}

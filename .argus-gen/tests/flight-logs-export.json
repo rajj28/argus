@@ -1,0 +1,84 @@
+{
+  "id": "flight-logs-export",
+  "name": "FLIGHT LOGS EXPORT",
+  "goal": "Export flight logs as CSV",
+  "tags": [
+    "critical"
+  ],
+  "start_url": "/logs",
+  "steps": [
+    {
+      "id": "s1",
+      "intent": "trigger CSV export",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Export logs as CSV",
+        "text": "Export CSV",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-secondary",
+          "aria-label": "Export logs as CSV"
+        },
+        "label": "",
+        "context": "main",
+        "neighbor_text": "Flight logs Recent flight history | Filter by drone All drones Falcon-1 Falcon-2",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[1]/button[1]",
+        "css": "#main-content > div:nth-of-type(1) > button",
+        "bbox": {
+          "x": 1143.0,
+          "y": 99.0,
+          "w": 105.0,
+          "h": 36.0
+        }
+      },
+      "value": "",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    }
+  ],
+  "oracles": [
+    {
+      "kind": "network_called",
+      "params": {
+        "method": "GET",
+        "path": "/api/logs/export",
+        "status_class": "2xx"
+      },
+      "description": "GET request to export logs succeeded",
+      "rule_ref": null
+    }
+  ],
+  "version": 2,
+  "status": "retired",
+  "origin": "generated",
+  "history": [
+    {
+      "version": 1,
+      "at": "2026-09-24T19:35:01+00:00",
+      "kind": "created",
+      "summary": "Generated 1-step test with 1 oracles",
+      "diff": "",
+      "verdict_ref": null
+    },
+    {
+      "version": 2,
+      "at": "2026-09-24T19:35:41+00:00",
+      "kind": "retired",
+      "summary": "Retired: /logs no longer exists and the release notes retire it.",
+      "diff": "",
+      "verdict_ref": "20260925-010536-9f97"
+    }
+  ],
+  "requires_login": true
+}

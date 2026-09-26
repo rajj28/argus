@@ -1,0 +1,516 @@
+{
+  "id": "age-validation",
+  "name": "Age 150 is rejected by the booking form",
+  "goal": "Entering age 150 in the booking form is rejected: the step-1 validation fires before any slot or confirmation (business rule B1)",
+  "tags": [
+    "negative",
+    "validation"
+  ],
+  "start_url": "/#/login",
+  "steps": [
+    {
+      "id": "s1",
+      "intent": "Enter the front-desk email to sign in",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Email address",
+        "text": "",
+        "attrs": {
+          "class": "mq-input",
+          "name": "email",
+          "type": "email",
+          "placeholder": "you@clinic.in",
+          "required": "",
+          "ordinal": "0"
+        },
+        "label": "Email address",
+        "context": "Calmer clinics start with a clear queue.",
+        "neighbor_text": "Email address | Password | Sign in to MediQueue",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/section[1]/div[2]/div[1]/form[1]/label[1]/input[1]",
+        "css": "#mq-login-form > label:nth-of-type(1) > input",
+        "bbox": {
+          "x": 708.0,
+          "y": 333.0,
+          "w": 440.0,
+          "h": 48.0
+        }
+      },
+      "value": "${creds.user}",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s2",
+      "intent": "Enter the password",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Password",
+        "text": "",
+        "attrs": {
+          "class": "mq-input",
+          "name": "password",
+          "type": "password",
+          "placeholder": "Enter your password",
+          "required": "",
+          "ordinal": "0"
+        },
+        "label": "Password",
+        "context": "Calmer clinics start with a clear queue.",
+        "neighbor_text": "Password | Email address | Sign in to MediQueue",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/section[1]/div[2]/div[1]/form[1]/label[2]/input[1]",
+        "css": "#mq-login-form > label:nth-of-type(2) > input",
+        "bbox": {
+          "x": 708.0,
+          "y": 426.0,
+          "w": 440.0,
+          "h": 48.0
+        }
+      },
+      "value": "${creds.password}",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s3",
+      "intent": "Click the sign-in button",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Sign in to MediQueue",
+        "text": "Sign in to MediQueue",
+        "attrs": {
+          "class": "mq-primary",
+          "type": "submit",
+          "ordinal": "0"
+        },
+        "label": "",
+        "context": "Calmer clinics start with a clear queue.",
+        "neighbor_text": "Email address | Password | FRONT DESK PORTAL",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/section[1]/div[2]/div[1]/form[1]/button[1]",
+        "css": "#mq-login-form > button",
+        "bbox": {
+          "x": 708.0,
+          "y": 494.0,
+          "w": 440.0,
+          "h": 43.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": true,
+        "url_pattern": "/",
+        "network": [
+          {
+            "method": "POST",
+            "path": "/api/login",
+            "status": 200,
+            "resource_type": "fetch"
+          }
+        ],
+        "headings_any": [
+          "Good morning, Front Desk"
+        ],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s4",
+      "intent": "Wait for the overview to load",
+      "action": "wait",
+      "target": null,
+      "value": "1500",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s5",
+      "intent": "Open the appointment desk from clinic navigation",
+      "action": "click",
+      "target": {
+        "tag": "a",
+        "role": "link",
+        "name": "New appointment",
+        "text": "New appointment",
+        "attrs": {
+          "class": "mq-nav-link",
+          "href": "#/app/book",
+          "ordinal": "0"
+        },
+        "label": "",
+        "context": "Main navigation",
+        "neighbor_text": "Overview | Doctors | Appointments",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/header[1]/nav[1]/a[3]",
+        "css": "#mq-main > header > nav > a:nth-of-type(3)",
+        "bbox": {
+          "x": 417.0,
+          "y": 12.0,
+          "w": 147.0,
+          "h": 49.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": true,
+        "url_pattern": "/",
+        "network": [],
+        "headings_any": [
+          "Book an appointment",
+          "Patient details"
+        ],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s6",
+      "intent": "Wait for the booking wizard to load the doctor and open slots",
+      "action": "wait",
+      "target": null,
+      "value": "800",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s7",
+      "intent": "Enter a patient name",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Patient name *",
+        "text": "",
+        "attrs": {
+          "id": "mq-patient-name",
+          "class": "mq-input",
+          "required": "",
+          "ordinal": "0"
+        },
+        "label": "Patient name *",
+        "context": "Patient details",
+        "neighbor_text": "Patient name * | Age * | Phone number *",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/section[1]/div[2]/section[1]/div[2]/label[1]/input[1]",
+        "css": "#mq-patient-name",
+        "bbox": {
+          "x": 61.0,
+          "y": 554.0,
+          "w": 1158.0,
+          "h": 48.0
+        }
+      },
+      "value": "Age Test Patient",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s8",
+      "intent": "Enter the invalid age 150",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Age *",
+        "text": "",
+        "attrs": {
+          "id": "mq-patient-age",
+          "class": "mq-input",
+          "max": "120",
+          "min": "0",
+          "required": "",
+          "ordinal": "0"
+        },
+        "label": "Age *",
+        "context": "Patient details",
+        "neighbor_text": "Age * | Patient name * | Phone number *",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/section[1]/div[2]/section[1]/div[2]/label[2]/input[1]",
+        "css": "#mq-patient-age",
+        "bbox": {
+          "x": 61.0,
+          "y": 647.0,
+          "w": 569.0,
+          "h": 48.0
+        }
+      },
+      "value": "150",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s9",
+      "intent": "Enter a valid phone number",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Phone number *",
+        "text": "",
+        "attrs": {
+          "id": "mq-patient-phone",
+          "class": "mq-input",
+          "required": "",
+          "ordinal": "0"
+        },
+        "label": "Phone number *",
+        "context": "Patient details",
+        "neighbor_text": "Phone number * | Patient name * | Age *",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/section[1]/div[2]/section[1]/div[2]/label[3]/input[1]",
+        "css": "#mq-patient-phone",
+        "bbox": {
+          "x": 650.0,
+          "y": 647.0,
+          "w": 569.0,
+          "h": 48.0
+        }
+      },
+      "value": "+91 9876543210",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s10",
+      "intent": "Open the visit type selector",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Choose visit type",
+        "text": "Choose visit type",
+        "attrs": {
+          "class": "mq-select-trigger",
+          "type": "button",
+          "aria-expanded": "false",
+          "ordinal": "0"
+        },
+        "label": "",
+        "context": "Patient details",
+        "neighbor_text": "ConsultationFollow-upEmergency | Visit type *",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/section[1]/div[2]/section[1]/div[2]/div[1]/div[1]/button[1]",
+        "css": "#mq-content > div:nth-of-type(2) > section > div:nth-of-type(2) > div > div > button",
+        "bbox": {
+          "x": 61.0,
+          "y": 740.0,
+          "w": 1158.0,
+          "h": 48.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s11",
+      "intent": "Select Consultation as the visit type",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "option",
+        "name": "Consultation",
+        "text": "Consultation",
+        "attrs": {
+          "class": "mq-option",
+          "type": "button",
+          "aria-selected": "false",
+          "ordinal": "0"
+        },
+        "label": "",
+        "context": "Patient details",
+        "neighbor_text": "Follow-up | Emergency | Choose visit type",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/section[1]/div[2]/section[1]/div[2]/div[1]/div[1]/div[1]/button[1]",
+        "css": "#mq-content > div:nth-of-type(2) > section > div:nth-of-type(2) > div > div > div > button:nth-of-type(1)",
+        "bbox": {
+          "x": 67.0,
+          "y": 800.0,
+          "w": 1146.0,
+          "h": 41.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s12",
+      "intent": "Click Next to attempt advancing past the patient details step",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Next",
+        "text": "Next",
+        "attrs": {
+          "id": "mq-booking-next",
+          "class": "mq-primary",
+          "type": "button",
+          "ordinal": "0"
+        },
+        "label": "",
+        "context": "Patient details",
+        "neighbor_text": "Back | Patient details Enter the patient’s contact information and the reason fo",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/section[1]/div[2]/section[1]/div[4]/button[2]",
+        "css": "#mq-booking-next",
+        "bbox": {
+          "x": 1143.0,
+          "y": 820.0,
+          "w": 76.0,
+          "h": 43.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s13",
+      "intent": "Wait for the age validation response",
+      "action": "wait",
+      "target": null,
+      "value": "500",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    }
+  ],
+  "oracles": [
+    {
+      "kind": "network_absent",
+      "params": {
+        "method": "POST",
+        "path": "/api/appointments",
+        "status_class": "2xx"
+      },
+      "description": "No appointment is created when age 150 is entered",
+      "rule_ref": "B1"
+    },
+    {
+      "kind": "text_visible",
+      "params": {
+        "text": "Age must be between"
+      },
+      "description": "Age validation error message is shown",
+      "rule_ref": "B1"
+    }
+  ],
+  "version": 1,
+  "status": "active",
+  "origin": "manual",
+  "history": [
+    {
+      "version": 1,
+      "at": "2026-09-25T19:24:38+00:00",
+      "kind": "created",
+      "summary": "Authored (manual); baseline recorded",
+      "diff": "",
+      "verdict_ref": null
+    }
+  ],
+  "requires_login": false
+}

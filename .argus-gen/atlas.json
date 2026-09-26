@@ -1,0 +1,4868 @@
+{
+  "meta": {
+    "app": "http://127.0.0.1:8003",
+    "start_url": "/dashboard",
+    "start_state": "S1",
+    "login_state": "S0",
+    "counts": {
+      "states": 13,
+      "actions": 18,
+      "transitions": 18
+    }
+  },
+  "states": {
+    "S0": {
+      "id": "S0",
+      "url": "/login",
+      "entry_url": "http://127.0.0.1:8003/login",
+      "path": [],
+      "signature": "3433ed9222d46f7fd2a4d8a7442cb7cdadef09f9",
+      "title": "SkyOps — Drone Operations Console",
+      "headings": [
+        "Drone Operations Console"
+      ],
+      "alerts": [],
+      "elements": [
+        {
+          "id": "S0.e0",
+          "fp": {
+            "tag": "input",
+            "role": "textbox",
+            "name": "Email address",
+            "text": "",
+            "attrs": {
+              "type": "email",
+              "id": "login-email",
+              "data-testid": "login-email",
+              "name": "email",
+              "required": "",
+              "placeholder": "pilot@skyops.io",
+              "aria-label": "Email address"
+            },
+            "label": "Email address",
+            "context": "Drone Operations Console",
+            "neighbor_text": "Email address | Password | Log in",
+            "xpath": "/html[1]/body[1]/div[1]/div[1]/form[1]/div[1]/input[1]",
+            "css": "#login-email",
+            "bbox": {
+              "x": 481.0,
+              "y": 399.0,
+              "w": 318.0,
+              "h": 37.0
+            }
+          },
+          "desc": "textbox \"Email address\" (in: Drone Operations Console)",
+          "enabled": true
+        },
+        {
+          "id": "S0.e1",
+          "fp": {
+            "tag": "input",
+            "role": "textbox",
+            "name": "Password",
+            "text": "",
+            "attrs": {
+              "type": "password",
+              "id": "login-password",
+              "data-testid": "login-password",
+              "name": "password",
+              "required": "",
+              "aria-label": "Password"
+            },
+            "label": "Password",
+            "context": "Drone Operations Console",
+            "neighbor_text": "Password | Email address | Log in",
+            "xpath": "/html[1]/body[1]/div[1]/div[1]/form[1]/div[2]/input[1]",
+            "css": "#login-password",
+            "bbox": {
+              "x": 481.0,
+              "y": 478.0,
+              "w": 318.0,
+              "h": 37.0
+            }
+          },
+          "desc": "textbox \"Password\" (in: Drone Operations Console)",
+          "enabled": true
+        },
+        {
+          "id": "S0.e2",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "Log in",
+            "text": "Log in",
+            "attrs": {
+              "type": "submit",
+              "id": "login-submit",
+              "data-testid": "login-submit",
+              "class": "btn btn-primary"
+            },
+            "label": "",
+            "context": "Drone Operations Console",
+            "neighbor_text": "Email address | Password | 🛸 SkyOps",
+            "xpath": "/html[1]/body[1]/div[1]/div[1]/form[1]/button[1]",
+            "css": "#login-submit",
+            "bbox": {
+              "x": 481.0,
+              "y": 535.0,
+              "w": 318.0,
+              "h": 36.0
+            }
+          },
+          "desc": "button \"Log in\" (in: Drone Operations Console)",
+          "enabled": true
+        }
+      ],
+      "forms": []
+    },
+    "S1": {
+      "id": "S1",
+      "url": "/dashboard",
+      "entry_url": "http://127.0.0.1:8003/dashboard",
+      "path": [],
+      "signature": "0798544f69251826333a9df09d694acb5eb804f5",
+      "title": "Dashboard — Drone Operations Console",
+      "headings": [
+        "Fleet overview"
+      ],
+      "alerts": [],
+      "elements": [
+        {
+          "id": "S1.e0",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "🛸 SkyOps",
+            "text": "🛸 SkyOps",
+            "attrs": {
+              "href": "/dashboard",
+              "class": "brand"
+            },
+            "label": "",
+            "context": "header",
+            "neighbor_text": "Dashboard Missions Live map Flight logs Settings | v1.0 Log out | Fleet overview",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/a[1]",
+            "css": "body > div > header > a",
+            "bbox": {
+              "x": 24.0,
+              "y": 13.0,
+              "w": 91.0,
+              "h": 30.0
+            }
+          },
+          "desc": "link \"🛸 SkyOps\" (in: header)",
+          "enabled": true
+        },
+        {
+          "id": "S1.e1",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Dashboard",
+            "text": "Dashboard",
+            "attrs": {
+              "href": "/dashboard",
+              "class": " active"
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Missions | Live map | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[1]",
+            "css": "body > div > header > nav > a:nth-of-type(1)",
+            "bbox": {
+              "x": 147.0,
+              "y": 11.0,
+              "w": 93.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Dashboard\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S1.e2",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Missions",
+            "text": "Missions",
+            "attrs": {
+              "href": "/missions",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Live map | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[2]",
+            "css": "body > div > header > nav > a:nth-of-type(2)",
+            "bbox": {
+              "x": 244.0,
+              "y": 11.0,
+              "w": 77.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Missions\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S1.e3",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Live map",
+            "text": "Live map",
+            "attrs": {
+              "href": "/map",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[3]",
+            "css": "body > div > header > nav > a:nth-of-type(3)",
+            "bbox": {
+              "x": 325.0,
+              "y": 11.0,
+              "w": 79.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Live map\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S1.e4",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Flight logs",
+            "text": "Flight logs",
+            "attrs": {
+              "href": "/logs",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Live map",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[4]",
+            "css": "body > div > header > nav > a:nth-of-type(4)",
+            "bbox": {
+              "x": 409.0,
+              "y": 11.0,
+              "w": 88.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Flight logs\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S1.e5",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Settings",
+            "text": "Settings",
+            "attrs": {
+              "href": "/settings",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Live map",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[5]",
+            "css": "body > div > header > nav > a:nth-of-type(5)",
+            "bbox": {
+              "x": 501.0,
+              "y": 11.0,
+              "w": 74.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Settings\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S1.e6",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "Log out",
+            "text": "Log out",
+            "attrs": {
+              "class": "btn btn-secondary btn-sm",
+              "type": "button"
+            },
+            "label": "",
+            "context": "header",
+            "neighbor_text": "v1.0 | 🛸 SkyOps | Dashboard Missions Live map Flight logs Settings",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/div[1]/button[1]",
+            "css": "body > div > header > div > button",
+            "bbox": {
+              "x": 1192.0,
+              "y": 14.0,
+              "w": 64.0,
+              "h": 27.0
+            }
+          },
+          "desc": "button \"Log out\" (in: header)",
+          "enabled": true
+        },
+        {
+          "id": "S1.e7",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "View Falcon-1",
+            "text": "View",
+            "attrs": {
+              "type": "button",
+              "class": "btn btn-secondary btn-sm",
+              "aria-label": "View Falcon-1"
+            },
+            "label": "",
+            "context": "Falcon-1 DJI M350 92% Idle Dock-A",
+            "neighbor_text": "Falcon-1 | DJI M350 | 92%",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/table[1]/tbody[1]/tr[1]/td[6]/button[1]",
+            "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(2) > table > tbody > tr:nth-of-type(1) > td:nth-of-type(6) > button",
+            "bbox": {
+              "x": 1096.0,
+              "y": 391.0,
+              "w": 48.0,
+              "h": 27.0
+            }
+          },
+          "desc": "button \"View Falcon-1\" (in: Falcon-1 DJI M350 92% Idle Dock-A)",
+          "enabled": true
+        },
+        {
+          "id": "S1.e8",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "View Falcon-2",
+            "text": "View",
+            "attrs": {
+              "type": "button",
+              "class": "btn btn-secondary btn-sm",
+              "aria-label": "View Falcon-2"
+            },
+            "label": "",
+            "context": "Falcon-2 DJI M350 88% Idle Dock-A",
+            "neighbor_text": "Falcon-2 | DJI M350 | 88%",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/table[1]/tbody[1]/tr[2]/td[6]/button[1]",
+            "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(2) > table > tbody > tr:nth-of-type(2) > td:nth-of-type(6) > button",
+            "bbox": {
+              "x": 1096.0,
+              "y": 442.0,
+              "w": 48.0,
+              "h": 27.0
+            }
+          },
+          "desc": "button \"View Falcon-2\" (in: Falcon-2 DJI M350 88% Idle Dock-A)",
+          "enabled": true
+        },
+        {
+          "id": "S1.e9",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "View Hawk-7",
+            "text": "View",
+            "attrs": {
+              "type": "button",
+              "class": "btn btn-secondary btn-sm",
+              "aria-label": "View Hawk-7"
+            },
+            "label": "",
+            "context": "Hawk-7 Autel EVO II 12% Idle Dock-B",
+            "neighbor_text": "Hawk-7 | Autel EVO II | 12%",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/table[1]/tbody[1]/tr[3]/td[6]/button[1]",
+            "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(2) > table > tbody > tr:nth-of-type(3) > td:nth-of-type(6) > button",
+            "bbox": {
+              "x": 1096.0,
+              "y": 494.0,
+              "w": 48.0,
+              "h": 27.0
+            }
+          },
+          "desc": "button \"View Hawk-7\" (in: Hawk-7 Autel EVO II 12% Idle Dock-B)",
+          "enabled": true
+        },
+        {
+          "id": "S1.e10",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "View Osprey-3",
+            "text": "View",
+            "attrs": {
+              "type": "button",
+              "class": "btn btn-secondary btn-sm",
+              "aria-label": "View Osprey-3"
+            },
+            "label": "",
+            "context": "Osprey-3 DJI M300 64% In mission Dock-C",
+            "neighbor_text": "Osprey-3 | DJI M300 | 64%",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/table[1]/tbody[1]/tr[4]/td[6]/button[1]",
+            "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(2) > table > tbody > tr:nth-of-type(4) > td:nth-of-type(6) > button",
+            "bbox": {
+              "x": 1096.0,
+              "y": 546.0,
+              "w": 48.0,
+              "h": 27.0
+            }
+          },
+          "desc": "button \"View Osprey-3\" (in: Osprey-3 DJI M300 64% In mission Dock-C)",
+          "enabled": true
+        },
+        {
+          "id": "S1.e11",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "View Kite-5",
+            "text": "View",
+            "attrs": {
+              "type": "button",
+              "class": "btn btn-secondary btn-sm",
+              "aria-label": "View Kite-5"
+            },
+            "label": "",
+            "context": "Kite-5 Parrot ANAFI 45% Idle Dock-B",
+            "neighbor_text": "Kite-5 | Parrot ANAFI | 45%",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/table[1]/tbody[1]/tr[5]/td[6]/button[1]",
+            "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(2) > table > tbody > tr:nth-of-type(5) > td:nth-of-type(6) > button",
+            "bbox": {
+              "x": 1096.0,
+              "y": 598.0,
+              "w": 48.0,
+              "h": 27.0
+            }
+          },
+          "desc": "button \"View Kite-5\" (in: Kite-5 Parrot ANAFI 45% Idle Dock-B)",
+          "enabled": true
+        },
+        {
+          "id": "S1.e12",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "View Raven-9",
+            "text": "View",
+            "attrs": {
+              "type": "button",
+              "class": "btn btn-secondary btn-sm",
+              "aria-label": "View Raven-9"
+            },
+            "label": "",
+            "context": "Raven-9 DJI M350 100% Maintenance Dock-D",
+            "neighbor_text": "Raven-9 | DJI M350 | 100%",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/table[1]/tbody[1]/tr[6]/td[6]/button[1]",
+            "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(2) > table > tbody > tr:nth-of-type(6) > td:nth-of-type(6) > button",
+            "bbox": {
+              "x": 1096.0,
+              "y": 650.0,
+              "w": 48.0,
+              "h": 27.0
+            }
+          },
+          "desc": "button \"View Raven-9\" (in: Raven-9 DJI M350 100% Maintenance Dock-D)",
+          "enabled": true
+        }
+      ],
+      "forms": []
+    },
+    "S2": {
+      "id": "S2",
+      "url": "/missions",
+      "entry_url": "http://127.0.0.1:8003/missions",
+      "path": [],
+      "signature": "e3359652c5e7c0774620cda2e1dbfc6164bc088b",
+      "title": "Missions — Drone Operations Console",
+      "headings": [
+        "Missions"
+      ],
+      "alerts": [],
+      "elements": [
+        {
+          "id": "S2.e0",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "🛸 SkyOps",
+            "text": "🛸 SkyOps",
+            "attrs": {
+              "href": "/dashboard",
+              "class": "brand"
+            },
+            "label": "",
+            "context": "header",
+            "neighbor_text": "Dashboard Missions Live map Flight logs Settings | v1.0 Log out | Missions Plan ",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/a[1]",
+            "css": "body > div > header > a",
+            "bbox": {
+              "x": 24.0,
+              "y": 13.0,
+              "w": 91.0,
+              "h": 30.0
+            }
+          },
+          "desc": "link \"🛸 SkyOps\" (in: header)",
+          "enabled": true
+        },
+        {
+          "id": "S2.e1",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Dashboard",
+            "text": "Dashboard",
+            "attrs": {
+              "href": "/dashboard",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Missions | Live map | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[1]",
+            "css": "body > div > header > nav > a:nth-of-type(1)",
+            "bbox": {
+              "x": 147.0,
+              "y": 11.0,
+              "w": 91.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Dashboard\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S2.e2",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Missions",
+            "text": "Missions",
+            "attrs": {
+              "href": "/missions",
+              "class": " active"
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Live map | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[2]",
+            "css": "body > div > header > nav > a:nth-of-type(2)",
+            "bbox": {
+              "x": 243.0,
+              "y": 11.0,
+              "w": 79.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Missions\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S2.e3",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Live map",
+            "text": "Live map",
+            "attrs": {
+              "href": "/map",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[3]",
+            "css": "body > div > header > nav > a:nth-of-type(3)",
+            "bbox": {
+              "x": 325.0,
+              "y": 11.0,
+              "w": 79.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Live map\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S2.e4",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Flight logs",
+            "text": "Flight logs",
+            "attrs": {
+              "href": "/logs",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Live map",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[4]",
+            "css": "body > div > header > nav > a:nth-of-type(4)",
+            "bbox": {
+              "x": 409.0,
+              "y": 11.0,
+              "w": 88.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Flight logs\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S2.e5",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Settings",
+            "text": "Settings",
+            "attrs": {
+              "href": "/settings",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Live map",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[5]",
+            "css": "body > div > header > nav > a:nth-of-type(5)",
+            "bbox": {
+              "x": 501.0,
+              "y": 11.0,
+              "w": 74.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Settings\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S2.e6",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "Log out",
+            "text": "Log out",
+            "attrs": {
+              "class": "btn btn-secondary btn-sm",
+              "type": "button"
+            },
+            "label": "",
+            "context": "header",
+            "neighbor_text": "v1.0 | 🛸 SkyOps | Dashboard Missions Live map Flight logs Settings",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/div[1]/button[1]",
+            "css": "body > div > header > div > button",
+            "bbox": {
+              "x": 1192.0,
+              "y": 14.0,
+              "w": 64.0,
+              "h": 27.0
+            }
+          },
+          "desc": "button \"Log out\" (in: header)",
+          "enabled": true
+        },
+        {
+          "id": "S2.e7",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "New mission",
+            "text": "+ New mission",
+            "attrs": {
+              "type": "button",
+              "class": "btn btn-primary",
+              "aria-label": "New mission"
+            },
+            "label": "",
+            "context": "main",
+            "neighbor_text": "Missions Plan and monitor drone missions | Search missions | NAME DRONE ALTITUDE",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[1]/button[1]",
+            "css": "#main-content > div:nth-of-type(1) > button",
+            "bbox": {
+              "x": 1120.0,
+              "y": 99.0,
+              "w": 129.0,
+              "h": 36.0
+            }
+          },
+          "desc": "button \"New mission\" (in: main)",
+          "enabled": true
+        },
+        {
+          "id": "S2.e8",
+          "fp": {
+            "tag": "input",
+            "role": "searchbox",
+            "name": "Search missions",
+            "text": "",
+            "attrs": {
+              "type": "search",
+              "id": "mission-search-input",
+              "placeholder": "Search missions",
+              "aria-label": "Search missions"
+            },
+            "label": "Search missions",
+            "context": "main",
+            "neighbor_text": "Search missions | Missions Plan and monitor drone missions + New mission | NAME ",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[2]/input[1]",
+            "css": "#mission-search-input",
+            "bbox": {
+              "x": 133.0,
+              "y": 170.0,
+              "w": 173.0,
+              "h": 19.0
+            }
+          },
+          "desc": "searchbox \"Search missions\" (in: main)",
+          "enabled": true
+        },
+        {
+          "id": "S2.e9",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Port Survey Alpha",
+            "text": "Port Survey Alpha",
+            "attrs": {
+              "href": "/missions/m1"
+            },
+            "label": "",
+            "context": "Osprey-3 80 m In mission 2026-09-20",
+            "neighbor_text": "Osprey-3 | 80 m | In mission",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/table[1]/tbody[1]/tr[1]/td[1]/a[1]",
+            "css": "#main-content > div:nth-of-type(3) > table > tbody > tr:nth-of-type(1) > td:nth-of-type(1) > a",
+            "bbox": {
+              "x": 49.0,
+              "y": 267.0,
+              "w": 110.0,
+              "h": 19.0
+            }
+          },
+          "desc": "link \"Port Survey Alpha\" (in: Osprey-3 80 m In mission 2026-09-20)",
+          "enabled": true
+        },
+        {
+          "id": "S2.e10",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Solar Inspection B7",
+            "text": "Solar Inspection B7",
+            "attrs": {
+              "href": "/missions/m2"
+            },
+            "label": "",
+            "context": "Falcon-1 45 m Completed 2026-09-21",
+            "neighbor_text": "Falcon-1 | 45 m | Completed",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/table[1]/tbody[1]/tr[2]/td[1]/a[1]",
+            "css": "#main-content > div:nth-of-type(3) > table > tbody > tr:nth-of-type(2) > td:nth-of-type(1) > a",
+            "bbox": {
+              "x": 49.0,
+              "y": 314.0,
+              "w": 118.0,
+              "h": 19.0
+            }
+          },
+          "desc": "link \"Solar Inspection B7\" (in: Falcon-1 45 m Completed 2026-09-21)",
+          "enabled": true
+        },
+        {
+          "id": "S2.e11",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Depot Patrol Morning",
+            "text": "Depot Patrol Morning",
+            "attrs": {
+              "href": "/missions/m3"
+            },
+            "label": "",
+            "context": "Falcon-2 60 m Scheduled 2026-09-22",
+            "neighbor_text": "Falcon-2 | 60 m | Scheduled",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/table[1]/tbody[1]/tr[3]/td[1]/a[1]",
+            "css": "#main-content > div:nth-of-type(3) > table > tbody > tr:nth-of-type(3) > td:nth-of-type(1) > a",
+            "bbox": {
+              "x": 49.0,
+              "y": 361.0,
+              "w": 135.0,
+              "h": 19.0
+            }
+          },
+          "desc": "link \"Depot Patrol Morning\" (in: Falcon-2 60 m Scheduled 2026-09-22)",
+          "enabled": true
+        }
+      ],
+      "forms": []
+    },
+    "S3": {
+      "id": "S3",
+      "url": "/map",
+      "entry_url": "http://127.0.0.1:8003/map",
+      "path": [],
+      "signature": "ea6c0c9058deaed836ad8ff9435815165bf82be7",
+      "title": "Live map — Drone Operations Console",
+      "headings": [
+        "Live map",
+        "Selection"
+      ],
+      "alerts": [
+        "No drone selected"
+      ],
+      "elements": [
+        {
+          "id": "S3.e0",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "🛸 SkyOps",
+            "text": "🛸 SkyOps",
+            "attrs": {
+              "href": "/dashboard",
+              "class": "brand"
+            },
+            "label": "",
+            "context": "header",
+            "neighbor_text": "Dashboard Missions Live map Flight logs Settings | v1.0 Log out | Live map Real-",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/a[1]",
+            "css": "body > div > header > a",
+            "bbox": {
+              "x": 24.0,
+              "y": 13.0,
+              "w": 91.0,
+              "h": 30.0
+            }
+          },
+          "desc": "link \"🛸 SkyOps\" (in: header)",
+          "enabled": true
+        },
+        {
+          "id": "S3.e1",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Dashboard",
+            "text": "Dashboard",
+            "attrs": {
+              "href": "/dashboard",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Missions | Live map | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[1]",
+            "css": "body > div > header > nav > a:nth-of-type(1)",
+            "bbox": {
+              "x": 147.0,
+              "y": 11.0,
+              "w": 91.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Dashboard\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S3.e2",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Missions",
+            "text": "Missions",
+            "attrs": {
+              "href": "/missions",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Live map | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[2]",
+            "css": "body > div > header > nav > a:nth-of-type(2)",
+            "bbox": {
+              "x": 243.0,
+              "y": 11.0,
+              "w": 77.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Missions\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S3.e3",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Live map",
+            "text": "Live map",
+            "attrs": {
+              "href": "/map",
+              "class": " active"
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[3]",
+            "css": "body > div > header > nav > a:nth-of-type(3)",
+            "bbox": {
+              "x": 324.0,
+              "y": 11.0,
+              "w": 81.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Live map\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S3.e4",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Flight logs",
+            "text": "Flight logs",
+            "attrs": {
+              "href": "/logs",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Live map",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[4]",
+            "css": "body > div > header > nav > a:nth-of-type(4)",
+            "bbox": {
+              "x": 409.0,
+              "y": 11.0,
+              "w": 88.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Flight logs\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S3.e5",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Settings",
+            "text": "Settings",
+            "attrs": {
+              "href": "/settings",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Live map",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[5]",
+            "css": "body > div > header > nav > a:nth-of-type(5)",
+            "bbox": {
+              "x": 501.0,
+              "y": 11.0,
+              "w": 74.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Settings\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S3.e6",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "Log out",
+            "text": "Log out",
+            "attrs": {
+              "class": "btn btn-secondary btn-sm",
+              "type": "button"
+            },
+            "label": "",
+            "context": "header",
+            "neighbor_text": "v1.0 | 🛸 SkyOps | Dashboard Missions Live map Flight logs Settings",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/div[1]/button[1]",
+            "css": "body > div > header > div > button",
+            "bbox": {
+              "x": 1192.0,
+              "y": 14.0,
+              "w": 64.0,
+              "h": 27.0
+            }
+          },
+          "desc": "button \"Log out\" (in: header)",
+          "enabled": true
+        }
+      ],
+      "forms": []
+    },
+    "S4": {
+      "id": "S4",
+      "url": "/logs",
+      "entry_url": "http://127.0.0.1:8003/logs",
+      "path": [],
+      "signature": "6ceaf5f37655e30c1151b2dc8cab20fe11c58e80",
+      "title": "Flight logs — Drone Operations Console",
+      "headings": [
+        "Flight logs"
+      ],
+      "alerts": [],
+      "elements": [
+        {
+          "id": "S4.e0",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "🛸 SkyOps",
+            "text": "🛸 SkyOps",
+            "attrs": {
+              "href": "/dashboard",
+              "class": "brand"
+            },
+            "label": "",
+            "context": "header",
+            "neighbor_text": "Dashboard Missions Live map Flight logs Settings | v1.0 Log out | Flight logs Re",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/a[1]",
+            "css": "body > div > header > a",
+            "bbox": {
+              "x": 24.0,
+              "y": 13.0,
+              "w": 91.0,
+              "h": 30.0
+            }
+          },
+          "desc": "link \"🛸 SkyOps\" (in: header)",
+          "enabled": true
+        },
+        {
+          "id": "S4.e1",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Dashboard",
+            "text": "Dashboard",
+            "attrs": {
+              "href": "/dashboard",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Missions | Live map | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[1]",
+            "css": "body > div > header > nav > a:nth-of-type(1)",
+            "bbox": {
+              "x": 147.0,
+              "y": 11.0,
+              "w": 91.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Dashboard\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S4.e2",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Missions",
+            "text": "Missions",
+            "attrs": {
+              "href": "/missions",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Live map | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[2]",
+            "css": "body > div > header > nav > a:nth-of-type(2)",
+            "bbox": {
+              "x": 243.0,
+              "y": 11.0,
+              "w": 77.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Missions\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S4.e3",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Live map",
+            "text": "Live map",
+            "attrs": {
+              "href": "/map",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[3]",
+            "css": "body > div > header > nav > a:nth-of-type(3)",
+            "bbox": {
+              "x": 324.0,
+              "y": 11.0,
+              "w": 79.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Live map\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S4.e4",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Flight logs",
+            "text": "Flight logs",
+            "attrs": {
+              "href": "/logs",
+              "class": " active"
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Live map",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[4]",
+            "css": "body > div > header > nav > a:nth-of-type(4)",
+            "bbox": {
+              "x": 407.0,
+              "y": 11.0,
+              "w": 90.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Flight logs\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S4.e5",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Settings",
+            "text": "Settings",
+            "attrs": {
+              "href": "/settings",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Live map",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[5]",
+            "css": "body > div > header > nav > a:nth-of-type(5)",
+            "bbox": {
+              "x": 502.0,
+              "y": 11.0,
+              "w": 74.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Settings\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S4.e6",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "Log out",
+            "text": "Log out",
+            "attrs": {
+              "class": "btn btn-secondary btn-sm",
+              "type": "button"
+            },
+            "label": "",
+            "context": "header",
+            "neighbor_text": "v1.0 | 🛸 SkyOps | Dashboard Missions Live map Flight logs Settings",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/div[1]/button[1]",
+            "css": "body > div > header > div > button",
+            "bbox": {
+              "x": 1192.0,
+              "y": 14.0,
+              "w": 64.0,
+              "h": 27.0
+            }
+          },
+          "desc": "button \"Log out\" (in: header)",
+          "enabled": true
+        },
+        {
+          "id": "S4.e7",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "Export logs as CSV",
+            "text": "Export CSV",
+            "attrs": {
+              "type": "button",
+              "class": "btn btn-secondary",
+              "aria-label": "Export logs as CSV"
+            },
+            "label": "",
+            "context": "main",
+            "neighbor_text": "Flight logs Recent flight history | Filter by drone All drones Falcon-1 Falcon-2",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[1]/button[1]",
+            "css": "#main-content > div:nth-of-type(1) > button",
+            "bbox": {
+              "x": 1143.0,
+              "y": 99.0,
+              "w": 105.0,
+              "h": 36.0
+            }
+          },
+          "desc": "button \"Export logs as CSV\" (in: main)",
+          "enabled": true
+        },
+        {
+          "id": "S4.e8",
+          "fp": {
+            "tag": "select",
+            "role": "combobox",
+            "name": "Filter by drone",
+            "text": "All drones Falcon-1 Falcon-2 Hawk-7 Osprey-3 Kite-5 Raven-9",
+            "attrs": {
+              "id": "log-drone-filter",
+              "aria-label": "Filter by drone",
+              "value": "all"
+            },
+            "label": "Filter by drone",
+            "context": "main",
+            "neighbor_text": "Filter by drone | Flight logs Recent flight history Export CSV | DATE DRONE DURA",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[2]/select[1]",
+            "css": "#log-drone-filter",
+            "bbox": {
+              "x": 130.0,
+              "y": 170.0,
+              "w": 220.0,
+              "h": 37.0
+            }
+          },
+          "desc": "combobox \"Filter by drone\" (in: main)",
+          "enabled": true
+        }
+      ],
+      "forms": []
+    },
+    "S5": {
+      "id": "S5",
+      "url": "/settings",
+      "entry_url": "http://127.0.0.1:8003/settings",
+      "path": [],
+      "signature": "81a45a7ebeb3983b8b9571a437796ff7e3ae790d",
+      "title": "Settings — Drone Operations Console",
+      "headings": [
+        "Settings"
+      ],
+      "alerts": [],
+      "elements": [
+        {
+          "id": "S5.e0",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "🛸 SkyOps",
+            "text": "🛸 SkyOps",
+            "attrs": {
+              "href": "/dashboard",
+              "class": "brand"
+            },
+            "label": "",
+            "context": "header",
+            "neighbor_text": "Dashboard Missions Live map Flight logs Settings | v1.0 Log out | Settings Accou",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/a[1]",
+            "css": "body > div > header > a",
+            "bbox": {
+              "x": 24.0,
+              "y": 13.0,
+              "w": 91.0,
+              "h": 30.0
+            }
+          },
+          "desc": "link \"🛸 SkyOps\" (in: header)",
+          "enabled": true
+        },
+        {
+          "id": "S5.e1",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Dashboard",
+            "text": "Dashboard",
+            "attrs": {
+              "href": "/dashboard",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Missions | Live map | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[1]",
+            "css": "body > div > header > nav > a:nth-of-type(1)",
+            "bbox": {
+              "x": 147.0,
+              "y": 11.0,
+              "w": 91.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Dashboard\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S5.e2",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Missions",
+            "text": "Missions",
+            "attrs": {
+              "href": "/missions",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Live map | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[2]",
+            "css": "body > div > header > nav > a:nth-of-type(2)",
+            "bbox": {
+              "x": 243.0,
+              "y": 11.0,
+              "w": 77.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Missions\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S5.e3",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Live map",
+            "text": "Live map",
+            "attrs": {
+              "href": "/map",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[3]",
+            "css": "body > div > header > nav > a:nth-of-type(3)",
+            "bbox": {
+              "x": 324.0,
+              "y": 11.0,
+              "w": 79.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Live map\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S5.e4",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Flight logs",
+            "text": "Flight logs",
+            "attrs": {
+              "href": "/logs",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Live map",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[4]",
+            "css": "body > div > header > nav > a:nth-of-type(4)",
+            "bbox": {
+              "x": 407.0,
+              "y": 11.0,
+              "w": 88.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Flight logs\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S5.e5",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Settings",
+            "text": "Settings",
+            "attrs": {
+              "href": "/settings",
+              "class": " active"
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Live map",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[5]",
+            "css": "body > div > header > nav > a:nth-of-type(5)",
+            "bbox": {
+              "x": 499.0,
+              "y": 11.0,
+              "w": 75.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Settings\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S5.e6",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "Log out",
+            "text": "Log out",
+            "attrs": {
+              "class": "btn btn-secondary btn-sm",
+              "type": "button"
+            },
+            "label": "",
+            "context": "header",
+            "neighbor_text": "v1.0 | 🛸 SkyOps | Dashboard Missions Live map Flight logs Settings",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/div[1]/button[1]",
+            "css": "body > div > header > div > button",
+            "bbox": {
+              "x": 1192.0,
+              "y": 14.0,
+              "w": 64.0,
+              "h": 27.0
+            }
+          },
+          "desc": "button \"Log out\" (in: header)",
+          "enabled": true
+        },
+        {
+          "id": "S5.e7",
+          "fp": {
+            "tag": "input",
+            "role": "textbox",
+            "name": "Display name",
+            "text": "",
+            "attrs": {
+              "type": "text",
+              "id": "settings-display-name",
+              "name": "display_name",
+              "value": "Alex Pilot",
+              "aria-label": "Display name"
+            },
+            "label": "Display name",
+            "context": "form",
+            "neighbor_text": "Display name | Email Email cannot be changed here. | Units Metric Imperial",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[2]/form[1]/div[1]/div[1]/input[1]",
+            "css": "#settings-display-name",
+            "bbox": {
+              "x": 53.0,
+              "y": 216.0,
+              "w": 518.0,
+              "h": 37.0
+            }
+          },
+          "desc": "textbox \"Display name\" (in: form)",
+          "enabled": true
+        },
+        {
+          "id": "S5.e8",
+          "fp": {
+            "tag": "input",
+            "role": "textbox",
+            "name": "Email address (read-only)",
+            "text": "",
+            "attrs": {
+              "type": "email",
+              "id": "settings-email",
+              "name": "email",
+              "value": "pilot@skyops.io",
+              "readonly": "",
+              "aria-label": "Email address (read-only)"
+            },
+            "label": "Email",
+            "context": "form",
+            "neighbor_text": "Email | Email cannot be changed here. | Display name",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[2]/form[1]/div[1]/div[2]/input[1]",
+            "css": "#settings-email",
+            "bbox": {
+              "x": 53.0,
+              "y": 299.0,
+              "w": 518.0,
+              "h": 37.0
+            }
+          },
+          "desc": "textbox \"Email address (read-only)\" (in: form)",
+          "enabled": true
+        },
+        {
+          "id": "S5.e9",
+          "fp": {
+            "tag": "input",
+            "role": "radio",
+            "name": "Metric",
+            "text": "",
+            "attrs": {
+              "type": "radio",
+              "id": "units-metric",
+              "name": "units",
+              "value": "Metric"
+            },
+            "label": "Metric",
+            "context": "form",
+            "neighbor_text": "Metric | Imperial",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[2]/form[1]/div[1]/div[3]/div[1]/div[1]/input[1]",
+            "css": "#units-metric",
+            "bbox": {
+              "x": 53.0,
+              "y": 409.0,
+              "w": 13.0,
+              "h": 13.0
+            }
+          },
+          "desc": "radio \"Metric\" (in: form)",
+          "enabled": true
+        },
+        {
+          "id": "S5.e10",
+          "fp": {
+            "tag": "input",
+            "role": "radio",
+            "name": "Imperial",
+            "text": "",
+            "attrs": {
+              "type": "radio",
+              "id": "units-imperial",
+              "name": "units",
+              "value": "Imperial"
+            },
+            "label": "Imperial",
+            "context": "form",
+            "neighbor_text": "Imperial | Metric",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[2]/form[1]/div[1]/div[3]/div[1]/div[2]/input[1]",
+            "css": "#units-imperial",
+            "bbox": {
+              "x": 123.0,
+              "y": 409.0,
+              "w": 13.0,
+              "h": 13.0
+            }
+          },
+          "desc": "radio \"Imperial\" (in: form)",
+          "enabled": true
+        },
+        {
+          "id": "S5.e11",
+          "fp": {
+            "tag": "input",
+            "role": "checkbox",
+            "name": "Email me flight reports",
+            "text": "",
+            "attrs": {
+              "type": "checkbox",
+              "id": "email-reports",
+              "name": "email_reports"
+            },
+            "label": "Email me flight reports",
+            "context": "form",
+            "neighbor_text": "Email me flight reports | Display name | Email Email cannot be changed here.",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[2]/form[1]/div[1]/div[4]/input[1]",
+            "css": "#email-reports",
+            "bbox": {
+              "x": 53.0,
+              "y": 450.0,
+              "w": 13.0,
+              "h": 13.0
+            }
+          },
+          "desc": "checkbox \"Email me flight reports\" (in: form)",
+          "enabled": true
+        },
+        {
+          "id": "S5.e12",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "Save settings",
+            "text": "Save settings",
+            "attrs": {
+              "type": "submit",
+              "class": "btn btn-primary"
+            },
+            "label": "",
+            "context": "form",
+            "neighbor_text": "Display name Email Email cannot be changed here. Units Metric Imperial Email me ",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[2]/form[1]/div[2]/button[1]",
+            "css": "#main-content > div:nth-of-type(2) > form > div:nth-of-type(2) > button",
+            "bbox": {
+              "x": 53.0,
+              "y": 508.0,
+              "w": 117.0,
+              "h": 36.0
+            }
+          },
+          "desc": "button \"Save settings\" (in: form)",
+          "enabled": true
+        }
+      ],
+      "forms": []
+    },
+    "S6": {
+      "id": "S6",
+      "url": "/drones/:id",
+      "entry_url": "http://127.0.0.1:8003/drones/d3",
+      "path": [],
+      "signature": "4cd12c31d80e6d98d386132b0e3afa595cccae56",
+      "title": "Hawk-7 — Drone Operations Console",
+      "headings": [
+        "Hawk-7"
+      ],
+      "alerts": [],
+      "elements": [
+        {
+          "id": "S6.e0",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "🛸 SkyOps",
+            "text": "🛸 SkyOps",
+            "attrs": {
+              "href": "/dashboard",
+              "class": "brand"
+            },
+            "label": "",
+            "context": "header",
+            "neighbor_text": "Dashboard Missions Live map Flight logs Settings | v1.0 Log out | Hawk-7 Autel E",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/a[1]",
+            "css": "body > div > header > a",
+            "bbox": {
+              "x": 24.0,
+              "y": 13.0,
+              "w": 91.0,
+              "h": 30.0
+            }
+          },
+          "desc": "link \"🛸 SkyOps\" (in: header)",
+          "enabled": true
+        },
+        {
+          "id": "S6.e1",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Dashboard",
+            "text": "Dashboard",
+            "attrs": {
+              "href": "/dashboard",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Missions | Live map | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[1]",
+            "css": "body > div > header > nav > a:nth-of-type(1)",
+            "bbox": {
+              "x": 147.0,
+              "y": 11.0,
+              "w": 91.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Dashboard\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S6.e2",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Missions",
+            "text": "Missions",
+            "attrs": {
+              "href": "/missions",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Live map | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[2]",
+            "css": "body > div > header > nav > a:nth-of-type(2)",
+            "bbox": {
+              "x": 243.0,
+              "y": 11.0,
+              "w": 77.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Missions\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S6.e3",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Live map",
+            "text": "Live map",
+            "attrs": {
+              "href": "/map",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[3]",
+            "css": "body > div > header > nav > a:nth-of-type(3)",
+            "bbox": {
+              "x": 324.0,
+              "y": 11.0,
+              "w": 79.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Live map\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S6.e4",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Flight logs",
+            "text": "Flight logs",
+            "attrs": {
+              "href": "/logs",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Live map",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[4]",
+            "css": "body > div > header > nav > a:nth-of-type(4)",
+            "bbox": {
+              "x": 407.0,
+              "y": 11.0,
+              "w": 88.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Flight logs\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S6.e5",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Settings",
+            "text": "Settings",
+            "attrs": {
+              "href": "/settings",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Live map",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[5]",
+            "css": "body > div > header > nav > a:nth-of-type(5)",
+            "bbox": {
+              "x": 499.0,
+              "y": 11.0,
+              "w": 74.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Settings\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S6.e6",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "Log out",
+            "text": "Log out",
+            "attrs": {
+              "class": "btn btn-secondary btn-sm",
+              "type": "button"
+            },
+            "label": "",
+            "context": "header",
+            "neighbor_text": "v1.0 | 🛸 SkyOps | Dashboard Missions Live map Flight logs Settings",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/div[1]/button[1]",
+            "css": "body > div > header > div > button",
+            "bbox": {
+              "x": 1192.0,
+              "y": 14.0,
+              "w": 64.0,
+              "h": 27.0
+            }
+          },
+          "desc": "button \"Log out\" (in: header)",
+          "enabled": true
+        },
+        {
+          "id": "S6.e7",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "← Fleet",
+            "text": "← Fleet",
+            "attrs": {
+              "href": "/dashboard",
+              "class": "btn btn-secondary"
+            },
+            "label": "",
+            "context": "main",
+            "neighbor_text": "Hawk-7 Autel EVO II | MODEL Autel EVO II BATTERY 12% STATUS Idle DOCK Dock-B | L",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[1]/a[1]",
+            "css": "#main-content > div:nth-of-type(1) > a",
+            "bbox": {
+              "x": 1167.0,
+              "y": 99.0,
+              "w": 81.0,
+              "h": 36.0
+            }
+          },
+          "desc": "link \"← Fleet\" (in: main)",
+          "enabled": true
+        }
+      ],
+      "forms": []
+    },
+    "S7": {
+      "id": "S7",
+      "url": "/missions/new",
+      "entry_url": "http://127.0.0.1:8003/missions/new#step-details",
+      "path": [],
+      "signature": "f479e1bee961f984c7abde2eea8f049ba1c0e755",
+      "title": "Plan a mission — Drone Operations Console",
+      "headings": [
+        "Plan a mission",
+        "Mission details"
+      ],
+      "alerts": [],
+      "elements": [
+        {
+          "id": "S7.e0",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "🛸 SkyOps",
+            "text": "🛸 SkyOps",
+            "attrs": {
+              "href": "/dashboard",
+              "class": "brand"
+            },
+            "label": "",
+            "context": "header",
+            "neighbor_text": "Dashboard Missions Live map Flight logs Settings | v1.0 Log out | Plan a mission",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/a[1]",
+            "css": "body > div > header > a",
+            "bbox": {
+              "x": 24.0,
+              "y": 13.0,
+              "w": 91.0,
+              "h": 30.0
+            }
+          },
+          "desc": "link \"🛸 SkyOps\" (in: header)",
+          "enabled": true
+        },
+        {
+          "id": "S7.e1",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Dashboard",
+            "text": "Dashboard",
+            "attrs": {
+              "href": "/dashboard",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Missions | Live map | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[1]",
+            "css": "body > div > header > nav > a:nth-of-type(1)",
+            "bbox": {
+              "x": 147.0,
+              "y": 11.0,
+              "w": 91.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Dashboard\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S7.e2",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Missions",
+            "text": "Missions",
+            "attrs": {
+              "href": "/missions",
+              "class": " active"
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Live map | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[2]",
+            "css": "body > div > header > nav > a:nth-of-type(2)",
+            "bbox": {
+              "x": 243.0,
+              "y": 11.0,
+              "w": 79.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Missions\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S7.e3",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Live map",
+            "text": "Live map",
+            "attrs": {
+              "href": "/map",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[3]",
+            "css": "body > div > header > nav > a:nth-of-type(3)",
+            "bbox": {
+              "x": 325.0,
+              "y": 11.0,
+              "w": 79.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Live map\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S7.e4",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Flight logs",
+            "text": "Flight logs",
+            "attrs": {
+              "href": "/logs",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Live map",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[4]",
+            "css": "body > div > header > nav > a:nth-of-type(4)",
+            "bbox": {
+              "x": 409.0,
+              "y": 11.0,
+              "w": 88.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Flight logs\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S7.e5",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Settings",
+            "text": "Settings",
+            "attrs": {
+              "href": "/settings",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Live map",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[5]",
+            "css": "body > div > header > nav > a:nth-of-type(5)",
+            "bbox": {
+              "x": 501.0,
+              "y": 11.0,
+              "w": 74.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Settings\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S7.e6",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "Log out",
+            "text": "Log out",
+            "attrs": {
+              "class": "btn btn-secondary btn-sm",
+              "type": "button"
+            },
+            "label": "",
+            "context": "header",
+            "neighbor_text": "v1.0 | 🛸 SkyOps | Dashboard Missions Live map Flight logs Settings",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/div[1]/button[1]",
+            "css": "body > div > header > div > button",
+            "bbox": {
+              "x": 1192.0,
+              "y": 14.0,
+              "w": 64.0,
+              "h": 27.0
+            }
+          },
+          "desc": "button \"Log out\" (in: header)",
+          "enabled": true
+        },
+        {
+          "id": "S7.e7",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "← Missions",
+            "text": "← Missions",
+            "attrs": {
+              "href": "/missions",
+              "class": "btn btn-secondary"
+            },
+            "label": "",
+            "context": "main",
+            "neighbor_text": "Plan a mission Create a new drone mission in 4 steps | 1 Mission details 2 Selec",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[1]/a[1]",
+            "css": "#main-content > div:nth-of-type(1) > a",
+            "bbox": {
+              "x": 1143.0,
+              "y": 99.0,
+              "w": 105.0,
+              "h": 36.0
+            }
+          },
+          "desc": "link \"← Missions\" (in: main)",
+          "enabled": true
+        },
+        {
+          "id": "S7.e8",
+          "fp": {
+            "tag": "input",
+            "role": "textbox",
+            "name": "Mission name *",
+            "text": "",
+            "attrs": {
+              "type": "text",
+              "id": "field-mission-name",
+              "name": "name",
+              "required": "",
+              "placeholder": "e.g. Morning patrol run"
+            },
+            "label": "Mission name *",
+            "context": "Mission details",
+            "neighbor_text": "Mission name * | Mission type * Select type… Survey Inspection Delivery Patrol |",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[2]/div[1]/input[1]",
+            "css": "#field-mission-name",
+            "bbox": {
+              "x": 53.0,
+              "y": 340.0,
+              "w": 1174.0,
+              "h": 37.0
+            }
+          },
+          "desc": "textbox \"Mission name *\" (in: Mission details)",
+          "enabled": true
+        },
+        {
+          "id": "S7.e9",
+          "fp": {
+            "tag": "select",
+            "role": "combobox",
+            "name": "Mission type *",
+            "text": "Select type… Survey Inspection Delivery Patrol",
+            "attrs": {
+              "id": "field-mission-type",
+              "name": "type",
+              "required": ""
+            },
+            "label": "Mission type *",
+            "context": "Mission details",
+            "neighbor_text": "Mission type * | Mission name * | Site * Select site… Pune Depot Mumbai Port Ben",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[2]/div[2]/select[1]",
+            "css": "#field-mission-type",
+            "bbox": {
+              "x": 53.0,
+              "y": 429.0,
+              "w": 1174.0,
+              "h": 37.0
+            }
+          },
+          "desc": "combobox \"Mission type *\" (in: Mission details)",
+          "enabled": true
+        },
+        {
+          "id": "S7.e10",
+          "fp": {
+            "tag": "select",
+            "role": "combobox",
+            "name": "Site *",
+            "text": "Select site… Pune Depot Mumbai Port Bengaluru Solar Farm",
+            "attrs": {
+              "id": "field-mission-site",
+              "name": "site",
+              "required": ""
+            },
+            "label": "Site *",
+            "context": "Mission details",
+            "neighbor_text": "Site * | Mission name * | Mission type * Select type… Survey Inspection Delivery",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[2]/div[3]/select[1]",
+            "css": "#field-mission-site",
+            "bbox": {
+              "x": 53.0,
+              "y": 517.0,
+              "w": 1174.0,
+              "h": 37.0
+            }
+          },
+          "desc": "combobox \"Site *\" (in: Mission details)",
+          "enabled": true
+        },
+        {
+          "id": "S7.e11",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "Next",
+            "text": "Next",
+            "attrs": {
+              "type": "button",
+              "class": "btn btn-primary"
+            },
+            "label": "",
+            "context": "Mission details",
+            "neighbor_text": "Mission details | Mission name * Mission type * Select type… Survey Inspection D",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[3]/button[1]",
+            "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(3) > button",
+            "bbox": {
+              "x": 53.0,
+              "y": 605.0,
+              "w": 64.0,
+              "h": 36.0
+            }
+          },
+          "desc": "button \"Next\" (in: Mission details)",
+          "enabled": true
+        }
+      ],
+      "forms": []
+    },
+    "S8": {
+      "id": "S8",
+      "url": "/missions/:id",
+      "entry_url": "http://127.0.0.1:8003/missions/m1",
+      "path": [],
+      "signature": "a8a4ce376e58930a183326e7f99a0b8c4b696791",
+      "title": "Port Survey Alpha — Drone Operations Console",
+      "headings": [
+        "Port Survey Alpha"
+      ],
+      "alerts": [],
+      "elements": [
+        {
+          "id": "S8.e0",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "🛸 SkyOps",
+            "text": "🛸 SkyOps",
+            "attrs": {
+              "href": "/dashboard",
+              "class": "brand"
+            },
+            "label": "",
+            "context": "header",
+            "neighbor_text": "Dashboard Missions Live map Flight logs Settings | v1.0 Log out | Port Survey Al",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/a[1]",
+            "css": "body > div > header > a",
+            "bbox": {
+              "x": 24.0,
+              "y": 13.0,
+              "w": 91.0,
+              "h": 30.0
+            }
+          },
+          "desc": "link \"🛸 SkyOps\" (in: header)",
+          "enabled": true
+        },
+        {
+          "id": "S8.e1",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Dashboard",
+            "text": "Dashboard",
+            "attrs": {
+              "href": "/dashboard",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Missions | Live map | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[1]",
+            "css": "body > div > header > nav > a:nth-of-type(1)",
+            "bbox": {
+              "x": 147.0,
+              "y": 11.0,
+              "w": 91.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Dashboard\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S8.e2",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Missions",
+            "text": "Missions",
+            "attrs": {
+              "href": "/missions",
+              "class": " active"
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Live map | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[2]",
+            "css": "body > div > header > nav > a:nth-of-type(2)",
+            "bbox": {
+              "x": 243.0,
+              "y": 11.0,
+              "w": 79.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Missions\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S8.e3",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Live map",
+            "text": "Live map",
+            "attrs": {
+              "href": "/map",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[3]",
+            "css": "body > div > header > nav > a:nth-of-type(3)",
+            "bbox": {
+              "x": 325.0,
+              "y": 11.0,
+              "w": 79.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Live map\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S8.e4",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Flight logs",
+            "text": "Flight logs",
+            "attrs": {
+              "href": "/logs",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Live map",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[4]",
+            "css": "body > div > header > nav > a:nth-of-type(4)",
+            "bbox": {
+              "x": 409.0,
+              "y": 11.0,
+              "w": 88.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Flight logs\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S8.e5",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Settings",
+            "text": "Settings",
+            "attrs": {
+              "href": "/settings",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Live map",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[5]",
+            "css": "body > div > header > nav > a:nth-of-type(5)",
+            "bbox": {
+              "x": 501.0,
+              "y": 11.0,
+              "w": 74.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Settings\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S8.e6",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "Log out",
+            "text": "Log out",
+            "attrs": {
+              "class": "btn btn-secondary btn-sm",
+              "type": "button"
+            },
+            "label": "",
+            "context": "header",
+            "neighbor_text": "v1.0 | 🛸 SkyOps | Dashboard Missions Live map Flight logs Settings",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/div[1]/button[1]",
+            "css": "body > div > header > div > button",
+            "bbox": {
+              "x": 1192.0,
+              "y": 14.0,
+              "w": 64.0,
+              "h": 27.0
+            }
+          },
+          "desc": "button \"Log out\" (in: header)",
+          "enabled": true
+        },
+        {
+          "id": "S8.e7",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "← Missions",
+            "text": "← Missions",
+            "attrs": {
+              "href": "/missions",
+              "class": "btn btn-secondary"
+            },
+            "label": "",
+            "context": "main",
+            "neighbor_text": "Port Survey Alpha Survey · Mumbai Port | DRONE Osprey-3 TYPE Survey SITE Mumbai ",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[1]/a[1]",
+            "css": "#main-content > div:nth-of-type(1) > a",
+            "bbox": {
+              "x": 1143.0,
+              "y": 99.0,
+              "w": 105.0,
+              "h": 36.0
+            }
+          },
+          "desc": "link \"← Missions\" (in: main)",
+          "enabled": true
+        },
+        {
+          "id": "S8.e8",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "Abort mission Port Survey Alpha",
+            "text": "Abort mission",
+            "attrs": {
+              "type": "button",
+              "class": "btn btn-danger",
+              "aria-label": "Abort mission Port Survey Alpha"
+            },
+            "label": "",
+            "context": "main",
+            "neighbor_text": "Port Survey Alpha Survey · Mumbai Port ← Missions | DRONE Osprey-3 TYPE Survey S",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/button[1]",
+            "css": "#main-content > div:nth-of-type(3) > button",
+            "bbox": {
+              "x": 32.0,
+              "y": 307.0,
+              "w": 123.0,
+              "h": 36.0
+            }
+          },
+          "desc": "button \"Abort mission Port Survey Alpha\" (in: main)",
+          "enabled": true
+        }
+      ],
+      "forms": []
+    },
+    "S9": {
+      "id": "S9",
+      "url": "/missions/new",
+      "entry_url": "http://127.0.0.1:8003/missions/new#step-details",
+      "path": [
+        {
+          "action": "fill",
+          "target": {
+            "tag": "input",
+            "role": "textbox",
+            "name": "Mission name *",
+            "text": "",
+            "attrs": {
+              "type": "text",
+              "id": "field-mission-name",
+              "name": "name",
+              "required": "",
+              "placeholder": "e.g. Morning patrol run"
+            },
+            "label": "Mission name *",
+            "context": "Mission details",
+            "neighbor_text": "Mission name * | Mission type * Select type… Survey Inspection Delivery Patrol |",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[2]/div[1]/input[1]",
+            "css": "#field-mission-name",
+            "bbox": {
+              "x": 53.0,
+              "y": 340.0,
+              "w": 1174.0,
+              "h": 37.0
+            }
+          },
+          "value": "Argus ${unique}",
+          "intent": "fill 'Mission name *'"
+        },
+        {
+          "action": "select",
+          "target": {
+            "tag": "select",
+            "role": "combobox",
+            "name": "Mission type *",
+            "text": "Select type… Survey Inspection Delivery Patrol",
+            "attrs": {
+              "id": "field-mission-type",
+              "name": "type",
+              "required": ""
+            },
+            "label": "Mission type *",
+            "context": "Mission details",
+            "neighbor_text": "Mission type * | Mission name * | Site * Select site… Pune Depot Mumbai Port Ben",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[2]/div[2]/select[1]",
+            "css": "#field-mission-type",
+            "bbox": {
+              "x": 53.0,
+              "y": 429.0,
+              "w": 1174.0,
+              "h": 37.0
+            }
+          },
+          "value": "Survey",
+          "intent": "select 'Survey' in 'Mission type *'"
+        },
+        {
+          "action": "select",
+          "target": {
+            "tag": "select",
+            "role": "combobox",
+            "name": "Site *",
+            "text": "Select site… Pune Depot Mumbai Port Bengaluru Solar Farm",
+            "attrs": {
+              "id": "field-mission-site",
+              "name": "site",
+              "required": ""
+            },
+            "label": "Site *",
+            "context": "Mission details",
+            "neighbor_text": "Site * | Mission name * | Mission type * Select type… Survey Inspection Delivery",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[2]/div[3]/select[1]",
+            "css": "#field-mission-site",
+            "bbox": {
+              "x": 53.0,
+              "y": 517.0,
+              "w": 1174.0,
+              "h": 37.0
+            }
+          },
+          "value": "Pune Depot",
+          "intent": "select 'Pune Depot' in 'Site *'"
+        },
+        {
+          "action": "click",
+          "target": {
+            "tag": "button",
+            "role": "button",
+            "name": "Next",
+            "text": "Next",
+            "attrs": {
+              "type": "button",
+              "class": "btn btn-primary"
+            },
+            "label": "",
+            "context": "Mission details",
+            "neighbor_text": "Mission details | Mission name * Mission type * Select type… Survey Inspection D",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[3]/button[1]",
+            "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(3) > button",
+            "bbox": {
+              "x": 53.0,
+              "y": 605.0,
+              "w": 64.0,
+              "h": 36.0
+            }
+          },
+          "value": null,
+          "intent": "click 'Next'"
+        }
+      ],
+      "signature": "a50df1bf5093c2f60d6a51b7a19f6af01a8f5a0a",
+      "title": "Plan a mission — Drone Operations Console",
+      "headings": [
+        "Plan a mission",
+        "Select drone"
+      ],
+      "alerts": [
+        "Battery 12% — below 30%",
+        "Currently In mission",
+        "Currently Maintenance"
+      ],
+      "elements": [
+        {
+          "id": "S9.e0",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "🛸 SkyOps",
+            "text": "🛸 SkyOps",
+            "attrs": {
+              "href": "/dashboard",
+              "class": "brand"
+            },
+            "label": "",
+            "context": "header",
+            "neighbor_text": "Dashboard Missions Live map Flight logs Settings | v1.0 Log out | Plan a mission",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/a[1]",
+            "css": "body > div > header > a",
+            "bbox": {
+              "x": 24.0,
+              "y": 13.0,
+              "w": 91.0,
+              "h": 30.0
+            }
+          },
+          "desc": "link \"🛸 SkyOps\" (in: header)",
+          "enabled": true
+        },
+        {
+          "id": "S9.e1",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Dashboard",
+            "text": "Dashboard",
+            "attrs": {
+              "href": "/dashboard",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Missions | Live map | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[1]",
+            "css": "body > div > header > nav > a:nth-of-type(1)",
+            "bbox": {
+              "x": 147.0,
+              "y": 11.0,
+              "w": 91.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Dashboard\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S9.e2",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Missions",
+            "text": "Missions",
+            "attrs": {
+              "href": "/missions",
+              "class": " active"
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Live map | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[2]",
+            "css": "body > div > header > nav > a:nth-of-type(2)",
+            "bbox": {
+              "x": 243.0,
+              "y": 11.0,
+              "w": 79.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Missions\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S9.e3",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Live map",
+            "text": "Live map",
+            "attrs": {
+              "href": "/map",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[3]",
+            "css": "body > div > header > nav > a:nth-of-type(3)",
+            "bbox": {
+              "x": 325.0,
+              "y": 11.0,
+              "w": 79.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Live map\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S9.e4",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Flight logs",
+            "text": "Flight logs",
+            "attrs": {
+              "href": "/logs",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Live map",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[4]",
+            "css": "body > div > header > nav > a:nth-of-type(4)",
+            "bbox": {
+              "x": 409.0,
+              "y": 11.0,
+              "w": 88.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Flight logs\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S9.e5",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Settings",
+            "text": "Settings",
+            "attrs": {
+              "href": "/settings",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Live map",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[5]",
+            "css": "body > div > header > nav > a:nth-of-type(5)",
+            "bbox": {
+              "x": 501.0,
+              "y": 11.0,
+              "w": 74.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Settings\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S9.e6",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "Log out",
+            "text": "Log out",
+            "attrs": {
+              "class": "btn btn-secondary btn-sm",
+              "type": "button"
+            },
+            "label": "",
+            "context": "header",
+            "neighbor_text": "v1.0 | 🛸 SkyOps | Dashboard Missions Live map Flight logs Settings",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/div[1]/button[1]",
+            "css": "body > div > header > div > button",
+            "bbox": {
+              "x": 1192.0,
+              "y": 14.0,
+              "w": 64.0,
+              "h": 27.0
+            }
+          },
+          "desc": "button \"Log out\" (in: header)",
+          "enabled": true
+        },
+        {
+          "id": "S9.e7",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "← Missions",
+            "text": "← Missions",
+            "attrs": {
+              "href": "/missions",
+              "class": "btn btn-secondary"
+            },
+            "label": "",
+            "context": "main",
+            "neighbor_text": "Plan a mission Create a new drone mission in 4 steps | 1 Mission details 2 Selec",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[1]/a[1]",
+            "css": "#main-content > div:nth-of-type(1) > a",
+            "bbox": {
+              "x": 1143.0,
+              "y": 99.0,
+              "w": 105.0,
+              "h": 36.0
+            }
+          },
+          "desc": "link \"← Missions\" (in: main)",
+          "enabled": true
+        },
+        {
+          "id": "S9.e8",
+          "fp": {
+            "tag": "input",
+            "role": "radio",
+            "name": "Falcon-1",
+            "text": "",
+            "attrs": {
+              "type": "radio",
+              "id": "drone-d1",
+              "name": "drone_id",
+              "value": "d1",
+              "aria-label": "Falcon-1"
+            },
+            "label": "Falcon-1 DJI M350 92%",
+            "context": "Select drone",
+            "neighbor_text": "Falcon-1 | DJI M350 | 92%",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/fieldset[1]/div[1]/label[1]/input[1]",
+            "css": "#drone-d1",
+            "bbox": {
+              "x": 251.0,
+              "y": 359.0,
+              "w": 13.0,
+              "h": 13.0
+            }
+          },
+          "desc": "radio \"Falcon-1\" (in: Select drone)",
+          "enabled": true
+        },
+        {
+          "id": "S9.e9",
+          "fp": {
+            "tag": "input",
+            "role": "radio",
+            "name": "Falcon-2",
+            "text": "",
+            "attrs": {
+              "type": "radio",
+              "id": "drone-d2",
+              "name": "drone_id",
+              "value": "d2",
+              "aria-label": "Falcon-2"
+            },
+            "label": "Falcon-2 DJI M350 88%",
+            "context": "Select drone",
+            "neighbor_text": "Falcon-2 | DJI M350 | 88%",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/fieldset[1]/div[1]/label[2]/input[1]",
+            "css": "#drone-d2",
+            "bbox": {
+              "x": 488.0,
+              "y": 359.0,
+              "w": 13.0,
+              "h": 13.0
+            }
+          },
+          "desc": "radio \"Falcon-2\" (in: Select drone)",
+          "enabled": true
+        },
+        {
+          "id": "S9.e10",
+          "fp": {
+            "tag": "input",
+            "role": "radio",
+            "name": "Hawk-7 — Battery too low",
+            "text": "",
+            "attrs": {
+              "type": "radio",
+              "id": "drone-d3",
+              "name": "drone_id",
+              "value": "d3",
+              "disabled": "",
+              "aria-label": "Hawk-7 — Battery too low"
+            },
+            "label": "Hawk-7 Autel EVO II 12% Battery 12% — below 30%",
+            "context": "Select drone",
+            "neighbor_text": "Hawk-7 | Autel EVO II | 12%",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/fieldset[1]/div[1]/label[3]/input[1]",
+            "css": "#drone-d3",
+            "bbox": {
+              "x": 726.0,
+              "y": 359.0,
+              "w": 13.0,
+              "h": 13.0
+            }
+          },
+          "desc": "radio \"Hawk-7 — Battery too low\" (in: Select drone)",
+          "enabled": false
+        },
+        {
+          "id": "S9.e11",
+          "fp": {
+            "tag": "input",
+            "role": "radio",
+            "name": "Osprey-3 — Currently In mission",
+            "text": "",
+            "attrs": {
+              "type": "radio",
+              "id": "drone-d4",
+              "name": "drone_id",
+              "value": "d4",
+              "disabled": "",
+              "aria-label": "Osprey-3 — Currently In mission"
+            },
+            "label": "Osprey-3 DJI M300 64% Currently In mission",
+            "context": "Select drone",
+            "neighbor_text": "Osprey-3 | DJI M300 | 64%",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/fieldset[1]/div[1]/label[4]/input[1]",
+            "css": "#drone-d4",
+            "bbox": {
+              "x": 963.0,
+              "y": 359.0,
+              "w": 13.0,
+              "h": 13.0
+            }
+          },
+          "desc": "radio \"Osprey-3 — Currently In mission\" (in: Select drone)",
+          "enabled": false
+        },
+        {
+          "id": "S9.e12",
+          "fp": {
+            "tag": "input",
+            "role": "radio",
+            "name": "Kite-5",
+            "text": "",
+            "attrs": {
+              "type": "radio",
+              "id": "drone-d5",
+              "name": "drone_id",
+              "value": "d5",
+              "aria-label": "Kite-5"
+            },
+            "label": "Kite-5 Parrot ANAFI 45%",
+            "context": "Select drone",
+            "neighbor_text": "Kite-5 | Parrot ANAFI | 45%",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/fieldset[1]/div[1]/label[5]/input[1]",
+            "css": "#drone-d5",
+            "bbox": {
+              "x": 1200.0,
+              "y": 359.0,
+              "w": 13.0,
+              "h": 13.0
+            }
+          },
+          "desc": "radio \"Kite-5\" (in: Select drone)",
+          "enabled": true
+        },
+        {
+          "id": "S9.e13",
+          "fp": {
+            "tag": "input",
+            "role": "radio",
+            "name": "Raven-9 — Currently Maintenance",
+            "text": "",
+            "attrs": {
+              "type": "radio",
+              "id": "drone-d6",
+              "name": "drone_id",
+              "value": "d6",
+              "disabled": "",
+              "aria-label": "Raven-9 — Currently Maintenance"
+            },
+            "label": "Raven-9 DJI M350 100% Currently Maintenance",
+            "context": "Select drone",
+            "neighbor_text": "Raven-9 | DJI M350 | 100%",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/fieldset[1]/div[1]/label[6]/input[1]",
+            "css": "#drone-d6",
+            "bbox": {
+              "x": 251.0,
+              "y": 500.0,
+              "w": 13.0,
+              "h": 13.0
+            }
+          },
+          "desc": "radio \"Raven-9 — Currently Maintenance\" (in: Select drone)",
+          "enabled": false
+        },
+        {
+          "id": "S9.e14",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "Back",
+            "text": "Back",
+            "attrs": {
+              "type": "button",
+              "class": "btn btn-secondary"
+            },
+            "label": "",
+            "context": "Select drone",
+            "neighbor_text": "Next | Select drone | Select an available drone for this mission Falcon-1 DJI M3",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/div[2]/button[1]",
+            "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(2) > div:nth-of-type(2) > button:nth-of-type(1)",
+            "bbox": {
+              "x": 53.0,
+              "y": 668.0,
+              "w": 64.0,
+              "h": 36.0
+            }
+          },
+          "desc": "button \"Back\" (in: Select drone)",
+          "enabled": true
+        },
+        {
+          "id": "S9.e15",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "Next",
+            "text": "Next",
+            "attrs": {
+              "type": "button",
+              "class": "btn btn-primary"
+            },
+            "label": "",
+            "context": "Select drone",
+            "neighbor_text": "Back | Select drone | Select an available drone for this mission Falcon-1 DJI M3",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/div[2]/button[2]",
+            "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(2) > div:nth-of-type(2) > button:nth-of-type(2)",
+            "bbox": {
+              "x": 129.0,
+              "y": 668.0,
+              "w": 64.0,
+              "h": 36.0
+            }
+          },
+          "desc": "button \"Next\" (in: Select drone)",
+          "enabled": true
+        }
+      ],
+      "forms": []
+    },
+    "S10": {
+      "id": "S10",
+      "url": "/missions/new",
+      "entry_url": "http://127.0.0.1:8003/missions/new#step-details",
+      "path": [
+        {
+          "action": "fill",
+          "target": {
+            "tag": "input",
+            "role": "textbox",
+            "name": "Mission name *",
+            "text": "",
+            "attrs": {
+              "type": "text",
+              "id": "field-mission-name",
+              "name": "name",
+              "required": "",
+              "placeholder": "e.g. Morning patrol run"
+            },
+            "label": "Mission name *",
+            "context": "Mission details",
+            "neighbor_text": "Mission name * | Mission type * Select type… Survey Inspection Delivery Patrol |",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[2]/div[1]/input[1]",
+            "css": "#field-mission-name",
+            "bbox": {
+              "x": 53.0,
+              "y": 340.0,
+              "w": 1174.0,
+              "h": 37.0
+            }
+          },
+          "value": "Argus ${unique}",
+          "intent": "fill 'Mission name *'"
+        },
+        {
+          "action": "select",
+          "target": {
+            "tag": "select",
+            "role": "combobox",
+            "name": "Mission type *",
+            "text": "Select type… Survey Inspection Delivery Patrol",
+            "attrs": {
+              "id": "field-mission-type",
+              "name": "type",
+              "required": ""
+            },
+            "label": "Mission type *",
+            "context": "Mission details",
+            "neighbor_text": "Mission type * | Mission name * | Site * Select site… Pune Depot Mumbai Port Ben",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[2]/div[2]/select[1]",
+            "css": "#field-mission-type",
+            "bbox": {
+              "x": 53.0,
+              "y": 429.0,
+              "w": 1174.0,
+              "h": 37.0
+            }
+          },
+          "value": "Survey",
+          "intent": "select 'Survey' in 'Mission type *'"
+        },
+        {
+          "action": "select",
+          "target": {
+            "tag": "select",
+            "role": "combobox",
+            "name": "Site *",
+            "text": "Select site… Pune Depot Mumbai Port Bengaluru Solar Farm",
+            "attrs": {
+              "id": "field-mission-site",
+              "name": "site",
+              "required": ""
+            },
+            "label": "Site *",
+            "context": "Mission details",
+            "neighbor_text": "Site * | Mission name * | Mission type * Select type… Survey Inspection Delivery",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[2]/div[3]/select[1]",
+            "css": "#field-mission-site",
+            "bbox": {
+              "x": 53.0,
+              "y": 517.0,
+              "w": 1174.0,
+              "h": 37.0
+            }
+          },
+          "value": "Pune Depot",
+          "intent": "select 'Pune Depot' in 'Site *'"
+        },
+        {
+          "action": "click",
+          "target": {
+            "tag": "button",
+            "role": "button",
+            "name": "Next",
+            "text": "Next",
+            "attrs": {
+              "type": "button",
+              "class": "btn btn-primary"
+            },
+            "label": "",
+            "context": "Mission details",
+            "neighbor_text": "Mission details | Mission name * Mission type * Select type… Survey Inspection D",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[3]/button[1]",
+            "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(3) > button",
+            "bbox": {
+              "x": 53.0,
+              "y": 605.0,
+              "w": 64.0,
+              "h": 36.0
+            }
+          },
+          "value": null,
+          "intent": "click 'Next'"
+        },
+        {
+          "action": "click",
+          "target": {
+            "tag": "input",
+            "role": "radio",
+            "name": "Falcon-1",
+            "text": "",
+            "attrs": {
+              "type": "radio",
+              "id": "drone-d1",
+              "name": "drone_id",
+              "value": "d1",
+              "aria-label": "Falcon-1"
+            },
+            "label": "Falcon-1 DJI M350 92%",
+            "context": "Select drone",
+            "neighbor_text": "Falcon-1 | DJI M350 | 92%",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/fieldset[1]/div[1]/label[1]/input[1]",
+            "css": "#drone-d1",
+            "bbox": {
+              "x": 251.0,
+              "y": 359.0,
+              "w": 13.0,
+              "h": 13.0
+            }
+          },
+          "value": null,
+          "intent": "select 'Falcon-1'"
+        },
+        {
+          "action": "click",
+          "target": {
+            "tag": "button",
+            "role": "button",
+            "name": "Next",
+            "text": "Next",
+            "attrs": {
+              "type": "button",
+              "class": "btn btn-primary"
+            },
+            "label": "",
+            "context": "Select drone",
+            "neighbor_text": "Back | Select drone | Select an available drone for this mission Falcon-1 DJI M3",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/div[2]/button[2]",
+            "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(2) > div:nth-of-type(2) > button:nth-of-type(2)",
+            "bbox": {
+              "x": 129.0,
+              "y": 668.0,
+              "w": 64.0,
+              "h": 36.0
+            }
+          },
+          "value": null,
+          "intent": "click 'Next'"
+        }
+      ],
+      "signature": "0c54240bdfcd1614a5dd6eecebe749c2398dddb6",
+      "title": "Plan a mission — Drone Operations Console",
+      "headings": [
+        "Plan a mission",
+        "Flight parameters"
+      ],
+      "alerts": [],
+      "elements": [
+        {
+          "id": "S10.e0",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "🛸 SkyOps",
+            "text": "🛸 SkyOps",
+            "attrs": {
+              "href": "/dashboard",
+              "class": "brand"
+            },
+            "label": "",
+            "context": "header",
+            "neighbor_text": "Dashboard Missions Live map Flight logs Settings | v1.0 Log out | Plan a mission",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/a[1]",
+            "css": "body > div > header > a",
+            "bbox": {
+              "x": 24.0,
+              "y": 13.0,
+              "w": 91.0,
+              "h": 30.0
+            }
+          },
+          "desc": "link \"🛸 SkyOps\" (in: header)",
+          "enabled": true
+        },
+        {
+          "id": "S10.e1",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Dashboard",
+            "text": "Dashboard",
+            "attrs": {
+              "href": "/dashboard",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Missions | Live map | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[1]",
+            "css": "body > div > header > nav > a:nth-of-type(1)",
+            "bbox": {
+              "x": 147.0,
+              "y": 11.0,
+              "w": 91.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Dashboard\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S10.e2",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Missions",
+            "text": "Missions",
+            "attrs": {
+              "href": "/missions",
+              "class": " active"
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Live map | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[2]",
+            "css": "body > div > header > nav > a:nth-of-type(2)",
+            "bbox": {
+              "x": 243.0,
+              "y": 11.0,
+              "w": 79.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Missions\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S10.e3",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Live map",
+            "text": "Live map",
+            "attrs": {
+              "href": "/map",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[3]",
+            "css": "body > div > header > nav > a:nth-of-type(3)",
+            "bbox": {
+              "x": 325.0,
+              "y": 11.0,
+              "w": 79.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Live map\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S10.e4",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Flight logs",
+            "text": "Flight logs",
+            "attrs": {
+              "href": "/logs",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Live map",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[4]",
+            "css": "body > div > header > nav > a:nth-of-type(4)",
+            "bbox": {
+              "x": 409.0,
+              "y": 11.0,
+              "w": 88.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Flight logs\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S10.e5",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Settings",
+            "text": "Settings",
+            "attrs": {
+              "href": "/settings",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Live map",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[5]",
+            "css": "body > div > header > nav > a:nth-of-type(5)",
+            "bbox": {
+              "x": 501.0,
+              "y": 11.0,
+              "w": 74.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Settings\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S10.e6",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "Log out",
+            "text": "Log out",
+            "attrs": {
+              "class": "btn btn-secondary btn-sm",
+              "type": "button"
+            },
+            "label": "",
+            "context": "header",
+            "neighbor_text": "v1.0 | 🛸 SkyOps | Dashboard Missions Live map Flight logs Settings",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/div[1]/button[1]",
+            "css": "body > div > header > div > button",
+            "bbox": {
+              "x": 1192.0,
+              "y": 14.0,
+              "w": 64.0,
+              "h": 27.0
+            }
+          },
+          "desc": "button \"Log out\" (in: header)",
+          "enabled": true
+        },
+        {
+          "id": "S10.e7",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "← Missions",
+            "text": "← Missions",
+            "attrs": {
+              "href": "/missions",
+              "class": "btn btn-secondary"
+            },
+            "label": "",
+            "context": "main",
+            "neighbor_text": "Plan a mission Create a new drone mission in 4 steps | 1 Mission details 2 Selec",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[1]/a[1]",
+            "css": "#main-content > div:nth-of-type(1) > a",
+            "bbox": {
+              "x": 1143.0,
+              "y": 99.0,
+              "w": 105.0,
+              "h": 36.0
+            }
+          },
+          "desc": "link \"← Missions\" (in: main)",
+          "enabled": true
+        },
+        {
+          "id": "S10.e8",
+          "fp": {
+            "tag": "input",
+            "role": "spinbutton",
+            "name": "Altitude (m) *",
+            "text": "",
+            "attrs": {
+              "type": "number",
+              "id": "field-altitude",
+              "name": "altitude",
+              "min": "10",
+              "max": "120",
+              "value": "60",
+              "required": ""
+            },
+            "label": "Altitude (m) *",
+            "context": "Flight parameters",
+            "neighbor_text": "Altitude (m) * | 10–120 m AGL (DGCA limit) | Speed (m/s) * 1–15 m/s",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[3]/div[2]/div[1]/input[1]",
+            "css": "#field-altitude",
+            "bbox": {
+              "x": 53.0,
+              "y": 340.0,
+              "w": 1174.0,
+              "h": 37.0
+            }
+          },
+          "desc": "spinbutton \"Altitude (m) *\" (in: Flight parameters)",
+          "enabled": true
+        },
+        {
+          "id": "S10.e9",
+          "fp": {
+            "tag": "input",
+            "role": "spinbutton",
+            "name": "Speed (m/s) *",
+            "text": "",
+            "attrs": {
+              "type": "number",
+              "id": "field-speed",
+              "name": "speed",
+              "min": "1",
+              "max": "15",
+              "value": "8",
+              "required": ""
+            },
+            "label": "Speed (m/s) *",
+            "context": "Flight parameters",
+            "neighbor_text": "Speed (m/s) * | 1–15 m/s | Altitude (m) * 10–120 m AGL (DGCA limit)",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[3]/div[2]/div[2]/input[1]",
+            "css": "#field-speed",
+            "bbox": {
+              "x": 53.0,
+              "y": 453.0,
+              "w": 1174.0,
+              "h": 37.0
+            }
+          },
+          "desc": "spinbutton \"Speed (m/s) *\" (in: Flight parameters)",
+          "enabled": true
+        },
+        {
+          "id": "S10.e10",
+          "fp": {
+            "tag": "input",
+            "role": "checkbox",
+            "name": "Return to home on low battery",
+            "text": "",
+            "attrs": {
+              "type": "checkbox",
+              "id": "field-rth",
+              "name": "rth"
+            },
+            "label": "Return to home on low battery",
+            "context": "Flight parameters",
+            "neighbor_text": "Return to home on low battery | Altitude (m) * 10–120 m AGL (DGCA limit) | Speed",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[3]/div[2]/div[3]/input[1]",
+            "css": "#field-rth",
+            "bbox": {
+              "x": 53.0,
+              "y": 544.0,
+              "w": 13.0,
+              "h": 13.0
+            }
+          },
+          "desc": "checkbox \"Return to home on low battery\" (in: Flight parameters)",
+          "enabled": true
+        },
+        {
+          "id": "S10.e11",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "Back",
+            "text": "Back",
+            "attrs": {
+              "type": "button",
+              "class": "btn btn-secondary"
+            },
+            "label": "",
+            "context": "Flight parameters",
+            "neighbor_text": "Next | Flight parameters | Altitude (m) * 10–120 m AGL (DGCA limit) Speed (m/s) ",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[3]/div[3]/button[1]",
+            "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(3) > div:nth-of-type(3) > button:nth-of-type(1)",
+            "bbox": {
+              "x": 53.0,
+              "y": 606.0,
+              "w": 64.0,
+              "h": 36.0
+            }
+          },
+          "desc": "button \"Back\" (in: Flight parameters)",
+          "enabled": true
+        },
+        {
+          "id": "S10.e12",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "Next",
+            "text": "Next",
+            "attrs": {
+              "type": "button",
+              "class": "btn btn-primary"
+            },
+            "label": "",
+            "context": "Flight parameters",
+            "neighbor_text": "Back | Flight parameters | Altitude (m) * 10–120 m AGL (DGCA limit) Speed (m/s) ",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[3]/div[3]/button[2]",
+            "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(3) > div:nth-of-type(3) > button:nth-of-type(2)",
+            "bbox": {
+              "x": 129.0,
+              "y": 606.0,
+              "w": 64.0,
+              "h": 36.0
+            }
+          },
+          "desc": "button \"Next\" (in: Flight parameters)",
+          "enabled": true
+        }
+      ],
+      "forms": []
+    },
+    "S11": {
+      "id": "S11",
+      "url": "/missions/new",
+      "entry_url": "http://127.0.0.1:8003/missions/new#step-details",
+      "path": [
+        {
+          "action": "fill",
+          "target": {
+            "tag": "input",
+            "role": "textbox",
+            "name": "Mission name *",
+            "text": "",
+            "attrs": {
+              "type": "text",
+              "id": "field-mission-name",
+              "name": "name",
+              "required": "",
+              "placeholder": "e.g. Morning patrol run"
+            },
+            "label": "Mission name *",
+            "context": "Mission details",
+            "neighbor_text": "Mission name * | Mission type * Select type… Survey Inspection Delivery Patrol |",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[2]/div[1]/input[1]",
+            "css": "#field-mission-name",
+            "bbox": {
+              "x": 53.0,
+              "y": 340.0,
+              "w": 1174.0,
+              "h": 37.0
+            }
+          },
+          "value": "Argus ${unique}",
+          "intent": "fill 'Mission name *'"
+        },
+        {
+          "action": "select",
+          "target": {
+            "tag": "select",
+            "role": "combobox",
+            "name": "Mission type *",
+            "text": "Select type… Survey Inspection Delivery Patrol",
+            "attrs": {
+              "id": "field-mission-type",
+              "name": "type",
+              "required": ""
+            },
+            "label": "Mission type *",
+            "context": "Mission details",
+            "neighbor_text": "Mission type * | Mission name * | Site * Select site… Pune Depot Mumbai Port Ben",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[2]/div[2]/select[1]",
+            "css": "#field-mission-type",
+            "bbox": {
+              "x": 53.0,
+              "y": 429.0,
+              "w": 1174.0,
+              "h": 37.0
+            }
+          },
+          "value": "Survey",
+          "intent": "select 'Survey' in 'Mission type *'"
+        },
+        {
+          "action": "select",
+          "target": {
+            "tag": "select",
+            "role": "combobox",
+            "name": "Site *",
+            "text": "Select site… Pune Depot Mumbai Port Bengaluru Solar Farm",
+            "attrs": {
+              "id": "field-mission-site",
+              "name": "site",
+              "required": ""
+            },
+            "label": "Site *",
+            "context": "Mission details",
+            "neighbor_text": "Site * | Mission name * | Mission type * Select type… Survey Inspection Delivery",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[2]/div[3]/select[1]",
+            "css": "#field-mission-site",
+            "bbox": {
+              "x": 53.0,
+              "y": 517.0,
+              "w": 1174.0,
+              "h": 37.0
+            }
+          },
+          "value": "Pune Depot",
+          "intent": "select 'Pune Depot' in 'Site *'"
+        },
+        {
+          "action": "click",
+          "target": {
+            "tag": "button",
+            "role": "button",
+            "name": "Next",
+            "text": "Next",
+            "attrs": {
+              "type": "button",
+              "class": "btn btn-primary"
+            },
+            "label": "",
+            "context": "Mission details",
+            "neighbor_text": "Mission details | Mission name * Mission type * Select type… Survey Inspection D",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[3]/button[1]",
+            "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(3) > button",
+            "bbox": {
+              "x": 53.0,
+              "y": 605.0,
+              "w": 64.0,
+              "h": 36.0
+            }
+          },
+          "value": null,
+          "intent": "click 'Next'"
+        },
+        {
+          "action": "click",
+          "target": {
+            "tag": "input",
+            "role": "radio",
+            "name": "Falcon-1",
+            "text": "",
+            "attrs": {
+              "type": "radio",
+              "id": "drone-d1",
+              "name": "drone_id",
+              "value": "d1",
+              "aria-label": "Falcon-1"
+            },
+            "label": "Falcon-1 DJI M350 92%",
+            "context": "Select drone",
+            "neighbor_text": "Falcon-1 | DJI M350 | 92%",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/fieldset[1]/div[1]/label[1]/input[1]",
+            "css": "#drone-d1",
+            "bbox": {
+              "x": 251.0,
+              "y": 359.0,
+              "w": 13.0,
+              "h": 13.0
+            }
+          },
+          "value": null,
+          "intent": "select 'Falcon-1'"
+        },
+        {
+          "action": "click",
+          "target": {
+            "tag": "button",
+            "role": "button",
+            "name": "Next",
+            "text": "Next",
+            "attrs": {
+              "type": "button",
+              "class": "btn btn-primary"
+            },
+            "label": "",
+            "context": "Select drone",
+            "neighbor_text": "Back | Select drone | Select an available drone for this mission Falcon-1 DJI M3",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/div[2]/button[2]",
+            "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(2) > div:nth-of-type(2) > button:nth-of-type(2)",
+            "bbox": {
+              "x": 129.0,
+              "y": 668.0,
+              "w": 64.0,
+              "h": 36.0
+            }
+          },
+          "value": null,
+          "intent": "click 'Next'"
+        },
+        {
+          "action": "click",
+          "target": {
+            "tag": "button",
+            "role": "button",
+            "name": "Next",
+            "text": "Next",
+            "attrs": {
+              "type": "button",
+              "class": "btn btn-primary"
+            },
+            "label": "",
+            "context": "Flight parameters",
+            "neighbor_text": "Back | Flight parameters | Altitude (m) * 10–120 m AGL (DGCA limit) Speed (m/s) ",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[3]/div[3]/button[2]",
+            "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(3) > div:nth-of-type(3) > button:nth-of-type(2)",
+            "bbox": {
+              "x": 129.0,
+              "y": 606.0,
+              "w": 64.0,
+              "h": 36.0
+            }
+          },
+          "value": null,
+          "intent": "click 'Next'"
+        }
+      ],
+      "signature": "fd74753cd86bdd74cea54e764e4cd1c2c956266c",
+      "title": "Plan a mission — Drone Operations Console",
+      "headings": [
+        "Plan a mission",
+        "Review & launch"
+      ],
+      "alerts": [],
+      "elements": [
+        {
+          "id": "S11.e0",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "🛸 SkyOps",
+            "text": "🛸 SkyOps",
+            "attrs": {
+              "href": "/dashboard",
+              "class": "brand"
+            },
+            "label": "",
+            "context": "header",
+            "neighbor_text": "Dashboard Missions Live map Flight logs Settings | v1.0 Log out | Plan a mission",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/a[1]",
+            "css": "body > div > header > a",
+            "bbox": {
+              "x": 24.0,
+              "y": 13.0,
+              "w": 91.0,
+              "h": 30.0
+            }
+          },
+          "desc": "link \"🛸 SkyOps\" (in: header)",
+          "enabled": true
+        },
+        {
+          "id": "S11.e1",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Dashboard",
+            "text": "Dashboard",
+            "attrs": {
+              "href": "/dashboard",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Missions | Live map | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[1]",
+            "css": "body > div > header > nav > a:nth-of-type(1)",
+            "bbox": {
+              "x": 147.0,
+              "y": 11.0,
+              "w": 91.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Dashboard\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S11.e2",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Missions",
+            "text": "Missions",
+            "attrs": {
+              "href": "/missions",
+              "class": " active"
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Live map | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[2]",
+            "css": "body > div > header > nav > a:nth-of-type(2)",
+            "bbox": {
+              "x": 243.0,
+              "y": 11.0,
+              "w": 79.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Missions\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S11.e3",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Live map",
+            "text": "Live map",
+            "attrs": {
+              "href": "/map",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[3]",
+            "css": "body > div > header > nav > a:nth-of-type(3)",
+            "bbox": {
+              "x": 325.0,
+              "y": 11.0,
+              "w": 79.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Live map\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S11.e4",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Flight logs",
+            "text": "Flight logs",
+            "attrs": {
+              "href": "/logs",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Live map",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[4]",
+            "css": "body > div > header > nav > a:nth-of-type(4)",
+            "bbox": {
+              "x": 409.0,
+              "y": 11.0,
+              "w": 88.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Flight logs\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S11.e5",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Settings",
+            "text": "Settings",
+            "attrs": {
+              "href": "/settings",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Live map",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[5]",
+            "css": "body > div > header > nav > a:nth-of-type(5)",
+            "bbox": {
+              "x": 501.0,
+              "y": 11.0,
+              "w": 74.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Settings\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S11.e6",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "Log out",
+            "text": "Log out",
+            "attrs": {
+              "class": "btn btn-secondary btn-sm",
+              "type": "button"
+            },
+            "label": "",
+            "context": "header",
+            "neighbor_text": "v1.0 | 🛸 SkyOps | Dashboard Missions Live map Flight logs Settings",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/div[1]/button[1]",
+            "css": "body > div > header > div > button",
+            "bbox": {
+              "x": 1192.0,
+              "y": 14.0,
+              "w": 64.0,
+              "h": 27.0
+            }
+          },
+          "desc": "button \"Log out\" (in: header)",
+          "enabled": true
+        },
+        {
+          "id": "S11.e7",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "← Missions",
+            "text": "← Missions",
+            "attrs": {
+              "href": "/missions",
+              "class": "btn btn-secondary"
+            },
+            "label": "",
+            "context": "main",
+            "neighbor_text": "Plan a mission Create a new drone mission in 4 steps | 1 Mission details 2 Selec",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[1]/a[1]",
+            "css": "#main-content > div:nth-of-type(1) > a",
+            "bbox": {
+              "x": 1143.0,
+              "y": 99.0,
+              "w": 105.0,
+              "h": 36.0
+            }
+          },
+          "desc": "link \"← Missions\" (in: main)",
+          "enabled": true
+        },
+        {
+          "id": "S11.e8",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "Back",
+            "text": "Back",
+            "attrs": {
+              "type": "button",
+              "class": "btn btn-secondary"
+            },
+            "label": "",
+            "context": "Review & launch",
+            "neighbor_text": "Launch mission | Review & launch | Review your mission parameters before launchi",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[4]/div[1]/button[1]",
+            "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(4) > div > button:nth-of-type(1)",
+            "bbox": {
+              "x": 53.0,
+              "y": 590.0,
+              "w": 64.0,
+              "h": 36.0
+            }
+          },
+          "desc": "button \"Back\" (in: Review & launch)",
+          "enabled": true
+        },
+        {
+          "id": "S11.e9",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "Launch mission",
+            "text": "Launch mission",
+            "attrs": {
+              "type": "button",
+              "class": "btn btn-primary"
+            },
+            "label": "",
+            "context": "Review & launch",
+            "neighbor_text": "Back | Review & launch | Review your mission parameters before launching.",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[4]/div[1]/button[2]",
+            "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(4) > div > button:nth-of-type(2)",
+            "bbox": {
+              "x": 129.0,
+              "y": 590.0,
+              "w": 131.0,
+              "h": 36.0
+            }
+          },
+          "desc": "button \"Launch mission\" (in: Review & launch)",
+          "enabled": true
+        }
+      ],
+      "forms": []
+    },
+    "S12": {
+      "id": "S12",
+      "url": "/missions/:id",
+      "entry_url": "http://127.0.0.1:8003/missions/m4",
+      "path": [],
+      "signature": "249e04174722a34702e66a7b40d8057cfdf41694",
+      "title": "Argus 81c410 — Drone Operations Console",
+      "headings": [
+        "Argus 81c410"
+      ],
+      "alerts": [
+        "🚀 Mission launched successfully!",
+        "Mission launched"
+      ],
+      "elements": [
+        {
+          "id": "S12.e0",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "🛸 SkyOps",
+            "text": "🛸 SkyOps",
+            "attrs": {
+              "href": "/dashboard",
+              "class": "brand"
+            },
+            "label": "",
+            "context": "header",
+            "neighbor_text": "Dashboard Missions Live map Flight logs Settings | v1.0 Log out | Argus 81c410 S",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/a[1]",
+            "css": "body > div:nth-of-type(1) > header > a",
+            "bbox": {
+              "x": 24.0,
+              "y": 13.0,
+              "w": 91.0,
+              "h": 30.0
+            }
+          },
+          "desc": "link \"🛸 SkyOps\" (in: header)",
+          "enabled": true
+        },
+        {
+          "id": "S12.e1",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Dashboard",
+            "text": "Dashboard",
+            "attrs": {
+              "href": "/dashboard",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Missions | Live map | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[1]",
+            "css": "body > div:nth-of-type(1) > header > nav > a:nth-of-type(1)",
+            "bbox": {
+              "x": 147.0,
+              "y": 11.0,
+              "w": 91.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Dashboard\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S12.e2",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Missions",
+            "text": "Missions",
+            "attrs": {
+              "href": "/missions",
+              "class": " active"
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Live map | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[2]",
+            "css": "body > div:nth-of-type(1) > header > nav > a:nth-of-type(2)",
+            "bbox": {
+              "x": 243.0,
+              "y": 11.0,
+              "w": 79.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Missions\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S12.e3",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Live map",
+            "text": "Live map",
+            "attrs": {
+              "href": "/map",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Flight logs",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[3]",
+            "css": "body > div:nth-of-type(1) > header > nav > a:nth-of-type(3)",
+            "bbox": {
+              "x": 325.0,
+              "y": 11.0,
+              "w": 79.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Live map\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S12.e4",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Flight logs",
+            "text": "Flight logs",
+            "attrs": {
+              "href": "/logs",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Live map",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[4]",
+            "css": "body > div:nth-of-type(1) > header > nav > a:nth-of-type(4)",
+            "bbox": {
+              "x": 409.0,
+              "y": 11.0,
+              "w": 88.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Flight logs\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S12.e5",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "Settings",
+            "text": "Settings",
+            "attrs": {
+              "href": "/settings",
+              "class": ""
+            },
+            "label": "",
+            "context": "Main navigation",
+            "neighbor_text": "Dashboard | Missions | Live map",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[5]",
+            "css": "body > div:nth-of-type(1) > header > nav > a:nth-of-type(5)",
+            "bbox": {
+              "x": 501.0,
+              "y": 11.0,
+              "w": 74.0,
+              "h": 33.0
+            }
+          },
+          "desc": "link \"Settings\" (in: Main navigation)",
+          "enabled": true
+        },
+        {
+          "id": "S12.e6",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "Log out",
+            "text": "Log out",
+            "attrs": {
+              "class": "btn btn-secondary btn-sm",
+              "type": "button"
+            },
+            "label": "",
+            "context": "header",
+            "neighbor_text": "v1.0 | 🛸 SkyOps | Dashboard Missions Live map Flight logs Settings",
+            "xpath": "/html[1]/body[1]/div[1]/header[1]/div[1]/button[1]",
+            "css": "body > div:nth-of-type(1) > header > div > button",
+            "bbox": {
+              "x": 1192.0,
+              "y": 14.0,
+              "w": 64.0,
+              "h": 27.0
+            }
+          },
+          "desc": "button \"Log out\" (in: header)",
+          "enabled": true
+        },
+        {
+          "id": "S12.e7",
+          "fp": {
+            "tag": "a",
+            "role": "link",
+            "name": "← Missions",
+            "text": "← Missions",
+            "attrs": {
+              "href": "/missions",
+              "class": "btn btn-secondary"
+            },
+            "label": "",
+            "context": "main",
+            "neighbor_text": "Argus 81c410 Survey · Pune Depot | 🚀 Mission launched successfully! | DRONE Fal",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[1]/a[1]",
+            "css": "#main-content > div:nth-of-type(1) > a",
+            "bbox": {
+              "x": 1143.0,
+              "y": 99.0,
+              "w": 105.0,
+              "h": 36.0
+            }
+          },
+          "desc": "link \"← Missions\" (in: main)",
+          "enabled": true
+        },
+        {
+          "id": "S12.e8",
+          "fp": {
+            "tag": "button",
+            "role": "button",
+            "name": "Abort mission Argus 81c410",
+            "text": "Abort mission",
+            "attrs": {
+              "type": "button",
+              "class": "btn btn-danger",
+              "aria-label": "Abort mission Argus 81c410"
+            },
+            "label": "",
+            "context": "main",
+            "neighbor_text": "Argus 81c410 Survey · Pune Depot ← Missions | 🚀 Mission launched successfully! ",
+            "xpath": "/html[1]/body[1]/div[1]/main[1]/div[4]/button[1]",
+            "css": "#main-content > div:nth-of-type(4) > button",
+            "bbox": {
+              "x": 32.0,
+              "y": 378.0,
+              "w": 123.0,
+              "h": 36.0
+            }
+          },
+          "desc": "button \"Abort mission Argus 81c410\" (in: main)",
+          "enabled": true
+        }
+      ],
+      "forms": []
+    }
+  },
+  "transitions": [
+    {
+      "from": "S1",
+      "to": "S2",
+      "action": "click",
+      "target": {
+        "tag": "a",
+        "role": "link",
+        "name": "Missions",
+        "text": "Missions",
+        "attrs": {
+          "href": "/missions",
+          "class": ""
+        },
+        "label": "",
+        "context": "Main navigation",
+        "neighbor_text": "Dashboard | Live map | Flight logs",
+        "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[2]",
+        "css": "body > div > header > nav > a:nth-of-type(2)",
+        "bbox": {
+          "x": 244.0,
+          "y": 11.0,
+          "w": 77.0,
+          "h": 33.0
+        }
+      },
+      "intent": "click 'Missions'",
+      "network": []
+    },
+    {
+      "from": "S1",
+      "to": "S3",
+      "action": "click",
+      "target": {
+        "tag": "a",
+        "role": "link",
+        "name": "Live map",
+        "text": "Live map",
+        "attrs": {
+          "href": "/map",
+          "class": ""
+        },
+        "label": "",
+        "context": "Main navigation",
+        "neighbor_text": "Dashboard | Missions | Flight logs",
+        "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[3]",
+        "css": "body > div > header > nav > a:nth-of-type(3)",
+        "bbox": {
+          "x": 325.0,
+          "y": 11.0,
+          "w": 79.0,
+          "h": 33.0
+        }
+      },
+      "intent": "click 'Live map'",
+      "network": []
+    },
+    {
+      "from": "S1",
+      "to": "S4",
+      "action": "click",
+      "target": {
+        "tag": "a",
+        "role": "link",
+        "name": "Flight logs",
+        "text": "Flight logs",
+        "attrs": {
+          "href": "/logs",
+          "class": ""
+        },
+        "label": "",
+        "context": "Main navigation",
+        "neighbor_text": "Dashboard | Missions | Live map",
+        "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[4]",
+        "css": "body > div > header > nav > a:nth-of-type(4)",
+        "bbox": {
+          "x": 409.0,
+          "y": 11.0,
+          "w": 88.0,
+          "h": 33.0
+        }
+      },
+      "intent": "click 'Flight logs'",
+      "network": []
+    },
+    {
+      "from": "S1",
+      "to": "S5",
+      "action": "click",
+      "target": {
+        "tag": "a",
+        "role": "link",
+        "name": "Settings",
+        "text": "Settings",
+        "attrs": {
+          "href": "/settings",
+          "class": ""
+        },
+        "label": "",
+        "context": "Main navigation",
+        "neighbor_text": "Dashboard | Missions | Live map",
+        "xpath": "/html[1]/body[1]/div[1]/header[1]/nav[1]/a[5]",
+        "css": "body > div > header > nav > a:nth-of-type(5)",
+        "bbox": {
+          "x": 501.0,
+          "y": 11.0,
+          "w": 74.0,
+          "h": 33.0
+        }
+      },
+      "intent": "click 'Settings'",
+      "network": []
+    },
+    {
+      "from": "S1",
+      "to": "S6",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "View Hawk-7",
+        "text": "View",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-secondary btn-sm",
+          "aria-label": "View Hawk-7"
+        },
+        "label": "",
+        "context": "Hawk-7 Autel EVO II 12% Idle Dock-B",
+        "neighbor_text": "Hawk-7 | Autel EVO II | 12%",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/table[1]/tbody[1]/tr[3]/td[6]/button[1]",
+        "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(2) > table > tbody > tr:nth-of-type(3) > td:nth-of-type(6) > button",
+        "bbox": {
+          "x": 1096.0,
+          "y": 494.0,
+          "w": 48.0,
+          "h": 27.0
+        }
+      },
+      "intent": "click 'View Hawk-7'",
+      "network": []
+    },
+    {
+      "from": "S1",
+      "to": "S6",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "View Osprey-3",
+        "text": "View",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-secondary btn-sm",
+          "aria-label": "View Osprey-3"
+        },
+        "label": "",
+        "context": "Osprey-3 DJI M300 64% In mission Dock-C",
+        "neighbor_text": "Osprey-3 | DJI M300 | 64%",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/table[1]/tbody[1]/tr[4]/td[6]/button[1]",
+        "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(2) > table > tbody > tr:nth-of-type(4) > td:nth-of-type(6) > button",
+        "bbox": {
+          "x": 1096.0,
+          "y": 546.0,
+          "w": 48.0,
+          "h": 27.0
+        }
+      },
+      "intent": "click 'View Osprey-3'",
+      "network": []
+    },
+    {
+      "from": "S1",
+      "to": "S6",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "View Kite-5",
+        "text": "View",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-secondary btn-sm",
+          "aria-label": "View Kite-5"
+        },
+        "label": "",
+        "context": "Kite-5 Parrot ANAFI 45% Idle Dock-B",
+        "neighbor_text": "Kite-5 | Parrot ANAFI | 45%",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/table[1]/tbody[1]/tr[5]/td[6]/button[1]",
+        "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(2) > table > tbody > tr:nth-of-type(5) > td:nth-of-type(6) > button",
+        "bbox": {
+          "x": 1096.0,
+          "y": 598.0,
+          "w": 48.0,
+          "h": 27.0
+        }
+      },
+      "intent": "click 'View Kite-5'",
+      "network": []
+    },
+    {
+      "from": "S1",
+      "to": "S6",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "View Raven-9",
+        "text": "View",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-secondary btn-sm",
+          "aria-label": "View Raven-9"
+        },
+        "label": "",
+        "context": "Raven-9 DJI M350 100% Maintenance Dock-D",
+        "neighbor_text": "Raven-9 | DJI M350 | 100%",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/table[1]/tbody[1]/tr[6]/td[6]/button[1]",
+        "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(2) > table > tbody > tr:nth-of-type(6) > td:nth-of-type(6) > button",
+        "bbox": {
+          "x": 1096.0,
+          "y": 650.0,
+          "w": 48.0,
+          "h": 27.0
+        }
+      },
+      "intent": "click 'View Raven-9'",
+      "network": []
+    },
+    {
+      "from": "S2",
+      "to": "S7",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "New mission",
+        "text": "+ New mission",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-primary",
+          "aria-label": "New mission"
+        },
+        "label": "",
+        "context": "main",
+        "neighbor_text": "Missions Plan and monitor drone missions | Search missions | NAME DRONE ALTITUDE",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[1]/button[1]",
+        "css": "#main-content > div:nth-of-type(1) > button",
+        "bbox": {
+          "x": 1120.0,
+          "y": 99.0,
+          "w": 129.0,
+          "h": 36.0
+        }
+      },
+      "intent": "click 'New mission'",
+      "network": []
+    },
+    {
+      "from": "S2",
+      "to": "S8",
+      "action": "click",
+      "target": {
+        "tag": "a",
+        "role": "link",
+        "name": "Port Survey Alpha",
+        "text": "Port Survey Alpha",
+        "attrs": {
+          "href": "/missions/m1"
+        },
+        "label": "",
+        "context": "Osprey-3 80 m In mission 2026-09-20",
+        "neighbor_text": "Osprey-3 | 80 m | In mission",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/table[1]/tbody[1]/tr[1]/td[1]/a[1]",
+        "css": "#main-content > div:nth-of-type(3) > table > tbody > tr:nth-of-type(1) > td:nth-of-type(1) > a",
+        "bbox": {
+          "x": 49.0,
+          "y": 267.0,
+          "w": 110.0,
+          "h": 19.0
+        }
+      },
+      "intent": "click 'Port Survey Alpha'",
+      "network": []
+    },
+    {
+      "from": "S5",
+      "to": "S5",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Save settings",
+        "text": "Save settings",
+        "attrs": {
+          "type": "submit",
+          "class": "btn btn-primary"
+        },
+        "label": "",
+        "context": "form",
+        "neighbor_text": "Display name Email Email cannot be changed here. Units Metric Imperial Email me ",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[2]/form[1]/div[2]/button[1]",
+        "css": "#main-content > div:nth-of-type(2) > form > div:nth-of-type(2) > button",
+        "bbox": {
+          "x": 53.0,
+          "y": 508.0,
+          "w": 117.0,
+          "h": 36.0
+        }
+      },
+      "intent": "click 'Save settings'",
+      "network": [
+        "PUT /api/settings 200"
+      ]
+    },
+    {
+      "from": "S7",
+      "to": "S9",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Next",
+        "text": "Next",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-primary"
+        },
+        "label": "",
+        "context": "Mission details",
+        "neighbor_text": "Mission details | Mission name * Mission type * Select type… Survey Inspection D",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[1]/div[3]/button[1]",
+        "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(3) > button",
+        "bbox": {
+          "x": 53.0,
+          "y": 605.0,
+          "w": 64.0,
+          "h": 36.0
+        }
+      },
+      "intent": "click 'Next'",
+      "network": [
+        "POST /api/missions/validate 200"
+      ]
+    },
+    {
+      "from": "S9",
+      "to": "S7",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Back",
+        "text": "Back",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-secondary"
+        },
+        "label": "",
+        "context": "Select drone",
+        "neighbor_text": "Next | Select drone | Select an available drone for this mission Falcon-1 DJI M3",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/div[2]/button[1]",
+        "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(2) > div:nth-of-type(2) > button:nth-of-type(1)",
+        "bbox": {
+          "x": 53.0,
+          "y": 668.0,
+          "w": 64.0,
+          "h": 36.0
+        }
+      },
+      "intent": "click 'Back'",
+      "network": []
+    },
+    {
+      "from": "S9",
+      "to": "S10",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Next",
+        "text": "Next",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-primary"
+        },
+        "label": "",
+        "context": "Select drone",
+        "neighbor_text": "Back | Select drone | Select an available drone for this mission Falcon-1 DJI M3",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[2]/div[2]/button[2]",
+        "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(2) > div:nth-of-type(2) > button:nth-of-type(2)",
+        "bbox": {
+          "x": 129.0,
+          "y": 668.0,
+          "w": 64.0,
+          "h": 36.0
+        }
+      },
+      "intent": "click 'Next'",
+      "network": [
+        "POST /api/missions/validate 200"
+      ]
+    },
+    {
+      "from": "S10",
+      "to": "S9",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Back",
+        "text": "Back",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-secondary"
+        },
+        "label": "",
+        "context": "Flight parameters",
+        "neighbor_text": "Next | Flight parameters | Altitude (m) * 10–120 m AGL (DGCA limit) Speed (m/s) ",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[3]/div[3]/button[1]",
+        "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(3) > div:nth-of-type(3) > button:nth-of-type(1)",
+        "bbox": {
+          "x": 53.0,
+          "y": 606.0,
+          "w": 64.0,
+          "h": 36.0
+        }
+      },
+      "intent": "click 'Back'",
+      "network": []
+    },
+    {
+      "from": "S10",
+      "to": "S11",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Next",
+        "text": "Next",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-primary"
+        },
+        "label": "",
+        "context": "Flight parameters",
+        "neighbor_text": "Back | Flight parameters | Altitude (m) * 10–120 m AGL (DGCA limit) Speed (m/s) ",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[3]/div[3]/button[2]",
+        "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(3) > div:nth-of-type(3) > button:nth-of-type(2)",
+        "bbox": {
+          "x": 129.0,
+          "y": 606.0,
+          "w": 64.0,
+          "h": 36.0
+        }
+      },
+      "intent": "click 'Next'",
+      "network": [
+        "POST /api/missions/validate 200"
+      ]
+    },
+    {
+      "from": "S11",
+      "to": "S10",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Back",
+        "text": "Back",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-secondary"
+        },
+        "label": "",
+        "context": "Review & launch",
+        "neighbor_text": "Launch mission | Review & launch | Review your mission parameters before launchi",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[4]/div[1]/button[1]",
+        "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(4) > div > button:nth-of-type(1)",
+        "bbox": {
+          "x": 53.0,
+          "y": 590.0,
+          "w": 64.0,
+          "h": 36.0
+        }
+      },
+      "intent": "click 'Back'",
+      "network": []
+    },
+    {
+      "from": "S11",
+      "to": "S12",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Launch mission",
+        "text": "Launch mission",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-primary"
+        },
+        "label": "",
+        "context": "Review & launch",
+        "neighbor_text": "Back | Review & launch | Review your mission parameters before launching.",
+        "xpath": "/html[1]/body[1]/div[1]/main[1]/div[3]/div[4]/div[1]/button[2]",
+        "css": "#main-content > div:nth-of-type(3) > div:nth-of-type(4) > div > button:nth-of-type(2)",
+        "bbox": {
+          "x": 129.0,
+          "y": 590.0,
+          "w": 131.0,
+          "h": 36.0
+        }
+      },
+      "intent": "click 'Launch mission'",
+      "network": [
+        "POST /api/missions 201"
+      ]
+    }
+  ],
+  "login": {
+    "id": "S0",
+    "url": "/login",
+    "entry_url": "http://127.0.0.1:8003/login",
+    "path": [],
+    "signature": "3433ed9222d46f7fd2a4d8a7442cb7cdadef09f9",
+    "title": "SkyOps — Drone Operations Console",
+    "headings": [
+      "Drone Operations Console"
+    ],
+    "alerts": [],
+    "elements": [
+      {
+        "id": "S0.e0",
+        "fp": {
+          "tag": "input",
+          "role": "textbox",
+          "name": "Email address",
+          "text": "",
+          "attrs": {
+            "type": "email",
+            "id": "login-email",
+            "data-testid": "login-email",
+            "name": "email",
+            "required": "",
+            "placeholder": "pilot@skyops.io",
+            "aria-label": "Email address"
+          },
+          "label": "Email address",
+          "context": "Drone Operations Console",
+          "neighbor_text": "Email address | Password | Log in",
+          "xpath": "/html[1]/body[1]/div[1]/div[1]/form[1]/div[1]/input[1]",
+          "css": "#login-email",
+          "bbox": {
+            "x": 481.0,
+            "y": 399.0,
+            "w": 318.0,
+            "h": 37.0
+          }
+        },
+        "desc": "textbox \"Email address\" (in: Drone Operations Console)",
+        "enabled": true
+      },
+      {
+        "id": "S0.e1",
+        "fp": {
+          "tag": "input",
+          "role": "textbox",
+          "name": "Password",
+          "text": "",
+          "attrs": {
+            "type": "password",
+            "id": "login-password",
+            "data-testid": "login-password",
+            "name": "password",
+            "required": "",
+            "aria-label": "Password"
+          },
+          "label": "Password",
+          "context": "Drone Operations Console",
+          "neighbor_text": "Password | Email address | Log in",
+          "xpath": "/html[1]/body[1]/div[1]/div[1]/form[1]/div[2]/input[1]",
+          "css": "#login-password",
+          "bbox": {
+            "x": 481.0,
+            "y": 478.0,
+            "w": 318.0,
+            "h": 37.0
+          }
+        },
+        "desc": "textbox \"Password\" (in: Drone Operations Console)",
+        "enabled": true
+      },
+      {
+        "id": "S0.e2",
+        "fp": {
+          "tag": "button",
+          "role": "button",
+          "name": "Log in",
+          "text": "Log in",
+          "attrs": {
+            "type": "submit",
+            "id": "login-submit",
+            "data-testid": "login-submit",
+            "class": "btn btn-primary"
+          },
+          "label": "",
+          "context": "Drone Operations Console",
+          "neighbor_text": "Email address | Password | 🛸 SkyOps",
+          "xpath": "/html[1]/body[1]/div[1]/div[1]/form[1]/button[1]",
+          "css": "#login-submit",
+          "bbox": {
+            "x": 481.0,
+            "y": 535.0,
+            "w": 318.0,
+            "h": 36.0
+          }
+        },
+        "desc": "button \"Log in\" (in: Drone Operations Console)",
+        "enabled": true
+      }
+    ],
+    "forms": []
+  }
+}

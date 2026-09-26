@@ -1,0 +1,82 @@
+{
+  "id": "map-select-drone",
+  "name": "Pick a drone on the live map",
+  "goal": "An operator selects drone Falcon-2 directly on the canvas fleet map",
+  "tags": [
+    "canvas",
+    "vision"
+  ],
+  "start_url": "/map",
+  "steps": [
+    {
+      "id": "s1",
+      "intent": "Click the Falcon-2 marker on the map",
+      "action": "click",
+      "target": null,
+      "value": null,
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": {
+        "state_key": "/map@1280x800",
+        "bbox": [
+          252.0,
+          113.0,
+          720.0,
+          426.265625
+        ],
+        "center_norm": [
+          0.7354166666666667,
+          0.14168618266978922
+        ],
+        "canvas_selector": "[data-js=fleet-map]",
+        "crop_png_b64": "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",
+        "phash": "9cc94bac6336b4538cc9525c733689a79cc952584b36ada7b4c84a54df36ada9",
+        "nearby_labels": [
+          "Live map Real-time fleet positions · Pune operations area"
+        ],
+        "hint": "drone marker Falcon-2",
+        "mask_png_b64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAAAAACPAi4CAAAAaElEQVR4nO2RMQ6AMAwD7Yj/fzkMgIpEqCtFTPiWdkjc5AoYY4z5EZmigPN2XRO6/zpqNt1fTJNjLC4FsLpTBeS48mUL5tyB5LbKE/V/J4EmXHzouwnCAbAD2AHswA4OAk3CAbAD9B3s160RRTFp3bAAAAAASUVORK5CYII="
+      },
+      "save_as": null
+    }
+  ],
+  "oracles": [
+    {
+      "kind": "text_visible",
+      "params": {
+        "text": "Selected drone: Falcon-2"
+      },
+      "description": "Falcon-2 is selected",
+      "rule_ref": null
+    }
+  ],
+  "version": 2,
+  "status": "active",
+  "origin": "manual",
+  "history": [
+    {
+      "version": 1,
+      "at": "2026-09-24T13:15:19+00:00",
+      "kind": "created",
+      "summary": "Authored (manual); baseline recorded",
+      "diff": "",
+      "verdict_ref": null
+    },
+    {
+      "version": 2,
+      "at": "2026-09-24T13:16:58+00:00",
+      "kind": "healed",
+      "summary": "Self-healed 0 locator(s); flow unchanged.",
+      "diff": "",
+      "verdict_ref": "20260924-184634-43f3"
+    }
+  ],
+  "requires_login": true
+}

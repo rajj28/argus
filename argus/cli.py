@@ -384,3 +384,34 @@ def boundary(test: str = typer.Option(..., "--test", help="Existing test whose r
 
 if __name__ == "__main__":
     app()
+
+
+live_app = typer.Typer(help="Argus Live: test a running live-ops cockpit against ground truth.")
+app.add_typer(live_app, name="live")
+
+
+@live_app.command("run")
+def live_run(only: Optional[list[str]] = typer.Option(None, "--only", help="Scenario id prefix, e.g. S1"),
+             headless: bool = typer.Option(False, help="Run without a visible browser (recordings still made)"),
+             out: Path = typer.Option(Path("runs/live"), help="Evidence folder")):
+    """Run the live scenarios: real browser, ground truth, narrated recordings, grouped findings."""
+    from argus.live.engine import run_scenarios
+    from argus.live.scenarios import SCENARIOS
+    chosen = [s for s in SCENARIOS if not only or any(s.id.startswith(o) for o in only)]
+    console.rule(f"[bold]Argus Live[/] {len(chosen)} scenario(s)")
+    results = asyncio.run(run_scenarios(chosen, out, headed=not headless, log=console.print))
+    table = Table("scenario", "level", "verdict", "finding", "video")
+    for r in results:
+        color = {"BUG": "bold red", "PASS": "green"}.get(r.verdict, "yellow")
+        table.add_row(r.id, r.level, f"[{color}]{r.verdict}[/]", r.findings[0].title if r.findings else "-",
+                      (r.videos or ["-"])[0])
+    console.print(table)
+
+
+@live_app.command("report")
+def live_report(runs: Path = typer.Option(Path("runs/live"), help="Evidence folder with */result.json"),
+                out: Path = typer.Option(Path("EVALUATION.md"), help="Markdown document to write")):
+    """Build the evaluation document (EVALUATION.md + runs/live/index.html) from stored results."""
+    from argus.live.report import build_report
+    path = build_report(runs, out)
+    console.print(f"[green]Wrote {path} and {runs / 'index.html'}[/]")

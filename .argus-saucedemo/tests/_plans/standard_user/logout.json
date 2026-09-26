@@ -1,0 +1,139 @@
+{
+  "id": "logout",
+  "name": "Shopper signs out from the main menu",
+  "goal": "Signing out via the main menu returns to the sign-in page",
+  "tags": [
+    "auth-exit"
+  ],
+  "start_url": "/",
+  "steps": [
+    {
+      "id": "s1",
+      "intent": "Open the Products catalogue",
+      "action": "goto",
+      "target": null,
+      "value": "/inventory.html",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s2",
+      "intent": "Open the main menu",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Open Menu",
+        "text": "Open Menu",
+        "attrs": {
+          "type": "button",
+          "id": "react-burger-menu-btn"
+        },
+        "label": "",
+        "context": "header",
+        "neighbor_text": "",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/header[1]/div[1]/div[1]/div[1]/div[1]/div[1]/button[1]",
+        "css": "#react-burger-menu-btn",
+        "bbox": {
+          "x": 20.0,
+          "y": 20.0,
+          "w": 20.0,
+          "h": 20.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s3",
+      "intent": "Sign out",
+      "action": "click",
+      "target": {
+        "tag": "a",
+        "role": "button",
+        "name": "Logout",
+        "text": "Logout",
+        "attrs": {
+          "id": "logout_sidebar_link",
+          "class": "bm-item menu-item",
+          "href": "#",
+          "data-test": "logout-sidebar-link"
+        },
+        "label": "",
+        "context": "nav",
+        "neighbor_text": "All Items | Dynamic Catalog | About",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/header[1]/div[1]/div[1]/div[1]/div[2]/div[1]/nav[1]/a[4]",
+        "css": "#logout_sidebar_link",
+        "bbox": {
+          "x": 24.0,
+          "y": 184.0,
+          "w": 252.0,
+          "h": 41.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": true,
+        "url_pattern": "/",
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    }
+  ],
+  "oracles": [
+    {
+      "kind": "url_matches",
+      "params": {
+        "pattern": "/$"
+      },
+      "description": "The sign-in page opens",
+      "rule_ref": "R10"
+    },
+    {
+      "kind": "text_visible",
+      "params": {
+        "text": "Accepted usernames are"
+      },
+      "description": "The sign-in prompt is shown",
+      "rule_ref": "R10"
+    }
+  ],
+  "version": 1,
+  "status": "active",
+  "origin": "manual",
+  "history": [
+    {
+      "version": 1,
+      "at": "2026-09-24T17:51:46+00:00",
+      "kind": "created",
+      "summary": "Authored (manual); baseline recorded",
+      "diff": "",
+      "verdict_ref": null
+    }
+  ],
+  "requires_login": true
+}

@@ -1,0 +1,176 @@
+{
+  "id": "S6-reconnect",
+  "title": "Connection loss and recovery",
+  "level": "L3",
+  "category": "Network and recovery",
+  "description": "When the server connection drops, the operator should be told, and the cockpit should recover and catch up.",
+  "approach": "Argus kicks every socket and refuses reconnects for 10 s via the control API, records the link badge during the outage, then measures how long the cockpit takes to match the simulator again and whether rows duplicate.",
+  "verdict": "PASS",
+  "findings": [],
+  "steps": [
+    "[  0.6s] Start: Drone 1 in flight, operator watching telemetry",
+    "[ 10.6s] Condition: server drops every cockpit socket and refuses reconnects for 10 s",
+    "[ 23.3s] Server accepts connections again - does the cockpit recover and catch up?"
+  ],
+  "samples": [
+    {
+      "phase": "outage",
+      "badge": "socket reconnecting",
+      "t": 12.7
+    },
+    {
+      "phase": "outage",
+      "badge": "socket reconnecting",
+      "t": 14.7
+    },
+    {
+      "phase": "outage",
+      "badge": "socket reconnecting",
+      "t": 16.7
+    },
+    {
+      "phase": "outage",
+      "badge": "socket reconnecting",
+      "t": 18.7
+    },
+    {
+      "phase": "outage",
+      "badge": "socket reconnecting",
+      "t": 20.7
+    },
+    {
+      "phase": "outage",
+      "badge": "socket connected",
+      "t": 22.8
+    },
+    {
+      "phase": "recovery",
+      "second": 1,
+      "badge": "socket connected",
+      "ui_distance": 140.0,
+      "truth_distance": 140,
+      "t": 24.3
+    },
+    {
+      "phase": "recovery",
+      "second": 2,
+      "badge": "socket connected",
+      "ui_distance": 150.0,
+      "truth_distance": 150,
+      "t": 25.3
+    },
+    {
+      "phase": "recovery",
+      "second": 3,
+      "badge": "socket connected",
+      "ui_distance": 160.0,
+      "truth_distance": 160,
+      "t": 26.4
+    },
+    {
+      "phase": "recovery",
+      "second": 4,
+      "badge": "socket connected",
+      "ui_distance": 170.0,
+      "truth_distance": 170,
+      "t": 27.4
+    },
+    {
+      "phase": "recovery",
+      "second": 5,
+      "badge": "socket connected",
+      "ui_distance": 180.0,
+      "truth_distance": 180,
+      "t": 28.4
+    },
+    {
+      "phase": "recovery",
+      "second": 6,
+      "badge": "socket connected",
+      "ui_distance": 190.0,
+      "truth_distance": 190,
+      "t": 29.5
+    },
+    {
+      "phase": "recovery",
+      "second": 7,
+      "badge": "socket connected",
+      "ui_distance": 200.0,
+      "truth_distance": 200,
+      "t": 30.5
+    },
+    {
+      "phase": "recovery",
+      "second": 8,
+      "badge": "socket connected",
+      "ui_distance": 210.0,
+      "truth_distance": 210,
+      "t": 31.6
+    },
+    {
+      "phase": "recovery",
+      "second": 9,
+      "badge": "socket connected",
+      "ui_distance": 220.0,
+      "truth_distance": 220,
+      "t": 32.6
+    },
+    {
+      "phase": "recovery",
+      "second": 10,
+      "badge": "socket connected",
+      "ui_distance": 230.0,
+      "truth_distance": 230,
+      "t": 33.7
+    },
+    {
+      "phase": "recovery",
+      "second": 11,
+      "badge": "socket connected",
+      "ui_distance": 245.0,
+      "truth_distance": 245,
+      "t": 34.7
+    },
+    {
+      "phase": "recovery",
+      "second": 12,
+      "badge": "socket connected",
+      "ui_distance": 255.0,
+      "truth_distance": 255,
+      "t": 35.7
+    },
+    {
+      "phase": "recovery",
+      "second": 13,
+      "badge": "socket connected",
+      "ui_distance": 265.0,
+      "truth_distance": 265,
+      "t": 36.7
+    },
+    {
+      "phase": "recovery",
+      "second": 14,
+      "badge": "socket connected",
+      "ui_distance": 275.0,
+      "truth_distance": 275,
+      "t": 37.8
+    },
+    {
+      "phase": "recovery",
+      "second": 15,
+      "badge": "socket connected",
+      "ui_distance": 285.0,
+      "truth_distance": 285,
+      "t": 38.8
+    }
+  ],
+  "videos": [
+    "video.mp4"
+  ],
+  "shots": [
+    "shots/1-outage.png",
+    "shots/2-recovered.png"
+  ],
+  "started": "2026-09-26 13:41:21",
+  "duration_s": 42.3
+}

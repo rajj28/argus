@@ -9,8 +9,9 @@ video's decoded frame rate, the movement trail's geometry — and compares them 
 truth, so it catches wrong or stale live data with hard evidence and near‑zero false positives.
 
 **Video (all Level‑2 scenarios, real time):** _[paste your Google Drive link here]_
-One recording introduces each scenario with a title card, then runs it in real time. A HUD overlay shows, at
-every moment, what the UI claims next to the ground truth and the verdict.
+One recording introduces each scenario with a title card and **voice narration**, then runs it in real time. A HUD
+overlay shows, at every moment, what the UI claims next to the ground truth and the verdict; for the stale‑map bug
+the true‑vs‑shown position gap is drawn straight onto the live map. Turn your sound on.
 
 ---
 
@@ -30,6 +31,23 @@ The full system is described in the Level‑1 write‑up. Level 2 exercises thre
 
 Verdicts are deterministic; symptoms of one root cause are grouped; and a scenario that behaves correctly is
 reported as **PASS**, which is how the system demonstrates precision.
+
+### 1.1 Evidence layer (new)
+
+A finding is only useful if a human can trust it in seconds. Argus now makes every judgement visible *on the
+product itself*, not just in a log:
+
+- **On‑map gap overlay.** For the stale‑map bug, Argus draws the drone's *true* position (green ring) and the
+  position the map is actually *showing* (amber) directly onto the live Cesium canvas, joined by a dashed line
+  labelled with the live metre gap. The discrepancy is visible on the real map, in real time — the overlay is
+  computed from the same coordinates the verdict uses, so what you see is the evidence.
+- **Burned‑in evidence HUD.** Every recording carries an overlay that shows, tick by tick, the measurement, what
+  the UI *claims*, the independent *ground truth*, and the running *verdict*. A reviewer can audit the decision
+  frame by frame without trusting a summary.
+- **Narrated walkthrough.** The combined recording opens each scenario with a title card and a voice track that
+  states the oracle and the finding, so the evidence reads on its own, without a live presenter.
+
+None of this touches the verdict logic — it is a presentation layer over the same deterministic measurements.
 
 ---
 
@@ -102,6 +120,51 @@ and one is already demonstrated above:
 | **Search & filtering within history** | Assert filtered results match the ground‑truth event log (no missing, duplicated or misattributed events). |
 
 Each reuses the same principle: read what the user sees, compare with independent truth, group by root cause.
+
+---
+
+## 4. Toward Level 3 — the JEV cost‑aware reasoning mesh
+
+Levels 1–2 keep every verdict **deterministic**: a hard oracle (coordinates, decoded frame rate, click‑to‑paint
+latency) decides pass or fail, which is exactly what gives Argus its near‑zero false‑positive rate. Level 3 —
+autonomous, open‑ended, self‑directed testing — needs a layer that can *decide what to test* and *reason where no
+numeric oracle exists*. That is the job of the **JEV mesh**, already wired into the codebase and deliberately kept
+**out of the Level‑2 verdict path** so it cannot introduce false alarms.
+
+**What the mesh is.** A cost‑aware *ladder* of models rather than one expensive model — cheap first, escalate only
+when needed:
+
+| Tier | Role | Cost |
+|---|---|---|
+| **JEV** (primary free key) | first pass on every reasoning call | free · quota‑limited |
+| **JEV2** (second free key) | overflow once JEV's daily quota is spent | free · quota‑limited |
+| **Groq / open‑weight** | high‑throughput fallback | free / very low |
+| **Premium model** | escalation *only* when the cheap tiers are uncertain | paid · rarely hit |
+
+A **circuit breaker** trips on quota exhaustion or repeated errors and routes down the ladder automatically, so the
+agent never stalls — the “tireless” property. In practice the free tiers absorb the large majority of calls, and a
+premium model is touched only when a cheap tier signals low confidence. This is what makes a *continuously‑running*
+Level‑3 agent economically viable instead of prohibitively expensive.
+
+**What the mesh unlocks at Level 3** — each capability still *grounded on the Level‑2 probes*:
+
+- **Autonomous exploration & scenario synthesis.** The agent crawls the running product; the LLM proposes
+  product‑specific scenarios (“there is a geofence editor — verify a drone crossing the fence raises an alert”)
+  instead of running a fixed list. The deterministic probes still decide the verdict; the LLM only chooses *what*
+  to try, so autonomy never costs precision.
+- **Self‑healing steps.** When a selector or step breaks after a UI change, the mesh re‑derives the target from the
+  current DOM, the screenshot and the step's stated intent — tests survive refactors instead of going red.
+- **Semantic assertions where truth is fuzzy.** For questions with no numeric oracle (“is this error message
+  actually helpful?”, “does this layout look broken?”) the LLM acts as a judge — but its opinion is cross‑checked
+  against the hard probes and is never allowed to override them.
+- **Triage & root‑cause narratives.** The mesh clusters many raw findings into a few root causes and writes the
+  human‑readable explanation, cutting noise for the reviewer.
+- **Natural‑language authoring.** A developer writes “check that logging out clears the session everywhere” and the
+  mesh compiles it into a runnable scenario over the existing probes.
+
+**The invariant that carries across all three levels.** The LLM decides *what* to test and *explains* the result;
+a deterministic oracle decides *whether* it passed. Level 3 adds open‑ended autonomy on top of Levels 1–2 **without
+giving up their evidence‑first, near‑zero‑false‑positive guarantee.**
 
 ---
 

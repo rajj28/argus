@@ -1,0 +1,203 @@
+{
+  "id": "sort-by-price",
+  "name": "Sort the catalogue by price low to high",
+  "goal": "The shopper sorts the catalogue by Price (low to high)",
+  "tags": [
+    "catalogue"
+  ],
+  "start_url": "/",
+  "steps": [
+    {
+      "id": "s1",
+      "intent": "Enter the username",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Username",
+        "text": "",
+        "attrs": {
+          "class": "input_error form_input",
+          "placeholder": "Username",
+          "aria-label": "Username",
+          "data-test": "username",
+          "id": "user-name",
+          "type": "text",
+          "name": "user-name"
+        },
+        "label": "",
+        "context": "Login",
+        "neighbor_text": "",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/form[1]/div[1]/input[1]",
+        "css": "#user-name",
+        "bbox": {
+          "x": 494.0,
+          "y": 154.0,
+          "w": 292.0,
+          "h": 39.0
+        }
+      },
+      "value": "${creds.user}",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s2",
+      "intent": "Enter the password",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Password",
+        "text": "",
+        "attrs": {
+          "class": "input_error form_input",
+          "placeholder": "Password",
+          "aria-label": "Password",
+          "data-test": "password",
+          "id": "password",
+          "type": "password",
+          "name": "password"
+        },
+        "label": "",
+        "context": "Login",
+        "neighbor_text": "",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/form[1]/div[2]/input[1]",
+        "css": "#password",
+        "bbox": {
+          "x": 494.0,
+          "y": 208.0,
+          "w": 292.0,
+          "h": 39.0
+        }
+      },
+      "value": "${creds.password}",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s3",
+      "intent": "Sign in",
+      "action": "click",
+      "target": {
+        "tag": "input",
+        "role": "button",
+        "name": "Login",
+        "text": "",
+        "attrs": {
+          "class": "submit-button btn_action",
+          "data-test": "login-button",
+          "id": "login-button",
+          "type": "submit",
+          "value": "Login",
+          "name": "login-button"
+        },
+        "label": "",
+        "context": "Login",
+        "neighbor_text": "",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/form[1]/input[1]",
+        "css": "#login-button",
+        "bbox": {
+          "x": 494.0,
+          "y": 302.0,
+          "w": 292.0,
+          "h": 49.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": true,
+        "url_pattern": "/inventory.html",
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s4",
+      "intent": "Sort products by Price (low to high)",
+      "action": "select",
+      "target": {
+        "tag": "select",
+        "role": "combobox",
+        "name": "Sort products",
+        "text": "Name (A to Z) Name (Z to A) Price (low to high) Price (high to low)",
+        "attrs": {
+          "class": "product_sort_container",
+          "aria-label": "Sort products",
+          "data-test": "product-sort-container",
+          "value": "az"
+        },
+        "label": "",
+        "context": "header",
+        "neighbor_text": "Name (A to Z)",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/header[1]/div[2]/div[1]/span[1]/select[1]",
+        "css": "#header_container > div:nth-of-type(2) > div > span > select",
+        "bbox": {
+          "x": 1036.0,
+          "y": 70.0,
+          "w": 223.0,
+          "h": 30.0
+        }
+      },
+      "value": "Price (low to high)",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    }
+  ],
+  "oracles": [
+    {
+      "kind": "text_visible",
+      "params": {
+        "text": "Sauce Labs Onesie"
+      },
+      "description": "The catalogue is populated after sorting",
+      "rule_ref": "R2"
+    }
+  ],
+  "version": 1,
+  "status": "active",
+  "origin": "manual",
+  "history": [
+    {
+      "version": 1,
+      "at": "2026-09-24T12:58:10+00:00",
+      "kind": "created",
+      "summary": "Authored (manual); baseline recorded",
+      "diff": "",
+      "verdict_ref": null
+    }
+  ],
+  "requires_login": false
+}

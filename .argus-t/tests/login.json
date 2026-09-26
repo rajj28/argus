@@ -1,0 +1,184 @@
+{
+  "id": "login",
+  "name": "Pilot signs in",
+  "goal": "A pilot with valid credentials reaches the fleet overview",
+  "tags": [
+    "auth",
+    "smoke"
+  ],
+  "start_url": "/login",
+  "steps": [
+    {
+      "id": "s1",
+      "intent": "Enter the pilot email",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Email address",
+        "text": "",
+        "attrs": {
+          "type": "email",
+          "id": "auth-email-input",
+          "data-testid": "login-email",
+          "name": "email",
+          "required": "",
+          "placeholder": "pilot@skyops.io",
+          "aria-label": "Email address"
+        },
+        "label": "Email address",
+        "context": "Drone Operations Console",
+        "neighbor_text": "Email address | Password | Sign in",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/form[1]/div[1]/input[1]",
+        "css": "#auth-email-input",
+        "bbox": {
+          "x": 481.0,
+          "y": 399.0,
+          "w": 318.0,
+          "h": 37.0
+        }
+      },
+      "value": "${creds.user}",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    },
+    {
+      "id": "s2",
+      "intent": "Enter the password",
+      "action": "fill",
+      "target": {
+        "tag": "input",
+        "role": "textbox",
+        "name": "Password",
+        "text": "",
+        "attrs": {
+          "type": "password",
+          "id": "auth-password-input",
+          "data-testid": "login-password",
+          "name": "password",
+          "required": "",
+          "aria-label": "Password"
+        },
+        "label": "Password",
+        "context": "Drone Operations Console",
+        "neighbor_text": "Password | Email address | Sign in",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/form[1]/div[2]/input[1]",
+        "css": "#auth-password-input",
+        "bbox": {
+          "x": 481.0,
+          "y": 478.0,
+          "w": 318.0,
+          "h": 37.0
+        }
+      },
+      "value": "${creds.password}",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    },
+    {
+      "id": "s3",
+      "intent": "Submit the sign-in form",
+      "action": "click",
+      "target": {
+        "tag": "a",
+        "role": "button",
+        "name": "Sign in",
+        "text": "Sign in",
+        "attrs": {
+          "href": "#",
+          "id": "auth-sign-in-btn",
+          "data-testid": "login-submit",
+          "class": "btn btn-primary",
+          "aria-label": "Sign in"
+        },
+        "label": "",
+        "context": "Drone Operations Console",
+        "neighbor_text": "Email address | Password | 🛸 SkyOps",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/form[1]/a[1]",
+        "css": "#auth-sign-in-btn",
+        "bbox": {
+          "x": 481.0,
+          "y": 535.0,
+          "w": 318.0,
+          "h": 36.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": true,
+        "url_pattern": "/dashboard",
+        "network": [
+          {
+            "method": "POST",
+            "path": "/api/login",
+            "status": 200,
+            "resource_type": "fetch"
+          }
+        ],
+        "headings_any": [
+          "Fleet overview"
+        ],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "save_as": null
+    }
+  ],
+  "oracles": [
+    {
+      "kind": "url_matches",
+      "params": {
+        "pattern": "/dashboard"
+      },
+      "description": "Pilot lands on the dashboard",
+      "rule_ref": "R5"
+    },
+    {
+      "kind": "text_visible",
+      "params": {
+        "text": "Fleet overview"
+      },
+      "description": "Fleet overview is shown",
+      "rule_ref": null
+    }
+  ],
+  "version": 2,
+  "status": "active",
+  "origin": "manual",
+  "history": [
+    {
+      "version": 1,
+      "at": "2026-09-24T12:12:25+00:00",
+      "kind": "created",
+      "summary": "Authored (manual); baseline recorded",
+      "diff": "",
+      "verdict_ref": null
+    },
+    {
+      "version": 2,
+      "at": "2026-09-24T12:13:29+00:00",
+      "kind": "healed",
+      "summary": "Self-healed 1 locator(s); flow unchanged.",
+      "diff": "- button \"Log in\" (in: Drone Operations Console)\n+ button \"Sign in\" (in: Drone Operations Console)",
+      "verdict_ref": "20260924-174324-4219"
+    }
+  ],
+  "requires_login": false
+}

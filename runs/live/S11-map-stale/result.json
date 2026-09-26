@@ -1,0 +1,83 @@
+{
+  "id": "S11-map-stale",
+  "title": "The map shows an old drone position as current",
+  "level": "L2",
+  "category": "Map & geospatial",
+  "description": "An operator reads a drone's location from the map to direct ground crews. When telemetry is delayed the map must not present an old position as if it were current.",
+  "approach": "Argus flies the drone, reads the marker's real latitude/longitude from the live Cesium map and compares it with the simulator's true position (baseline gap ~0 m). It then delays telemetry 8 s and measures how far the displayed marker falls behind reality, and whether the UI warns of the delay.",
+  "verdict": "BUG",
+  "findings": [
+    {
+      "title": "The map shows an old drone position as current",
+      "category": "Map & geospatial / live data",
+      "level": "L2",
+      "severity": "High",
+      "detail": "Under an 8 s telemetry delay the marker read 100 m from the drone's true position, with no stale or delayed indicator. An operator directing ground crews to the shown location would be off by that distance. Baseline (live) tracking was within a metre.",
+      "symptoms": [
+        "marker up to 100 m behind the true position, still presented as current",
+        "no 'delayed'/'stale' marker anywhere in the UI"
+      ],
+      "evidence": {
+        "baseline_gap_m": 0,
+        "peak_gap_m": 100
+      }
+    }
+  ],
+  "steps": [
+    "[  0.6s] Start: Drone 1 takes off; operator watches it move on the map",
+    "[ 14.4s] Condition: telemetry is delayed 8 s (a slow/unstable network)"
+  ],
+  "samples": [
+    {
+      "condition": "socket-delay",
+      "marker_lat": 18.56151,
+      "true_lat": 18.56167,
+      "gap_m": 25,
+      "t": 16.9
+    },
+    {
+      "condition": "socket-delay",
+      "marker_lat": 18.56151,
+      "true_lat": 18.56182,
+      "gap_m": 50,
+      "t": 19.5
+    },
+    {
+      "condition": "socket-delay",
+      "marker_lat": 18.56151,
+      "true_lat": 18.56201,
+      "gap_m": 80,
+      "t": 22.0
+    },
+    {
+      "condition": "socket-delay",
+      "marker_lat": 18.56155,
+      "true_lat": 18.56216,
+      "gap_m": 100,
+      "t": 24.6
+    },
+    {
+      "condition": "socket-delay",
+      "marker_lat": 18.56173,
+      "true_lat": 18.56231,
+      "gap_m": 95,
+      "t": 27.1
+    },
+    {
+      "condition": "socket-delay",
+      "marker_lat": 18.56194,
+      "true_lat": 18.56247,
+      "gap_m": 85,
+      "t": 29.7
+    }
+  ],
+  "videos": [
+    "video.mp4"
+  ],
+  "shots": [
+    "shots/0-map-accurate.png",
+    "shots/1-map-stale.png"
+  ],
+  "started": "2026-09-26 16:26:02",
+  "duration_s": 36.6
+}

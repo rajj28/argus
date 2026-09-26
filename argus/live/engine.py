@@ -91,7 +91,14 @@ HUD_JS = r"""(s) => {
       `<th style="text-align:left;color:#ffd48a;padding-bottom:4px">UI shows</th>` +
       `<th style="text-align:left;color:#8ef0c0;padding-bottom:4px">ground truth</th></tr>${rows}</table>` : '') +
     checks + (s.verdict ? `<div style="margin-top:9px;padding:8px 12px;border-radius:9px;font-weight:700;font-size:1.05em;text-align:center;` +
-      `background:${s.verdict.startsWith('BUG')?'#5c1d24':'#15452f'};color:#fff">${esc(s.verdict)}</div>` : '');
+      `background:${s.verdict.startsWith('BUG')?'#5c1d24':'#15452f'};color:#fff">${esc(s.verdict)}</div>` : '') +
+    (s.mesh && s.mesh.rows && s.mesh.rows.length ? `<div style="margin-top:10px;border-top:1px solid rgba(255,255,255,.14);padding-top:8px">` +
+      `<div style="color:#c3b1ff;font-weight:600;margin-bottom:5px;font-size:.95em">⚡ JEV MESH${s.mesh.summary ? ' · ' + esc(s.mesh.summary) : ''}</div>` +
+      s.mesh.rows.slice(-4).map(r => `<div style="display:flex;justify-content:space-between;gap:12px;line-height:1.55">` +
+        `<span style="color:${r.st==='quota'?'#ffc861':r.st==='cache'?'#8ab4ff':r.st==='think'?'#c3b1ff':'#3ddc97'}">` +
+        `${r.st==='quota'?'⚠':r.st==='think'?'◌':r.st==='cache'?'↺':'✓'} ${esc(r.tier||'')}${r.model?' · '+esc(r.model):''}</span>` +
+        `<span style="color:#9aa4b2">${esc(r.ms||'')}${r.cost?' · '+esc(r.cost):''}</span></div>`).join('') +
+      `</div>` : '');
 }"""
 
 LAYOUT_JS = r"""(sel) => {
@@ -188,6 +195,22 @@ class Ctx:
 
     async def note(self, kind: str, text: str) -> None:
         self.hud_state["checks"] = (self.hud_state.get("checks", []) + [[kind, text]])[-7:]
+        await self.hud_all()
+
+    async def mesh(self, *, summary: Optional[str] = None, row: Optional[dict] = None,
+                   rows: Optional[list] = None) -> None:
+        """Show live JEV-mesh routing in the HUD (Level 3). A 'think' placeholder row is replaced
+        by the next real row, so a call shows 'thinking…' then its provider/model/latency."""
+        m = self.hud_state.setdefault("mesh", {"summary": "", "rows": []})
+        if summary is not None:
+            m["summary"] = summary
+        if rows is not None:
+            m["rows"] = list(rows)[-8:]
+        if row is not None:
+            if m["rows"] and m["rows"][-1].get("st") == "think":
+                m["rows"][-1] = row
+            else:
+                m["rows"] = (m["rows"] + [row])[-8:]
         await self.hud_all()
 
     async def ui(self, page: Page) -> dict:

@@ -1,0 +1,300 @@
+{
+  "baseline": "http://127.0.0.1:8001",
+  "candidate": "http://127.0.0.1:8002",
+  "summary": {
+    "UI_DRIFT": 2,
+    "REGRESSION": 6
+  },
+  "tests": [
+    {
+      "test": "login",
+      "name": "Pilot signs in",
+      "class": "UI_DRIFT",
+      "why": "1 element(s) re-identified; identical outcome and side effects",
+      "delta": "[[], [], [], [], []]",
+      "baseline": {
+        "outcome_ok": true,
+        "failed_oracles": [],
+        "hard_signals": [],
+        "calls": [
+          "POST /api/login 2xx"
+        ],
+        "routes": [
+          "/dashboard"
+        ],
+        "healed": 0,
+        "structural": []
+      },
+      "candidate": {
+        "outcome_ok": true,
+        "failed_oracles": [],
+        "hard_signals": [],
+        "calls": [
+          "POST /api/login 2xx"
+        ],
+        "routes": [
+          "/dashboard"
+        ],
+        "healed": 1,
+        "structural": []
+      }
+    },
+    {
+      "test": "create-mission",
+      "name": "Plan and launch a survey mission",
+      "class": "REGRESSION",
+      "why": "The launched mission appears in the Missions list: expected text \"Survey 6f861\" not found on /missions",
+      "delta": "[[], [], [], [\"POST /api/missions/validate 4xx\"], [\"step_added\"]]",
+      "baseline": {
+        "outcome_ok": true,
+        "failed_oracles": [],
+        "hard_signals": [],
+        "calls": [
+          "POST /api/missions/validate 2xx",
+          "POST /api/missions/validate 2xx",
+          "POST /api/missions/validate 2xx",
+          "POST /api/missions 2xx"
+        ],
+        "routes": [
+          "/missions/new",
+          "/missions/:id",
+          "/missions"
+        ],
+        "healed": 0,
+        "structural": []
+      },
+      "candidate": {
+        "outcome_ok": false,
+        "failed_oracles": [
+          "The launched mission appears in the Missions list: expected text \"Survey 6f861\" not found on /missions"
+        ],
+        "hard_signals": [],
+        "calls": [
+          "POST /api/missions/validate 4xx",
+          "POST /api/missions/validate 2xx",
+          "POST /api/missions/validate 2xx",
+          "POST /api/missions/validate 2xx",
+          "POST /api/missions 2xx"
+        ],
+        "routes": [
+          "/missions/new",
+          "/missions/:id",
+          "/missions"
+        ],
+        "healed": 5,
+        "structural": [
+          "step_added"
+        ]
+      }
+    },
+    {
+      "test": "drone-detail",
+      "name": "Inspect a drone from the fleet table",
+      "class": "UI_DRIFT",
+      "why": "1 element(s) re-identified; identical outcome and side effects",
+      "delta": "[[], [], [], [], []]",
+      "baseline": {
+        "outcome_ok": true,
+        "failed_oracles": [],
+        "hard_signals": [],
+        "calls": [],
+        "routes": [
+          "/drones/:id"
+        ],
+        "healed": 0,
+        "structural": []
+      },
+      "candidate": {
+        "outcome_ok": true,
+        "failed_oracles": [],
+        "hard_signals": [],
+        "calls": [],
+        "routes": [
+          "/drones/:id"
+        ],
+        "healed": 1,
+        "structural": []
+      }
+    },
+    {
+      "test": "flight-logs",
+      "name": "Filter flight logs by drone",
+      "class": "REGRESSION",
+      "why": "Falcon-1 flights are listed: expected text \"Falcon-1\" not found on /logs",
+      "delta": "[[], [], [], [], []]",
+      "baseline": {
+        "outcome_ok": true,
+        "failed_oracles": [],
+        "hard_signals": [],
+        "calls": [],
+        "routes": [],
+        "healed": 0,
+        "structural": []
+      },
+      "candidate": {
+        "outcome_ok": false,
+        "failed_oracles": [
+          "Falcon-1 flights are listed: expected text \"Falcon-1\" not found on /logs"
+        ],
+        "hard_signals": [],
+        "calls": [],
+        "routes": [],
+        "healed": 0,
+        "structural": []
+      }
+    },
+    {
+      "test": "logout",
+      "name": "Pilot signs out",
+      "class": "REGRESSION",
+      "why": "uncaught exception: Cannot read properties of undefined (reading 'crash') | side effects lost: ['POST /api/logout 2xx']",
+      "delta": "[[\"/login\"], [], [\"POST /api/logout 2xx\"], [], []]",
+      "baseline": {
+        "outcome_ok": true,
+        "failed_oracles": [],
+        "hard_signals": [],
+        "calls": [
+          "POST /api/logout 2xx"
+        ],
+        "routes": [
+          "/login"
+        ],
+        "healed": 0,
+        "structural": []
+      },
+      "candidate": {
+        "outcome_ok": false,
+        "failed_oracles": [
+          "Pilot is back on the login page: url /dashboard does not match //login/"
+        ],
+        "hard_signals": [
+          "uncaught exception: Cannot read properties of undefined (reading 'crash')"
+        ],
+        "calls": [],
+        "routes": [],
+        "healed": 1,
+        "structural": []
+      }
+    },
+    {
+      "test": "save-settings",
+      "name": "Pilot updates display name",
+      "class": "REGRESSION",
+      "why": "PUT /api/settings returned 500 (baseline 200) | side effects lost: ['PUT /api/settings 2xx']",
+      "delta": "[[], [], [\"PUT /api/settings 2xx\"], [\"PUT /api/settings 5xx\"], []]",
+      "baseline": {
+        "outcome_ok": true,
+        "failed_oracles": [],
+        "hard_signals": [],
+        "calls": [
+          "PUT /api/settings 2xx"
+        ],
+        "routes": [],
+        "healed": 0,
+        "structural": []
+      },
+      "candidate": {
+        "outcome_ok": false,
+        "failed_oracles": [
+          "Settings are persisted by the API: PUT /api/settings [2xx] NOT observed (recent calls: PUT /api/settings 500)",
+          "Confirmation is shown: expected text \"Settings saved\" not found on /settings"
+        ],
+        "hard_signals": [
+          "PUT /api/settings returned 500 (baseline 200)"
+        ],
+        "calls": [
+          "PUT /api/settings 5xx"
+        ],
+        "routes": [],
+        "healed": 1,
+        "structural": []
+      }
+    },
+    {
+      "test": "altitude-limit",
+      "name": "Altitude above 120 m is rejected",
+      "class": "REGRESSION",
+      "why": "Altitude limit error is shown: expected text \"Altitude must be at most 120 m\" not found on /missions/new",
+      "delta": "[[], [], [], [], [\"step_added\"]]",
+      "baseline": {
+        "outcome_ok": true,
+        "failed_oracles": [],
+        "hard_signals": [],
+        "calls": [
+          "POST /api/missions/validate 2xx",
+          "POST /api/missions/validate 2xx",
+          "POST /api/missions/validate 4xx"
+        ],
+        "routes": [
+          "/missions/new"
+        ],
+        "healed": 0,
+        "structural": []
+      },
+      "candidate": {
+        "outcome_ok": false,
+        "failed_oracles": [
+          "Altitude limit error is shown: expected text \"Altitude must be at most 120 m\" not found on /missions/new"
+        ],
+        "hard_signals": [],
+        "calls": [
+          "POST /api/missions/validate 4xx",
+          "POST /api/missions/validate 2xx",
+          "POST /api/missions/validate 2xx",
+          "POST /api/missions/validate 2xx"
+        ],
+        "routes": [
+          "/missions/new"
+        ],
+        "healed": 3,
+        "structural": [
+          "step_added"
+        ]
+      }
+    },
+    {
+      "test": "low-battery-drone",
+      "name": "Low-battery drone cannot be assigned",
+      "class": "REGRESSION",
+      "why": "Hawk-7 (12% battery) is disabled: radio \"Hawk-7 — Battery too low\" (in: Select drone): enabled=True (expected False)",
+      "delta": "[[], [], [], [\"POST /api/missions/validate 4xx\"], [\"step_added\"]]",
+      "baseline": {
+        "outcome_ok": true,
+        "failed_oracles": [],
+        "hard_signals": [],
+        "calls": [
+          "POST /api/missions/validate 2xx"
+        ],
+        "routes": [
+          "/missions/new"
+        ],
+        "healed": 0,
+        "structural": []
+      },
+      "candidate": {
+        "outcome_ok": false,
+        "failed_oracles": [
+          "Hawk-7 (12% battery) is disabled: radio \"Hawk-7 — Battery too low\" (in: Select drone): enabled=True (expected False)"
+        ],
+        "hard_signals": [],
+        "calls": [
+          "POST /api/missions/validate 4xx",
+          "POST /api/missions/validate 2xx"
+        ],
+        "routes": [
+          "/missions/new"
+        ],
+        "healed": 1,
+        "structural": [
+          "step_added"
+        ]
+      }
+    }
+  ],
+  "runs": {
+    "baseline": "20260924-174844-f28f",
+    "candidate": "20260924-174918-6f86"
+  },
+  "measured_at": "2026-09-24T12:20:07+00:00",
+  "source": ".argus-d/diff.json"
+}

@@ -1,6 +1,6 @@
 {
   "schema": "argus-exam-scorecard-v2",
-  "generated_at": "2026-09-25T18:05:14+00:00",
+  "generated_at": "2026-09-25T19:11:08+00:00",
   "app": "MediQueue (exam_app) - hold-out, blind",
   "suite": "exam/argus_suite.json (one test per exam/intents.json id)",
   "server": "http://127.0.0.1:8010",
@@ -19,7 +19,7 @@
       "mode": "a_nollm",
       "title": "Mode A - human-intent suite (LLM off)",
       "llm_on": false,
-      "generated_at": "2026-09-25T16:50:00+00:00",
+      "generated_at": "2026-09-25T19:11:03+00:00",
       "home": ".argus-exam",
       "intents": [
         "login",
@@ -70,49 +70,49 @@
           "goals": "Cancel an appointment; verify confirmation dialog appears before removal and row is removed after confirming (B6)"
         },
         {
-          "id": "reschedule-appointment",
-          "steps": 11,
-          "oracles": 2,
-          "goals": "Reschedule an existing confirmed appointment to a different future time and verify the new time is retained"
-        },
-        {
           "id": "doctor-list-loads",
           "steps": 7,
           "oracles": 2,
           "goals": "Navigate to the doctor directory after login, observe the loading skeleton state, wait, and verify all eight doctors are shown"
+        },
+        {
+          "id": "toggle-sms-reminders",
+          "steps": 8,
+          "oracles": 1,
+          "goals": "Change the SMS reminders custom toggle switch and verify the preference is saved via the API"
         }
       ],
       "author_failures": [
         {
-          "id": "toggle-sms-reminders",
-          "error": "Error: Page.evaluate: TypeError: Cannot read properties of undefined (reading 'toLowerCase')\n    at getCSSPath (eval at evaluate (:311:30), <anonymous>:278:32)\n    at eval (eval at evaluate (:311:30), <anonymous>:502:17)\n    at UtilityScript.evaluate (<anonymous>:318:18)\n    at UtilityScript.<anonymous> (<"
+          "id": "reschedule-appointment",
+          "error": "steps/oracles could not be resolved or baselined"
         }
       ],
       "overall": {
-        "correct": 25,
+        "correct": 31,
         "total": 40,
-        "accuracy": 0.625
+        "accuracy": 0.775
       },
       "per_release": {
         "r2": {
+          "correct": 6,
+          "total": 8,
+          "accuracy": 0.75
+        },
+        "r3": {
           "correct": 7,
           "total": 8,
           "accuracy": 0.875
         },
-        "r3": {
-          "correct": 4,
-          "total": 8,
-          "accuracy": 0.5
-        },
         "r4": {
-          "correct": 2,
+          "correct": 5,
           "total": 8,
-          "accuracy": 0.25
+          "accuracy": 0.625
         },
         "r5": {
-          "correct": 4,
+          "correct": 5,
           "total": 8,
-          "accuracy": 0.5
+          "accuracy": 0.625
         },
         "r6": {
           "correct": 8,
@@ -139,18 +139,18 @@
           },
           "book-consultation": {
             "test_id": "book-consultation",
-            "verdict": "COSMETIC_DRIFT",
+            "verdict": "NEEDS_REVIEW",
             "decided_by": "rules",
             "acceptable": [
               "PASS",
               "COSMETIC_DRIFT"
             ],
-            "correct": true,
+            "correct": false,
             "why": "The booking behavior is unchanged despite the refreshed layout and action labels.",
-            "rationale": "2 element(s) moved/renamed and were re-identified (tiers [1]); all expectations and business oracles still hold.",
-            "observation": "button \"Next\" (in: Patient details) -> [e16] button \"Proceed\" (in: Patient details) via similarity (score 0.83, margin 0.32)",
-            "weakness": "",
-            "healed_steps": 2
+            "rationale": "No LLM available to judge a behavioural change; needs a human.",
+            "observation": "cannot find 'Select the first available future appointment slot' (best candidate 0.98 below thresholds); page / headings ['Book an appointment', 'Choose a time'] alerts []",
+            "weakness": "similarity margin gate (best match below threshold)",
+            "healed_steps": 1
           },
           "cancel-appointment": {
             "test_id": "cancel-appointment",
@@ -197,19 +197,19 @@
             "weakness": "",
             "healed_steps": 0
           },
-          "reschedule-appointment": {
-            "test_id": "reschedule-appointment",
-            "verdict": "NEEDS_REVIEW",
+          "toggle-sms-reminders": {
+            "test_id": "toggle-sms-reminders",
+            "verdict": "PASS",
             "decided_by": "rules",
             "acceptable": [
               "PASS",
               "COSMETIC_DRIFT"
             ],
-            "correct": false,
-            "why": "Rescheduling remains directly available and behavior is unchanged.",
-            "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "cannot find 'Click Reschedule on the first appointment' (best candidate 0.93 below thresholds); page / headings ['Appointments', 'Upcoming schedule'] alerts []",
-            "weakness": "similarity margin gate (best match below threshold)",
+            "correct": true,
+            "why": "The preference still works through the same custom control.",
+            "rationale": "Replayed exactly; every step and oracle held.",
+            "observation": "",
+            "weakness": "",
             "healed_steps": 0
           },
           "age-validation": {
@@ -229,18 +229,18 @@
           },
           "emergency-fee-zero": {
             "test_id": "emergency-fee-zero",
-            "verdict": "COSMETIC_DRIFT",
+            "verdict": "NEEDS_REVIEW",
             "decided_by": "rules",
             "acceptable": [
               "PASS",
               "COSMETIC_DRIFT"
             ],
-            "correct": true,
+            "correct": false,
             "why": "The emergency fee behavior is unchanged.",
-            "rationale": "2 element(s) moved/renamed and were re-identified (tiers [1]); all expectations and business oracles still hold.",
-            "observation": "button \"Next\" (in: Patient details) -> [e16] button \"Proceed\" (in: Patient details) via similarity (score 0.83, margin 0.35)",
-            "weakness": "",
-            "healed_steps": 2
+            "rationale": "No LLM available to judge a behavioural change; needs a human.",
+            "observation": "cannot find 'Select the first available slot' (best candidate 0.98 below thresholds); page / headings ['Book an appointment', 'Choose a time'] alerts []",
+            "weakness": "similarity margin gate (best match below threshold)",
+            "healed_steps": 1
           }
         },
         "r3": {
@@ -270,67 +270,67 @@
             "correct": true,
             "why": "The booking sequence and required patient information intentionally changed.",
             "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "cannot find 'Enter the patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
             "weakness": "",
             "healed_steps": 0
           },
           "cancel-appointment": {
             "test_id": "cancel-appointment",
-            "verdict": "NEEDS_REVIEW",
+            "verdict": "COSMETIC_DRIFT",
             "decided_by": "rules",
             "acceptable": [
               "PASS",
               "COSMETIC_DRIFT"
             ],
-            "correct": false,
+            "correct": true,
             "why": "Cancellation remains directly available and retains its confirmation behavior.",
-            "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "cannot find 'Click Cancel on the first appointment in the list' (best candidate 0.57 below thresholds); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
-            "weakness": "overlay / modal blocks navigation",
-            "healed_steps": 0
+            "rationale": "1 element(s) moved/renamed and were re-identified (tiers [1]); all expectations and business oracles still hold.",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
+            "weakness": "",
+            "healed_steps": 1
           },
           "doctor-list-loads": {
             "test_id": "doctor-list-loads",
-            "verdict": "NEEDS_REVIEW",
+            "verdict": "PASS",
             "decided_by": "rules",
             "acceptable": [
               "PASS",
               "COSMETIC_DRIFT"
             ],
-            "correct": false,
+            "correct": true,
             "why": "The r2 refreshed doctor cards continue to load normally.",
-            "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "Status shows all eight doctors loaded: expected text \"8 doctors available\" not found on /",
-            "weakness": "expected UI text missing (label or text drift)",
+            "rationale": "Replayed exactly; every step and oracle held.",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
+            "weakness": "",
             "healed_steps": 0
           },
           "invoice-total-correct": {
             "test_id": "invoice-total-correct",
-            "verdict": "NEEDS_REVIEW",
+            "verdict": "PASS",
             "decided_by": "rules",
             "acceptable": [
               "PASS",
               "COSMETIC_DRIFT"
             ],
-            "correct": false,
+            "correct": true,
             "why": "Billing is unchanged.",
-            "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "Line item 'Specialist consultation' is visible: expected text \"Specialist consultation\" not found on /",
-            "weakness": "expected UI text missing (label or text drift)",
+            "rationale": "Replayed exactly; every step and oracle held.",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
+            "weakness": "",
             "healed_steps": 0
           },
-          "reschedule-appointment": {
-            "test_id": "reschedule-appointment",
-            "verdict": "NEEDS_REVIEW",
+          "toggle-sms-reminders": {
+            "test_id": "toggle-sms-reminders",
+            "verdict": "PASS",
             "decided_by": "rules",
             "acceptable": [
-              "INTENDED_CHANGE",
-              "NEEDS_REVIEW"
+              "PASS",
+              "COSMETIC_DRIFT"
             ],
             "correct": true,
-            "why": "Rescheduling intentionally moved into the appointment overflow menu.",
-            "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "cannot find 'Click Reschedule on the first appointment' (best candidate 0.52 below thresholds); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+            "why": "The preference control and saved behavior are unchanged.",
+            "rationale": "Replayed exactly; every step and oracle held.",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
             "weakness": "",
             "healed_steps": 0
           },
@@ -345,7 +345,7 @@
             "correct": true,
             "why": "The booking journey around the age field changed even though B1 remains in force.",
             "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "cannot find 'Enter a patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
             "weakness": "",
             "healed_steps": 0
           },
@@ -360,7 +360,7 @@
             "correct": false,
             "why": "The emergency fee rule is unchanged.",
             "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "cannot find 'Enter a valid patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
             "weakness": "overlay / modal blocks navigation",
             "healed_steps": 0
           }
@@ -392,7 +392,7 @@
             "correct": false,
             "why": "Booking is unchanged.",
             "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "cannot find 'Enter the patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
             "weakness": "overlay / modal blocks navigation",
             "healed_steps": 0
           },
@@ -408,53 +408,53 @@
             "correct": true,
             "why": "Cancellation intentionally moved into the appointment overflow menu; confirmation and removal remain intact.",
             "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "cannot find 'Click Cancel on the first appointment in the list' (best candidate 0.57 below thresholds); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
             "weakness": "",
             "healed_steps": 0
           },
           "doctor-list-loads": {
             "test_id": "doctor-list-loads",
-            "verdict": "NEEDS_REVIEW",
+            "verdict": "PASS",
             "decided_by": "rules",
             "acceptable": [
               "PASS",
               "COSMETIC_DRIFT"
             ],
-            "correct": false,
+            "correct": true,
             "why": "Doctor loading is unchanged.",
-            "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "Status shows all eight doctors loaded: expected text \"8 doctors available\" not found on /",
-            "weakness": "expected UI text missing (label or text drift)",
+            "rationale": "Replayed exactly; every step and oracle held.",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
+            "weakness": "",
             "healed_steps": 0
           },
           "invoice-total-correct": {
             "test_id": "invoice-total-correct",
-            "verdict": "NEEDS_REVIEW",
+            "verdict": "PASS",
             "decided_by": "rules",
             "acceptable": [
               "PASS",
               "COSMETIC_DRIFT"
             ],
-            "correct": false,
+            "correct": true,
             "why": "Billing is unchanged.",
-            "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "Line item 'Specialist consultation' is visible: expected text \"Specialist consultation\" not found on /",
-            "weakness": "expected UI text missing (label or text drift)",
+            "rationale": "Replayed exactly; every step and oracle held.",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
+            "weakness": "",
             "healed_steps": 0
           },
-          "reschedule-appointment": {
-            "test_id": "reschedule-appointment",
-            "verdict": "NEEDS_REVIEW",
+          "toggle-sms-reminders": {
+            "test_id": "toggle-sms-reminders",
+            "verdict": "PASS",
             "decided_by": "rules",
             "acceptable": [
               "PASS",
               "COSMETIC_DRIFT"
             ],
-            "correct": false,
-            "why": "The r3 overflow-menu behavior continues to work.",
-            "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "cannot find 'Click Reschedule on the first appointment' (best candidate 0.52 below thresholds); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
-            "weakness": "overlay / modal blocks navigation",
+            "correct": true,
+            "why": "The preference control is unchanged.",
+            "rationale": "Replayed exactly; every step and oracle held.",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
+            "weakness": "",
             "healed_steps": 0
           },
           "age-validation": {
@@ -468,7 +468,7 @@
             "correct": false,
             "why": "Age validation is unchanged.",
             "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "cannot find 'Enter a patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
             "weakness": "overlay / modal blocks navigation",
             "healed_steps": 0
           },
@@ -483,7 +483,7 @@
             "correct": false,
             "why": "Emergency fee behavior is unchanged.",
             "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "cannot find 'Enter a valid patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
             "weakness": "overlay / modal blocks navigation",
             "healed_steps": 0
           }
@@ -518,7 +518,7 @@
             "correct": false,
             "why": "The interface reports a successful confirmation even though the request fails and no appointment is saved, violating B4.",
             "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "cannot find 'Enter the patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
             "weakness": "overlay / modal blocks navigation",
             "healed_steps": 0
           },
@@ -537,13 +537,13 @@
             "correct": true,
             "why": "No cancellation regression was introduced.",
             "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "cannot find 'Click Cancel on the first appointment in the list' (best candidate 0.57 below thresholds); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
             "weakness": "",
             "healed_steps": 0
           },
           "doctor-list-loads": {
             "test_id": "doctor-list-loads",
-            "verdict": "NEEDS_REVIEW",
+            "verdict": "PASS",
             "decided_by": "rules",
             "acceptable": [
               "PASS",
@@ -555,28 +555,28 @@
             ],
             "correct": true,
             "why": "All doctors still load; the release note is intentionally broad and does not imply a product defect.",
-            "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "Status shows all eight doctors loaded: expected text \"8 doctors available\" not found on /",
+            "rationale": "Replayed exactly; every step and oracle held.",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
             "weakness": "",
             "healed_steps": 0
           },
           "invoice-total-correct": {
             "test_id": "invoice-total-correct",
-            "verdict": "NEEDS_REVIEW",
+            "verdict": "BUG",
             "decided_by": "rules",
             "acceptable": [
               "BUG"
             ],
-            "correct": false,
+            "correct": true,
             "why": "Line items total INR 1180.00 while the displayed total is INR 1179.00, violating B3.",
-            "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "Line item 'Specialist consultation' is visible: expected text \"Specialist consultation\" not found on /",
-            "weakness": "expected UI text missing (label or text drift)",
+            "rationale": "Business rule(s) B3 violated: TOTAL ₹1,180.00 equals 620.00 + 380.00 + 180.00: expected text \"total ₹1,180.00\" not found on /",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
+            "weakness": "",
             "healed_steps": 0
           },
-          "reschedule-appointment": {
-            "test_id": "reschedule-appointment",
-            "verdict": "NEEDS_REVIEW",
+          "toggle-sms-reminders": {
+            "test_id": "toggle-sms-reminders",
+            "verdict": "PASS",
             "decided_by": "rules",
             "acceptable": [
               "PASS",
@@ -587,9 +587,9 @@
               "INFRA_ISSUE"
             ],
             "correct": true,
-            "why": "No rescheduling regression was introduced.",
-            "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "cannot find 'Click Reschedule on the first appointment' (best candidate 0.52 below thresholds); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+            "why": "The preference still saves correctly.",
+            "rationale": "Replayed exactly; every step and oracle held.",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
             "weakness": "",
             "healed_steps": 0
           },
@@ -603,7 +603,7 @@
             "correct": false,
             "why": "An age of 150 is accepted, violating B1.",
             "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "cannot find 'Enter a patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
             "weakness": "overlay / modal blocks navigation",
             "healed_steps": 0
           },
@@ -617,7 +617,7 @@
             "correct": false,
             "why": "An emergency visit is charged INR 500, violating B2.",
             "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "cannot find 'Enter a valid patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
             "weakness": "overlay / modal blocks navigation",
             "healed_steps": 0
           }
@@ -657,7 +657,7 @@
             "correct": true,
             "why": "Booking remains available.",
             "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "cannot find 'Enter the patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
             "weakness": "",
             "healed_steps": 0
           },
@@ -676,13 +676,13 @@
             "correct": true,
             "why": "Cancellation remains available.",
             "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "cannot find 'Click Cancel on the first appointment in the list' (best candidate 0.57 below thresholds); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
             "weakness": "",
             "healed_steps": 0
           },
           "doctor-list-loads": {
             "test_id": "doctor-list-loads",
-            "verdict": "NEEDS_REVIEW",
+            "verdict": "PASS",
             "decided_by": "rules",
             "acceptable": [
               "PASS",
@@ -694,14 +694,14 @@
             ],
             "correct": true,
             "why": "Every third request has an infrastructure delay of 3.5 seconds, but the doctors still load and this is not a product bug.",
-            "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "Status shows all eight doctors loaded: expected text \"8 doctors available\" not found on /",
+            "rationale": "Replayed exactly; every step and oracle held.",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
             "weakness": "",
             "healed_steps": 0
           },
           "invoice-total-correct": {
             "test_id": "invoice-total-correct",
-            "verdict": "NEEDS_REVIEW",
+            "verdict": "PASS",
             "decided_by": "rules",
             "acceptable": [
               "PASS",
@@ -713,29 +713,25 @@
             ],
             "correct": true,
             "why": "Billing remains available.",
-            "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "Line item 'Specialist consultation' is visible: expected text \"Specialist consultation\" not found on /",
+            "rationale": "Replayed exactly; every step and oracle held.",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
             "weakness": "",
             "healed_steps": 0
           },
-          "reschedule-appointment": {
-            "test_id": "reschedule-appointment",
+          "toggle-sms-reminders": {
+            "test_id": "toggle-sms-reminders",
             "verdict": "NEEDS_REVIEW",
             "decided_by": "rules",
             "acceptable": [
-              "PASS",
-              "COSMETIC_DRIFT",
-              "INTENDED_CHANGE",
-              "NEEDS_REVIEW",
               "FEATURE_REMOVED",
-              "INFRA_ISSUE"
+              "NEEDS_REVIEW"
             ],
             "correct": true,
-            "why": "Rescheduling remains available.",
+            "why": "The retired clinic settings remove access to the SMS reminder preference.",
             "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "cannot find 'Click Reschedule on the first appointment' (best candidate 0.52 below thresholds); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
             "weakness": "",
-            "healed_steps": 0
+            "healed_steps": 1
           },
           "age-validation": {
             "test_id": "age-validation",
@@ -752,7 +748,7 @@
             "correct": true,
             "why": "Age validation remains available.",
             "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "cannot find 'Enter a patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
             "weakness": "",
             "healed_steps": 0
           },
@@ -771,7 +767,7 @@
             "correct": true,
             "why": "Emergency fee behavior remains available.",
             "rationale": "No LLM available to judge a behavioural change; needs a human.",
-            "observation": "cannot find 'Enter a valid patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+            "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
             "weakness": "",
             "healed_steps": 0
           }
@@ -780,58 +776,30 @@
       "failures": [
         {
           "release": "r2",
-          "intent": "reschedule-appointment",
+          "intent": "book-consultation",
           "got": "NEEDS_REVIEW",
           "acceptable": [
             "PASS",
             "COSMETIC_DRIFT"
           ],
-          "observation": "cannot find 'Click Reschedule on the first appointment' (best candidate 0.93 below thresholds); page / headings ['Appointments', 'Upcoming schedule'] alerts []",
+          "observation": "cannot find 'Select the first available future appointment slot' (best candidate 0.98 below thresholds); page / headings ['Book an appointment', 'Choose a time'] alerts []",
           "rationale": "No LLM available to judge a behavioural change; needs a human.",
-          "why": "Rescheduling remains directly available and behavior is unchanged.",
+          "why": "The booking behavior is unchanged despite the refreshed layout and action labels.",
           "weakness": "similarity margin gate (best match below threshold)",
           "decided_by": "rules"
         },
         {
-          "release": "r3",
-          "intent": "cancel-appointment",
+          "release": "r2",
+          "intent": "emergency-fee-zero",
           "got": "NEEDS_REVIEW",
           "acceptable": [
             "PASS",
             "COSMETIC_DRIFT"
           ],
-          "observation": "cannot find 'Click Cancel on the first appointment in the list' (best candidate 0.57 below thresholds); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+          "observation": "cannot find 'Select the first available slot' (best candidate 0.98 below thresholds); page / headings ['Book an appointment', 'Choose a time'] alerts []",
           "rationale": "No LLM available to judge a behavioural change; needs a human.",
-          "why": "Cancellation remains directly available and retains its confirmation behavior.",
-          "weakness": "overlay / modal blocks navigation",
-          "decided_by": "rules"
-        },
-        {
-          "release": "r3",
-          "intent": "doctor-list-loads",
-          "got": "NEEDS_REVIEW",
-          "acceptable": [
-            "PASS",
-            "COSMETIC_DRIFT"
-          ],
-          "observation": "Status shows all eight doctors loaded: expected text \"8 doctors available\" not found on /",
-          "rationale": "No LLM available to judge a behavioural change; needs a human.",
-          "why": "The r2 refreshed doctor cards continue to load normally.",
-          "weakness": "expected UI text missing (label or text drift)",
-          "decided_by": "rules"
-        },
-        {
-          "release": "r3",
-          "intent": "invoice-total-correct",
-          "got": "NEEDS_REVIEW",
-          "acceptable": [
-            "PASS",
-            "COSMETIC_DRIFT"
-          ],
-          "observation": "Line item 'Specialist consultation' is visible: expected text \"Specialist consultation\" not found on /",
-          "rationale": "No LLM available to judge a behavioural change; needs a human.",
-          "why": "Billing is unchanged.",
-          "weakness": "expected UI text missing (label or text drift)",
+          "why": "The emergency fee behavior is unchanged.",
+          "weakness": "similarity margin gate (best match below threshold)",
           "decided_by": "rules"
         },
         {
@@ -842,7 +810,7 @@
             "PASS",
             "COSMETIC_DRIFT"
           ],
-          "observation": "cannot find 'Enter a valid patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+          "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
           "rationale": "No LLM available to judge a behavioural change; needs a human.",
           "why": "The emergency fee rule is unchanged.",
           "weakness": "overlay / modal blocks navigation",
@@ -856,51 +824,9 @@
             "PASS",
             "COSMETIC_DRIFT"
           ],
-          "observation": "cannot find 'Enter the patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+          "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
           "rationale": "No LLM available to judge a behavioural change; needs a human.",
           "why": "Booking is unchanged.",
-          "weakness": "overlay / modal blocks navigation",
-          "decided_by": "rules"
-        },
-        {
-          "release": "r4",
-          "intent": "doctor-list-loads",
-          "got": "NEEDS_REVIEW",
-          "acceptable": [
-            "PASS",
-            "COSMETIC_DRIFT"
-          ],
-          "observation": "Status shows all eight doctors loaded: expected text \"8 doctors available\" not found on /",
-          "rationale": "No LLM available to judge a behavioural change; needs a human.",
-          "why": "Doctor loading is unchanged.",
-          "weakness": "expected UI text missing (label or text drift)",
-          "decided_by": "rules"
-        },
-        {
-          "release": "r4",
-          "intent": "invoice-total-correct",
-          "got": "NEEDS_REVIEW",
-          "acceptable": [
-            "PASS",
-            "COSMETIC_DRIFT"
-          ],
-          "observation": "Line item 'Specialist consultation' is visible: expected text \"Specialist consultation\" not found on /",
-          "rationale": "No LLM available to judge a behavioural change; needs a human.",
-          "why": "Billing is unchanged.",
-          "weakness": "expected UI text missing (label or text drift)",
-          "decided_by": "rules"
-        },
-        {
-          "release": "r4",
-          "intent": "reschedule-appointment",
-          "got": "NEEDS_REVIEW",
-          "acceptable": [
-            "PASS",
-            "COSMETIC_DRIFT"
-          ],
-          "observation": "cannot find 'Click Reschedule on the first appointment' (best candidate 0.52 below thresholds); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
-          "rationale": "No LLM available to judge a behavioural change; needs a human.",
-          "why": "The r3 overflow-menu behavior continues to work.",
           "weakness": "overlay / modal blocks navigation",
           "decided_by": "rules"
         },
@@ -912,7 +838,7 @@
             "PASS",
             "COSMETIC_DRIFT"
           ],
-          "observation": "cannot find 'Enter a patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+          "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
           "rationale": "No LLM available to judge a behavioural change; needs a human.",
           "why": "Age validation is unchanged.",
           "weakness": "overlay / modal blocks navigation",
@@ -926,7 +852,7 @@
             "PASS",
             "COSMETIC_DRIFT"
           ],
-          "observation": "cannot find 'Enter a valid patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+          "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
           "rationale": "No LLM available to judge a behavioural change; needs a human.",
           "why": "Emergency fee behavior is unchanged.",
           "weakness": "overlay / modal blocks navigation",
@@ -939,23 +865,10 @@
           "acceptable": [
             "BUG"
           ],
-          "observation": "cannot find 'Enter the patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+          "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
           "rationale": "No LLM available to judge a behavioural change; needs a human.",
           "why": "The interface reports a successful confirmation even though the request fails and no appointment is saved, violating B4.",
           "weakness": "overlay / modal blocks navigation",
-          "decided_by": "rules"
-        },
-        {
-          "release": "r5",
-          "intent": "invoice-total-correct",
-          "got": "NEEDS_REVIEW",
-          "acceptable": [
-            "BUG"
-          ],
-          "observation": "Line item 'Specialist consultation' is visible: expected text \"Specialist consultation\" not found on /",
-          "rationale": "No LLM available to judge a behavioural change; needs a human.",
-          "why": "Line items total INR 1180.00 while the displayed total is INR 1179.00, violating B3.",
-          "weakness": "expected UI text missing (label or text drift)",
           "decided_by": "rules"
         },
         {
@@ -965,7 +878,7 @@
           "acceptable": [
             "BUG"
           ],
-          "observation": "cannot find 'Enter a patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+          "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
           "rationale": "No LLM available to judge a behavioural change; needs a human.",
           "why": "An age of 150 is accepted, violating B1.",
           "weakness": "overlay / modal blocks navigation",
@@ -978,7 +891,7 @@
           "acceptable": [
             "BUG"
           ],
-          "observation": "cannot find 'Enter a valid patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+          "observation": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
           "rationale": "No LLM available to judge a behavioural change; needs a human.",
           "why": "An emergency visit is charged INR 500, violating B2.",
           "weakness": "overlay / modal blocks navigation",
@@ -988,20 +901,20 @@
       "criteria": {
         "Reliability": {
           "detail": "r2 is a design-only refresh: PASS or COSMETIC_DRIFT everywhere",
-          "correct": 7,
+          "correct": 6,
           "total": 8,
-          "accuracy": 0.875,
-          "memory_probe_heals": 2
+          "accuracy": 0.75,
+          "memory_probe_heals": 6
         },
         "Context": {
           "detail": "r3-r6: intended change, banner reflow, masked 500 bug, feature removal",
-          "correct": 18,
+          "correct": 25,
           "total": 32,
-          "accuracy": 0.562,
+          "accuracy": 0.781,
           "per_release": {
-            "r3": 0.5,
-            "r4": 0.25,
-            "r5": 0.5,
+            "r3": 0.875,
+            "r4": 0.625,
+            "r5": 0.625,
             "r6": 1.0
           }
         },
@@ -1073,22 +986,22 @@
           "runs": [
             {
               "label": "r2-run",
-              "healed_steps": 6,
-              "replayed_steps": 74
+              "healed_steps": 4,
+              "replayed_steps": 70
             },
             {
               "label": "r2-memory-probe-1",
-              "healed_steps": 1,
-              "replayed_steps": 79
+              "healed_steps": 3,
+              "replayed_steps": 71
             },
             {
               "label": "r2-memory-probe-2",
-              "healed_steps": 1,
-              "replayed_steps": 79
+              "healed_steps": 3,
+              "replayed_steps": 71
             }
           ],
-          "heals_first_run": 6,
-          "heals_repeat_runs": 2
+          "heals_first_run": 4,
+          "heals_repeat_runs": 6
         },
         "Generation": {
           "detail": "zero-knowledge coverage (mode B) and how much of it baselined",
@@ -1106,14 +1019,65 @@
           "label": "r1-baseline",
           "release": "r1",
           "update": true,
-          "started_at": "2026-09-25T16:34:42+00:00",
-          "run_id": "20260925-220442-5185",
-          "wall_s": 96.1,
+          "started_at": "2026-09-25T18:58:46+00:00",
+          "run_id": "20260926-002846-dbf3",
+          "wall_s": 100.4,
+          "tests_run": 8,
+          "healed_steps": 2,
+          "replayed_steps": 77,
+          "tiers": {
+            "0": 77,
+            "1": 2,
+            "2": 1
+          },
+          "llm_calls": 0,
+          "llm_calls_cached": 0,
+          "tokens_in": 0,
+          "tokens_out": 0,
+          "cost_usd": 0.0,
+          "verdicts": {
+            "PASS": 5,
+            "COSMETIC_DRIFT": 2,
+            "NEEDS_REVIEW": 1
+          }
+        },
+        {
+          "label": "r2-run",
+          "release": "r2",
+          "update": true,
+          "started_at": "2026-09-25T19:00:26+00:00",
+          "run_id": "20260926-003026-ab06",
+          "wall_s": 96.7,
+          "tests_run": 8,
+          "healed_steps": 4,
+          "replayed_steps": 70,
+          "tiers": {
+            "0": 70,
+            "1": 4
+          },
+          "llm_calls": 0,
+          "llm_calls_cached": 0,
+          "tokens_in": 0,
+          "tokens_out": 0,
+          "cost_usd": 0.0,
+          "verdicts": {
+            "PASS": 4,
+            "NEEDS_REVIEW": 2,
+            "COSMETIC_DRIFT": 2
+          }
+        },
+        {
+          "label": "r3-run",
+          "release": "r3",
+          "update": true,
+          "started_at": "2026-09-25T19:02:03+00:00",
+          "run_id": "20260926-003203-f93f",
+          "wall_s": 88.6,
           "tests_run": 8,
           "healed_steps": 1,
-          "replayed_steps": 79,
+          "replayed_steps": 52,
           "tiers": {
-            "0": 79,
+            "0": 52,
             "1": 1
           },
           "llm_calls": 0,
@@ -1122,24 +1086,46 @@
           "tokens_out": 0,
           "cost_usd": 0.0,
           "verdicts": {
-            "PASS": 6,
-            "COSMETIC_DRIFT": 1,
-            "NEEDS_REVIEW": 1
+            "PASS": 4,
+            "NEEDS_REVIEW": 3,
+            "COSMETIC_DRIFT": 1
           }
         },
         {
-          "label": "r2-run",
-          "release": "r2",
+          "label": "r4-run",
+          "release": "r4",
           "update": true,
-          "started_at": "2026-09-25T16:36:18+00:00",
-          "run_id": "20260925-220618-d95c",
-          "wall_s": 96.1,
+          "started_at": "2026-09-25T19:03:31+00:00",
+          "run_id": "20260926-003331-45aa",
+          "wall_s": 84.1,
           "tests_run": 8,
-          "healed_steps": 6,
-          "replayed_steps": 74,
+          "healed_steps": 0,
+          "replayed_steps": 49,
           "tiers": {
-            "0": 74,
-            "1": 6
+            "0": 49
+          },
+          "llm_calls": 0,
+          "llm_calls_cached": 0,
+          "tokens_in": 0,
+          "tokens_out": 0,
+          "cost_usd": 0.0,
+          "verdicts": {
+            "PASS": 4,
+            "NEEDS_REVIEW": 4
+          }
+        },
+        {
+          "label": "r5-run",
+          "release": "r5",
+          "update": true,
+          "started_at": "2026-09-25T19:04:56+00:00",
+          "run_id": "20260926-003456-0ba2",
+          "wall_s": 87.2,
+          "tests_run": 8,
+          "healed_steps": 0,
+          "replayed_steps": 49,
+          "tiers": {
+            "0": 49
           },
           "llm_calls": 0,
           "llm_calls_cached": 0,
@@ -1148,91 +1134,23 @@
           "cost_usd": 0.0,
           "verdicts": {
             "PASS": 3,
-            "COSMETIC_DRIFT": 4,
-            "NEEDS_REVIEW": 1
-          }
-        },
-        {
-          "label": "r3-run",
-          "release": "r3",
-          "update": true,
-          "started_at": "2026-09-25T16:37:54+00:00",
-          "run_id": "20260925-220754-e085",
-          "wall_s": 133.5,
-          "tests_run": 8,
-          "healed_steps": 0,
-          "replayed_steps": 47,
-          "tiers": {
-            "0": 47
-          },
-          "llm_calls": 0,
-          "llm_calls_cached": 0,
-          "tokens_in": 0,
-          "tokens_out": 0,
-          "cost_usd": 0.0,
-          "verdicts": {
-            "PASS": 1,
-            "NEEDS_REVIEW": 7
-          }
-        },
-        {
-          "label": "r4-run",
-          "release": "r4",
-          "update": true,
-          "started_at": "2026-09-25T16:40:08+00:00",
-          "run_id": "20260925-221008-54b8",
-          "wall_s": 133.8,
-          "tests_run": 8,
-          "healed_steps": 0,
-          "replayed_steps": 47,
-          "tiers": {
-            "0": 47
-          },
-          "llm_calls": 0,
-          "llm_calls_cached": 0,
-          "tokens_in": 0,
-          "tokens_out": 0,
-          "cost_usd": 0.0,
-          "verdicts": {
-            "PASS": 1,
-            "NEEDS_REVIEW": 7
-          }
-        },
-        {
-          "label": "r5-run",
-          "release": "r5",
-          "update": true,
-          "started_at": "2026-09-25T16:42:22+00:00",
-          "run_id": "20260925-221222-7c82",
-          "wall_s": 133.1,
-          "tests_run": 8,
-          "healed_steps": 0,
-          "replayed_steps": 47,
-          "tiers": {
-            "0": 47
-          },
-          "llm_calls": 0,
-          "llm_calls_cached": 0,
-          "tokens_in": 0,
-          "tokens_out": 0,
-          "cost_usd": 0.0,
-          "verdicts": {
-            "PASS": 1,
-            "NEEDS_REVIEW": 7
+            "NEEDS_REVIEW": 4,
+            "BUG": 1
           }
         },
         {
           "label": "r6-run",
           "release": "r6",
           "update": true,
-          "started_at": "2026-09-25T16:44:35+00:00",
-          "run_id": "20260925-221435-45d0",
-          "wall_s": 133.1,
+          "started_at": "2026-09-25T19:06:23+00:00",
+          "run_id": "20260926-003623-754b",
+          "wall_s": 85.7,
           "tests_run": 8,
-          "healed_steps": 0,
-          "replayed_steps": 47,
+          "healed_steps": 1,
+          "replayed_steps": 46,
           "tiers": {
-            "0": 47
+            "0": 46,
+            "1": 1
           },
           "llm_calls": 0,
           "llm_calls_cached": 0,
@@ -1240,23 +1158,23 @@
           "tokens_out": 0,
           "cost_usd": 0.0,
           "verdicts": {
-            "PASS": 1,
-            "NEEDS_REVIEW": 7
+            "PASS": 3,
+            "NEEDS_REVIEW": 5
           }
         },
         {
           "label": "r2-memory-probe-1",
           "release": "r2",
           "update": true,
-          "started_at": "2026-09-25T16:46:48+00:00",
-          "run_id": "20260925-221648-682c",
-          "wall_s": 95.7,
+          "started_at": "2026-09-25T19:07:49+00:00",
+          "run_id": "20260926-003749-fc6b",
+          "wall_s": 97.1,
           "tests_run": 8,
-          "healed_steps": 1,
-          "replayed_steps": 79,
+          "healed_steps": 3,
+          "replayed_steps": 71,
           "tiers": {
-            "0": 79,
-            "1": 1
+            "0": 71,
+            "1": 3
           },
           "llm_calls": 0,
           "llm_calls_cached": 0,
@@ -1264,24 +1182,24 @@
           "tokens_out": 0,
           "cost_usd": 0.0,
           "verdicts": {
-            "PASS": 6,
-            "COSMETIC_DRIFT": 1,
-            "NEEDS_REVIEW": 1
+            "PASS": 5,
+            "NEEDS_REVIEW": 2,
+            "COSMETIC_DRIFT": 1
           }
         },
         {
           "label": "r2-memory-probe-2",
           "release": "r2",
           "update": true,
-          "started_at": "2026-09-25T16:48:24+00:00",
-          "run_id": "20260925-221824-e76f",
-          "wall_s": 96.4,
+          "started_at": "2026-09-25T19:09:26+00:00",
+          "run_id": "20260926-003926-5256",
+          "wall_s": 96.9,
           "tests_run": 8,
-          "healed_steps": 1,
-          "replayed_steps": 79,
+          "healed_steps": 3,
+          "replayed_steps": 71,
           "tiers": {
-            "0": 79,
-            "1": 1
+            "0": 71,
+            "1": 3
           },
           "llm_calls": 0,
           "llm_calls_cached": 0,
@@ -1289,9 +1207,9 @@
           "tokens_out": 0,
           "cost_usd": 0.0,
           "verdicts": {
-            "PASS": 6,
-            "COSMETIC_DRIFT": 1,
-            "NEEDS_REVIEW": 1
+            "PASS": 5,
+            "NEEDS_REVIEW": 2,
+            "COSMETIC_DRIFT": 1
           }
         }
       ],

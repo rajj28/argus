@@ -1,0 +1,116 @@
+{
+  "schema": "argus-saucedemo-realworld-v1",
+  "base_url": "https://www.saucedemo.com",
+  "generated_at": "2026-09-24T17:51:46.998364+00:00",
+  "users": {
+    "verdicts": {
+      "standard_user": {
+        "login": "PASS",
+        "add-to-cart": "PASS",
+        "cart-contents": "PASS",
+        "checkout-happy": "PASS",
+        "item-detail": "PASS",
+        "logout": "PASS",
+        "sort-by-price": "PASS",
+        "checkout-validation": "PASS"
+      },
+      "problem_user": {
+        "login": "PASS",
+        "add-to-cart": "PASS",
+        "cart-contents": "PASS",
+        "checkout-happy": "NEEDS_REVIEW",
+        "item-detail": "BUG",
+        "logout": "PASS",
+        "sort-by-price": "BUG",
+        "checkout-validation": "BUG"
+      },
+      "error_user": {
+        "login": "PASS",
+        "add-to-cart": "PASS",
+        "cart-contents": "PASS",
+        "checkout-happy": "BUG",
+        "item-detail": "BUG",
+        "logout": "PASS",
+        "sort-by-price": "BUG",
+        "checkout-validation": "BUG"
+      },
+      "performance_glitch_user": {
+        "login": "PASS",
+        "add-to-cart": "PASS",
+        "cart-contents": "PASS",
+        "checkout-happy": "PASS",
+        "item-detail": "PASS",
+        "logout": "PASS",
+        "sort-by-price": "PASS",
+        "checkout-validation": "PASS"
+      },
+      "visual_user": {
+        "login": "PASS",
+        "add-to-cart": "PASS",
+        "cart-contents": "PASS",
+        "checkout-happy": "PASS",
+        "item-detail": "PASS",
+        "logout": "PASS",
+        "sort-by-price": "PASS",
+        "checkout-validation": "PASS"
+      }
+    },
+    "metrics": {
+      "standard_user": {
+        "counts": {
+          "PASS": 8
+        },
+        "llm_calls": 0,
+        "llm_calls_cached": 0,
+        "naive_tokens_estimate": 16994,
+        "duration_ms": 45001,
+        "wall_s": 50.0
+      },
+      "problem_user": {
+        "counts": {
+          "BUG": 3,
+          "NEEDS_REVIEW": 1,
+          "PASS": 4
+        },
+        "llm_calls": 0,
+        "llm_calls_cached": 0,
+        "naive_tokens_estimate": 19106,
+        "duration_ms": 58004,
+        "wall_s": 63.1
+      },
+      "error_user": {
+        "counts": {
+          "BUG": 4,
+          "PASS": 4
+        },
+        "llm_calls": 0,
+        "llm_calls_cached": 0,
+        "naive_tokens_estimate": 16999,
+        "duration_ms": 49260,
+        "wall_s": 54.4
+      },
+      "performance_glitch_user": {
+        "counts": {
+          "PASS": 8
+        },
+        "llm_calls": 0,
+        "llm_calls_cached": 0,
+        "naive_tokens_estimate": 16994,
+        "duration_ms": 89697,
+        "wall_s": 99.4
+      },
+      "visual_user": {
+        "counts": {
+          "PASS": 8
+        },
+        "llm_calls": 0,
+        "llm_calls_cached": 0,
+        "naive_tokens_estimate": 16994,
+        "duration_ms": 45682,
+        "wall_s": 50.7
+      }
+    }
+  },
+  "measured_at": "2026-09-24T17:51:46.998364+00:00",
+  "source": ".argus-saucedemo/realworld.json"
+}

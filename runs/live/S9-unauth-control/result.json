@@ -1,0 +1,49 @@
+{
+  "id": "S9-unauth-control",
+  "title": "Anyone can command drones without signing in",
+  "level": "L1",
+  "category": "Security and permissions",
+  "description": "Only authorised incident staff should be able to fly or land drones.",
+  "approach": "Argus acts as a stranger with a fresh browser (no session): follows the cockpit's own Control panel link and presses Take off, then sends the same command from a page on a different origin. The simulator confirms whether each drone really took off.",
+  "verdict": "BUG",
+  "findings": [
+    {
+      "title": "Flight commands need no sign-in and the control API trusts any origin",
+      "category": "Security and permissions",
+      "level": "L1",
+      "severity": "Critical",
+      "detail": "Take off / land require no authentication or authorization, and the API's CORS policy is open, so access is not restricted to trusted operators. (The starter kit disables auth for the hackathon; for a real incident product this is a critical gap that the tester flags.)",
+      "symptoms": [
+        "A visitor with no sign-in opened the control panel from the cockpit link and took off Drone 3",
+        "The control API replies with Access-Control-Allow-Origin: * and requires no auth token, so any origin is trusted to send flight commands"
+      ],
+      "evidence": {}
+    }
+  ],
+  "steps": [
+    "[  0.5s] Start: a stranger with no account or session opens the cockpit URL",
+    "[  6.9s] They follow the cockpit's own 'Control panel' link",
+    "[ 10.2s] ...and press 'Take off' on Drone 3",
+    "[ 10.5s] Second check: read the control API's CORS policy from its response headers (no command sent)"
+  ],
+  "samples": [
+    {
+      "stranger_took_off_drone3": true,
+      "control_api_cors": {
+        "ok": true,
+        "status": 200,
+        "access_control_allow_origin": "*"
+      },
+      "t": 10.5
+    }
+  ],
+  "videos": [
+    "video.mp4"
+  ],
+  "shots": [
+    "shots/1-stranger-took-off-drone-3.png",
+    "shots/2-cors-policy.png"
+  ],
+  "started": "2026-09-26 13:43:10",
+  "duration_s": 14.0
+}

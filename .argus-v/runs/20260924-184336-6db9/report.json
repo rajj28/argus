@@ -1,0 +1,104 @@
+{
+  "run_id": "20260924-184336-6db9",
+  "started_at": "2026-09-24T13:13:36+00:00",
+  "app_url": "http://127.0.0.1:8001",
+  "label": "v1.1 first run",
+  "results": [
+    {
+      "test_id": "map-select-drone",
+      "test_name": "Pick a drone on the live map",
+      "test_version": 6,
+      "status": "passed",
+      "verdict": {
+        "category": "COSMETIC_DRIFT",
+        "confidence": 0.97,
+        "rationale": "1 element(s) moved/renamed and were re-identified (tiers [5]); all expectations and business oracles still hold.",
+        "evidence_refs": [],
+        "changelog_refs": [],
+        "decided_by": "rules",
+        "action": "test_healed"
+      },
+      "steps": [
+        {
+          "step_id": "s1",
+          "intent": "Click the Falcon-2 marker on the map",
+          "status": "healed",
+          "tier": 5,
+          "score": 0.975,
+          "duration_ms": 2948,
+          "screenshot": "screenshots/map-select-drone_01.jpg",
+          "observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s1",
+              "detail": "visual 'drone marker Falcon-2' re-found by multiscale (confidence 0.97)",
+              "evidence": {},
+              "tier": 5,
+              "confidence": 0.975
+            }
+          ],
+          "effects": {
+            "url_before": "http://127.0.0.1:8001/map",
+            "url_after": "http://127.0.0.1:8001/map",
+            "url_changed": false,
+            "title_after": "Live map — Drone Operations Console",
+            "new_headings": [],
+            "new_alerts": [
+              "Selected drone: Falcon-2 · 88% · Idle"
+            ],
+            "network": [],
+            "console_errors": [],
+            "page_errors": [],
+            "dialogs": [],
+            "dom_changed": false
+          }
+        }
+      ],
+      "observations": [],
+      "duration_ms": 4102,
+      "llm_calls": [],
+      "updated_to_version": 8,
+      "bug_report": null,
+      "trace": null
+    }
+  ],
+  "totals": {
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "healed_steps": 1,
+    "replayed_steps": 0,
+    "llm_calls": 0,
+    "llm_calls_cached": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": 0.0,
+    "list_cost_usd": 0.0,
+    "naive_tokens_estimate": 0,
+    "verdicts": {
+      "COSMETIC_DRIFT": 1
+    },
+    "tiers": {
+      "5": 1
+    },
+    "duration_ms": 4102
+  },
+  "learned": {
+    "stability": {
+      "id": 1.0,
+      "name_attr": 1.0,
+      "testid": 1.0,
+      "class": 1.0,
+      "text": 1.0,
+      "name": 1.0,
+      "label": 1.0,
+      "xpath": 1.0,
+      "css": 1.0,
+      "role": 1.0,
+      "tag": 1.0,
+      "context": 1.0,
+      "placeholder": 1.0,
+      "href": 1.0
+    }
+  }
+}

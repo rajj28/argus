@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Argus Live · Level 2</title>
+<title>Argus Live Â· Level 2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;600;700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -75,17 +75,17 @@ footer{padding-block:38px;border-top:1px solid var(--line);color:var(--faint);fo
 </style>
 </head>
 <body>
-<div style="max-width:1080px;margin:0 auto;padding:14px 24px 0"><a href="index.html" style="font-family:Geist Mono,monospace;font-size:13px;color:#5c6370;text-decoration:none">← Argus Live</a></div>
+<div style="max-width:1080px;margin:0 auto;padding:14px 24px 0"><a href="index.html" style="font-family:Geist Mono,monospace;font-size:13px;color:#5c6370;text-decoration:none">â Argus Live</a></div>
 
 <header class="wrap hero">
-  <div class="tag"><span class="dot"></span>FlytBase “The Tireless Hand” · Level 2</div>
-  <h1 style="margin-top:18px">Is what the screen shows actually <em>true</em> — across a whole workflow?</h1>
+  <div class="tag"><span class="dot"></span>FlytBase âThe Tireless Handâ Â· Level 2</div>
+  <h1 style="margin-top:18px">Is what the screen shows actually <em>true</em> â across a whole workflow?</h1>
   <p class="lead" style="margin-top:18px">Level 1 asked whether each screen <em>looks</em> right. Level 2 reads real
-  values out of the live product — a drone's latitude and longitude off the 3D map, the video's decoded frame rate,
-  the movement trail's geometry — and compares them against the simulator's ground truth. So it catches wrong or
+  values out of the live product â a drone's latitude and longitude off the 3D map, the video's decoded frame rate,
+  the movement trail's geometry â and compares them against the simulator's ground truth. So it catches wrong or
   stale live data with exact evidence, and passes cleanly when the product is correct.</p>
   <div class="row">
-    <span class="tag">Cesium map · real lat/lon</span>
+    <span class="tag">Cesium map Â· real lat/lon</span>
     <span class="tag">Video frame counters</span>
     <span class="tag">Chrome DevTools timing</span>
     <span class="tag">Ground-truth oracles</span>
@@ -101,15 +101,15 @@ footer{padding-block:38px;border-top:1px solid var(--line);color:var(--faint);fo
 
 <section class="wrap">
   <div class="eyebrow">The core idea, on the map</div>
-  <h2>Read the drone's real coordinates off the live map — then compare to truth</h2>
+  <h2>Read the drone's real coordinates off the live map â then compare to truth</h2>
   <div class="two">
     <div>
-      <p>The strongest Level‑2 check is geospatial. Argus reaches the running Cesium viewer through the page's React
+      <p>The strongest Levelâ2 check is geospatial. Argus reaches the running Cesium viewer through the page's React
       fiber and reads each drone marker's actual position, converting it to latitude/longitude with the map's own
-      WGS‑84 ellipsoid. Ground truth is the simulator's true position; the gap is measured in metres.</p>
+      WGSâ84 ellipsoid. Ground truth is the simulator's true position; the gap is measured in metres.</p>
       <p>In normal flight the marker matches the drone to within a metre. Delay the telemetry by 8 seconds and the
-      marker keeps showing where the drone <em>was</em> — up to <b>110 m</b> from where it <em>is</em> — with no stale
-      indicator. An operator directing ground crews to that spot would be 110 m off. That is a real, high‑impact bug,
+      marker keeps showing where the drone <em>was</em> â up to <b>110 m</b> from where it <em>is</em> â with no stale
+      indicator. An operator directing ground crews to that spot would be 110 m off. That is a real, highâimpact bug,
       proven with coordinates, not pixels.</p>
     </div>
     <div>
@@ -133,11 +133,11 @@ footer{padding-block:38px;border-top:1px solid var(--line);color:var(--faint);fo
         <line x1="150" y1="150" x2="320" y2="110" stroke="#d63b3b" stroke-width="2" stroke-dasharray="6 5"/>
         <rect x="205" y="112" width="70" height="24" rx="6" fill="#fff" stroke="#d63b3b"/>
         <text x="214" y="129" font-family="Geist Mono" font-size="13" fill="#d63b3b" font-weight="600">110 m off</text>
-        <text x="20" y="256" font-family="Geist Mono" font-size="11" fill="#8a919e">under an 8 s telemetry delay · no stale indicator shown</text>
+        <text x="20" y="256" font-family="Geist Mono" font-size="11" fill="#8a919e">under an 8 s telemetry delay Â· no stale indicator shown</text>
       </svg>
       <pre style="margin-top:14px"><code>UI marker   <span class="cmt">18.56179, 73.69496</span>
 ground truth <span class="cmt">18.56247, 73.69572</span>
-gap <span style="color:#d63b3b">110 m</span> · stale indicator: <span style="color:#d63b3b">none</span></code></pre>
+gap <span style="color:#d63b3b">110 m</span> Â· stale indicator: <span style="color:#d63b3b">none</span></code></pre>
     </div>
   </div>
 </section>
@@ -146,35 +146,36 @@ gap <span style="color:#d63b3b">110 m</span> · stale indicator: <span style="co
   <div class="eyebrow">Architecture</div>
   <h2>Three deeper probes, each read from the live product and checked against truth</h2>
   <div class="cards">
-    <div class="card"><span class="k">geospatial</span><h3>Real lat/lon off the 3D map</h3><p>Reach the live Cesium viewer via React fiber; read marker and trail positions; convert with the map's WGS‑84 ellipsoid; compare to the simulator in metres.</p></div>
-    <div class="card"><span class="k">video</span><h3>Decoded frames + perceptual hash</h3><p>Liveness from the `&lt;video&gt;` element's frame counter and a frame hash, so a frozen or wrong‑source stream is caught even when the label says “live”.</p></div>
-    <div class="card"><span class="k">performance</span><h3>Chrome DevTools timing</h3><p>Long‑Tasks blocking, click‑to‑paint latency and JS‑heap size, measured at rest and under a sustained multi‑drone load.</p></div>
+    <div class="card"><span class="k">geospatial</span><h3>Real lat/lon off the 3D map</h3><p>Reach the live Cesium viewer via React fiber; read marker and trail positions; convert with the map's WGSâ84 ellipsoid; compare to the simulator in metres.</p></div>
+    <div class="card"><span class="k">video</span><h3>Decoded frames + perceptual hash</h3><p>Liveness from the `&lt;video&gt;` element's frame counter and a frame hash, so a frozen or wrongâsource stream is caught even when the label says âliveâ.</p></div>
+    <div class="card"><span class="k">performance</span><h3>Chrome DevTools timing</h3><p>LongâTasks blocking, clickâtoâpaint latency and JSâheap size, measured at rest and under a sustained multiâdrone load.</p></div>
   </div>
   <p class="note">Ground truth (simulator state, backend health, active faults) always comes from the control API and a
-  socket feed subscribed like the cockpit — never from the UI under test. Verdicts are deterministic; symptoms of one
+  socket feed subscribed like the cockpit â never from the UI under test. Verdicts are deterministic; symptoms of one
   root cause are grouped; correct behaviour is reported as PASS.</p>
 </section>
 
 <section class="wrap">
   <div class="eyebrow">Scenarios</div>
   <h2>Two issues, three precision passes</h2>
+  <p class="lead" style="margin-top:-4px">Each scenario below has its own recording with <strong>voice narration and a live evidence overlay</strong> — turn your sound on 🔊</p>
 
   <div class="sc buggy">
     <div class="sc-head"><span class="sc-num">Scenario 1</span><span class="pill bug">BUG</span><span class="chip">Map &amp; geospatial</span><span class="chip">high impact</span></div>
     <h3>The map shows an old drone position as current</h3>
     <div class="field"><div class="lbl">Expects</div><div class="val">The map marker reflects where the drone actually is; if data is delayed, the UI says so.</div></div>
     <div class="field"><div class="lbl">Approach</div><div class="val">Fly the drone; read the marker's real lat/lon off the live Cesium map and confirm it matches truth to a metre; delay telemetry 8 s and measure how far the marker falls behind, and whether the UI warns.</div></div>
-    <div class="field"><div class="lbl">Result</div><div class="val res">Marker drifted to <b>110 m</b> behind the true position, still shown as current, with no stale indicator. Maps to the brief's <em>“an old position looks current.”</em></div></div>
-    <div class="ev"><span class="u">UI marker 18.56179, 73.69496</span> · <span class="t">truth 18.56247, 73.69572</span> · <span class="b">gap 25→50→75→100→110 m</span> · baseline (live) <span class="g">within 1 m</span></div>    <video class="scv" controls preload="none" playsinline src="videos/S11-map-stale.mp4"></video>
+    <div class="field"><div class="lbl">Result</div><div class="val res">Marker drifted to <b>110 m</b> behind the true position, still shown as current, with no stale indicator. Maps to the brief's <em>âan old position looks current.â</em></div></div>
+    <div class="ev"><span class="u">UI marker 18.56179, 73.69496</span> Â· <span class="t">truth 18.56247, 73.69572</span> Â· <span class="b">gap 25â50â75â100â110 m</span> Â· baseline (live) <span class="g">within 1 m</span></div>    <video class="scv" controls preload="none" playsinline src="videos/S11-map-stale.mp4?v=2"></video>
   </div>
 
   <div class="sc buggy">
     <div class="sc-head"><span class="sc-num">Scenario 2</span><span class="pill bug">BUG</span><span class="chip">Video &amp; media</span></div>
-    <h3>Frozen drone video still labelled “live”</h3>
+    <h3>Frozen drone video still labelled âliveâ</h3>
     <div class="field"><div class="lbl">Expects</div><div class="val">If the stream freezes, the operator is not told the picture is live.</div></div>
     <div class="field"><div class="lbl">Approach</div><div class="val">Measure decoded frames per second on the real video element and read the tile's label every second after freezing the stream.</div></div>
-    <div class="field"><div class="lbl">Result</div><div class="val res"><b>0 frames/second for 5 seconds while labelled “live.”</b> Maps to <em>“a dropped stream still looks live.”</em></div></div>
-    <div class="ev"><span class="u">label “live”</span> · <span class="b">0 fps decoded</span> · fault active: video‑freeze</div>    <video class="scv" controls preload="none" playsinline src="videos/S2-frozen-video.mp4"></video>
+    <div class="field"><div class="lbl">Result</div><div class="val res"><b>0 frames/second for 5 seconds while labelled âlive.â</b> Maps to <em>âa dropped stream still looks live.â</em></div></div>
+    <div class="ev"><span class="u">label âliveâ</span> Â· <span class="b">0 fps decoded</span> Â· fault active: videoâfreeze</div>    <video class="scv" controls preload="none" playsinline src="videos/S2-frozen-video.mp4?v=2"></video>
   </div>
 
   <div class="sc passy">
@@ -182,23 +183,23 @@ gap <span style="color:#d63b3b">110 m</span> · stale indicator: <span style="co
     <h3>The drone movement trail matches the real flight path</h3>
     <div class="field"><div class="lbl">Expects</div><div class="val">The drawn trail records where the drone actually flew.</div></div>
     <div class="field"><div class="lbl">Approach</div><div class="val">Sample the drone's true positions through a flight; read the trail polyline from the live map; check every true position lies on the trail and the trail ends at the drone.</div></div>
-    <div class="field"><div class="lbl">Result</div><div class="val res">49 trail points, <b>0 m</b> worst deviation, endpoint 10 m from the drone — <b>PASS.</b> Verifies a bonus capability's correctness, not just faults.</div></div>    <video class="scv" controls preload="none" playsinline src="videos/S12-movement-trail.mp4"></video>
+    <div class="field"><div class="lbl">Result</div><div class="val res">49 trail points, <b>0 m</b> worst deviation, endpoint 10 m from the drone â <b>PASS.</b> Verifies a bonus capability's correctness, not just faults.</div></div>    <video class="scv" controls preload="none" playsinline src="videos/S12-movement-trail.mp4?v=2"></video>
   </div>
 
   <div class="sc passy">
-    <div class="sc-head"><span class="sc-num">Scenario 4</span><span class="pill pass">PASS</span><span class="chip">Functional · cross-part</span></div>
+    <div class="sc-head"><span class="sc-num">Scenario 4</span><span class="pill pass">PASS</span><span class="chip">Functional Â· cross-part</span></div>
     <h3>Selecting a drone switches map, video and telemetry together</h3>
     <div class="field"><div class="lbl">Expects</div><div class="val">Selecting a drone shows that drone's state everywhere at once.</div></div>
     <div class="field"><div class="lbl">Approach</div><div class="val">Select Drone 2; check the video frame changes to a distinct feed (perceptual hash), the telemetry battery matches Drone 2's true battery, and the label follows the selection.</div></div>
-    <div class="field"><div class="lbl">Result</div><div class="val res">All three switched consistently — <b>PASS.</b> Connects behaviour across related parts of the product with no false positive.</div></div>    <video class="scv" controls preload="none" playsinline src="videos/S8-switch-drone.mp4"></video>
+    <div class="field"><div class="lbl">Result</div><div class="val res">All three switched consistently â <b>PASS.</b> Connects behaviour across related parts of the product with no false positive.</div></div>    <video class="scv" controls preload="none" playsinline src="videos/S8-switch-drone.mp4?v=2"></video>
   </div>
 
   <div class="sc passy">
     <div class="sc-head"><span class="sc-num">Scenario 5</span><span class="pill pass">PASS</span><span class="chip">Performance &amp; long-running</span></div>
     <h3>Responsive with 16 flying drones over ~10 simulated minutes</h3>
     <div class="field"><div class="lbl">Expects</div><div class="val">The cockpit stays usable when many drones fly and data streams for a long time.</div></div>
-    <div class="field"><div class="lbl">Approach</div><div class="val">Measure frame timing, Long‑Task blocking, click‑to‑paint latency and JS heap at rest, then add 12 drones, fly all 16 at 5× speed and re‑measure across the run.</div></div>
-    <div class="field"><div class="lbl">Result</div><div class="val res">Click‑to‑paint 28–123 ms (under 250 ms), no long‑task stalls, heap garbage‑collected (no leak) — <b>PASS.</b> Proves the product scales, measured not assumed.</div></div>    <video class="scv" controls preload="none" playsinline src="videos/S10-load-long-run.mp4"></video>
+    <div class="field"><div class="lbl">Approach</div><div class="val">Measure frame timing, LongâTask blocking, clickâtoâpaint latency and JS heap at rest, then add 12 drones, fly all 16 at 5Ã speed and reâmeasure across the run.</div></div>
+    <div class="field"><div class="lbl">Result</div><div class="val res">Clickâtoâpaint 28â123 ms (under 250 ms), no longâtask stalls, heap garbageâcollected (no leak) â <b>PASS.</b> Proves the product scales, measured not assumed.</div></div>    <video class="scv" controls preload="none" playsinline src="videos/S10-load-long-run.mp4?v=2"></video>
   </div>
 </section>
 
@@ -207,12 +208,12 @@ gap <span style="color:#d63b3b">110 m</span> · stale indicator: <span style="co
   <h2>The same ground-truth method extends to the bonus features</h2>
   <div class="tbl-wrap"><table>
     <tr><th>Bonus capability</th><th>How Argus tests it</th></tr>
-    <tr><td class="mono">Movement trails <span style="color:var(--pass)">· shown</span></td><td>Read the drawn trail polyline from the live map; verify it matches the drone's true flown path within tolerance.</td></tr>
-    <tr><td class="mono">Alerts &amp; notifications</td><td>Drive a real condition (low battery, disconnect) via the control API and assert the correct alert appears and clears — never spuriously.</td></tr>
+    <tr><td class="mono">Movement trails <span style="color:var(--pass)">Â· shown</span></td><td>Read the drawn trail polyline from the live map; verify it matches the drone's true flown path within tolerance.</td></tr>
+    <tr><td class="mono">Alerts &amp; notifications</td><td>Drive a real condition (low battery, disconnect) via the control API and assert the correct alert appears and clears â never spuriously.</td></tr>
     <tr><td class="mono">Shared map drawings &amp; markers</td><td>Read placed markers/shapes from the Cesium viewer; verify coordinates and that they replicate to a second operator.</td></tr>
-    <tr><td class="mono">Synchronized replay</td><td>Compare the replay's positions and timeline against the recorded ground‑truth trajectory, frame for frame.</td></tr>
-    <tr><td class="mono">Multiple video layouts</td><td>Verify each tile shows a distinct, correctly‑labelled feed (perceptual hash per drone) across layouts.</td></tr>
-    <tr><td class="mono">Search &amp; filtering in history</td><td>Assert filtered results match the ground‑truth event log — nothing missing, duplicated or misattributed.</td></tr>
+    <tr><td class="mono">Synchronized replay</td><td>Compare the replay's positions and timeline against the recorded groundâtruth trajectory, frame for frame.</td></tr>
+    <tr><td class="mono">Multiple video layouts</td><td>Verify each tile shows a distinct, correctlyâlabelled feed (perceptual hash per drone) across layouts.</td></tr>
+    <tr><td class="mono">Search &amp; filtering in history</td><td>Assert filtered results match the groundâtruth event log â nothing missing, duplicated or misattributed.</td></tr>
   </table></div>
 </section>
 
@@ -220,17 +221,17 @@ gap <span style="color:#d63b3b">110 m</span> · stale indicator: <span style="co
   <div class="eyebrow">Reproduce</div>
   <h2>Every scenario runs from one command</h2>
   <pre><code><span class="cmt"># start the product</span>
-<span class="cmd">docker compose up --build</span>            <span class="cmt"># cockpit :4010 · control API :4000/api</span>
+<span class="cmd">docker compose up --build</span>            <span class="cmt"># cockpit :4010 Â· control API :4000/api</span>
 
 <span class="cmt"># run a Level-2 scenario (a real Chrome opens and records)</span>
 <span class="cmd">argus live run</span> --only S11         <span class="cmt"># map shows an old position as current</span>
 <span class="cmd">argus live run</span> --only S12         <span class="cmt"># movement-trail accuracy (bonus)</span>
 <span class="cmd">argus live run</span>                    <span class="cmt"># the whole suite</span></code></pre>
-  <p class="note">Each run writes <span class="mono">runs/live/&lt;id&gt;/</span> — an MP4 with a HUD narrating UI‑claim vs ground‑truth, screenshots, timed samples and a machine‑readable <span class="mono">result.json</span>.</p>
+  <p class="note">Each run writes <span class="mono">runs/live/&lt;id&gt;/</span> â an MP4 with a HUD narrating UIâclaim vs groundâtruth, screenshots, timed samples and a machineâreadable <span class="mono">result.json</span>.</p>
 </section>
 
 <footer class="wrap">
-  Argus Live · Level 2 — live data, map, video &amp; performance. Ground‑truth UI testing for the FlytBase cockpit.
+  Argus Live Â· Level 2 â live data, map, video &amp; performance. Groundâtruth UI testing for the FlytBase cockpit.
 </footer>
 
 </body>

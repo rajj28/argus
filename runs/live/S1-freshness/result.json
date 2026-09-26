@@ -1,0 +1,205 @@
+{
+  "id": "S1-freshness",
+  "title": "Stale, delayed or offline drone data shown as live",
+  "level": "L2",
+  "category": "Telemetry / freshness",
+  "description": "An operator relies on the cockpit to know whether a drone's position and status are current. When the telemetry feed is lost, delayed or its source goes offline, the cockpit should say so instead of presenting old data as live.",
+  "approach": "Argus flies Drone 1 via the control API, proves the cockpit updates live, then injects three conditions (socket-drop 100%, socket-delay 6 s, sim-offline). Every 2 s it compares the on-screen distance, status and link badge with the simulator's true position and the backend's health, and looks for any stale/delayed wording. Symptoms with the same root cause are grouped into one issue.",
+  "verdict": "BUG",
+  "findings": [
+    {
+      "title": "Stale, delayed or offline drone data is presented as live",
+      "category": "Telemetry / data freshness",
+      "level": "L2 (status mismatch is L1)",
+      "severity": "High",
+      "detail": "The cockpit has no per-device freshness state. The only signal is the socket badge, which describes the browser-to-backend socket, not whether drone data is current. Argus grouped 3 symptoms under this one root cause.",
+      "symptoms": [
+        "Feed lost: distance frozen at 75 m for 10 s while the drone actually moved +105 m; badge still 'socket connected', no stale warning",
+        "Feed delayed: positions shown ~58 m behind reality (\u22486 s old) with no 'delayed' indication",
+        "Source offline: backend reports the simulator disconnected, but Drone 1 is still shown 'in_flight' under a 'socket connected' badge"
+      ],
+      "evidence": {}
+    }
+  ],
+  "steps": [
+    "[  0.6s] Start: simulator reset, Drone 1 takes off, operator opens the cockpit",
+    "[ 18.4s] Condition 1/3 - feed lost: 100% of telemetry dropped",
+    "[ 35.3s] Condition 2/3 - feed delayed by 6 s",
+    "[ 52.2s] Condition 3/3 - data source offline: simulator disconnected"
+  ],
+  "samples": [
+    {
+      "condition": "socket-drop",
+      "ui_distance": 75.0,
+      "truth_distance": 95,
+      "socket_badge": "socket connected",
+      "ui_status": "in_flight",
+      "simulator": "connected",
+      "t": 20.5
+    },
+    {
+      "condition": "socket-drop",
+      "ui_distance": 75.0,
+      "truth_distance": 120,
+      "socket_badge": "socket connected",
+      "ui_status": "in_flight",
+      "simulator": "connected",
+      "t": 22.6
+    },
+    {
+      "condition": "socket-drop",
+      "ui_distance": 75.0,
+      "truth_distance": 140,
+      "socket_badge": "socket connected",
+      "ui_status": "in_flight",
+      "simulator": "connected",
+      "t": 24.7
+    },
+    {
+      "condition": "socket-drop",
+      "ui_distance": 75.0,
+      "truth_distance": 160,
+      "socket_badge": "socket connected",
+      "ui_status": "in_flight",
+      "simulator": "connected",
+      "t": 26.7
+    },
+    {
+      "condition": "socket-drop",
+      "ui_distance": 75.0,
+      "truth_distance": 180,
+      "socket_badge": "socket connected",
+      "ui_status": "in_flight",
+      "simulator": "connected",
+      "t": 28.8
+    },
+    {
+      "condition": "socket-drop",
+      "ui_distance": 75.0,
+      "truth_distance": 200,
+      "socket_badge": "socket connected",
+      "ui_status": "in_flight",
+      "simulator": "connected",
+      "t": 30.9
+    },
+    {
+      "condition": "socket-delay",
+      "ui_distance": 245.0,
+      "truth_distance": 265,
+      "socket_badge": "socket connected",
+      "ui_status": "in_flight",
+      "simulator": "connected",
+      "t": 37.4
+    },
+    {
+      "condition": "socket-delay",
+      "ui_distance": 245.0,
+      "truth_distance": 285,
+      "socket_badge": "socket connected",
+      "ui_status": "in_flight",
+      "simulator": "connected",
+      "t": 39.5
+    },
+    {
+      "condition": "socket-delay",
+      "ui_distance": 245.0,
+      "truth_distance": 305,
+      "socket_badge": "socket connected",
+      "ui_status": "in_flight",
+      "simulator": "connected",
+      "t": 41.5
+    },
+    {
+      "condition": "socket-delay",
+      "ui_distance": 260.0,
+      "truth_distance": 325,
+      "socket_badge": "socket connected",
+      "ui_status": "in_flight",
+      "simulator": "connected",
+      "t": 43.6
+    },
+    {
+      "condition": "socket-delay",
+      "ui_distance": 275.0,
+      "truth_distance": 350,
+      "socket_badge": "socket connected",
+      "ui_status": "in_flight",
+      "simulator": "connected",
+      "t": 45.7
+    },
+    {
+      "condition": "socket-delay",
+      "ui_distance": 280.0,
+      "truth_distance": 370,
+      "socket_badge": "socket connected",
+      "ui_status": "in_flight",
+      "simulator": "connected",
+      "t": 47.8
+    },
+    {
+      "condition": "sim-offline",
+      "ui_distance": 355.0,
+      "truth_distance": 435,
+      "socket_badge": "socket connected",
+      "ui_status": "in_flight",
+      "simulator": "disconnected",
+      "t": 54.4
+    },
+    {
+      "condition": "sim-offline",
+      "ui_distance": 375.0,
+      "truth_distance": 455,
+      "socket_badge": "socket connected",
+      "ui_status": "in_flight",
+      "simulator": "disconnected",
+      "t": 56.4
+    },
+    {
+      "condition": "sim-offline",
+      "ui_distance": 375.0,
+      "truth_distance": 475,
+      "socket_badge": "socket connected",
+      "ui_status": "in_flight",
+      "simulator": "disconnected",
+      "t": 58.5
+    },
+    {
+      "condition": "sim-offline",
+      "ui_distance": 375.0,
+      "truth_distance": 495,
+      "socket_badge": "socket connected",
+      "ui_status": "in_flight",
+      "simulator": "disconnected",
+      "t": 60.6
+    },
+    {
+      "condition": "sim-offline",
+      "ui_distance": 375.0,
+      "truth_distance": 520,
+      "socket_badge": "socket connected",
+      "ui_status": "in_flight",
+      "simulator": "disconnected",
+      "t": 62.7
+    },
+    {
+      "condition": "sim-offline",
+      "ui_distance": 375.0,
+      "truth_distance": 540,
+      "socket_badge": "socket connected",
+      "ui_status": "in_flight",
+      "simulator": "disconnected",
+      "t": 64.7
+    }
+  ],
+  "videos": [
+    "video.mp4"
+  ],
+  "shots": [
+    "shots/0-baseline-live.png",
+    "shots/1-socket-drop.png",
+    "shots/2-socket-delay.png",
+    "shots/3-sim-offline.png"
+  ],
+  "started": "2026-09-26 13:38:49",
+  "duration_s": 68.1
+}

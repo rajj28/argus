@@ -1,0 +1,64 @@
+{
+  "id": "S10-load-long-run",
+  "title": "Responsiveness with 16 flying drones over about 10 simulated minutes",
+  "level": "L3",
+  "category": "Performance / Long-running",
+  "description": "The cockpit must stay usable when many drones fly and data keeps streaming for a long time.",
+  "approach": "Argus measures frames per second, long tasks, click-to-paint latency and JS heap at rest, then adds 12 drones, flies all 16 at 5x simulator speed and samples the same metrics four times.",
+  "verdict": "PASS",
+  "findings": [],
+  "steps": [
+    "[  0.6s] Start: reset to 4 drones on their docks; measure the cockpit at rest",
+    "[ 13.0s] Condition: 12 more drones join, all fly, simulator runs 5x faster (~10 simulated minutes)"
+  ],
+  "samples": [
+    {
+      "phase": "at rest",
+      "fps": 59.2,
+      "long_task_ms": 0,
+      "long_tasks": 0,
+      "click_to_paint_ms": 46.1,
+      "heap_mb": 70.4,
+      "rows": 4,
+      "t": 13.0
+    },
+    {
+      "phase": "load 1",
+      "fps": 9.8,
+      "long_task_ms": 224,
+      "long_tasks": 1,
+      "click_to_paint_ms": 230.3,
+      "heap_mb": 110.6,
+      "rows": 16,
+      "t": 30.6
+    },
+    {
+      "phase": "load 2",
+      "fps": 18.5,
+      "long_task_ms": 0,
+      "long_tasks": 0,
+      "click_to_paint_ms": 31,
+      "heap_mb": 48.9,
+      "rows": 16,
+      "t": 47.5
+    },
+    {
+      "phase": "load 3",
+      "fps": 9.2,
+      "long_task_ms": 0,
+      "long_tasks": 0,
+      "click_to_paint_ms": 237.9,
+      "heap_mb": 108.0,
+      "rows": 16,
+      "t": 64.4
+    }
+  ],
+  "videos": [
+    "video.mp4"
+  ],
+  "shots": [
+    "shots/1-under-load.png"
+  ],
+  "started": "2026-09-26 16:29:03",
+  "duration_s": 106.5
+}

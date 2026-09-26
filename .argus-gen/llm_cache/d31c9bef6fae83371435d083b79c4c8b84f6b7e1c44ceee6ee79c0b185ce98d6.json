@@ -1,0 +1,1 @@
+{"category": "BUG", "confidence": 0.97, "rationale": "obs1 shows validation succeeded (200) instead of rejecting (422) for altitude >120 m, violating R1; obs2 missing expected error message \"at most 120 m\".", "changelog_refs": [], "evidence_refs": ["obs1", "obs2"]}

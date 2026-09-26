@@ -1,0 +1,563 @@
+{
+  "measured_at": "2026-09-25T19:14:29+00:00",
+  "source": "argus mcp over stdio (official mcp client)",
+  "server": "C:\\Users\\Acer\\tireless hackathon\\.venv\\Scripts\\python.exe -m argus mcp --home C:\\Users\\Acer\\AppData\\Local\\Temp\\argus-export-oi2c1k7q",
+  "app_url": "http://127.0.0.1:8000",
+  "frames": [
+    {
+      "dir": "->",
+      "frame": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "initialize",
+        "params": {
+          "protocolVersion": "2025-11-25",
+          "capabilities": {},
+          "clientInfo": {
+            "name": "mcp",
+            "version": "0.1.0"
+          },
+          "_meta": {}
+        }
+      }
+    },
+    {
+      "dir": "<-",
+      "frame": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": {
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "listChanged": false
+            },
+            "resources": {
+              "listChanged": false,
+              "subscribe": false
+            },
+            "tools": {
+              "listChanged": false
+            }
+          },
+          "instructions": "Argus runs the app's end-to-end UI regression suite in a real browser, self-heals broken locators, and classifies every deviation as BUG, INTENDED_CHANGE, FEATURE_REMOVED or NEEDS_REVIEW. Call verify_change after implementing a feature, passing a description of what you intended to change.",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "argus",
+            "version": ""
+          }
+        }
+      }
+    },
+    {
+      "dir": "->",
+      "frame": {
+        "jsonrpc": "2.0",
+        "method": "notifications/initialized"
+      }
+    },
+    {
+      "dir": "->",
+      "frame": {
+        "jsonrpc": "2.0",
+        "id": 2,
+        "method": "tools/list",
+        "params": {
+          "_meta": {}
+        }
+      }
+    },
+    {
+      "dir": "<-",
+      "frame": {
+        "jsonrpc": "2.0",
+        "id": 2,
+        "result": {
+          "tools": [
+            {
+              "description": "Run the full suite and return verdicts per test (JSON).",
+              "inputSchema": {
+                "properties": {
+                  "label": {
+                    "default": "mcp run",
+                    "title": "Label",
+                    "type": "string"
+                  }
+                },
+                "type": "object",
+                "title": "run_testsArguments"
+              },
+              "name": "run_tests",
+              "outputSchema": {
+                "properties": {
+                  "result": {
+                    "title": "Result",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "result"
+                ],
+                "type": "object",
+                "title": "run_testsOutput"
+              }
+            },
+            {
+              "description": "Verify a change you just made. `description` is your intent (like a PR description); Argus uses it\n        as the oracle for 'intended change vs regression' and reports bugs with repro steps.",
+              "inputSchema": {
+                "properties": {
+                  "description": {
+                    "title": "Description",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "description"
+                ],
+                "type": "object",
+                "title": "verify_changeArguments"
+              },
+              "name": "verify_change",
+              "outputSchema": {
+                "properties": {
+                  "result": {
+                    "title": "Result",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "result"
+                ],
+                "type": "object",
+                "title": "verify_changeOutput"
+              }
+            },
+            {
+              "description": "For an app with no tests: explore it and generate a baselined regression suite.",
+              "inputSchema": {
+                "properties": {
+                  "max_tests": {
+                    "default": 6,
+                    "title": "Max Tests",
+                    "type": "integer"
+                  }
+                },
+                "type": "object",
+                "title": "explore_and_generateArguments"
+              },
+              "name": "explore_and_generate",
+              "outputSchema": {
+                "properties": {
+                  "result": {
+                    "title": "Result",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "result"
+                ],
+                "type": "object",
+                "title": "explore_and_generateOutput"
+              }
+            },
+            {
+              "description": "Verdicts of the most recent run.",
+              "inputSchema": {
+                "properties": {},
+                "type": "object",
+                "title": "last_reportArguments"
+              },
+              "name": "last_report",
+              "outputSchema": {
+                "properties": {
+                  "result": {
+                    "title": "Result",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "result"
+                ],
+                "type": "object",
+                "title": "last_reportOutput"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "dir": "->",
+      "frame": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "method": "tools/call",
+        "params": {
+          "name": "last_report",
+          "arguments": {},
+          "_meta": {}
+        }
+      }
+    },
+    {
+      "dir": "<-",
+      "frame": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "result": {
+          "content": [
+            {
+              "text": "{\n  \"run_id\": \"20260926-004302-7e3f\",\n  \"verdicts\": {\n    \"PASS\": 7\n  },\n  \"llm_calls\": 0,\n  \"healed_steps\": 0,\n  \"tests\": [\n    {\n      \"test\": \"Pilot signs in\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Plan and launch a survey mission\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Inspect a drone from the fleet table\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Pilot signs out\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Pilot updates display name\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Altitude above 120 m is rejected\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Low-battery drone cannot be assigned\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    }\n  ]\n}",
+              "type": "text"
+            }
+          ],
+          "isError": false,
+          "structuredContent": {
+            "result": "{\n  \"run_id\": \"20260926-004302-7e3f\",\n  \"verdicts\": {\n    \"PASS\": 7\n  },\n  \"llm_calls\": 0,\n  \"healed_steps\": 0,\n  \"tests\": [\n    {\n      \"test\": \"Pilot signs in\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Plan and launch a survey mission\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Inspect a drone from the fleet table\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Pilot signs out\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Pilot updates display name\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Altitude above 120 m is rejected\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Low-battery drone cannot be assigned\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    }\n  ]\n}"
+          }
+        }
+      }
+    },
+    {
+      "dir": "->",
+      "frame": {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "method": "tools/call",
+        "params": {
+          "name": "verify_change",
+          "arguments": {
+            "description": "Mission planner v2: parameters before drone selection; new required Pilot in command field"
+          },
+          "_meta": {}
+        }
+      }
+    },
+    {
+      "dir": "<-",
+      "frame": {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "result": {
+          "content": [
+            {
+              "text": "{\n  \"run_id\": \"20260926-004341-a31c\",\n  \"verdicts\": {\n    \"PASS\": 4,\n    \"BUG\": 1,\n    \"NEEDS_REVIEW\": 2\n  },\n  \"llm_calls\": 5,\n  \"healed_steps\": 0,\n  \"tests\": [\n    {\n      \"test\": \"Pilot signs in\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Plan and launch a survey mission\",\n      \"verdict\": \"BUG\",\n      \"confidence\": 0.93,\n      \"why\": \"R4 violated: launched mission not listed (obs13) and UI blocks due to missing required Pilot field (obs12). No released changelog changes this behavior.\",\n      \"changelog_refs\": [],\n      \"bug_report\": \"## BUG: Plan and launch a survey mission\\n\\n**Verdict:** R4 violated: launched mission not listed (obs13) and UI blocks due to missing required Pilot field (obs12). No released changelog changes this behavior.\\n\\n**Business goal:** An operator plans a mission with an available drone and it appears in the Missions list as Scheduled\\n\\n**Reproduce:**\\n1. Open /missions/new\\n2. Name the mission = 'Survey a31c1'\\n3. Choose mission type Survey = 'Survey'\\n4. Choose the Pune Depot site = 'Pune Depot'\\n5. Continue from mission details\\n6. Continue with 'Continue'\\n7. Assign drone Falcon-1\\n8. Continue from drone selection\\n9. Set altitude to 80 m = '80'\\n10. Set speed to 8 m/s = '8'\\n11. Continue from flight parameters\\n12. Launch the mission\\n13. Open the Missions list\\n14. Open mission details to fill Pilot in command\\n\\n**Expected vs actual:**\\n- `effect_mismatch` POST /api/missions/validate returned 200 (baseline 422)\\n- `effect_mismatch` POST /api/missions/validate returned 422 (baseline 200)\\n- `goal_unreachable` blocked at 'Fill new required field 'Pilot in command'': Pilot in command field not present; no navigation element to reach it from this page; page /missions/:id alerts []\\n- `assertion_failed` The launched mission appears in the Missions list: expected text \\\"Survey a31c1\\\" not found on /missions/:id\\n\\n**Release notes check:** none of the release notes explain this behaviour.\\n\\n**Evidence:** screenshots/create-mission_12.jpg, screenshots/create-mission_13.jpg\"\n    },\n    {\n      \"test\": \"Inspect a drone from the fleet table\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Pilot signs out\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Pilot updates display name\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Altitude above 120 m is rejected\",\n      \"verdict\": \"NEEDS_REVIEW\",\n      \"confidence\": 0.78,\n      \"why\": \"Observed step reordering (obs2-obs8) conflicts with expected flow, but no changelog entry documents this functional change; outcome still passes R1.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Low-battery drone cannot be assigned\",\n      \"verdict\": \"NEEDS_REVIEW\",\n      \"confidence\": 0.4,\n      \"why\": \"Observed drone with 12% battery is correctly disabled per R2; no regression or documented change detected\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    }\n  ]\n}",
+              "type": "text"
+            }
+          ],
+          "isError": false,
+          "structuredContent": {
+            "result": "{\n  \"run_id\": \"20260926-004341-a31c\",\n  \"verdicts\": {\n    \"PASS\": 4,\n    \"BUG\": 1,\n    \"NEEDS_REVIEW\": 2\n  },\n  \"llm_calls\": 5,\n  \"healed_steps\": 0,\n  \"tests\": [\n    {\n      \"test\": \"Pilot signs in\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Plan and launch a survey mission\",\n      \"verdict\": \"BUG\",\n      \"confidence\": 0.93,\n      \"why\": \"R4 violated: launched mission not listed (obs13) and UI blocks due to missing required Pilot field (obs12). No released changelog changes this behavior.\",\n      \"changelog_refs\": [],\n      \"bug_report\": \"## BUG: Plan and launch a survey mission\\n\\n**Verdict:** R4 violated: launched mission not listed (obs13) and UI blocks due to missing required Pilot field (obs12). No released changelog changes this behavior.\\n\\n**Business goal:** An operator plans a mission with an available drone and it appears in the Missions list as Scheduled\\n\\n**Reproduce:**\\n1. Open /missions/new\\n2. Name the mission = 'Survey a31c1'\\n3. Choose mission type Survey = 'Survey'\\n4. Choose the Pune Depot site = 'Pune Depot'\\n5. Continue from mission details\\n6. Continue with 'Continue'\\n7. Assign drone Falcon-1\\n8. Continue from drone selection\\n9. Set altitude to 80 m = '80'\\n10. Set speed to 8 m/s = '8'\\n11. Continue from flight parameters\\n12. Launch the mission\\n13. Open the Missions list\\n14. Open mission details to fill Pilot in command\\n\\n**Expected vs actual:**\\n- `effect_mismatch` POST /api/missions/validate returned 200 (baseline 422)\\n- `effect_mismatch` POST /api/missions/validate returned 422 (baseline 200)\\n- `goal_unreachable` blocked at 'Fill new required field 'Pilot in command'': Pilot in command field not present; no navigation element to reach it from this page; page /missions/:id alerts []\\n- `assertion_failed` The launched mission appears in the Missions list: expected text \\\"Survey a31c1\\\" not found on /missions/:id\\n\\n**Release notes check:** none of the release notes explain this behaviour.\\n\\n**Evidence:** screenshots/create-mission_12.jpg, screenshots/create-mission_13.jpg\"\n    },\n    {\n      \"test\": \"Inspect a drone from the fleet table\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Pilot signs out\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Pilot updates display name\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Altitude above 120 m is rejected\",\n      \"verdict\": \"NEEDS_REVIEW\",\n      \"confidence\": 0.78,\n      \"why\": \"Observed step reordering (obs2-obs8) conflicts with expected flow, but no changelog entry documents this functional change; outcome still passes R1.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Low-battery drone cannot be assigned\",\n      \"verdict\": \"NEEDS_REVIEW\",\n      \"confidence\": 0.4,\n      \"why\": \"Observed drone with 12% battery is correctly disabled per R2; no regression or documented change detected\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    }\n  ]\n}"
+          }
+        }
+      }
+    }
+  ],
+  "methods": [
+    "initialize",
+    "notifications/initialized",
+    "tools/list",
+    "tools/call",
+    "tools/call"
+  ],
+  "events": [
+    {
+      "type": "log",
+      "stream": "stdout",
+      "line": "LLM cap for this run: 6 call(s)"
+    },
+    {
+      "type": "log",
+      "stream": "stdout",
+      "line": "$ argus mcp --home C:\\Users\\Acer\\AppData\\Local\\Temp\\argus-export-oi2c1k7q   (stdio, official mcp client)"
+    },
+    {
+      "type": "mcp",
+      "dir": "->",
+      "frame": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "initialize",
+        "params": {
+          "protocolVersion": "2025-11-25",
+          "capabilities": {},
+          "clientInfo": {
+            "name": "mcp",
+            "version": "0.1.0"
+          },
+          "_meta": {}
+        }
+      }
+    },
+    {
+      "type": "mcp",
+      "dir": "<-",
+      "frame": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": {
+          "capabilities": {
+            "experimental": {},
+            "prompts": {
+              "listChanged": false
+            },
+            "resources": {
+              "listChanged": false,
+              "subscribe": false
+            },
+            "tools": {
+              "listChanged": false
+            }
+          },
+          "instructions": "Argus runs the app's end-to-end UI regression suite in a real browser, self-heals broken locators, and classifies every deviation as BUG, INTENDED_CHANGE, FEATURE_REMOVED or NEEDS_REVIEW. Call verify_change after implementing a feature, passing a description of what you intended to change.",
+          "protocolVersion": "2025-11-25",
+          "serverInfo": {
+            "name": "argus",
+            "version": ""
+          }
+        }
+      }
+    },
+    {
+      "type": "mcp",
+      "dir": "->",
+      "frame": {
+        "jsonrpc": "2.0",
+        "method": "notifications/initialized"
+      }
+    },
+    {
+      "type": "mcp",
+      "dir": "->",
+      "frame": {
+        "jsonrpc": "2.0",
+        "id": 2,
+        "method": "tools/list",
+        "params": {
+          "_meta": {}
+        }
+      }
+    },
+    {
+      "type": "mcp",
+      "dir": "<-",
+      "frame": {
+        "jsonrpc": "2.0",
+        "id": 2,
+        "result": {
+          "tools": [
+            {
+              "description": "Run the full suite and return verdicts per test (JSON).",
+              "inputSchema": {
+                "properties": {
+                  "label": {
+                    "default": "mcp run",
+                    "title": "Label",
+                    "type": "string"
+                  }
+                },
+                "type": "object",
+                "title": "run_testsArguments"
+              },
+              "name": "run_tests",
+              "outputSchema": {
+                "properties": {
+                  "result": {
+                    "title": "Result",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "result"
+                ],
+                "type": "object",
+                "title": "run_testsOutput"
+              }
+            },
+            {
+              "description": "Verify a change you just made. `description` is your intent (like a PR description); Argus uses it\n        as the oracle for 'intended change vs regression' and reports bugs with repro steps.",
+              "inputSchema": {
+                "properties": {
+                  "description": {
+                    "title": "Description",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "description"
+                ],
+                "type": "object",
+                "title": "verify_changeArguments"
+              },
+              "name": "verify_change",
+              "outputSchema": {
+                "properties": {
+                  "result": {
+                    "title": "Result",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "result"
+                ],
+                "type": "object",
+                "title": "verify_changeOutput"
+              }
+            },
+            {
+              "description": "For an app with no tests: explore it and generate a baselined regression suite.",
+              "inputSchema": {
+                "properties": {
+                  "max_tests": {
+                    "default": 6,
+                    "title": "Max Tests",
+                    "type": "integer"
+                  }
+                },
+                "type": "object",
+                "title": "explore_and_generateArguments"
+              },
+              "name": "explore_and_generate",
+              "outputSchema": {
+                "properties": {
+                  "result": {
+                    "title": "Result",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "result"
+                ],
+                "type": "object",
+                "title": "explore_and_generateOutput"
+              }
+            },
+            {
+              "description": "Verdicts of the most recent run.",
+              "inputSchema": {
+                "properties": {},
+                "type": "object",
+                "title": "last_reportArguments"
+              },
+              "name": "last_report",
+              "outputSchema": {
+                "properties": {
+                  "result": {
+                    "title": "Result",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "result"
+                ],
+                "type": "object",
+                "title": "last_reportOutput"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "log",
+      "stream": "stdout",
+      "line": "tool  run_tests: Run the full suite and return verdicts per test (JSON)."
+    },
+    {
+      "type": "log",
+      "stream": "stdout",
+      "line": "tool  verify_change: Verify a change you just made. `description` is your intent (like a PR description); Argus uses it"
+    },
+    {
+      "type": "log",
+      "stream": "stdout",
+      "line": "tool  explore_and_generate: For an app with no tests: explore it and generate a baselined regression suite."
+    },
+    {
+      "type": "log",
+      "stream": "stdout",
+      "line": "tool  last_report: Verdicts of the most recent run."
+    },
+    {
+      "type": "mcp",
+      "dir": "->",
+      "frame": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "method": "tools/call",
+        "params": {
+          "name": "last_report",
+          "arguments": {},
+          "_meta": {}
+        }
+      }
+    },
+    {
+      "type": "mcp",
+      "dir": "<-",
+      "frame": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "result": {
+          "content": [
+            {
+              "text": "{\n  \"run_id\": \"20260926-004302-7e3f\",\n  \"verdicts\": {\n    \"PASS\": 7\n  },\n  \"llm_calls\": 0,\n  \"healed_steps\": 0,\n  \"tests\": [\n    {\n      \"test\": \"Pilot signs in\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Plan and launch a survey mission\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Inspect a drone from the fleet table\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Pilot signs out\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Pilot updates display name\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Altitude above 120 m is rejected\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Low-battery drone cannot be assigned\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    }\n  ]\n}",
+              "type": "text"
+            }
+          ],
+          "isError": false,
+          "structuredContent": {
+            "result": "{\n  \"run_id\": \"20260926-004302-7e3f\",\n  \"verdicts\": {\n    \"PASS\": 7\n  },\n  \"llm_calls\": 0,\n  \"healed_steps\": 0,\n  \"tests\": [\n    {\n      \"test\": \"Pilot signs in\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Plan and launch a survey mission\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Inspect a drone from the fleet table\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Pilot signs out\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Pilot updates display name\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Altitude above 120 m is rejected\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Low-battery drone cannot be assigned\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    }\n  ]\n}"
+          }
+        }
+      }
+    },
+    {
+      "type": "log",
+      "stream": "stdout",
+      "line": "last_report -> {\n  \"run_id\": \"20260926-004302-7e3f\",\n  \"verdicts\": {\n    \"PASS\": 7\n  },\n  \"llm_calls\": 0,\n  \"healed_steps\": 0,\n  \"tests\": [\n    {\n      \"test\": \"Pilot signs in\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Plan and launch a survey mission\",\n      \"ve"
+    },
+    {
+      "type": "mcp",
+      "dir": "->",
+      "frame": {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "method": "tools/call",
+        "params": {
+          "name": "verify_change",
+          "arguments": {
+            "description": "Mission planner v2: parameters before drone selection; new required Pilot in command field"
+          },
+          "_meta": {}
+        }
+      }
+    },
+    {
+      "type": "mcp",
+      "dir": "<-",
+      "frame": {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "result": {
+          "content": [
+            {
+              "text": "{\n  \"run_id\": \"20260926-004341-a31c\",\n  \"verdicts\": {\n    \"PASS\": 4,\n    \"BUG\": 1,\n    \"NEEDS_REVIEW\": 2\n  },\n  \"llm_calls\": 5,\n  \"healed_steps\": 0,\n  \"tests\": [\n    {\n      \"test\": \"Pilot signs in\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Plan and launch a survey mission\",\n      \"verdict\": \"BUG\",\n      \"confidence\": 0.93,\n      \"why\": \"R4 violated: launched mission not listed (obs13) and UI blocks due to missing required Pilot field (obs12). No released changelog changes this behavior.\",\n      \"changelog_refs\": [],\n      \"bug_report\": \"## BUG: Plan and launch a survey mission\\n\\n**Verdict:** R4 violated: launched mission not listed (obs13) and UI blocks due to missing required Pilot field (obs12). No released changelog changes this behavior.\\n\\n**Business goal:** An operator plans a mission with an available drone and it appears in the Missions list as Scheduled\\n\\n**Reproduce:**\\n1. Open /missions/new\\n2. Name the mission = 'Survey a31c1'\\n3. Choose mission type Survey = 'Survey'\\n4. Choose the Pune Depot site = 'Pune Depot'\\n5. Continue from mission details\\n6. Continue with 'Continue'\\n7. Assign drone Falcon-1\\n8. Continue from drone selection\\n9. Set altitude to 80 m = '80'\\n10. Set speed to 8 m/s = '8'\\n11. Continue from flight parameters\\n12. Launch the mission\\n13. Open the Missions list\\n14. Open mission details to fill Pilot in command\\n\\n**Expected vs actual:**\\n- `effect_mismatch` POST /api/missions/validate returned 200 (baseline 422)\\n- `effect_mismatch` POST /api/missions/validate returned 422 (baseline 200)\\n- `goal_unreachable` blocked at 'Fill new required field 'Pilot in command'': Pilot in command field not present; no navigation element to reach it from this page; page /missions/:id alerts []\\n- `assertion_failed` The launched mission appears in the Missions list: expected text \\\"Survey a31c1\\\" not found on /missions/:id\\n\\n**Release notes check:** none of the release notes explain this behaviour.\\n\\n**Evidence:** screenshots/create-mission_12.jpg, screenshots/create-mission_13.jpg\"\n    },\n    {\n      \"test\": \"Inspect a drone from the fleet table\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Pilot signs out\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Pilot updates display name\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Altitude above 120 m is rejected\",\n      \"verdict\": \"NEEDS_REVIEW\",\n      \"confidence\": 0.78,\n      \"why\": \"Observed step reordering (obs2-obs8) conflicts with expected flow, but no changelog entry documents this functional change; outcome still passes R1.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Low-battery drone cannot be assigned\",\n      \"verdict\": \"NEEDS_REVIEW\",\n      \"confidence\": 0.4,\n      \"why\": \"Observed drone with 12% battery is correctly disabled per R2; no regression or documented change detected\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    }\n  ]\n}",
+              "type": "text"
+            }
+          ],
+          "isError": false,
+          "structuredContent": {
+            "result": "{\n  \"run_id\": \"20260926-004341-a31c\",\n  \"verdicts\": {\n    \"PASS\": 4,\n    \"BUG\": 1,\n    \"NEEDS_REVIEW\": 2\n  },\n  \"llm_calls\": 5,\n  \"healed_steps\": 0,\n  \"tests\": [\n    {\n      \"test\": \"Pilot signs in\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Plan and launch a survey mission\",\n      \"verdict\": \"BUG\",\n      \"confidence\": 0.93,\n      \"why\": \"R4 violated: launched mission not listed (obs13) and UI blocks due to missing required Pilot field (obs12). No released changelog changes this behavior.\",\n      \"changelog_refs\": [],\n      \"bug_report\": \"## BUG: Plan and launch a survey mission\\n\\n**Verdict:** R4 violated: launched mission not listed (obs13) and UI blocks due to missing required Pilot field (obs12). No released changelog changes this behavior.\\n\\n**Business goal:** An operator plans a mission with an available drone and it appears in the Missions list as Scheduled\\n\\n**Reproduce:**\\n1. Open /missions/new\\n2. Name the mission = 'Survey a31c1'\\n3. Choose mission type Survey = 'Survey'\\n4. Choose the Pune Depot site = 'Pune Depot'\\n5. Continue from mission details\\n6. Continue with 'Continue'\\n7. Assign drone Falcon-1\\n8. Continue from drone selection\\n9. Set altitude to 80 m = '80'\\n10. Set speed to 8 m/s = '8'\\n11. Continue from flight parameters\\n12. Launch the mission\\n13. Open the Missions list\\n14. Open mission details to fill Pilot in command\\n\\n**Expected vs actual:**\\n- `effect_mismatch` POST /api/missions/validate returned 200 (baseline 422)\\n- `effect_mismatch` POST /api/missions/validate returned 422 (baseline 200)\\n- `goal_unreachable` blocked at 'Fill new required field 'Pilot in command'': Pilot in command field not present; no navigation element to reach it from this page; page /missions/:id alerts []\\n- `assertion_failed` The launched mission appears in the Missions list: expected text \\\"Survey a31c1\\\" not found on /missions/:id\\n\\n**Release notes check:** none of the release notes explain this behaviour.\\n\\n**Evidence:** screenshots/create-mission_12.jpg, screenshots/create-mission_13.jpg\"\n    },\n    {\n      \"test\": \"Inspect a drone from the fleet table\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Pilot signs out\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Pilot updates display name\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Altitude above 120 m is rejected\",\n      \"verdict\": \"NEEDS_REVIEW\",\n      \"confidence\": 0.78,\n      \"why\": \"Observed step reordering (obs2-obs8) conflicts with expected flow, but no changelog entry documents this functional change; outcome still passes R1.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Low-battery drone cannot be assigned\",\n      \"verdict\": \"NEEDS_REVIEW\",\n      \"confidence\": 0.4,\n      \"why\": \"Observed drone with 12% battery is correctly disabled per R2; no regression or documented change detected\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    }\n  ]\n}"
+          }
+        }
+      }
+    },
+    {
+      "type": "log",
+      "stream": "stdout",
+      "line": "verify_change -> {\n  \"run_id\": \"20260926-004341-a31c\",\n  \"verdicts\": {\n    \"PASS\": 4,\n    \"BUG\": 1,\n    \"NEEDS_REVIEW\": 2\n  },\n  \"llm_calls\": 5,\n  \"healed_steps\": 0,\n  \"tests\": [\n    {\n      \"test\": \"Pilot signs in\",\n      \"verdict\": \"PASS\",\n      \"confidence\": 1.0,\n      \"why\": \"Replayed exactly; every step and oracle held.\",\n      \"changelog_refs\": [],\n      \"bug_report\": null\n    },\n    {\n      \"test\": \"Plan and launch a survey mission\",\n      \"verdict\": \"BUG\",\n      \"confidence\": 0.93,\n      \"why\": \"R4 violated: launched mission not listed (obs13) and UI blocks due to missing required Pilot field (obs12). No released changelog changes this behavior.\",\n      \"changelog_refs\": [],\n      \"bug_report\": \"## BUG: Plan and launch a survey mission\\n\\n**Verdict:** R4 violated: launched mission not listed (obs13) and UI blocks due to missing required Pilot field (obs12). No released changelog changes this behavior.\\n\\n**Business goal:** An operator plans a mission with an available drone and it appears in the Missions list as Scheduled\\n\\n**Reproduce:**\\n1. Open /missions/new\\n2. Name the mission = 'Survey a31c1'\\n3. Choose mission type Survey = 'Survey'\\n4. Choose the Pune Depot site = 'Pune Depot'\\n5."
+    }
+  ],
+  "home": "C:/Users/Acer/AppData/Local/Temp/argus-export-oi2c1k7q"
+}

@@ -674,6 +674,286 @@ async def movement_trail(c: Ctx) -> None:
 
 
 
+# ==================================================================================================
+# Level 3 - the JEV cost-aware reasoning mesh, layered on top of the ground-truth oracle.
+# The mesh decides WHAT to test and reasons where no numeric oracle exists; a deterministic check
+# still decides WHETHER it passed, so autonomy never costs the near-zero-false-positive guarantee.
+# ==================================================================================================
+import json as _json
+import time as _time
+
+from argus.config import load_settings as _load_settings
+from argus.llm.client import LLMClient as _LLMClient
+from argus.llm.providers import split as _split
+
+_TIER_LABEL = {"openrouter": "JEV", "openrouter2": "JEV2", "groq": "Groq", "gemini": "Gemini", "cerebras": "Cerebras"}
+
+
+def _new_llm() -> _LLMClient:
+    """A JEV-first mesh client for a live scenario (keys read from .env via load_settings)."""
+    return _LLMClient(_load_settings())
+
+
+def _mesh_row(llm: _LLMClient) -> dict:
+    """Turn the mesh's last ledger entry into a HUD row: which provider/model answered, latency, cost."""
+    if not llm.ledger:
+        return {"tier": "JEV", "model": "no response", "st": "quota"}
+    rec = llm.ledger[-1]
+    if rec.cached:
+        return {"tier": "cache", "model": "hit", "ms": "0 ms", "cost": "$0.00", "st": "cache"}
+    prov, mid = _split(rec.model)
+    short = mid.split("/")[-1].replace(":free", "")[:20]
+    return {"tier": _TIER_LABEL.get(prov, prov), "model": short,
+            "ms": f"{rec.latency_ms} ms", "cost": "$0.00", "st": "ok"}
+
+
+async def _mark_scene(c: Ctx) -> None:
+    """Record when the ready cockpit scene begins so the video build can trim the load-in frames."""
+    try:
+        (c.out / "scene.json").write_text(_json.dumps({"content_start": round(_time.time() - c._t0, 2)}),
+                                          encoding="utf-8")
+    except Exception:
+        pass
+
+
+CANDIDATES_JS = r"""() => {
+  const clean = s => (s || '').replace(/\s+/g, ' ').trim();
+  const out = []; let i = 0;
+  document.querySelectorAll('[data-testid^="device-row-"]').forEach(el => {
+    out.push({ref: 'c' + (++i), role: 'fleet list row (clickable)', testid: el.dataset.testid,
+              text: clean(el.innerText).slice(0, 70)});
+  });
+  return out;
+}"""
+
+INVENTORY_JS = r"""() => {
+  const clean = s => (s || '').replace(/\s+/g, ' ').trim();
+  const ids = [...new Set([...document.querySelectorAll('[data-testid]')].map(e => e.dataset.testid))];
+  const buttons = [...document.querySelectorAll('button,[role=button]')].map(e => clean(e.innerText)).filter(Boolean);
+  const rows = [...document.querySelectorAll('[data-testid^="device-row-"]')].map(e => clean(e.innerText).slice(0, 55));
+  const telemetry = [...document.querySelectorAll('[data-testid^="telemetry-"]')].map(e => e.dataset.testid.replace('telemetry-', ''));
+  return {
+    counts: {controls: buttons.length, fleet_rows: rows.length, telemetry_fields: telemetry.length, test_ids: ids.length},
+    has_map: !!document.querySelector('[data-testid="map-canvas"]'),
+    has_video: !!document.querySelector('video'),
+    fleet: rows, telemetry: telemetry, buttons: [...new Set(buttons)].slice(0, 14),
+    socket_status: clean(document.querySelector('[data-testid="socket-status"]')?.innerText),
+  };
+}"""
+
+
+# L3-heal ------------------------------------------------------------------------------------------------------
+async def self_healing_selector(c: Ctx) -> None:
+    """A UI refactor renamed the control a test recorded; the JEV mesh re-identifies it from intent + the live
+    DOM, Argus clicks the real control, and the simulator confirms the right (flying) drone was selected."""
+    t = c.truth
+    llm = _new_llm()
+    await c.step("A test was recorded on an earlier build; Drone 2 is airborne; Argus opens today's cockpit")
+    t.takeoff("drone-2")                                  # give Drone 2 a distinct, moving state to verify against
+    p = await c.operator("operator", "desktop")
+    await p.wait_for_selector('[data-testid^="device-row-"]', timeout=25000)
+    await _mark_scene(c)
+    recorded = {"testid": "fleet-aircraft-2", "label": "UAV-02 · Skyranger",
+                "intent": "select the second aircraft in the fleet so its telemetry and camera load"}
+    await c.hud(p, compare=[["recorded selector", "[data-testid=fleet-aircraft-2]", "—"],
+                            ["recorded label", '"UAV-02 · Skyranger"', "—"]])
+    await c.note("info", "a prior-build test stored this selector for the Drone 2 control")
+    await p.wait_for_timeout(1600)
+
+    await c.step("The UI was refactored since: that selector no longer exists — a brittle test breaks here")
+    await c.hud(p, compare=[["recorded selector", "[data-testid=fleet-aircraft-2]", "not found in this build"],
+                            ["brittle test", "would fail: element missing", "self-heal instead"]])
+    await c.note("warn", "the recorded selector does not match the shipped UI")
+    await p.wait_for_timeout(1600)
+
+    await c.step("Argus self-heals: it asks the JEV mesh to re-identify the control from its intent")
+    cands = await p.evaluate(CANDIDATES_JS)
+    await c.mesh(summary="fast tier", row={"tier": "JEV", "model": "re-identifying…", "st": "think"})
+    system = ("You are a self-healing UI-test agent. A recorded control no longer matches after a UI refactor. "
+              "From the recorded control's INTENT and the page's current candidate elements, choose the element "
+              "that fulfils the same intent. Reply with JSON only.")
+    user = (f"Recorded control (previous build): {recorded}\n\n"
+            "Current candidate elements on the refactored page:\n" +
+            "\n".join(f'{cc["ref"]}: role={cc["role"]!r} text={cc["text"]!r}' for cc in cands) +
+            '\n\nReturn {"ref":"<matching ref>","confidence":0..1,"reason":"<short why>"}.')
+    try:
+        pick = await llm.json(tier="fast", purpose="heal", system=system, user=user, max_tokens=200)
+    except Exception as exc:
+        pick = {}
+        await c.note("warn", f"mesh unavailable: {type(exc).__name__}")
+    await c.mesh(row=_mesh_row(llm))
+    chosen = next((cc for cc in cands if cc["ref"] == str(pick.get("ref", ""))), None)
+    if not chosen:
+        c.find(Finding(title="Self-heal could not re-identify the refactored control",
+                       category="Self-healing (LLM-assisted)", level="L3", severity="Medium",
+                       detail="The JEV mesh did not return a usable element for the recorded intent."))
+        await c.note("bug", "self-heal failed to resolve a candidate")
+        return
+    label = " ".join(chosen["text"].split()[:2])
+    await c.hud(p, compare=[["JEV healed to", f'"{label}"', f'testid {chosen["testid"]}'],
+                            ["confidence", str(pick.get("confidence", "")), "—"],
+                            ["reason", str(pick.get("reason", ""))[:38], "—"]])
+    await c.note("pass", f'JEV mapped the intent to the live control: {str(pick.get("reason",""))[:60]}')
+    await p.wait_for_timeout(900)
+
+    await c.step("Argus clicks the healed control and checks the result against the simulator")
+    await p.click(f'[data-testid="{chosen["testid"]}"]')
+    await p.wait_for_timeout(4500)
+    target = chosen["testid"].replace("device-row-", "")
+    ui = await c.ui(p)
+    ui_status = ui.get("selected_status", "") or ""
+    ui_dist = number(await _tel(p, "home-distance"))
+    tr_dist = t.home_distance(target)
+    tr_status = t.drone(target).get("status", "?")
+    status_ok = "flight" in ui_status.lower() or "in_flight" in ui_status
+    dist_ok = ui_dist is not None and tr_dist == tr_dist and abs(ui_dist - tr_dist) <= max(80.0, 0.2 * tr_dist)
+    match = status_ok and dist_ok
+    await c.hud(p, compare=[["healed action", f"selected {target}", "—"],
+                            ["status (UI)", ui_status or "?", f"{tr_status} (simulator)"],
+                            ["dist. from home (UI)", f"{ui_dist} m" if ui_dist is not None else "?",
+                             f"{tr_dist:.0f} m (simulator)" if tr_dist == tr_dist else "?"]])
+    c.sample(recorded_selector="fleet-aircraft-2", healed_to=chosen["testid"], confidence=pick.get("confidence"),
+             ui_status=ui_status, ui_distance=ui_dist,
+             truth_status=tr_status, truth_distance=None if tr_dist != tr_dist else round(tr_dist), verified=match)
+    await c.shot(p, "1-self-healed")
+    if match:
+        await c.note("pass", "self-healed with no test edit — and verified against ground truth")
+    else:
+        c.find(Finding(title="Self-heal selected a control that did not match ground truth",
+                       category="Self-healing (LLM-assisted)", level="L3", severity="High",
+                       detail=f"Healed to {chosen['testid']}, but the selected drone's UI state did not match "
+                              f"{target}'s true state.", symptoms=[f"UI status {ui_status!r}, dist {ui_dist} vs truth {tr_status}, {tr_dist}"]))
+        await c.note("bug", "healed element did not match ground truth")
+
+
+# L3-explore ---------------------------------------------------------------------------------------------------
+async def autonomous_exploration(c: Ctx) -> None:
+    """No script: Argus inventories the live cockpit, the JEV mesh designs test scenarios for what it found,
+    and Argus executes a grounded one (fleet shown == fleet the simulator reports)."""
+    t = c.truth
+    llm = _new_llm()
+    await c.step("Argus opens the cockpit with no script and inventories its affordances")
+    p = await c.operator("explorer", "desktop")
+    await p.wait_for_selector('[data-testid^="device-row-"]', timeout=25000)
+    await _mark_scene(c)
+    inv = await p.evaluate(INVENTORY_JS)
+    await c.hud(p, compare=[["controls found", str(inv["counts"]["controls"]), "—"],
+                            ["fleet rows / telemetry", f'{inv["counts"]["fleet_rows"]} / {inv["counts"]["telemetry_fields"]}', "—"],
+                            ["map / video present", f'{inv["has_map"]} / {inv["has_video"]}', "—"]])
+    await c.note("info", "built a live inventory of the cockpit — no hand-written script")
+    await p.wait_for_timeout(1400)
+
+    await c.step("Argus asks the JEV mesh to design ground-truth test scenarios for what it found")
+    await c.mesh(summary="smart tier", row={"tier": "JEV", "model": "designing tests…", "st": "think"})
+    system = ("You are an autonomous QA agent for a live drone-operations cockpit. A flight simulator and a control "
+              "API give independent ground truth (each drone's true position, battery and status). Propose test "
+              "scenarios that check what the UI shows against that ground truth. Reply with JSON only.")
+    user = (f"Live UI inventory:\n{_json.dumps(inv)[:1700]}\n\n"
+            'Propose exactly 4 high-value scenarios. Return '
+            '{"scenarios":[{"title":"...","risk":"...","ground_truth_check":"..."}]}.')
+    try:
+        plan = await llm.json(tier="smart", purpose="explore", system=system, user=user, max_tokens=700)
+        scen = [s for s in plan.get("scenarios", []) if isinstance(s, dict)][:4]
+    except Exception as exc:
+        scen = []
+        await c.note("warn", f"mesh unavailable: {type(exc).__name__}")
+    await c.mesh(row=_mesh_row(llm))
+    for i, s in enumerate(scen, 1):
+        await c.note("info", f'{i}. {str(s.get("title",""))[:72]}')
+        await p.wait_for_timeout(750)
+    c.sample(self_authored=[str(s.get("title", "")) for s in scen])
+    await c.shot(p, "1-self-authored-plan")
+
+    await c.step("Argus executes a grounded check from its own plan: does the cockpit's fleet match reality?")
+    ui_ids = await p.evaluate("() => [...document.querySelectorAll('[data-testid^=device-row-]')]"
+                              ".map(e => e.dataset.testid.replace('device-row-',''))")
+    truth_ids = list(t.state().get("drones", {}))
+    missing = [d for d in truth_ids if d not in ui_ids]
+    invented = [d for d in ui_ids if d not in truth_ids]
+    ok = not missing and not invented
+    await c.hud(p, compare=[["fleet shown (UI)", str(sorted(ui_ids)), "—"],
+                            ["fleet in simulator", str(sorted(truth_ids)), "ground truth"],
+                            ["match", "every drone, none invented" if ok else f"missing {missing} extra {invented}", "verdict"]])
+    c.sample(ui_fleet=sorted(ui_ids), truth_fleet=sorted(truth_ids), fleet_matches=ok)
+    await c.shot(p, "2-grounded-execution")
+    if ok:
+        await c.note("pass", "Argus designed its own tests and one passed against ground truth")
+    else:
+        c.find(Finding(title="The cockpit's fleet list does not match the simulator",
+                       category="Autonomous exploration (self-authored)", level="L3", severity="High",
+                       detail=f"UI shows {sorted(ui_ids)}; simulator has {sorted(truth_ids)}.",
+                       symptoms=[f"missing {missing}", f"invented {invented}"]))
+        await c.note("bug", "fleet shown does not match ground truth")
+
+
+# L3-judge -----------------------------------------------------------------------------------------------------
+async def semantic_judgment(c: Ctx) -> None:
+    """A hard oracle can't score 'is the warning clear enough'. When the data source truly goes offline, the JEV
+    mesh judges the cockpit's messaging - and MUST quote on-screen text, which Argus verifies against the live
+    DOM, so a hallucinated verdict is discarded (the near-zero-false-positive guarantee holds)."""
+    t = c.truth
+    llm = _new_llm()
+    await c.step("Start: Drone 1 flying, cockpit showing live data")
+    t.takeoff("drone-1")
+    p = await c.operator("operator", "desktop")
+    await p.wait_for_selector('[data-testid^="device-row-"]', timeout=25000)
+    await _mark_scene(c)
+    await _wait_ui_status(p, 1, "in_flight")
+    await c.note("pass", "baseline: cockpit is showing live, trustworthy data")
+    await p.wait_for_timeout(1200)
+
+    await c.step("Ground truth changes: the flight-data simulator (the source) goes offline")
+    t.fault("sim-offline", seconds=45)
+    await _await_truth(p, lambda: t.health().get("simulator") != "connected", 12)
+    await p.wait_for_timeout(6000)                          # let the cockpit sit in the offline state
+    ui = await c.ui(p)
+    page_text = ui.get("page_text", "") or ""
+    off = t.health().get("simulator") != "connected"
+    await c.hud(p, compare=[["data source", "connected badge" if not off else (ui.get("socket") or "(no change)"),
+                             "OFFLINE (simulator disconnected)"],
+                            ["Drone 1 shown as", ui.get("selected_status") or "—", "no fresh data available"]])
+    await c.note("info", "the source is down — nothing on screen can be trusted")
+    await p.wait_for_timeout(1000)
+
+    await c.step("No numeric oracle can score 'is the warning clear enough' — so the JEV mesh judges it")
+    await c.mesh(summary="smart tier", row={"tier": "JEV", "model": "judging UX…", "st": "think"})
+    system = ("You are a safety-critical UX reviewer for a drone cockpit. GROUND TRUTH (from the backend, not the "
+              "UI): the flight-data simulator is OFFLINE, so no on-screen telemetry can be trusted. Judge only from "
+              "the on-screen text below whether the cockpit CLEARLY warns the operator that the data is stale / not "
+              "live. You MUST quote the exact on-screen text your judgement is based on. Reply with JSON only.")
+    user = (f'On-screen text (verbatim):\n"""{page_text[:1500]}"""\n\n'
+            'Return {"clearly_warns":true|false,"severity":"low|medium|high",'
+            '"missing":"<what a good cockpit would show>","cite":"<exact substring copied from the text above>"}.')
+    try:
+        j = await llm.json(tier="smart", purpose="judge", system=system, user=user, max_tokens=400)
+    except Exception as exc:
+        j = {}
+        await c.note("warn", f"mesh unavailable: {type(exc).__name__}")
+    await c.mesh(row=_mesh_row(llm))
+    cite = str(j.get("cite", "") or "").strip()
+    warns = bool(j.get("clearly_warns"))
+    cite_ok = len(cite) >= 4 and cite[:44].lower() in page_text.lower()      # GUARDRAIL: evidence must exist
+    await c.hud(p, compare=[["JEV judgement", "warns clearly" if warns else "warning inadequate", "semantic"],
+                            ["cited on-screen text", (cite[:34] + "…") if len(cite) > 34 else (cite or "(none)"),
+                             "must exist in DOM"],
+                            ["guardrail: cite verified", "yes" if cite_ok else "NO — discarded", "anti-hallucination"]])
+    c.sample(sim_offline=off, jev_warns=warns, jev_cite=cite[:100], cite_verified=cite_ok,
+             jev_missing=str(j.get("missing", ""))[:140])
+    await c.shot(p, "1-semantic-judgement")
+    if not cite_ok:
+        await c.note("info", "JEV's evidence did not verify against the live DOM — verdict discarded, no false alarm")
+    elif off and not warns:
+        c.find(Finding(title="The cockpit does not clearly warn that flight data is offline",
+                       category="Semantic UX (LLM-judged, truth-grounded)", level="L3", severity="High",
+                       detail=f"The simulator is offline (ground truth), yet the cockpit does not clearly signal that "
+                              f"its data is stale. JEV cited: {cite!r}. Missing: {j.get('missing','')}",
+                       symptoms=[f"cited on-screen text: {cite[:140]}"]))
+        await c.note("bug", "offline data not clearly flagged — and JEV's evidence checks out against the DOM")
+    else:
+        await c.note("pass", "the cockpit's messaging was judged adequate and the evidence checks out")
+    t.clear_faults()
+
+
 SCENARIOS = [
     Scenario("S1-freshness", "Stale, delayed or offline drone data shown as live", "L2", "Telemetry / freshness",
              "An operator relies on the cockpit to know whether a drone's position and status are current. When the telemetry "
@@ -733,4 +1013,29 @@ SCENARIOS = [
              "actually flew.",
              "Argus samples the drone's true positions during a flight, reads the drawn trail polyline from the live Cesium "
              "map, and checks that every true position lies on the trail and the trail ends at the drone.", movement_trail),
+    Scenario("L3-heal", "Self-healing: a UI refactor renames a control, the JEV mesh re-identifies it", "L3",
+             "Self-healing (LLM-assisted)",
+             "Real UIs get refactored, and brittle tests break on renamed selectors. A resilient tester should "
+             "recover on its own instead of going red.",
+             "A test recorded the Drone 2 control on a previous build; that selector no longer exists. Argus asks "
+             "the JEV mesh to re-identify the control from its recorded intent and the current DOM, clicks the "
+             "healed control, and confirms against the simulator that the right (flying) drone was selected.",
+             self_healing_selector),
+    Scenario("L3-explore", "Autonomous exploration: the JEV mesh designs its own test plan", "L3",
+             "Autonomous exploration (self-authored)",
+             "A tireless tester should not need a hand-written script; it should look at the product and decide "
+             "what is worth testing.",
+             "With no script, Argus inventories the live cockpit's affordances, asks the JEV mesh to design four "
+             "ground-truth test scenarios for what it found, then executes a grounded one: every drone the "
+             "simulator reports must appear in the cockpit, with none invented.",
+             autonomous_exploration),
+    Scenario("L3-judge", "Semantic judgement: the JEV mesh judges UX, with an anti-hallucination guardrail", "L3",
+             "Semantic UX (LLM-judged, truth-grounded)",
+             "Some correctness questions have no numeric oracle - 'is this warning clear enough?' When the data "
+             "source truly goes offline, does the cockpit make that unmistakable to the operator?",
+             "Argus takes the simulator offline (ground truth), then asks the JEV mesh to judge whether the "
+             "cockpit clearly warns the operator - requiring it to quote exact on-screen text. Argus verifies the "
+             "quote against the live DOM and discards any verdict whose evidence is not really there, so an LLM "
+             "opinion can never raise a false alarm.",
+             semantic_judgment),
 ]

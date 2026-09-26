@@ -1,0 +1,35 @@
+{
+  "id": "S4-phone-map-toggle",
+  "title": "Video tile covers the map's 2D/3D switch on a phone",
+  "level": "L1",
+  "category": "Responsive UI / Visual",
+  "description": "An operator on a phone switches the map to 2D.",
+  "approach": "Argus finds the 2D button, checks what element is actually on top at its centre, taps it with a real touch and verifies whether the map mode changed.",
+  "verdict": "BUG",
+  "findings": [
+    {
+      "title": "On a phone the video tile covers the 2D/3D map switch, so tapping 2D does nothing",
+      "category": "Responsive UI / Visual",
+      "level": "L1",
+      "severity": "Medium",
+      "detail": "The 2D button's centre is covered by video-player; a real tap on it did not change the map mode.",
+      "symptoms": [
+        "2D button rect [151, 802, 44, 29] covered by video-player"
+      ],
+      "evidence": {}
+    }
+  ],
+  "steps": [
+    "[  0.6s] Start: operator on a phone wants to switch the map to 2D",
+    "[  6.9s] Tap the 2D button where it is drawn"
+  ],
+  "samples": [],
+  "videos": [
+    "video.mp4"
+  ],
+  "shots": [
+    "shots/1-toggle-covered.png"
+  ],
+  "started": "2026-09-26 13:40:51",
+  "duration_s": 11.4
+}

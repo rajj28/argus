@@ -1,0 +1,71 @@
+# argus run --build 1.1 against http://127.0.0.1:8000
+# recorded 2026-09-25T19:13:34+00:00 by scripts/export_site_data.py
+# home C:\Users\Acer\AppData\Local\Temp\argus-export-oi2c1k7q (seeded from .argus/tests + demo_app/context)
+# exit code 0, run id 20260926-004302-7e3f
+
+$ python -m demo_app.deploy 1.1 http://127.0.0.1:8000
+SkyOps is now v1.1
+LLM cap for this run: 6 call(s)
+$ C:\Users\Acer\tireless hackathon\.venv\Scripts\python.exe -m argus run --build 1.1 --label export: recorded transcript --home C:\Users\Acer\AppData\Local\Temp\argus-export-oi2c1k7q
+──────────────────── Argus run export: recorded transcript ────────────────────
+PASS             Pilot signs in                             {'replay': 3}
+llm=0  3.1s
+PASS             Plan and launch a survey mission           {'replay': 11}
+llm=0  9.3s
+PASS             Inspect a drone from the fleet table       {'replay': 1}
+llm=0  1.7s
+PASS             Pilot signs out                            {'replay': 1}
+llm=0  1.7s
+PASS             Pilot updates display name                 {'replay': 2}
+llm=0  2.4s
+PASS             Altitude above 120 m is rejected           {'replay': 9}
+llm=0  7.7s
+PASS             Low-battery drone cannot be assigned       {'replay': 4}
+llm=0  3.9s
+ tests               7                   verdicts           PASS:7
+ steps replayed      31/31               self-healed        0
+ (T0)
+ LLM calls           0 (+0 cached)       tokens             0
+ cost                $0.0000 (list       tokens avoided vs  18,140 (100%)
+                     $0.0000)            LLM-per-step
+ duration            29.7s               run                20260926-004302-7…
+[step] login s1 passed tier=0 :: Enter the pilot email
+[step] login s2 passed tier=0 :: Enter the password
+[step] login s3 passed tier=0 :: Submit the sign-in form
+[verdict] login PASS :: Replayed exactly; every step and oracle held.
+[step] create-mission s1 passed tier=0 :: Name the mission
+[step] create-mission s2 passed tier=0 :: Choose mission type Survey
+[step] create-mission s3 passed tier=0 :: Choose the Pune Depot site
+[step] create-mission s4 passed tier=0 :: Continue from mission details
+[step] create-mission s5 passed tier=0 :: Assign drone Falcon-1
+[step] create-mission s6 passed tier=0 :: Continue from drone selection
+[step] create-mission s7 passed tier=0 :: Set altitude to 80 m
+[step] create-mission s8 passed tier=0 :: Set speed to 8 m/s
+[step] create-mission s9 passed tier=0 :: Continue from flight parameters
+[step] create-mission s10 passed tier=0 :: Launch the mission
+[step] create-mission s11 passed tier=0 :: Open the Missions list
+[verdict] create-mission PASS :: Replayed exactly; every step and oracle held.
+[step] drone-detail s1 passed tier=0 :: Open Kite-5 details
+[verdict] drone-detail PASS :: Replayed exactly; every step and oracle held.
+[step] logout s1 passed tier=0 :: Sign out
+[verdict] logout PASS :: Replayed exactly; every step and oracle held.
+[step] save-settings s1 passed tier=0 :: Change the display name
+[step] save-settings s2 passed tier=0 :: Save the settings
+[verdict] save-settings PASS :: Replayed exactly; every step and oracle held.
+[step] altitude-limit s1 passed tier=0 :: Name the mission
+[step] altitude-limit s2 passed tier=0 :: Choose mission type Inspection
+[step] altitude-limit s3 passed tier=0 :: Choose the Mumbai Port site
+[step] altitude-limit s4 passed tier=0 :: Continue from mission details
+[step] altitude-limit s5 passed tier=0 :: Assign drone Falcon-2
+[step] altitude-limit s6 passed tier=0 :: Continue from drone selection
+[step] altitude-limit s7 passed tier=0 :: Enter an illegal altitude of 500 m
+[step] altitude-limit s8 passed tier=0 :: Set speed to 8 m/s
+[step] altitude-limit s9 passed tier=0 :: Try to continue from flight parameters
+[verdict] altitude-limit PASS :: Replayed exactly; every step and oracle held.
+[step] low-battery-drone s1 passed tier=0 :: Name the mission
+[step] low-battery-drone s2 passed tier=0 :: Choose mission type Patrol
+[step] low-battery-drone s3 passed tier=0 :: Choose the Pune Depot site
+[step] low-battery-drone s4 passed tier=0 :: Continue from mission details
+[verdict] low-battery-drone PASS :: Replayed exactly; every step and oracle held.
+[meters] {"tests": 7, "passed": 7, "failed": 0, "healed_steps": 0, "replayed_steps": 31, "llm_calls": 0, "llm_calls_cached": 0, "tokens_in": 0, "tokens_out": 0, "cost_usd": 0.0, "list_cost_usd": 0.0, "naive_tokens_estimate": 18140, "verdicts": {"PASS": 7}, "tiers": {"0": 31}, "duration_ms": 29652}
+run 20260926-004302-7e3f: 7/7 passed, 0 LLM calls, $0.0000

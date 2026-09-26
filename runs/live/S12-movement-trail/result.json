@@ -1,0 +1,30 @@
+{
+  "id": "S12-movement-trail",
+  "title": "The drone movement trail matches the real flight path",
+  "level": "L2",
+  "category": "Map & geospatial (bonus: movement trails)",
+  "description": "The cockpit draws each drone's movement trail. The trail is only useful if it records where the drone actually flew.",
+  "approach": "Argus samples the drone's true positions during a flight, reads the drawn trail polyline from the live Cesium map, and checks that every true position lies on the trail and the trail ends at the drone.",
+  "verdict": "PASS",
+  "findings": [],
+  "steps": [
+    "[  0.6s] Start: Drone 1 flies; the map draws its movement trail (a bonus capability)"
+  ],
+  "samples": [
+    {
+      "trail_points": 49,
+      "truth_samples": 14,
+      "worst_deviation_m": 0,
+      "endpoint_gap_m": 10,
+      "t": 25.5
+    }
+  ],
+  "videos": [
+    "video.mp4"
+  ],
+  "shots": [
+    "shots/1-trail.png"
+  ],
+  "started": "2026-09-26 16:31:13",
+  "duration_s": 28.9
+}

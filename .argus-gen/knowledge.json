@@ -1,0 +1,119 @@
+{
+  "stability": {
+    "class": {
+      "same": 38,
+      "changed": 0
+    },
+    "context": {
+      "same": 35,
+      "changed": 3
+    },
+    "testid": {
+      "same": 38,
+      "changed": 0
+    },
+    "href": {
+      "same": 5,
+      "changed": 33
+    },
+    "neighbor_text": {
+      "same": 24,
+      "changed": 14
+    },
+    "xpath": {
+      "same": 2,
+      "changed": 36
+    },
+    "placeholder": {
+      "same": 38,
+      "changed": 0
+    },
+    "alt": {
+      "same": 38,
+      "changed": 0
+    },
+    "tag": {
+      "same": 5,
+      "changed": 33
+    },
+    "id": {
+      "same": 33,
+      "changed": 5
+    },
+    "type": {
+      "same": 5,
+      "changed": 33
+    },
+    "name": {
+      "same": 2,
+      "changed": 36
+    },
+    "css": {
+      "same": 0,
+      "changed": 38
+    },
+    "text": {
+      "same": 2,
+      "changed": 36
+    },
+    "name_attr": {
+      "same": 38,
+      "changed": 0
+    },
+    "role": {
+      "same": 38,
+      "changed": 0
+    },
+    "title": {
+      "same": 38,
+      "changed": 0
+    },
+    "label": {
+      "same": 38,
+      "changed": 0
+    },
+    "position": {
+      "same": 5,
+      "changed": 33
+    },
+    "size": {
+      "same": 8,
+      "changed": 30
+    }
+  },
+  "decisions": {
+    "d0ec2ec4788eb099": {
+      "category": "INTENDED_CHANGE",
+      "confidence": 0.85,
+      "rationale": "2 flow change(s), each naming fields/screens that the release notes describe; business oracles still hold.",
+      "evidence_refs": [],
+      "changelog_refs": [
+        "New required field \"Pilot in command\" on Mission details step (DGCA compliance requirement)."
+      ],
+      "decided_by": "rules",
+      "action": "test_updated"
+    },
+    "1b256d04ced0a5ed": {
+      "category": "INTENDED_CHANGE",
+      "confidence": 0.85,
+      "rationale": "2 flow change(s), each naming fields/screens that the release notes describe; business oracles still hold.",
+      "evidence_refs": [],
+      "changelog_refs": [
+        "New required field \"Pilot in command\" on Mission details step (DGCA compliance requirement)."
+      ],
+      "decided_by": "rules",
+      "action": "test_updated"
+    },
+    "d3aaba19629dc11f": {
+      "category": "INTENDED_CHANGE",
+      "confidence": 0.85,
+      "rationale": "2 flow change(s), each naming fields/screens that the release notes describe; business oracles still hold.",
+      "evidence_refs": [],
+      "changelog_refs": [
+        "New required field \"Pilot in command\" on Mission details step (DGCA compliance requirement)."
+      ],
+      "decided_by": "rules",
+      "action": "test_updated"
+    }
+  }
+}

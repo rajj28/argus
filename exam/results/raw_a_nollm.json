@@ -3,7 +3,7 @@
   "title": "Mode A - human-intent suite (LLM off)",
   "llm_on": false,
   "home": ".argus-exam",
-  "generated_at": "2026-09-25T16:50:00+00:00",
+  "generated_at": "2026-09-25T19:11:03+00:00",
   "intents": [
     "login",
     "book-consultation",
@@ -53,22 +53,22 @@
       "goals": "Cancel an appointment; verify confirmation dialog appears before removal and row is removed after confirming (B6)"
     },
     {
-      "id": "reschedule-appointment",
-      "steps": 11,
-      "oracles": 2,
-      "goals": "Reschedule an existing confirmed appointment to a different future time and verify the new time is retained"
-    },
-    {
       "id": "doctor-list-loads",
       "steps": 7,
       "oracles": 2,
       "goals": "Navigate to the doctor directory after login, observe the loading skeleton state, wait, and verify all eight doctors are shown"
+    },
+    {
+      "id": "toggle-sms-reminders",
+      "steps": 8,
+      "oracles": 1,
+      "goals": "Change the SMS reminders custom toggle switch and verify the preference is saved via the API"
     }
   ],
   "author_failures": [
     {
-      "id": "toggle-sms-reminders",
-      "error": "Error: Page.evaluate: TypeError: Cannot read properties of undefined (reading 'toLowerCase')\n    at getCSSPath (eval at evaluate (:311:30), <anonymous>:278:32)\n    at eval (eval at evaluate (:311:30), <anonymous>:502:17)\n    at UtilityScript.evaluate (<anonymous>:318:18)\n    at UtilityScript.<anonymous> (<"
+      "id": "reschedule-appointment",
+      "error": "steps/oracles could not be resolved or baselined"
     }
   ],
   "runs": [
@@ -76,15 +76,16 @@
       "label": "r1-baseline",
       "release": "r1",
       "update": true,
-      "started_at": "2026-09-25T16:34:42+00:00",
-      "run_id": "20260925-220442-5185",
-      "wall_s": 96.1,
+      "started_at": "2026-09-25T18:58:46+00:00",
+      "run_id": "20260926-002846-dbf3",
+      "wall_s": 100.4,
       "tests_run": 8,
-      "healed_steps": 1,
-      "replayed_steps": 79,
+      "healed_steps": 2,
+      "replayed_steps": 77,
       "tiers": {
-        "0": 79,
-        "1": 1
+        "0": 77,
+        "1": 2,
+        "2": 1
       },
       "llm_calls": 0,
       "llm_calls_cached": 0,
@@ -92,8 +93,8 @@
       "tokens_out": 0,
       "cost_usd": 0.0,
       "verdicts": {
-        "PASS": 6,
-        "COSMETIC_DRIFT": 1,
+        "PASS": 5,
+        "COSMETIC_DRIFT": 2,
         "NEEDS_REVIEW": 1
       },
       "tests": [
@@ -117,29 +118,39 @@
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 5399
+          "duration_ms": 5409
         },
         {
           "test_id": "book-consultation",
           "name": "Book a consultation for a new patient",
           "status": "passed",
-          "verdict": "PASS",
+          "verdict": "COSMETIC_DRIFT",
           "decided_by": "rules",
-          "action": "none",
+          "action": "test_healed",
           "confidence": 1.0,
-          "rationale": "Replayed exactly; every step and oracle held.",
+          "rationale": "1 element(s) moved/renamed and were re-identified (tiers [1]); all expectations and business oracles still hold.",
           "changelog_refs": [],
           "observations": [],
-          "step_observations": [],
+          "step_observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s14",
+              "detail": "radio \"Today · 12:30 AM\" (in: Choose a time) -> [e11] radio \"Today · 12:30 AM\" (in: Choose a time) via similarity (score 1.00, margin 0.05)",
+              "tier": 1
+            }
+          ],
           "tiers": {
-            "0": 18
+            "0": 17,
+            "1": 1
           },
-          "healed_steps": 0,
-          "failed_steps": [],
+          "healed_steps": 1,
+          "failed_steps": [
+            "Select the first available future appointment slot"
+          ],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 19420
+          "duration_ms": 19088
         },
         {
           "test_id": "cancel-appointment",
@@ -171,7 +182,7 @@
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 12335
+          "duration_ms": 12238
         },
         {
           "test_id": "doctor-list-loads",
@@ -193,7 +204,7 @@
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 10675
+          "duration_ms": 10685
         },
         {
           "test_id": "invoice-total-correct",
@@ -215,58 +226,29 @@
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 7256
+          "duration_ms": 7123
         },
         {
-          "test_id": "reschedule-appointment",
-          "name": "Reschedule an existing appointment to a different time",
-          "status": "failed",
-          "verdict": "NEEDS_REVIEW",
+          "test_id": "toggle-sms-reminders",
+          "name": "Toggle SMS reminders preference and verify it is saved",
+          "status": "passed",
+          "verdict": "PASS",
           "decided_by": "rules",
-          "action": "review_requested",
-          "confidence": 0.5,
-          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "action": "none",
+          "confidence": 1.0,
+          "rationale": "Replayed exactly; every step and oracle held.",
           "changelog_refs": [],
-          "observations": [
-            {
-              "kind": "goal_unreachable",
-              "step_id": "s7",
-              "detail": "cannot find 'Click Reschedule on the first appointment' (best candidate 0.96 below thresholds); page / headings ['Appointments', 'Upcoming schedule'] alerts []",
-              "tier": null,
-              "evidence": {}
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Reschedule API call succeeded: PUT /api/appointments/:id/reschedule [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200, GET /api/appointments 200)",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 0,
-                "rule_ref": null
-              }
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "The app confirms the appointment kept the new time: expected text \"Appointment rescheduled\" not found on /",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 1,
-                "rule_ref": null,
-                "screenshot": "screenshots/reschedule-appointment_final.jpg"
-              }
-            }
-          ],
+          "observations": [],
           "step_observations": [],
           "tiers": {
-            "0": 6
+            "0": 8
           },
           "healed_steps": 0,
           "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 10371
+          "duration_ms": 9590
         },
         {
           "test_id": "age-validation",
@@ -288,29 +270,78 @@
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 13689
+          "duration_ms": 13207
         },
         {
           "test_id": "emergency-fee-zero",
           "name": "Emergency visit shows zero doctor fee and zero total",
-          "status": "passed",
-          "verdict": "PASS",
+          "status": "failed",
+          "verdict": "NEEDS_REVIEW",
           "decided_by": "rules",
-          "action": "none",
-          "confidence": 1.0,
-          "rationale": "Replayed exactly; every step and oracle held.",
+          "action": "review_requested",
+          "confidence": 0.5,
+          "rationale": "No LLM available to judge a behavioural change; needs a human.",
           "changelog_refs": [],
-          "observations": [],
-          "step_observations": [],
+          "observations": [
+            {
+              "kind": "goal_unreachable",
+              "step_id": "s14",
+              "detail": "cannot find 'Select the first available slot' (best candidate 0.98 below thresholds); page / headings ['Book an appointment', 'Choose a time'] alerts ['Choose an appointment time']",
+              "tier": null,
+              "evidence": {}
+            },
+            {
+              "kind": "assertion_failed",
+              "step_id": null,
+              "detail": "Visit type Emergency is shown in the confirmation: expected text \"Emergency\" not found on /",
+              "tier": null,
+              "evidence": {
+                "oracle_index": 0,
+                "rule_ref": "B2"
+              }
+            },
+            {
+              "kind": "assertion_failed",
+              "step_id": null,
+              "detail": "Doctor fee is zero for an emergency visit: expected text \"doctor fee ₹0.00\" not found on /",
+              "tier": null,
+              "evidence": {
+                "oracle_index": 1,
+                "rule_ref": "B2"
+              }
+            },
+            {
+              "kind": "assertion_failed",
+              "step_id": null,
+              "detail": "Total is zero for an emergency visit: expected text \"total ₹0.00\" not found on /",
+              "tier": null,
+              "evidence": {
+                "oracle_index": 2,
+                "rule_ref": "B2",
+                "screenshot": "screenshots/emergency-fee-zero_final.jpg"
+              }
+            }
+          ],
+          "step_observations": [
+            {
+              "kind": "step_reordered",
+              "step_id": "s15",
+              "detail": "'Continue to the confirm step to review fees' executed out of order (flow reordered); matched [e17] button \"Next\" (in: Choose a time) score 1.00",
+              "tier": 2
+            }
+          ],
           "tiers": {
-            "0": 16
+            "0": 13,
+            "2": 1
           },
-          "healed_steps": 0,
-          "failed_steps": [],
+          "healed_steps": 1,
+          "failed_steps": [
+            "Continue to the confirm step to review fees"
+          ],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 16253
+          "duration_ms": 22450
         }
       ]
     },
@@ -318,15 +349,15 @@
       "label": "r2-run",
       "release": "r2",
       "update": true,
-      "started_at": "2026-09-25T16:36:18+00:00",
-      "run_id": "20260925-220618-d95c",
-      "wall_s": 96.1,
+      "started_at": "2026-09-25T19:00:26+00:00",
+      "run_id": "20260926-003026-ab06",
+      "wall_s": 96.7,
       "tests_run": 8,
-      "healed_steps": 6,
-      "replayed_steps": 74,
+      "healed_steps": 4,
+      "replayed_steps": 70,
       "tiers": {
-        "0": 74,
-        "1": 6
+        "0": 70,
+        "1": 4
       },
       "llm_calls": 0,
       "llm_calls_cached": 0,
@@ -334,9 +365,9 @@
       "tokens_out": 0,
       "cost_usd": 0.0,
       "verdicts": {
-        "PASS": 3,
-        "COSMETIC_DRIFT": 4,
-        "NEEDS_REVIEW": 1
+        "PASS": 4,
+        "NEEDS_REVIEW": 2,
+        "COSMETIC_DRIFT": 2
       },
       "tests": [
         {
@@ -359,46 +390,78 @@
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 5448
+          "duration_ms": 5259
         },
         {
           "test_id": "book-consultation",
           "name": "Book a consultation for a new patient",
-          "status": "passed",
-          "verdict": "COSMETIC_DRIFT",
+          "status": "failed",
+          "verdict": "NEEDS_REVIEW",
           "decided_by": "rules",
-          "action": "test_healed",
-          "confidence": 0.83,
-          "rationale": "2 element(s) moved/renamed and were re-identified (tiers [1]); all expectations and business oracles still hold.",
+          "action": "review_requested",
+          "confidence": 0.5,
+          "rationale": "No LLM available to judge a behavioural change; needs a human.",
           "changelog_refs": [],
-          "observations": [],
+          "observations": [
+            {
+              "kind": "goal_unreachable",
+              "step_id": "s14",
+              "detail": "cannot find 'Select the first available future appointment slot' (best candidate 0.98 below thresholds); page / headings ['Book an appointment', 'Choose a time'] alerts []",
+              "tier": null,
+              "evidence": {}
+            },
+            {
+              "kind": "assertion_failed",
+              "step_id": null,
+              "detail": "Appointment is created via the API: POST /api/appointments [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200, GET /api/doctors 200, GET /api/slots 200)",
+              "tier": null,
+              "evidence": {
+                "oracle_index": 0,
+                "rule_ref": "B4"
+              }
+            },
+            {
+              "kind": "assertion_failed",
+              "step_id": null,
+              "detail": "Redirected to the appointments list after confirmation: url / does not match /app/appointments/",
+              "tier": null,
+              "evidence": {
+                "oracle_index": 1,
+                "rule_ref": null
+              }
+            },
+            {
+              "kind": "assertion_failed",
+              "step_id": null,
+              "detail": "The booking wizard confirms the new appointment was saved: expected text \"Appointment confirmed\" not found on /",
+              "tier": null,
+              "evidence": {
+                "oracle_index": 2,
+                "rule_ref": null,
+                "screenshot": "screenshots/book-consultation_final.jpg"
+              }
+            }
+          ],
           "step_observations": [
             {
               "kind": "locator_healed",
               "step_id": "s12",
               "detail": "button \"Next\" (in: Patient details) -> [e16] button \"Proceed\" (in: Patient details) via similarity (score 0.83, margin 0.32)",
               "tier": 1
-            },
-            {
-              "kind": "locator_healed",
-              "step_id": "s15",
-              "detail": "button \"Next\" (in: Choose a time) -> [e17] button \"Proceed\" (in: Choose a time) via similarity (score 0.83, margin 0.31)",
-              "tier": 1
             }
           ],
           "tiers": {
-            "0": 16,
-            "1": 2
+            "0": 12,
+            "1": 1
           },
-          "healed_steps": 2,
+          "healed_steps": 1,
           "failed_steps": [
-            "Continue to slot selection",
-            "Continue to the confirm step"
+            "Continue to slot selection"
           ],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 19299
+          "duration_ms": 16303
         },
         {
           "test_id": "cancel-appointment",
@@ -430,7 +493,7 @@
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 12481
+          "duration_ms": 12338
         },
         {
           "test_id": "doctor-list-loads",
@@ -452,7 +515,7 @@
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 10826
+          "duration_ms": 10653
         },
         {
           "test_id": "invoice-total-correct",
@@ -474,58 +537,29 @@
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 7219
+          "duration_ms": 7138
         },
         {
-          "test_id": "reschedule-appointment",
-          "name": "Reschedule an existing appointment to a different time",
-          "status": "failed",
-          "verdict": "NEEDS_REVIEW",
+          "test_id": "toggle-sms-reminders",
+          "name": "Toggle SMS reminders preference and verify it is saved",
+          "status": "passed",
+          "verdict": "PASS",
           "decided_by": "rules",
-          "action": "review_requested",
-          "confidence": 0.5,
-          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "action": "none",
+          "confidence": 1.0,
+          "rationale": "Replayed exactly; every step and oracle held.",
           "changelog_refs": [],
-          "observations": [
-            {
-              "kind": "goal_unreachable",
-              "step_id": "s7",
-              "detail": "cannot find 'Click Reschedule on the first appointment' (best candidate 0.93 below thresholds); page / headings ['Appointments', 'Upcoming schedule'] alerts []",
-              "tier": null,
-              "evidence": {}
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Reschedule API call succeeded: PUT /api/appointments/:id/reschedule [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200, GET /api/appointments 200)",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 0,
-                "rule_ref": null
-              }
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "The app confirms the appointment kept the new time: expected text \"Appointment rescheduled\" not found on /",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 1,
-                "rule_ref": null,
-                "screenshot": "screenshots/reschedule-appointment_final.jpg"
-              }
-            }
-          ],
+          "observations": [],
           "step_observations": [],
           "tiers": {
-            "0": 6
+            "0": 8
           },
           "healed_steps": 0,
           "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 10185
+          "duration_ms": 9591
         },
         {
           "test_id": "age-validation",
@@ -557,46 +591,78 @@
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 13605
+          "duration_ms": 13273
         },
         {
           "test_id": "emergency-fee-zero",
           "name": "Emergency visit shows zero doctor fee and zero total",
-          "status": "passed",
-          "verdict": "COSMETIC_DRIFT",
+          "status": "failed",
+          "verdict": "NEEDS_REVIEW",
           "decided_by": "rules",
-          "action": "test_healed",
-          "confidence": 0.83,
-          "rationale": "2 element(s) moved/renamed and were re-identified (tiers [1]); all expectations and business oracles still hold.",
+          "action": "review_requested",
+          "confidence": 0.5,
+          "rationale": "No LLM available to judge a behavioural change; needs a human.",
           "changelog_refs": [],
-          "observations": [],
+          "observations": [
+            {
+              "kind": "goal_unreachable",
+              "step_id": "s14",
+              "detail": "cannot find 'Select the first available slot' (best candidate 0.98 below thresholds); page / headings ['Book an appointment', 'Choose a time'] alerts []",
+              "tier": null,
+              "evidence": {}
+            },
+            {
+              "kind": "assertion_failed",
+              "step_id": null,
+              "detail": "Visit type Emergency is shown in the confirmation: expected text \"Emergency\" not found on /",
+              "tier": null,
+              "evidence": {
+                "oracle_index": 0,
+                "rule_ref": "B2"
+              }
+            },
+            {
+              "kind": "assertion_failed",
+              "step_id": null,
+              "detail": "Doctor fee is zero for an emergency visit: expected text \"doctor fee ₹0.00\" not found on /",
+              "tier": null,
+              "evidence": {
+                "oracle_index": 1,
+                "rule_ref": "B2"
+              }
+            },
+            {
+              "kind": "assertion_failed",
+              "step_id": null,
+              "detail": "Total is zero for an emergency visit: expected text \"total ₹0.00\" not found on /",
+              "tier": null,
+              "evidence": {
+                "oracle_index": 2,
+                "rule_ref": "B2",
+                "screenshot": "screenshots/emergency-fee-zero_final.jpg"
+              }
+            }
+          ],
           "step_observations": [
             {
               "kind": "locator_healed",
               "step_id": "s12",
               "detail": "button \"Next\" (in: Patient details) -> [e16] button \"Proceed\" (in: Patient details) via similarity (score 0.83, margin 0.35)",
               "tier": 1
-            },
-            {
-              "kind": "locator_healed",
-              "step_id": "s15",
-              "detail": "button \"Next\" (in: Choose a time) -> [e17] button \"Proceed\" (in: Choose a time) via similarity (score 0.83, margin 0.31)",
-              "tier": 1
             }
           ],
           "tiers": {
-            "0": 14,
-            "1": 2
+            "0": 12,
+            "1": 1
           },
-          "healed_steps": 2,
+          "healed_steps": 1,
           "failed_steps": [
-            "Continue to slot selection",
-            "Continue to the confirm step to review fees"
+            "Continue to slot selection"
           ],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 16387
+          "duration_ms": 21528
         }
       ]
     },
@@ -604,14 +670,15 @@
       "label": "r3-run",
       "release": "r3",
       "update": true,
-      "started_at": "2026-09-25T16:37:54+00:00",
-      "run_id": "20260925-220754-e085",
-      "wall_s": 133.5,
+      "started_at": "2026-09-25T19:02:03+00:00",
+      "run_id": "20260926-003203-f93f",
+      "wall_s": 88.6,
       "tests_run": 8,
-      "healed_steps": 0,
-      "replayed_steps": 47,
+      "healed_steps": 1,
+      "replayed_steps": 52,
       "tiers": {
-        "0": 47
+        "0": 52,
+        "1": 1
       },
       "llm_calls": 0,
       "llm_calls_cached": 0,
@@ -619,8 +686,9 @@
       "tokens_out": 0,
       "cost_usd": 0.0,
       "verdicts": {
-        "PASS": 1,
-        "NEEDS_REVIEW": 7
+        "PASS": 4,
+        "NEEDS_REVIEW": 3,
+        "COSMETIC_DRIFT": 1
       },
       "tests": [
         {
@@ -643,7 +711,7 @@
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 5446
+          "duration_ms": 5357
         },
         {
           "test_id": "book-consultation",
@@ -657,16 +725,26 @@
           "changelog_refs": [],
           "observations": [
             {
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
+              "tier": null,
+              "evidence": {
+                "overlay": "[e14] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
+              }
+            },
+            {
               "kind": "goal_unreachable",
               "step_id": "s7",
-              "detail": "cannot find 'Enter the patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+              "detail": "cannot find 'Enter the patient name' (no compatible candidates on page); page / headings ['Book an appointment', 'Choose a time'] alerts []",
               "tier": null,
               "evidence": {}
             },
             {
               "kind": "assertion_failed",
               "step_id": null,
-              "detail": "Appointment is created via the API: POST /api/appointments [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200)",
+              "detail": "Appointment is created via the API: POST /api/appointments [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200, GET /api/doctors 200, GET /api/slots 200)",
               "tier": null,
               "evidence": {
                 "oracle_index": 0,
@@ -695,301 +773,158 @@
               }
             }
           ],
-          "step_observations": [
-            {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
-            }
-          ],
+          "step_observations": [],
           "tiers": {
             "0": 6
           },
           "healed_steps": 0,
-          "failed_steps": [
-            "Open the appointment desk from clinic navigation"
-          ],
+          "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 15489
+          "duration_ms": 11250
         },
         {
           "test_id": "cancel-appointment",
           "name": "Cancel an appointment with explicit confirmation",
-          "status": "failed",
-          "verdict": "NEEDS_REVIEW",
+          "status": "passed",
+          "verdict": "COSMETIC_DRIFT",
           "decided_by": "rules",
-          "action": "review_requested",
-          "confidence": 0.5,
-          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "action": "test_healed",
+          "confidence": 0.98,
+          "rationale": "1 element(s) moved/renamed and were re-identified (tiers [1]); all expectations and business oracles still hold.",
           "changelog_refs": [],
           "observations": [
             {
-              "kind": "goal_unreachable",
-              "step_id": "s7",
-              "detail": "cannot find 'Click Cancel on the first appointment in the list' (best candidate 0.57 below thresholds); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
-              "tier": null,
-              "evidence": {}
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Cancellation API call succeeded: DELETE /api/appointments/:id [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200)",
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
               "tier": null,
               "evidence": {
-                "oracle_index": 0,
-                "rule_ref": "B6",
-                "screenshot": "screenshots/cancel-appointment_final.jpg"
+                "overlay": "[e14] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
               }
             }
           ],
           "step_observations": [
             {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
+              "kind": "locator_healed",
+              "step_id": "s7",
+              "detail": "button \"Cancel\" (in: Appointments) -> [e10] button \"Cancel\" (in: Appointments) via similarity (score 0.98, margin 0.04)",
+              "tier": 1
             }
           ],
           "tiers": {
-            "0": 6
+            "0": 9,
+            "1": 1
           },
-          "healed_steps": 0,
+          "healed_steps": 1,
           "failed_steps": [
-            "Navigate to the appointments page"
+            "Click Cancel on the first appointment in the list"
           ],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 13026
+          "duration_ms": 13275
         },
         {
           "test_id": "doctor-list-loads",
           "name": "Doctor directory loads asynchronously showing all eight doctors",
-          "status": "failed",
-          "verdict": "NEEDS_REVIEW",
+          "status": "passed",
+          "verdict": "PASS",
           "decided_by": "rules",
-          "action": "review_requested",
-          "confidence": 0.5,
-          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "action": "none",
+          "confidence": 1.0,
+          "rationale": "Replayed exactly; every step and oracle held.",
           "changelog_refs": [],
           "observations": [
             {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Status shows all eight doctors loaded: expected text \"8 doctors available\" not found on /",
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
               "tier": null,
               "evidence": {
-                "oracle_index": 0,
-                "rule_ref": null
-              }
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "At least one doctor card is visible: expected text \"Dr. Aarav Mehta\" not found on /",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 1,
-                "rule_ref": null,
-                "screenshot": "screenshots/doctor-list-loads_final.jpg"
+                "overlay": "[e14] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
               }
             }
           ],
-          "step_observations": [
-            {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
-            }
-          ],
+          "step_observations": [],
           "tiers": {
             "0": 7
           },
           "healed_steps": 0,
-          "failed_steps": [
-            "Navigate to the doctor directory"
-          ],
+          "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 21361
+          "duration_ms": 11549
         },
         {
           "test_id": "invoice-total-correct",
           "name": "Invoice total equals the sum of all line items",
-          "status": "failed",
-          "verdict": "NEEDS_REVIEW",
+          "status": "passed",
+          "verdict": "PASS",
           "decided_by": "rules",
-          "action": "review_requested",
-          "confidence": 0.5,
-          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "action": "none",
+          "confidence": 1.0,
+          "rationale": "Replayed exactly; every step and oracle held.",
           "changelog_refs": [],
           "observations": [
             {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Line item 'Specialist consultation' is visible: expected text \"Specialist consultation\" not found on /",
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
               "tier": null,
               "evidence": {
-                "oracle_index": 0,
-                "rule_ref": null
-              }
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Line item amounts are rendered with two decimals: expected text \"₹620.00\" not found on /",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 1,
-                "rule_ref": null
-              }
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Line item amounts are rendered with two decimals: expected text \"₹380.00\" not found on /",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 2,
-                "rule_ref": null
-              }
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Line item amounts are rendered with two decimals: expected text \"₹180.00\" not found on /",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 3,
-                "rule_ref": null
-              }
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "TOTAL ₹1,180.00 equals 620.00 + 380.00 + 180.00: expected text \"total ₹1,180.00\" not found on /",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 4,
-                "rule_ref": "B3",
-                "screenshot": "screenshots/invoice-total-correct_final.jpg"
+                "overlay": "[e14] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
               }
             }
           ],
-          "step_observations": [
-            {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
-            }
-          ],
+          "step_observations": [],
           "tiers": {
             "0": 6
           },
           "healed_steps": 0,
-          "failed_steps": [
-            "Navigate to the billing page"
-          ],
+          "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 25868
+          "duration_ms": 8095
         },
         {
-          "test_id": "reschedule-appointment",
-          "name": "Reschedule an existing appointment to a different time",
-          "status": "failed",
-          "verdict": "NEEDS_REVIEW",
+          "test_id": "toggle-sms-reminders",
+          "name": "Toggle SMS reminders preference and verify it is saved",
+          "status": "passed",
+          "verdict": "PASS",
           "decided_by": "rules",
-          "action": "review_requested",
-          "confidence": 0.5,
-          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "action": "none",
+          "confidence": 1.0,
+          "rationale": "Replayed exactly; every step and oracle held.",
           "changelog_refs": [],
           "observations": [
             {
-              "kind": "goal_unreachable",
-              "step_id": "s7",
-              "detail": "cannot find 'Click Reschedule on the first appointment' (best candidate 0.52 below thresholds); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
-              "tier": null,
-              "evidence": {}
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Reschedule API call succeeded: PUT /api/appointments/:id/reschedule [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200)",
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
               "tier": null,
               "evidence": {
-                "oracle_index": 0,
-                "rule_ref": null
-              }
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "The app confirms the appointment kept the new time: expected text \"Appointment rescheduled\" not found on /",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 1,
-                "rule_ref": null,
-                "screenshot": "screenshots/reschedule-appointment_final.jpg"
+                "overlay": "[e14] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
               }
             }
           ],
-          "step_observations": [
-            {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
-            }
-          ],
+          "step_observations": [],
           "tiers": {
-            "0": 6
+            "0": 8
           },
           "healed_steps": 0,
-          "failed_steps": [
-            "Navigate to the appointments page"
-          ],
+          "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 15193
+          "duration_ms": 10558
         },
         {
           "test_id": "age-validation",
@@ -1003,9 +938,19 @@
           "changelog_refs": [],
           "observations": [
             {
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
+              "tier": null,
+              "evidence": {
+                "overlay": "[e14] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
+              }
+            },
+            {
               "kind": "goal_unreachable",
               "step_id": "s7",
-              "detail": "cannot find 'Enter a patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+              "detail": "cannot find 'Enter a patient name' (no compatible candidates on page); page / headings ['Book an appointment', 'Choose a time'] alerts []",
               "tier": null,
               "evidence": {}
             },
@@ -1021,31 +966,16 @@
               }
             }
           ],
-          "step_observations": [
-            {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
-            }
-          ],
+          "step_observations": [],
           "tiers": {
             "0": 6
           },
           "healed_steps": 0,
-          "failed_steps": [
-            "Open the appointment desk from clinic navigation"
-          ],
+          "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 15536
+          "duration_ms": 11286
         },
         {
           "test_id": "emergency-fee-zero",
@@ -1059,9 +989,19 @@
           "changelog_refs": [],
           "observations": [
             {
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
+              "tier": null,
+              "evidence": {
+                "overlay": "[e14] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
+              }
+            },
+            {
               "kind": "goal_unreachable",
               "step_id": "s7",
-              "detail": "cannot find 'Enter a valid patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+              "detail": "cannot find 'Enter a valid patient name' (no compatible candidates on page); page / headings ['Book an appointment', 'Choose a time'] alerts []",
               "tier": null,
               "evidence": {}
             },
@@ -1097,31 +1037,16 @@
               }
             }
           ],
-          "step_observations": [
-            {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
-            }
-          ],
+          "step_observations": [],
           "tiers": {
             "0": 6
           },
           "healed_steps": 0,
-          "failed_steps": [
-            "Open the appointment desk from clinic navigation"
-          ],
+          "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 20907
+          "duration_ms": 16650
         }
       ]
     },
@@ -1129,14 +1054,14 @@
       "label": "r4-run",
       "release": "r4",
       "update": true,
-      "started_at": "2026-09-25T16:40:08+00:00",
-      "run_id": "20260925-221008-54b8",
-      "wall_s": 133.8,
+      "started_at": "2026-09-25T19:03:31+00:00",
+      "run_id": "20260926-003331-45aa",
+      "wall_s": 84.1,
       "tests_run": 8,
       "healed_steps": 0,
-      "replayed_steps": 47,
+      "replayed_steps": 49,
       "tiers": {
-        "0": 47
+        "0": 49
       },
       "llm_calls": 0,
       "llm_calls_cached": 0,
@@ -1144,8 +1069,8 @@
       "tokens_out": 0,
       "cost_usd": 0.0,
       "verdicts": {
-        "PASS": 1,
-        "NEEDS_REVIEW": 7
+        "PASS": 4,
+        "NEEDS_REVIEW": 4
       },
       "tests": [
         {
@@ -1168,7 +1093,7 @@
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 5405
+          "duration_ms": 5370
         },
         {
           "test_id": "book-consultation",
@@ -1182,16 +1107,26 @@
           "changelog_refs": [],
           "observations": [
             {
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
+              "tier": null,
+              "evidence": {
+                "overlay": "[e14] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
+              }
+            },
+            {
               "kind": "goal_unreachable",
               "step_id": "s7",
-              "detail": "cannot find 'Enter the patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+              "detail": "cannot find 'Enter the patient name' (no compatible candidates on page); page / headings ['Book an appointment', 'Choose a time'] alerts []",
               "tier": null,
               "evidence": {}
             },
             {
               "kind": "assertion_failed",
               "step_id": null,
-              "detail": "Appointment is created via the API: POST /api/appointments [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200)",
+              "detail": "Appointment is created via the API: POST /api/appointments [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200, GET /api/doctors 200, GET /api/slots 200)",
               "tier": null,
               "evidence": {
                 "oracle_index": 0,
@@ -1220,31 +1155,16 @@
               }
             }
           ],
-          "step_observations": [
-            {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
-            }
-          ],
+          "step_observations": [],
           "tiers": {
             "0": 6
           },
           "healed_steps": 0,
-          "failed_steps": [
-            "Open the appointment desk from clinic navigation"
-          ],
+          "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 15543
+          "duration_ms": 11280
         },
         {
           "test_id": "cancel-appointment",
@@ -1258,16 +1178,26 @@
           "changelog_refs": [],
           "observations": [
             {
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
+              "tier": null,
+              "evidence": {
+                "overlay": "[e14] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
+              }
+            },
+            {
               "kind": "goal_unreachable",
               "step_id": "s7",
-              "detail": "cannot find 'Click Cancel on the first appointment in the list' (best candidate 0.57 below thresholds); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+              "detail": "cannot find 'Click Cancel on the first appointment in the list' (best candidate 0.64 below thresholds); page / headings ['Appointments', 'Upcoming schedule'] alerts []",
               "tier": null,
               "evidence": {}
             },
             {
               "kind": "assertion_failed",
               "step_id": null,
-              "detail": "Cancellation API call succeeded: DELETE /api/appointments/:id [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200)",
+              "detail": "Cancellation API call succeeded: DELETE /api/appointments/:id [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200, GET /api/appointments 200)",
               "tier": null,
               "evidence": {
                 "oracle_index": 0,
@@ -1276,245 +1206,115 @@
               }
             }
           ],
-          "step_observations": [
-            {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
-            }
-          ],
+          "step_observations": [],
           "tiers": {
             "0": 6
           },
           "healed_steps": 0,
-          "failed_steps": [
-            "Navigate to the appointments page"
-          ],
+          "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 13118
+          "duration_ms": 8861
         },
         {
           "test_id": "doctor-list-loads",
           "name": "Doctor directory loads asynchronously showing all eight doctors",
-          "status": "failed",
-          "verdict": "NEEDS_REVIEW",
+          "status": "passed",
+          "verdict": "PASS",
           "decided_by": "rules",
-          "action": "review_requested",
-          "confidence": 0.5,
-          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "action": "none",
+          "confidence": 1.0,
+          "rationale": "Replayed exactly; every step and oracle held.",
           "changelog_refs": [],
           "observations": [
             {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Status shows all eight doctors loaded: expected text \"8 doctors available\" not found on /",
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
               "tier": null,
               "evidence": {
-                "oracle_index": 0,
-                "rule_ref": null
-              }
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "At least one doctor card is visible: expected text \"Dr. Aarav Mehta\" not found on /",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 1,
-                "rule_ref": null,
-                "screenshot": "screenshots/doctor-list-loads_final.jpg"
+                "overlay": "[e14] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
               }
             }
           ],
-          "step_observations": [
-            {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
-            }
-          ],
+          "step_observations": [],
           "tiers": {
             "0": 7
           },
           "healed_steps": 0,
-          "failed_steps": [
-            "Navigate to the doctor directory"
-          ],
+          "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 21448
+          "duration_ms": 11576
         },
         {
           "test_id": "invoice-total-correct",
           "name": "Invoice total equals the sum of all line items",
-          "status": "failed",
-          "verdict": "NEEDS_REVIEW",
+          "status": "passed",
+          "verdict": "PASS",
           "decided_by": "rules",
-          "action": "review_requested",
-          "confidence": 0.5,
-          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "action": "none",
+          "confidence": 1.0,
+          "rationale": "Replayed exactly; every step and oracle held.",
           "changelog_refs": [],
           "observations": [
             {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Line item 'Specialist consultation' is visible: expected text \"Specialist consultation\" not found on /",
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
               "tier": null,
               "evidence": {
-                "oracle_index": 0,
-                "rule_ref": null
-              }
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Line item amounts are rendered with two decimals: expected text \"₹620.00\" not found on /",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 1,
-                "rule_ref": null
-              }
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Line item amounts are rendered with two decimals: expected text \"₹380.00\" not found on /",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 2,
-                "rule_ref": null
-              }
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Line item amounts are rendered with two decimals: expected text \"₹180.00\" not found on /",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 3,
-                "rule_ref": null
-              }
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "TOTAL ₹1,180.00 equals 620.00 + 380.00 + 180.00: expected text \"total ₹1,180.00\" not found on /",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 4,
-                "rule_ref": "B3",
-                "screenshot": "screenshots/invoice-total-correct_final.jpg"
+                "overlay": "[e14] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
               }
             }
           ],
-          "step_observations": [
-            {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
-            }
-          ],
+          "step_observations": [],
           "tiers": {
             "0": 6
           },
           "healed_steps": 0,
-          "failed_steps": [
-            "Navigate to the billing page"
-          ],
+          "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 25760
+          "duration_ms": 8039
         },
         {
-          "test_id": "reschedule-appointment",
-          "name": "Reschedule an existing appointment to a different time",
-          "status": "failed",
-          "verdict": "NEEDS_REVIEW",
+          "test_id": "toggle-sms-reminders",
+          "name": "Toggle SMS reminders preference and verify it is saved",
+          "status": "passed",
+          "verdict": "PASS",
           "decided_by": "rules",
-          "action": "review_requested",
-          "confidence": 0.5,
-          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "action": "none",
+          "confidence": 1.0,
+          "rationale": "Replayed exactly; every step and oracle held.",
           "changelog_refs": [],
           "observations": [
             {
-              "kind": "goal_unreachable",
-              "step_id": "s7",
-              "detail": "cannot find 'Click Reschedule on the first appointment' (best candidate 0.52 below thresholds); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
-              "tier": null,
-              "evidence": {}
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Reschedule API call succeeded: PUT /api/appointments/:id/reschedule [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200)",
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
               "tier": null,
               "evidence": {
-                "oracle_index": 0,
-                "rule_ref": null
-              }
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "The app confirms the appointment kept the new time: expected text \"Appointment rescheduled\" not found on /",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 1,
-                "rule_ref": null,
-                "screenshot": "screenshots/reschedule-appointment_final.jpg"
+                "overlay": "[e14] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
               }
             }
           ],
-          "step_observations": [
-            {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
-            }
-          ],
+          "step_observations": [],
           "tiers": {
-            "0": 6
+            "0": 8
           },
           "healed_steps": 0,
-          "failed_steps": [
-            "Navigate to the appointments page"
-          ],
+          "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 15420
+          "duration_ms": 10563
         },
         {
           "test_id": "age-validation",
@@ -1528,9 +1328,19 @@
           "changelog_refs": [],
           "observations": [
             {
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
+              "tier": null,
+              "evidence": {
+                "overlay": "[e14] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
+              }
+            },
+            {
               "kind": "goal_unreachable",
               "step_id": "s7",
-              "detail": "cannot find 'Enter a patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+              "detail": "cannot find 'Enter a patient name' (no compatible candidates on page); page / headings ['Book an appointment', 'Choose a time'] alerts []",
               "tier": null,
               "evidence": {}
             },
@@ -1546,31 +1356,16 @@
               }
             }
           ],
-          "step_observations": [
-            {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
-            }
-          ],
+          "step_observations": [],
           "tiers": {
             "0": 6
           },
           "healed_steps": 0,
-          "failed_steps": [
-            "Open the appointment desk from clinic navigation"
-          ],
+          "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 15647
+          "duration_ms": 11249
         },
         {
           "test_id": "emergency-fee-zero",
@@ -1584,9 +1379,19 @@
           "changelog_refs": [],
           "observations": [
             {
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
+              "tier": null,
+              "evidence": {
+                "overlay": "[e14] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
+              }
+            },
+            {
               "kind": "goal_unreachable",
               "step_id": "s7",
-              "detail": "cannot find 'Enter a valid patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+              "detail": "cannot find 'Enter a valid patient name' (no compatible candidates on page); page / headings ['Book an appointment', 'Choose a time'] alerts []",
               "tier": null,
               "evidence": {}
             },
@@ -1622,31 +1427,16 @@
               }
             }
           ],
-          "step_observations": [
-            {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
-            }
-          ],
+          "step_observations": [],
           "tiers": {
             "0": 6
           },
           "healed_steps": 0,
-          "failed_steps": [
-            "Open the appointment desk from clinic navigation"
-          ],
+          "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 20832
+          "duration_ms": 16560
         }
       ]
     },
@@ -1654,14 +1444,14 @@
       "label": "r5-run",
       "release": "r5",
       "update": true,
-      "started_at": "2026-09-25T16:42:22+00:00",
-      "run_id": "20260925-221222-7c82",
-      "wall_s": 133.1,
+      "started_at": "2026-09-25T19:04:56+00:00",
+      "run_id": "20260926-003456-0ba2",
+      "wall_s": 87.2,
       "tests_run": 8,
       "healed_steps": 0,
-      "replayed_steps": 47,
+      "replayed_steps": 49,
       "tiers": {
-        "0": 47
+        "0": 49
       },
       "llm_calls": 0,
       "llm_calls_cached": 0,
@@ -1669,8 +1459,9 @@
       "tokens_out": 0,
       "cost_usd": 0.0,
       "verdicts": {
-        "PASS": 1,
-        "NEEDS_REVIEW": 7
+        "PASS": 3,
+        "NEEDS_REVIEW": 4,
+        "BUG": 1
       },
       "tests": [
         {
@@ -1693,7 +1484,7 @@
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 5419
+          "duration_ms": 5335
         },
         {
           "test_id": "book-consultation",
@@ -1707,16 +1498,26 @@
           "changelog_refs": [],
           "observations": [
             {
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
+              "tier": null,
+              "evidence": {
+                "overlay": "[e14] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
+              }
+            },
+            {
               "kind": "goal_unreachable",
               "step_id": "s7",
-              "detail": "cannot find 'Enter the patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+              "detail": "cannot find 'Enter the patient name' (no compatible candidates on page); page / headings ['Book an appointment', 'Choose a time'] alerts []",
               "tier": null,
               "evidence": {}
             },
             {
               "kind": "assertion_failed",
               "step_id": null,
-              "detail": "Appointment is created via the API: POST /api/appointments [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200)",
+              "detail": "Appointment is created via the API: POST /api/appointments [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200, GET /api/doctors 200, GET /api/slots 200)",
               "tier": null,
               "evidence": {
                 "oracle_index": 0,
@@ -1745,31 +1546,16 @@
               }
             }
           ],
-          "step_observations": [
-            {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
-            }
-          ],
+          "step_observations": [],
           "tiers": {
             "0": 6
           },
           "healed_steps": 0,
-          "failed_steps": [
-            "Open the appointment desk from clinic navigation"
-          ],
+          "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 15581
+          "duration_ms": 11273
         },
         {
           "test_id": "cancel-appointment",
@@ -1783,16 +1569,26 @@
           "changelog_refs": [],
           "observations": [
             {
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
+              "tier": null,
+              "evidence": {
+                "overlay": "[e14] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
+              }
+            },
+            {
               "kind": "goal_unreachable",
               "step_id": "s7",
-              "detail": "cannot find 'Click Cancel on the first appointment in the list' (best candidate 0.57 below thresholds); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+              "detail": "cannot find 'Click Cancel on the first appointment in the list' (best candidate 0.64 below thresholds); page / headings ['Appointments', 'Upcoming schedule'] alerts []",
               "tier": null,
               "evidence": {}
             },
             {
               "kind": "assertion_failed",
               "step_id": null,
-              "detail": "Cancellation API call succeeded: DELETE /api/appointments/:id [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200)",
+              "detail": "Cancellation API call succeeded: DELETE /api/appointments/:id [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200, GET /api/appointments 200)",
               "tier": null,
               "evidence": {
                 "oracle_index": 0,
@@ -1801,140 +1597,69 @@
               }
             }
           ],
-          "step_observations": [
-            {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
-            }
-          ],
+          "step_observations": [],
           "tiers": {
             "0": 6
           },
           "healed_steps": 0,
-          "failed_steps": [
-            "Navigate to the appointments page"
-          ],
+          "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 13033
+          "duration_ms": 8850
         },
         {
           "test_id": "doctor-list-loads",
           "name": "Doctor directory loads asynchronously showing all eight doctors",
-          "status": "failed",
-          "verdict": "NEEDS_REVIEW",
+          "status": "passed",
+          "verdict": "PASS",
           "decided_by": "rules",
-          "action": "review_requested",
-          "confidence": 0.5,
-          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "action": "none",
+          "confidence": 1.0,
+          "rationale": "Replayed exactly; every step and oracle held.",
           "changelog_refs": [],
           "observations": [
             {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Status shows all eight doctors loaded: expected text \"8 doctors available\" not found on /",
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
               "tier": null,
               "evidence": {
-                "oracle_index": 0,
-                "rule_ref": null
-              }
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "At least one doctor card is visible: expected text \"Dr. Aarav Mehta\" not found on /",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 1,
-                "rule_ref": null,
-                "screenshot": "screenshots/doctor-list-loads_final.jpg"
+                "overlay": "[e14] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
               }
             }
           ],
-          "step_observations": [
-            {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
-            }
-          ],
+          "step_observations": [],
           "tiers": {
             "0": 7
           },
           "healed_steps": 0,
-          "failed_steps": [
-            "Navigate to the doctor directory"
-          ],
+          "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 21319
+          "duration_ms": 11614
         },
         {
           "test_id": "invoice-total-correct",
           "name": "Invoice total equals the sum of all line items",
           "status": "failed",
-          "verdict": "NEEDS_REVIEW",
+          "verdict": "BUG",
           "decided_by": "rules",
-          "action": "review_requested",
-          "confidence": 0.5,
-          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "action": "bug_reported",
+          "confidence": 0.9,
+          "rationale": "Business rule(s) B3 violated: TOTAL ₹1,180.00 equals 620.00 + 380.00 + 180.00: expected text \"total ₹1,180.00\" not found on /",
           "changelog_refs": [],
           "observations": [
             {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Line item 'Specialist consultation' is visible: expected text \"Specialist consultation\" not found on /",
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
               "tier": null,
               "evidence": {
-                "oracle_index": 0,
-                "rule_ref": null
-              }
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Line item amounts are rendered with two decimals: expected text \"₹620.00\" not found on /",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 1,
-                "rule_ref": null
-              }
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Line item amounts are rendered with two decimals: expected text \"₹380.00\" not found on /",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 2,
-                "rule_ref": null
-              }
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Line item amounts are rendered with two decimals: expected text \"₹180.00\" not found on /",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 3,
-                "rule_ref": null
+                "overlay": "[e14] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
               }
             },
             {
@@ -1949,97 +1674,49 @@
               }
             }
           ],
-          "step_observations": [
-            {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
-            }
-          ],
+          "step_observations": [],
           "tiers": {
             "0": 6
           },
           "healed_steps": 0,
-          "failed_steps": [
-            "Navigate to the billing page"
-          ],
+          "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 25664
+          "duration_ms": 10932
         },
         {
-          "test_id": "reschedule-appointment",
-          "name": "Reschedule an existing appointment to a different time",
-          "status": "failed",
-          "verdict": "NEEDS_REVIEW",
+          "test_id": "toggle-sms-reminders",
+          "name": "Toggle SMS reminders preference and verify it is saved",
+          "status": "passed",
+          "verdict": "PASS",
           "decided_by": "rules",
-          "action": "review_requested",
-          "confidence": 0.5,
-          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "action": "none",
+          "confidence": 1.0,
+          "rationale": "Replayed exactly; every step and oracle held.",
           "changelog_refs": [],
           "observations": [
             {
-              "kind": "goal_unreachable",
-              "step_id": "s7",
-              "detail": "cannot find 'Click Reschedule on the first appointment' (best candidate 0.52 below thresholds); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
-              "tier": null,
-              "evidence": {}
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Reschedule API call succeeded: PUT /api/appointments/:id/reschedule [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200)",
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
               "tier": null,
               "evidence": {
-                "oracle_index": 0,
-                "rule_ref": null
-              }
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "The app confirms the appointment kept the new time: expected text \"Appointment rescheduled\" not found on /",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 1,
-                "rule_ref": null,
-                "screenshot": "screenshots/reschedule-appointment_final.jpg"
+                "overlay": "[e14] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
               }
             }
           ],
-          "step_observations": [
-            {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
-            }
-          ],
+          "step_observations": [],
           "tiers": {
-            "0": 6
+            "0": 8
           },
           "healed_steps": 0,
-          "failed_steps": [
-            "Navigate to the appointments page"
-          ],
+          "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 15093
+          "duration_ms": 10616
         },
         {
           "test_id": "age-validation",
@@ -2053,9 +1730,19 @@
           "changelog_refs": [],
           "observations": [
             {
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
+              "tier": null,
+              "evidence": {
+                "overlay": "[e14] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
+              }
+            },
+            {
               "kind": "goal_unreachable",
               "step_id": "s7",
-              "detail": "cannot find 'Enter a patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+              "detail": "cannot find 'Enter a patient name' (no compatible candidates on page); page / headings ['Book an appointment', 'Choose a time'] alerts []",
               "tier": null,
               "evidence": {}
             },
@@ -2071,31 +1758,16 @@
               }
             }
           ],
-          "step_observations": [
-            {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
-            }
-          ],
+          "step_observations": [],
           "tiers": {
             "0": 6
           },
           "healed_steps": 0,
-          "failed_steps": [
-            "Open the appointment desk from clinic navigation"
-          ],
+          "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 15514
+          "duration_ms": 11310
         },
         {
           "test_id": "emergency-fee-zero",
@@ -2109,9 +1781,19 @@
           "changelog_refs": [],
           "observations": [
             {
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
+              "tier": null,
+              "evidence": {
+                "overlay": "[e14] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
+              }
+            },
+            {
               "kind": "goal_unreachable",
               "step_id": "s7",
-              "detail": "cannot find 'Enter a valid patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+              "detail": "cannot find 'Enter a valid patient name' (no compatible candidates on page); page / headings ['Book an appointment', 'Choose a time'] alerts []",
               "tier": null,
               "evidence": {}
             },
@@ -2147,31 +1829,16 @@
               }
             }
           ],
-          "step_observations": [
-            {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
-            }
-          ],
+          "step_observations": [],
           "tiers": {
             "0": 6
           },
           "healed_steps": 0,
-          "failed_steps": [
-            "Open the appointment desk from clinic navigation"
-          ],
+          "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 20774
+          "duration_ms": 16677
         }
       ]
     },
@@ -2179,14 +1846,15 @@
       "label": "r6-run",
       "release": "r6",
       "update": true,
-      "started_at": "2026-09-25T16:44:35+00:00",
-      "run_id": "20260925-221435-45d0",
-      "wall_s": 133.1,
+      "started_at": "2026-09-25T19:06:23+00:00",
+      "run_id": "20260926-003623-754b",
+      "wall_s": 85.7,
       "tests_run": 8,
-      "healed_steps": 0,
-      "replayed_steps": 47,
+      "healed_steps": 1,
+      "replayed_steps": 46,
       "tiers": {
-        "0": 47
+        "0": 46,
+        "1": 1
       },
       "llm_calls": 0,
       "llm_calls_cached": 0,
@@ -2194,8 +1862,8 @@
       "tokens_out": 0,
       "cost_usd": 0.0,
       "verdicts": {
-        "PASS": 1,
-        "NEEDS_REVIEW": 7
+        "PASS": 3,
+        "NEEDS_REVIEW": 5
       },
       "tests": [
         {
@@ -2218,7 +1886,7 @@
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 5338
+          "duration_ms": 5351
         },
         {
           "test_id": "book-consultation",
@@ -2232,16 +1900,26 @@
           "changelog_refs": [],
           "observations": [
             {
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
+              "tier": null,
+              "evidence": {
+                "overlay": "[e13] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
+              }
+            },
+            {
               "kind": "goal_unreachable",
               "step_id": "s7",
-              "detail": "cannot find 'Enter the patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+              "detail": "cannot find 'Enter the patient name' (no compatible candidates on page); page / headings ['Book an appointment', 'Choose a time'] alerts []",
               "tier": null,
               "evidence": {}
             },
             {
               "kind": "assertion_failed",
               "step_id": null,
-              "detail": "Appointment is created via the API: POST /api/appointments [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200)",
+              "detail": "Appointment is created via the API: POST /api/appointments [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200, GET /api/doctors 200, GET /api/slots 200)",
               "tier": null,
               "evidence": {
                 "oracle_index": 0,
@@ -2270,31 +1948,16 @@
               }
             }
           ],
-          "step_observations": [
-            {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
-            }
-          ],
+          "step_observations": [],
           "tiers": {
             "0": 6
           },
           "healed_steps": 0,
-          "failed_steps": [
-            "Open the appointment desk from clinic navigation"
-          ],
+          "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 15513
+          "duration_ms": 11331
         },
         {
           "test_id": "cancel-appointment",
@@ -2308,16 +1971,26 @@
           "changelog_refs": [],
           "observations": [
             {
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
+              "tier": null,
+              "evidence": {
+                "overlay": "[e13] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
+              }
+            },
+            {
               "kind": "goal_unreachable",
               "step_id": "s7",
-              "detail": "cannot find 'Click Cancel on the first appointment in the list' (best candidate 0.57 below thresholds); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+              "detail": "cannot find 'Click Cancel on the first appointment in the list' (best candidate 0.64 below thresholds); page / headings ['Appointments', 'Upcoming schedule'] alerts []",
               "tier": null,
               "evidence": {}
             },
             {
               "kind": "assertion_failed",
               "step_id": null,
-              "detail": "Cancellation API call succeeded: DELETE /api/appointments/:id [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200)",
+              "detail": "Cancellation API call succeeded: DELETE /api/appointments/:id [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200, GET /api/appointments 200)",
               "tier": null,
               "evidence": {
                 "oracle_index": 0,
@@ -2326,183 +1999,86 @@
               }
             }
           ],
-          "step_observations": [
-            {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
-            }
-          ],
+          "step_observations": [],
           "tiers": {
             "0": 6
           },
           "healed_steps": 0,
-          "failed_steps": [
-            "Navigate to the appointments page"
-          ],
+          "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 13101
+          "duration_ms": 8869
         },
         {
           "test_id": "doctor-list-loads",
           "name": "Doctor directory loads asynchronously showing all eight doctors",
-          "status": "failed",
-          "verdict": "NEEDS_REVIEW",
+          "status": "passed",
+          "verdict": "PASS",
           "decided_by": "rules",
-          "action": "review_requested",
-          "confidence": 0.5,
-          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "action": "none",
+          "confidence": 1.0,
+          "rationale": "Replayed exactly; every step and oracle held.",
           "changelog_refs": [],
           "observations": [
             {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Status shows all eight doctors loaded: expected text \"8 doctors available\" not found on /",
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
               "tier": null,
               "evidence": {
-                "oracle_index": 0,
-                "rule_ref": null
-              }
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "At least one doctor card is visible: expected text \"Dr. Aarav Mehta\" not found on /",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 1,
-                "rule_ref": null,
-                "screenshot": "screenshots/doctor-list-loads_final.jpg"
+                "overlay": "[e13] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
               }
             }
           ],
-          "step_observations": [
-            {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
-            }
-          ],
+          "step_observations": [],
           "tiers": {
             "0": 7
           },
           "healed_steps": 0,
-          "failed_steps": [
-            "Navigate to the doctor directory"
-          ],
+          "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 21323
+          "duration_ms": 11689
         },
         {
           "test_id": "invoice-total-correct",
           "name": "Invoice total equals the sum of all line items",
-          "status": "failed",
-          "verdict": "NEEDS_REVIEW",
+          "status": "passed",
+          "verdict": "PASS",
           "decided_by": "rules",
-          "action": "review_requested",
-          "confidence": 0.5,
-          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "action": "none",
+          "confidence": 1.0,
+          "rationale": "Replayed exactly; every step and oracle held.",
           "changelog_refs": [],
           "observations": [
             {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Line item 'Specialist consultation' is visible: expected text \"Specialist consultation\" not found on /",
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
               "tier": null,
               "evidence": {
-                "oracle_index": 0,
-                "rule_ref": null
-              }
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Line item amounts are rendered with two decimals: expected text \"₹620.00\" not found on /",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 1,
-                "rule_ref": null
-              }
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Line item amounts are rendered with two decimals: expected text \"₹380.00\" not found on /",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 2,
-                "rule_ref": null
-              }
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Line item amounts are rendered with two decimals: expected text \"₹180.00\" not found on /",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 3,
-                "rule_ref": null
-              }
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "TOTAL ₹1,180.00 equals 620.00 + 380.00 + 180.00: expected text \"total ₹1,180.00\" not found on /",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 4,
-                "rule_ref": "B3",
-                "screenshot": "screenshots/invoice-total-correct_final.jpg"
+                "overlay": "[e13] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
               }
             }
           ],
-          "step_observations": [
-            {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
-            }
-          ],
+          "step_observations": [],
           "tiers": {
             "0": 6
           },
           "healed_steps": 0,
-          "failed_steps": [
-            "Navigate to the billing page"
-          ],
+          "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 25814
+          "duration_ms": 8201
         },
         {
-          "test_id": "reschedule-appointment",
-          "name": "Reschedule an existing appointment to a different time",
+          "test_id": "toggle-sms-reminders",
+          "name": "Toggle SMS reminders preference and verify it is saved",
           "status": "failed",
           "verdict": "NEEDS_REVIEW",
           "decided_by": "rules",
@@ -2512,59 +2088,60 @@
           "changelog_refs": [],
           "observations": [
             {
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
+              "tier": null,
+              "evidence": {
+                "overlay": "[e13] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
+              }
+            },
+            {
               "kind": "goal_unreachable",
               "step_id": "s7",
-              "detail": "cannot find 'Click Reschedule on the first appointment' (best candidate 0.52 below thresholds); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+              "detail": "cannot find 'Click the SMS reminders toggle switch (custom mq-toggle element, aria-label 'SMS reminders')' (best candidate 0.41 below thresholds); page / headings ['Billing', 'Invoice MQ-2408-1180'] alerts []",
               "tier": null,
               "evidence": {}
             },
             {
               "kind": "assertion_failed",
               "step_id": null,
-              "detail": "Reschedule API call succeeded: PUT /api/appointments/:id/reschedule [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200)",
+              "detail": "Settings preference saved via API after toggle: PUT /api/settings [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200, GET /api/billing 200)",
               "tier": null,
               "evidence": {
                 "oracle_index": 0,
-                "rule_ref": null
-              }
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "The app confirms the appointment kept the new time: expected text \"Appointment rescheduled\" not found on /",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 1,
                 "rule_ref": null,
-                "screenshot": "screenshots/reschedule-appointment_final.jpg"
+                "screenshot": "screenshots/toggle-sms-reminders_final.jpg"
               }
             }
           ],
           "step_observations": [
             {
-              "kind": "timeout",
+              "kind": "locator_healed",
               "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
+              "detail": "link \"Settings\" (in: Main navigation) -> [e5] link \"Billing\" (in: Main navigation) via similarity (score 0.75, margin 0.05)",
+              "tier": 1
             },
             {
               "kind": "effect_mismatch",
               "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
+              "detail": "expected screen ['Settings', 'Clinic name'] but saw ['Billing', 'Invoice MQ-2408-1180']",
               "tier": null
             }
           ],
           "tiers": {
-            "0": 6
+            "0": 5,
+            "1": 1
           },
-          "healed_steps": 0,
+          "healed_steps": 1,
           "failed_steps": [
-            "Navigate to the appointments page"
+            "Navigate to the settings page"
           ],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 15169
+          "duration_ms": 8352
         },
         {
           "test_id": "age-validation",
@@ -2578,9 +2155,19 @@
           "changelog_refs": [],
           "observations": [
             {
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
+              "tier": null,
+              "evidence": {
+                "overlay": "[e13] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
+              }
+            },
+            {
               "kind": "goal_unreachable",
               "step_id": "s7",
-              "detail": "cannot find 'Enter a patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+              "detail": "cannot find 'Enter a patient name' (no compatible candidates on page); page / headings ['Book an appointment', 'Choose a time'] alerts []",
               "tier": null,
               "evidence": {}
             },
@@ -2596,31 +2183,16 @@
               }
             }
           ],
-          "step_observations": [
-            {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
-            }
-          ],
+          "step_observations": [],
           "tiers": {
             "0": 6
           },
           "healed_steps": 0,
-          "failed_steps": [
-            "Open the appointment desk from clinic navigation"
-          ],
+          "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 15450
+          "duration_ms": 14653
         },
         {
           "test_id": "emergency-fee-zero",
@@ -2634,9 +2206,19 @@
           "changelog_refs": [],
           "observations": [
             {
+              "kind": "interrupt_dismissed",
+              "step_id": "s5",
+              "detail": "dismissed interrupt 'A smoother booking journey' (clicked 'Got it')",
+              "tier": null,
+              "evidence": {
+                "overlay": "[e13] dialog \"What’s new\" (in: A smoother booking journey)",
+                "heading": "A smoother booking journey"
+              }
+            },
+            {
               "kind": "goal_unreachable",
               "step_id": "s7",
-              "detail": "cannot find 'Enter a valid patient name' (no compatible candidates on page); page / headings ['Good morning, Front Desk', 'A smoother booking journey'] alerts []",
+              "detail": "cannot find 'Enter a valid patient name' (no compatible candidates on page); page / headings ['Book an appointment', 'Choose a time'] alerts []",
               "tier": null,
               "evidence": {}
             },
@@ -2672,31 +2254,16 @@
               }
             }
           ],
-          "step_observations": [
-            {
-              "kind": "timeout",
-              "step_id": "s5",
-              "detail": "action failed: ElementHandle.click: Timeout 5000ms exceeded.",
-              "tier": null
-            },
-            {
-              "kind": "effect_mismatch",
-              "step_id": "s5",
-              "detail": "expected navigation to / but stayed on /",
-              "tier": null
-            }
-          ],
+          "step_observations": [],
           "tiers": {
             "0": 6
           },
           "healed_steps": 0,
-          "failed_steps": [
-            "Open the appointment desk from clinic navigation"
-          ],
+          "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 20740
+          "duration_ms": 16693
         }
       ]
     },
@@ -2704,15 +2271,15 @@
       "label": "r2-memory-probe-1",
       "release": "r2",
       "update": true,
-      "started_at": "2026-09-25T16:46:48+00:00",
-      "run_id": "20260925-221648-682c",
-      "wall_s": 95.7,
+      "started_at": "2026-09-25T19:07:49+00:00",
+      "run_id": "20260926-003749-fc6b",
+      "wall_s": 97.1,
       "tests_run": 8,
-      "healed_steps": 1,
-      "replayed_steps": 79,
+      "healed_steps": 3,
+      "replayed_steps": 71,
       "tiers": {
-        "0": 79,
-        "1": 1
+        "0": 71,
+        "1": 3
       },
       "llm_calls": 0,
       "llm_calls_cached": 0,
@@ -2720,9 +2287,9 @@
       "tokens_out": 0,
       "cost_usd": 0.0,
       "verdicts": {
-        "PASS": 6,
-        "COSMETIC_DRIFT": 1,
-        "NEEDS_REVIEW": 1
+        "PASS": 5,
+        "NEEDS_REVIEW": 2,
+        "COSMETIC_DRIFT": 1
       },
       "tests": [
         {
@@ -2745,109 +2312,11 @@
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 5284
+          "duration_ms": 5322
         },
         {
           "test_id": "book-consultation",
           "name": "Book a consultation for a new patient",
-          "status": "passed",
-          "verdict": "PASS",
-          "decided_by": "rules",
-          "action": "none",
-          "confidence": 1.0,
-          "rationale": "Replayed exactly; every step and oracle held.",
-          "changelog_refs": [],
-          "observations": [],
-          "step_observations": [],
-          "tiers": {
-            "0": 18
-          },
-          "healed_steps": 0,
-          "failed_steps": [],
-          "llm_calls": 0,
-          "llm_calls_cached": 0,
-          "cost_usd": 0,
-          "duration_ms": 19393
-        },
-        {
-          "test_id": "cancel-appointment",
-          "name": "Cancel an appointment with explicit confirmation",
-          "status": "passed",
-          "verdict": "COSMETIC_DRIFT",
-          "decided_by": "rules",
-          "action": "test_healed",
-          "confidence": 1.0,
-          "rationale": "1 element(s) moved/renamed and were re-identified (tiers [1]); all expectations and business oracles still hold.",
-          "changelog_refs": [],
-          "observations": [],
-          "step_observations": [
-            {
-              "kind": "locator_healed",
-              "step_id": "s7",
-              "detail": "button \"Cancel\" (in: Appointments) -> [e10] button \"Cancel\" (in: Appointments) via similarity (score 1.00, margin 0.05)",
-              "tier": 1
-            }
-          ],
-          "tiers": {
-            "0": 9,
-            "1": 1
-          },
-          "healed_steps": 1,
-          "failed_steps": [
-            "Click Cancel on the first appointment in the list"
-          ],
-          "llm_calls": 0,
-          "llm_calls_cached": 0,
-          "cost_usd": 0,
-          "duration_ms": 12403
-        },
-        {
-          "test_id": "doctor-list-loads",
-          "name": "Doctor directory loads asynchronously showing all eight doctors",
-          "status": "passed",
-          "verdict": "PASS",
-          "decided_by": "rules",
-          "action": "none",
-          "confidence": 1.0,
-          "rationale": "Replayed exactly; every step and oracle held.",
-          "changelog_refs": [],
-          "observations": [],
-          "step_observations": [],
-          "tiers": {
-            "0": 7
-          },
-          "healed_steps": 0,
-          "failed_steps": [],
-          "llm_calls": 0,
-          "llm_calls_cached": 0,
-          "cost_usd": 0,
-          "duration_ms": 10806
-        },
-        {
-          "test_id": "invoice-total-correct",
-          "name": "Invoice total equals the sum of all line items",
-          "status": "passed",
-          "verdict": "PASS",
-          "decided_by": "rules",
-          "action": "none",
-          "confidence": 1.0,
-          "rationale": "Replayed exactly; every step and oracle held.",
-          "changelog_refs": [],
-          "observations": [],
-          "step_observations": [],
-          "tiers": {
-            "0": 6
-          },
-          "healed_steps": 0,
-          "failed_steps": [],
-          "llm_calls": 0,
-          "llm_calls_cached": 0,
-          "cost_usd": 0,
-          "duration_ms": 7302
-        },
-        {
-          "test_id": "reschedule-appointment",
-          "name": "Reschedule an existing appointment to a different time",
           "status": "failed",
           "verdict": "NEEDS_REVIEW",
           "decided_by": "rules",
@@ -2858,158 +2327,63 @@
           "observations": [
             {
               "kind": "goal_unreachable",
-              "step_id": "s7",
-              "detail": "cannot find 'Click Reschedule on the first appointment' (best candidate 0.93 below thresholds); page / headings ['Appointments', 'Upcoming schedule'] alerts []",
+              "step_id": "s14",
+              "detail": "cannot find 'Select the first available future appointment slot' (best candidate 0.98 below thresholds); page / headings ['Book an appointment', 'Choose a time'] alerts []",
               "tier": null,
               "evidence": {}
             },
             {
               "kind": "assertion_failed",
               "step_id": null,
-              "detail": "Reschedule API call succeeded: PUT /api/appointments/:id/reschedule [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200, GET /api/appointments 200)",
+              "detail": "Appointment is created via the API: POST /api/appointments [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200, GET /api/doctors 200, GET /api/slots 200)",
               "tier": null,
               "evidence": {
                 "oracle_index": 0,
+                "rule_ref": "B4"
+              }
+            },
+            {
+              "kind": "assertion_failed",
+              "step_id": null,
+              "detail": "Redirected to the appointments list after confirmation: url / does not match /app/appointments/",
+              "tier": null,
+              "evidence": {
+                "oracle_index": 1,
                 "rule_ref": null
               }
             },
             {
               "kind": "assertion_failed",
               "step_id": null,
-              "detail": "The app confirms the appointment kept the new time: expected text \"Appointment rescheduled\" not found on /",
+              "detail": "The booking wizard confirms the new appointment was saved: expected text \"Appointment confirmed\" not found on /",
               "tier": null,
               "evidence": {
-                "oracle_index": 1,
+                "oracle_index": 2,
                 "rule_ref": null,
-                "screenshot": "screenshots/reschedule-appointment_final.jpg"
+                "screenshot": "screenshots/book-consultation_final.jpg"
               }
             }
           ],
-          "step_observations": [],
+          "step_observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s12",
+              "detail": "button \"Next\" (in: Patient details) -> [e16] button \"Proceed\" (in: Patient details) via similarity (score 0.84, margin 0.30)",
+              "tier": 1
+            }
+          ],
           "tiers": {
-            "0": 6
+            "0": 12,
+            "1": 1
           },
-          "healed_steps": 0,
-          "failed_steps": [],
+          "healed_steps": 1,
+          "failed_steps": [
+            "Continue to slot selection"
+          ],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 10144
-        },
-        {
-          "test_id": "age-validation",
-          "name": "Age 150 is rejected by the booking form",
-          "status": "passed",
-          "verdict": "PASS",
-          "decided_by": "rules",
-          "action": "none",
-          "confidence": 1.0,
-          "rationale": "Replayed exactly; every step and oracle held.",
-          "changelog_refs": [],
-          "observations": [],
-          "step_observations": [],
-          "tiers": {
-            "0": 13
-          },
-          "healed_steps": 0,
-          "failed_steps": [],
-          "llm_calls": 0,
-          "llm_calls_cached": 0,
-          "cost_usd": 0,
-          "duration_ms": 13462
-        },
-        {
-          "test_id": "emergency-fee-zero",
-          "name": "Emergency visit shows zero doctor fee and zero total",
-          "status": "passed",
-          "verdict": "PASS",
-          "decided_by": "rules",
-          "action": "none",
-          "confidence": 1.0,
-          "rationale": "Replayed exactly; every step and oracle held.",
-          "changelog_refs": [],
-          "observations": [],
-          "step_observations": [],
-          "tiers": {
-            "0": 16
-          },
-          "healed_steps": 0,
-          "failed_steps": [],
-          "llm_calls": 0,
-          "llm_calls_cached": 0,
-          "cost_usd": 0,
-          "duration_ms": 16172
-        }
-      ]
-    },
-    {
-      "label": "r2-memory-probe-2",
-      "release": "r2",
-      "update": true,
-      "started_at": "2026-09-25T16:48:24+00:00",
-      "run_id": "20260925-221824-e76f",
-      "wall_s": 96.4,
-      "tests_run": 8,
-      "healed_steps": 1,
-      "replayed_steps": 79,
-      "tiers": {
-        "0": 79,
-        "1": 1
-      },
-      "llm_calls": 0,
-      "llm_calls_cached": 0,
-      "tokens_in": 0,
-      "tokens_out": 0,
-      "cost_usd": 0.0,
-      "verdicts": {
-        "PASS": 6,
-        "COSMETIC_DRIFT": 1,
-        "NEEDS_REVIEW": 1
-      },
-      "tests": [
-        {
-          "test_id": "login",
-          "name": "Front desk signs in",
-          "status": "passed",
-          "verdict": "PASS",
-          "decided_by": "rules",
-          "action": "none",
-          "confidence": 1.0,
-          "rationale": "Replayed exactly; every step and oracle held.",
-          "changelog_refs": [],
-          "observations": [],
-          "step_observations": [],
-          "tiers": {
-            "0": 4
-          },
-          "healed_steps": 0,
-          "failed_steps": [],
-          "llm_calls": 0,
-          "llm_calls_cached": 0,
-          "cost_usd": 0,
-          "duration_ms": 5440
-        },
-        {
-          "test_id": "book-consultation",
-          "name": "Book a consultation for a new patient",
-          "status": "passed",
-          "verdict": "PASS",
-          "decided_by": "rules",
-          "action": "none",
-          "confidence": 1.0,
-          "rationale": "Replayed exactly; every step and oracle held.",
-          "changelog_refs": [],
-          "observations": [],
-          "step_observations": [],
-          "tiers": {
-            "0": 18
-          },
-          "healed_steps": 0,
-          "failed_steps": [],
-          "llm_calls": 0,
-          "llm_calls_cached": 0,
-          "cost_usd": 0,
-          "duration_ms": 19447
+          "duration_ms": 16266
         },
         {
           "test_id": "cancel-appointment",
@@ -3041,7 +2415,7 @@
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 12438
+          "duration_ms": 12386
         },
         {
           "test_id": "doctor-list-loads",
@@ -3085,58 +2459,29 @@
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 7426
+          "duration_ms": 7133
         },
         {
-          "test_id": "reschedule-appointment",
-          "name": "Reschedule an existing appointment to a different time",
-          "status": "failed",
-          "verdict": "NEEDS_REVIEW",
+          "test_id": "toggle-sms-reminders",
+          "name": "Toggle SMS reminders preference and verify it is saved",
+          "status": "passed",
+          "verdict": "PASS",
           "decided_by": "rules",
-          "action": "review_requested",
-          "confidence": 0.5,
-          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "action": "none",
+          "confidence": 1.0,
+          "rationale": "Replayed exactly; every step and oracle held.",
           "changelog_refs": [],
-          "observations": [
-            {
-              "kind": "goal_unreachable",
-              "step_id": "s7",
-              "detail": "cannot find 'Click Reschedule on the first appointment' (best candidate 0.93 below thresholds); page / headings ['Appointments', 'Upcoming schedule'] alerts []",
-              "tier": null,
-              "evidence": {}
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "Reschedule API call succeeded: PUT /api/appointments/:id/reschedule [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200, GET /api/appointments 200)",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 0,
-                "rule_ref": null
-              }
-            },
-            {
-              "kind": "assertion_failed",
-              "step_id": null,
-              "detail": "The app confirms the appointment kept the new time: expected text \"Appointment rescheduled\" not found on /",
-              "tier": null,
-              "evidence": {
-                "oracle_index": 1,
-                "rule_ref": null,
-                "screenshot": "screenshots/reschedule-appointment_final.jpg"
-              }
-            }
-          ],
+          "observations": [],
           "step_observations": [],
           "tiers": {
-            "0": 6
+            "0": 8
           },
           "healed_steps": 0,
           "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 10406
+          "duration_ms": 9608
         },
         {
           "test_id": "age-validation",
@@ -3158,11 +2503,109 @@
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 13484
+          "duration_ms": 13313
         },
         {
           "test_id": "emergency-fee-zero",
           "name": "Emergency visit shows zero doctor fee and zero total",
+          "status": "failed",
+          "verdict": "NEEDS_REVIEW",
+          "decided_by": "rules",
+          "action": "review_requested",
+          "confidence": 0.5,
+          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "changelog_refs": [],
+          "observations": [
+            {
+              "kind": "goal_unreachable",
+              "step_id": "s14",
+              "detail": "cannot find 'Select the first available slot' (best candidate 0.98 below thresholds); page / headings ['Book an appointment', 'Choose a time'] alerts []",
+              "tier": null,
+              "evidence": {}
+            },
+            {
+              "kind": "assertion_failed",
+              "step_id": null,
+              "detail": "Visit type Emergency is shown in the confirmation: expected text \"Emergency\" not found on /",
+              "tier": null,
+              "evidence": {
+                "oracle_index": 0,
+                "rule_ref": "B2"
+              }
+            },
+            {
+              "kind": "assertion_failed",
+              "step_id": null,
+              "detail": "Doctor fee is zero for an emergency visit: expected text \"doctor fee ₹0.00\" not found on /",
+              "tier": null,
+              "evidence": {
+                "oracle_index": 1,
+                "rule_ref": "B2"
+              }
+            },
+            {
+              "kind": "assertion_failed",
+              "step_id": null,
+              "detail": "Total is zero for an emergency visit: expected text \"total ₹0.00\" not found on /",
+              "tier": null,
+              "evidence": {
+                "oracle_index": 2,
+                "rule_ref": "B2",
+                "screenshot": "screenshots/emergency-fee-zero_final.jpg"
+              }
+            }
+          ],
+          "step_observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s12",
+              "detail": "button \"Next\" (in: Patient details) -> [e16] button \"Proceed\" (in: Patient details) via similarity (score 0.84, margin 0.33)",
+              "tier": 1
+            }
+          ],
+          "tiers": {
+            "0": 12,
+            "1": 1
+          },
+          "healed_steps": 1,
+          "failed_steps": [
+            "Continue to slot selection"
+          ],
+          "llm_calls": 0,
+          "llm_calls_cached": 0,
+          "cost_usd": 0,
+          "duration_ms": 21586
+        }
+      ]
+    },
+    {
+      "label": "r2-memory-probe-2",
+      "release": "r2",
+      "update": true,
+      "started_at": "2026-09-25T19:09:26+00:00",
+      "run_id": "20260926-003926-5256",
+      "wall_s": 96.9,
+      "tests_run": 8,
+      "healed_steps": 3,
+      "replayed_steps": 71,
+      "tiers": {
+        "0": 71,
+        "1": 3
+      },
+      "llm_calls": 0,
+      "llm_calls_cached": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": 0.0,
+      "verdicts": {
+        "PASS": 5,
+        "NEEDS_REVIEW": 2,
+        "COSMETIC_DRIFT": 1
+      },
+      "tests": [
+        {
+          "test_id": "login",
+          "name": "Front desk signs in",
           "status": "passed",
           "verdict": "PASS",
           "decided_by": "rules",
@@ -3173,14 +2616,276 @@
           "observations": [],
           "step_observations": [],
           "tiers": {
-            "0": 16
+            "0": 4
           },
           "healed_steps": 0,
           "failed_steps": [],
           "llm_calls": 0,
           "llm_calls_cached": 0,
           "cost_usd": 0,
-          "duration_ms": 16277
+          "duration_ms": 5310
+        },
+        {
+          "test_id": "book-consultation",
+          "name": "Book a consultation for a new patient",
+          "status": "failed",
+          "verdict": "NEEDS_REVIEW",
+          "decided_by": "rules",
+          "action": "review_requested",
+          "confidence": 0.5,
+          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "changelog_refs": [],
+          "observations": [
+            {
+              "kind": "goal_unreachable",
+              "step_id": "s14",
+              "detail": "cannot find 'Select the first available future appointment slot' (best candidate 0.98 below thresholds); page / headings ['Book an appointment', 'Choose a time'] alerts []",
+              "tier": null,
+              "evidence": {}
+            },
+            {
+              "kind": "assertion_failed",
+              "step_id": null,
+              "detail": "Appointment is created via the API: POST /api/appointments [2xx] NOT observed (recent calls: POST /api/login 200, GET /api/appointments 200, GET /api/doctors 200, GET /api/slots 200)",
+              "tier": null,
+              "evidence": {
+                "oracle_index": 0,
+                "rule_ref": "B4"
+              }
+            },
+            {
+              "kind": "assertion_failed",
+              "step_id": null,
+              "detail": "Redirected to the appointments list after confirmation: url / does not match /app/appointments/",
+              "tier": null,
+              "evidence": {
+                "oracle_index": 1,
+                "rule_ref": null
+              }
+            },
+            {
+              "kind": "assertion_failed",
+              "step_id": null,
+              "detail": "The booking wizard confirms the new appointment was saved: expected text \"Appointment confirmed\" not found on /",
+              "tier": null,
+              "evidence": {
+                "oracle_index": 2,
+                "rule_ref": null,
+                "screenshot": "screenshots/book-consultation_final.jpg"
+              }
+            }
+          ],
+          "step_observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s12",
+              "detail": "button \"Next\" (in: Patient details) -> [e16] button \"Proceed\" (in: Patient details) via similarity (score 0.84, margin 0.31)",
+              "tier": 1
+            }
+          ],
+          "tiers": {
+            "0": 12,
+            "1": 1
+          },
+          "healed_steps": 1,
+          "failed_steps": [
+            "Continue to slot selection"
+          ],
+          "llm_calls": 0,
+          "llm_calls_cached": 0,
+          "cost_usd": 0,
+          "duration_ms": 16318
+        },
+        {
+          "test_id": "cancel-appointment",
+          "name": "Cancel an appointment with explicit confirmation",
+          "status": "passed",
+          "verdict": "COSMETIC_DRIFT",
+          "decided_by": "rules",
+          "action": "test_healed",
+          "confidence": 1.0,
+          "rationale": "1 element(s) moved/renamed and were re-identified (tiers [1]); all expectations and business oracles still hold.",
+          "changelog_refs": [],
+          "observations": [],
+          "step_observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s7",
+              "detail": "button \"Cancel\" (in: Appointments) -> [e10] button \"Cancel\" (in: Appointments) via similarity (score 1.00, margin 0.05)",
+              "tier": 1
+            }
+          ],
+          "tiers": {
+            "0": 9,
+            "1": 1
+          },
+          "healed_steps": 1,
+          "failed_steps": [
+            "Click Cancel on the first appointment in the list"
+          ],
+          "llm_calls": 0,
+          "llm_calls_cached": 0,
+          "cost_usd": 0,
+          "duration_ms": 12257
+        },
+        {
+          "test_id": "doctor-list-loads",
+          "name": "Doctor directory loads asynchronously showing all eight doctors",
+          "status": "passed",
+          "verdict": "PASS",
+          "decided_by": "rules",
+          "action": "none",
+          "confidence": 1.0,
+          "rationale": "Replayed exactly; every step and oracle held.",
+          "changelog_refs": [],
+          "observations": [],
+          "step_observations": [],
+          "tiers": {
+            "0": 7
+          },
+          "healed_steps": 0,
+          "failed_steps": [],
+          "llm_calls": 0,
+          "llm_calls_cached": 0,
+          "cost_usd": 0,
+          "duration_ms": 10722
+        },
+        {
+          "test_id": "invoice-total-correct",
+          "name": "Invoice total equals the sum of all line items",
+          "status": "passed",
+          "verdict": "PASS",
+          "decided_by": "rules",
+          "action": "none",
+          "confidence": 1.0,
+          "rationale": "Replayed exactly; every step and oracle held.",
+          "changelog_refs": [],
+          "observations": [],
+          "step_observations": [],
+          "tiers": {
+            "0": 6
+          },
+          "healed_steps": 0,
+          "failed_steps": [],
+          "llm_calls": 0,
+          "llm_calls_cached": 0,
+          "cost_usd": 0,
+          "duration_ms": 7118
+        },
+        {
+          "test_id": "toggle-sms-reminders",
+          "name": "Toggle SMS reminders preference and verify it is saved",
+          "status": "passed",
+          "verdict": "PASS",
+          "decided_by": "rules",
+          "action": "none",
+          "confidence": 1.0,
+          "rationale": "Replayed exactly; every step and oracle held.",
+          "changelog_refs": [],
+          "observations": [],
+          "step_observations": [],
+          "tiers": {
+            "0": 8
+          },
+          "healed_steps": 0,
+          "failed_steps": [],
+          "llm_calls": 0,
+          "llm_calls_cached": 0,
+          "cost_usd": 0,
+          "duration_ms": 9784
+        },
+        {
+          "test_id": "age-validation",
+          "name": "Age 150 is rejected by the booking form",
+          "status": "passed",
+          "verdict": "PASS",
+          "decided_by": "rules",
+          "action": "none",
+          "confidence": 1.0,
+          "rationale": "Replayed exactly; every step and oracle held.",
+          "changelog_refs": [],
+          "observations": [],
+          "step_observations": [],
+          "tiers": {
+            "0": 13
+          },
+          "healed_steps": 0,
+          "failed_steps": [],
+          "llm_calls": 0,
+          "llm_calls_cached": 0,
+          "cost_usd": 0,
+          "duration_ms": 13184
+        },
+        {
+          "test_id": "emergency-fee-zero",
+          "name": "Emergency visit shows zero doctor fee and zero total",
+          "status": "failed",
+          "verdict": "NEEDS_REVIEW",
+          "decided_by": "rules",
+          "action": "review_requested",
+          "confidence": 0.5,
+          "rationale": "No LLM available to judge a behavioural change; needs a human.",
+          "changelog_refs": [],
+          "observations": [
+            {
+              "kind": "goal_unreachable",
+              "step_id": "s14",
+              "detail": "cannot find 'Select the first available slot' (best candidate 0.98 below thresholds); page / headings ['Book an appointment', 'Choose a time'] alerts []",
+              "tier": null,
+              "evidence": {}
+            },
+            {
+              "kind": "assertion_failed",
+              "step_id": null,
+              "detail": "Visit type Emergency is shown in the confirmation: expected text \"Emergency\" not found on /",
+              "tier": null,
+              "evidence": {
+                "oracle_index": 0,
+                "rule_ref": "B2"
+              }
+            },
+            {
+              "kind": "assertion_failed",
+              "step_id": null,
+              "detail": "Doctor fee is zero for an emergency visit: expected text \"doctor fee ₹0.00\" not found on /",
+              "tier": null,
+              "evidence": {
+                "oracle_index": 1,
+                "rule_ref": "B2"
+              }
+            },
+            {
+              "kind": "assertion_failed",
+              "step_id": null,
+              "detail": "Total is zero for an emergency visit: expected text \"total ₹0.00\" not found on /",
+              "tier": null,
+              "evidence": {
+                "oracle_index": 2,
+                "rule_ref": "B2",
+                "screenshot": "screenshots/emergency-fee-zero_final.jpg"
+              }
+            }
+          ],
+          "step_observations": [
+            {
+              "kind": "locator_healed",
+              "step_id": "s12",
+              "detail": "button \"Next\" (in: Patient details) -> [e16] button \"Proceed\" (in: Patient details) via similarity (score 0.84, margin 0.33)",
+              "tier": 1
+            }
+          ],
+          "tiers": {
+            "0": 12,
+            "1": 1
+          },
+          "healed_steps": 1,
+          "failed_steps": [
+            "Continue to slot selection"
+          ],
+          "llm_calls": 0,
+          "llm_calls_cached": 0,
+          "cost_usd": 0,
+          "duration_ms": 21555
         }
       ]
     }

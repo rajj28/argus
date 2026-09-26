@@ -1,0 +1,35 @@
+{
+  "id": "S7-two-operators",
+  "title": "Two operators see the same take-off",
+  "level": "L3",
+  "category": "Real-time and multi-user",
+  "description": "Several people watch the same incident; a change must reach every screen promptly.",
+  "approach": "Argus opens two independent operators (desktop and tablet), takes off Drone 2 through the control API and times when each screen shows it in flight relative to the simulator.",
+  "verdict": "PASS",
+  "findings": [],
+  "steps": [
+    "[  0.6s] Start: two operators have the cockpit open at the same time",
+    "[ 13.4s] Drone 2 takes off (issued from the control API) - both screens must agree with the simulator"
+  ],
+  "samples": [
+    {
+      "truth_in_flight_at": 9.5,
+      "operator_A_at": 9.5,
+      "operator_B_at": 9.5,
+      "lag": {
+        "A": 0.0,
+        "B": 0.0
+      },
+      "t": 23.9
+    }
+  ],
+  "videos": [
+    "video.mp4"
+  ],
+  "shots": [
+    "shots/1-operator-A.png",
+    "shots/1-operator-B.png"
+  ],
+  "started": "2026-09-26 13:42:11",
+  "duration_s": 28.1
+}

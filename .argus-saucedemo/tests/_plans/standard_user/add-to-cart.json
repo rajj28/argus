@@ -1,0 +1,93 @@
+{
+  "id": "add-to-cart",
+  "name": "Add a product to the cart",
+  "goal": "Adding a product to the cart flips its button to Remove and increments the badge",
+  "tags": [
+    "cart"
+  ],
+  "start_url": "/",
+  "steps": [
+    {
+      "id": "s1",
+      "intent": "Open the Products catalogue",
+      "action": "goto",
+      "target": null,
+      "value": "/inventory.html",
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    },
+    {
+      "id": "s2",
+      "intent": "Add the first product to the cart",
+      "action": "click",
+      "target": {
+        "tag": "button",
+        "role": "button",
+        "name": "Add to cart",
+        "text": "Add to cart",
+        "attrs": {
+          "class": "btn btn_primary btn_small btn_inventory ",
+          "data-test": "add-to-cart-sauce-labs-backpack",
+          "id": "add-to-cart-sauce-labs-backpack",
+          "name": "add-to-cart-sauce-labs-backpack"
+        },
+        "label": "",
+        "context": "",
+        "neighbor_text": "$29.99 | Sauce Labs Backpack carry.allTheThings() with the sleek, streamlined Sl",
+        "xpath": "/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[2]/button[1]",
+        "css": "#add-to-cart-sauce-labs-backpack",
+        "bbox": {
+          "x": 420.0,
+          "y": 339.0,
+          "w": 160.0,
+          "h": 34.0
+        }
+      },
+      "value": null,
+      "expect": {
+        "url_changed": null,
+        "url_pattern": null,
+        "network": [],
+        "headings_any": [],
+        "assertions": []
+      },
+      "optional": false,
+      "page_hint": "",
+      "visual": null,
+      "save_as": null
+    }
+  ],
+  "oracles": [
+    {
+      "kind": "text_visible",
+      "params": {
+        "text": "Remove"
+      },
+      "description": "The first product's button reads Remove",
+      "rule_ref": "R3"
+    }
+  ],
+  "version": 1,
+  "status": "active",
+  "origin": "manual",
+  "history": [
+    {
+      "version": 1,
+      "at": "2026-09-24T17:50:50+00:00",
+      "kind": "created",
+      "summary": "Authored (manual); baseline recorded",
+      "diff": "",
+      "verdict_ref": null
+    }
+  ],
+  "requires_login": true
+}
