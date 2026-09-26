@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Argus Live · Level 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;600;700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--surface:#f7f8fa;--sunken:#f1f3f6;--line:#e6e8ec;--line-strong:#d5d9e0;--ink:#0b0d12;--text:#262a33;--muted:#5c6370;--faint:#8a919e;--accent:#1f4dff;--accent-ink:#1638cc;--accent-wash:#eef2ff;--pass:#0e8a5f;--bug:#d63b3b;--truth:#0a7c86;--warn:#b7791f;--mono:'Geist Mono',ui-monospace,Consolas,monospace;--disp:'Schibsted Grotesk',system-ui,sans-serif;--body:'Geist',system-ui,sans-serif;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--body);font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding-inline:24px}
+h1,h2,h3{font-family:var(--disp);color:var(--ink);text-wrap:balance;letter-spacing:-.02em;margin:0}
+h1{font-size:clamp(32px,5.5vw,52px);line-height:1.05;font-weight:700}
+h2{font-size:clamp(22px,3vw,30px);font-weight:600;margin-bottom:12px}
+h3{font-size:21px;font-weight:600}
+p{margin:0 0 14px;max-width:66ch}
+a{color:var(--accent);text-decoration:none}a:hover{color:var(--accent-ink)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.back{font-family:var(--mono);font-size:13px;color:var(--muted)}
+section{padding-block:56px;border-top:1px solid var(--line)}
+section:first-of-type{border-top:0}
+.lead{font-size:19px;color:var(--muted);max-width:62ch}
+.hero{padding-top:56px;padding-bottom:36px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:22px;margin-top:32px}
+.stat .n{font-family:var(--mono);font-size:30px;font-weight:500;color:var(--ink)}
+.stat .n.bug{color:var(--bug)}.stat .n.pass{color:var(--pass)}
+.stat .l{font-size:13px;color:var(--muted);margin-top:2px}
+.sc{border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-top:18px}
+.sc.buggy{border-left:3px solid var(--bug)}.sc.passy{border-left:3px solid var(--pass)}
+.sc-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+.sc-num{font-family:var(--mono);font-size:12px;color:var(--faint)}
+.pill{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:999px;font-weight:500}
+.pill.bug{background:#fcecec;color:var(--bug)}.pill.pass{background:#e7f5ef;color:var(--pass)}
+.chip{font-family:var(--mono);font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--line);padding:3px 9px;border-radius:999px}
+.sc h3{font-size:21px;margin:2px 0 12px}
+.field{display:grid;grid-template-columns:96px 1fr;gap:12px;font-size:14.5px;margin-bottom:7px}
+.field .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);padding-top:3px}
+.field .val.res{color:var(--ink)}
+.ev{margin-top:10px;background:var(--sunken);border:1px solid var(--line);border-radius:8px;padding:10px 13px;font-family:var(--mono);font-size:12.5px;overflow-x:auto}
+.ev .u{color:var(--warn)}.ev .t{color:var(--truth)}.ev .b{color:var(--bug);font-weight:500}.ev .g{color:var(--pass)}
+footer{padding-block:38px;border-top:1px solid var(--line);color:var(--faint);font-size:13px}
+</style>
+</head>
+<body>
+
+<header class="wrap hero">
+  <a class="back" href="index.html">← Argus Live</a>
+  <div class="eyebrow" style="margin-top:18px">FlytBase “The Tireless Hand” · Level 1</div>
+  <h1>Static UI &amp; basic security</h1>
+  <p class="lead" style="margin-top:16px">Does each screen show what it should — and stay secure? Argus drives the real
+  cockpit like an operator and checks the UI against the drone simulator's actual state, catching the deliberate
+  mutations the brief describes with hard, reproducible evidence.</p>
+  <div class="stats">
+    <div class="stat"><div class="n">5</div><div class="l">scenarios, each recorded</div></div>
+    <div class="stat"><div class="n bug">4</div><div class="l">genuine issues</div></div>
+    <div class="stat"><div class="n pass">1</div><div class="l">precision pass</div></div>
+  </div>
+</header>
+
+<section class="wrap">
+  <div class="eyebrow">Scenarios</div>
+  <h2>Four issues, one precision pass</h2>
+
+  <div class="sc buggy">
+    <div class="sc-head"><span class="sc-num">Scenario 1</span><span class="pill bug">BUG</span><span class="chip">Security &amp; permissions</span></div>
+    <h3>A signed‑out visitor can command drones</h3>
+    <div class="field"><div class="lbl">Approach</div><div class="val">A fresh browser with no session follows the cockpit's own “Control panel” link and presses Take off; the simulator confirms the drone flew. Argus also reads the control API's CORS policy from a response header (read‑only).</div></div>
+    <div class="field"><div class="lbl">Result</div><div class="val res">A visitor with no sign‑in took off a real drone, and the API trusts any origin. Maps to <em>“let a signed‑out user open a page that should need sign‑in.”</em></div></div>
+    <div class="ev">no session · <span class="b">Drone 3 took off</span> · Access‑Control‑Allow‑Origin: <span class="b">*</span> · auth on flight commands: <span class="b">none</span></div>
+  </div>
+
+  <div class="sc buggy">
+    <div class="sc-head"><span class="sc-num">Scenario 2</span><span class="pill bug">BUG</span><span class="chip">Telemetry / freshness</span></div>
+    <h3>A drone shown active while its data source is offline</h3>
+    <div class="field"><div class="lbl">Approach</div><div class="val">Fly a drone; prove the cockpit updates live; then drop the feed, delay it 6 s, and take the simulator offline — comparing on‑screen distance, status and link badge with the simulator every 2 s.</div></div>
+    <div class="field"><div class="lbl">Result</div><div class="val res">With the feed cut, the distance froze while the drone moved +105 m; with the simulator offline, the drone was still shown “in_flight” under a “connected” badge. Maps to <em>“show a drone as online when it is offline.”</em></div></div>
+    <div class="ev"><span class="u">UI: connected · in_flight · 75 m</span> · <span class="t">truth: simulator offline · +105 m</span> · <span class="b">no stale indicator</span></div>
+  </div>
+
+  <div class="sc buggy">
+    <div class="sc-head"><span class="sc-num">Scenario 3</span><span class="pill bug">BUG</span><span class="chip">Map / visual</span></div>
+    <h3>Drone and dock labels overlap on the map</h3>
+    <div class="field"><div class="lbl">Approach</div><div class="val">Read the map's real label entities from the live Cesium viewer (text, screen position, font) and measure the overlap between label boxes.</div></div>
+    <div class="field"><div class="lbl">Result</div><div class="val res">Each drone's status label overlaps its dock label and its altitude label — <span class="mono">“560 m ASL”</span> sits on top of <span class="mono">“0 m”</span> (100% overlap). The status text is unreadable at the default view.</div></div>
+  </div>
+
+  <div class="sc buggy">
+    <div class="sc-head"><span class="sc-num">Scenario 4</span><span class="pill bug">BUG</span><span class="chip">Responsive UI</span></div>
+    <h3>On a phone, the video tile covers the 2D/3D map switch</h3>
+    <div class="field"><div class="lbl">Approach</div><div class="val">Open the cockpit at 390×844 with touch; find the 2D button; check which element is actually on top at its centre; tap it with a real touch and verify whether the map mode changed.</div></div>
+    <div class="field"><div class="lbl">Result</div><div class="val res">The 2D button's centre is covered by the video tile; a real tap lands on the video and the map mode never changes. Maps to <em>“push the main action off screen at phone width.”</em></div></div>
+  </div>
+
+  <div class="sc passy">
+    <div class="sc-head"><span class="sc-num">Scenario 5</span><span class="pill pass">PASS</span><span class="chip">Responsive UI · precision</span></div>
+    <h3>Phone telemetry is reachable — no false alarm</h3>
+    <div class="field"><div class="lbl">Approach</div><div class="val">Open the cockpit at phone width; locate every telemetry field by meaning; scroll each into its own scroll container; check whether it becomes visible and is not covered.</div></div>
+    <div class="field"><div class="lbl">Result</div><div class="val res">Every field is reachable by scrolling the panel — <b>PASS.</b> Argus distinguishes “below the fold but reachable” from “truly unreachable,” avoiding a false positive.</div></div>
+  </div>
+</section>
+
+<footer class="wrap">
+  Argus Live · Level 1 — static UI &amp; basic security. <a href="index.html">Home</a> · <a href="level2.html">Level 2</a> · <a href="architecture.html">Architecture</a>
+</footer>
+
+</body>
+</html>

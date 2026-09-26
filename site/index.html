@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Argus Live</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;600;700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff;--surface:#f7f8fa;--sunken:#f1f3f6;--line:#e6e8ec;--line-strong:#d5d9e0;
+  --ink:#0b0d12;--text:#262a33;--muted:#5c6370;--faint:#8a919e;
+  --accent:#1f4dff;--accent-ink:#1638cc;--accent-wash:#eef2ff;
+  --pass:#0e8a5f;--bug:#d63b3b;--truth:#0a7c86;
+  --mono:'Geist Mono',ui-monospace,Consolas,monospace;--disp:'Schibsted Grotesk',system-ui,sans-serif;--body:'Geist',system-ui,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--body);font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:24px}
+h1,h2,h3{font-family:var(--disp);color:var(--ink);text-wrap:balance;letter-spacing:-.02em;margin:0}
+h1{font-size:clamp(38px,7vw,68px);line-height:1.02;font-weight:700}
+h2{font-size:clamp(22px,3vw,30px);font-weight:600;margin-bottom:14px}
+h3{font-size:20px;font-weight:600}
+p{margin:0 0 14px;max-width:64ch}
+a{color:var(--accent);text-decoration:none}
+a:hover{color:var(--accent-ink)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+section{padding-block:56px;border-top:1px solid var(--line)}
+section:first-of-type{border-top:0}
+.lead{font-size:20px;color:var(--muted);max-width:60ch}
+.tag{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line-strong);background:var(--surface);color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:2px;background:var(--accent)}
+.hero{padding-top:80px;padding-bottom:48px}
+.hero .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:22px;margin-top:36px}
+.stat .n{font-family:var(--mono);font-size:32px;font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums}
+.stat .n.bug{color:var(--bug)}.stat .n.pass{color:var(--pass)}.stat .n.truth{color:var(--truth)}
+.stat .l{font-size:13px;color:var(--muted);margin-top:2px}
+.levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:8px}
+.lv{display:block;border:1px solid var(--line);border-radius:14px;padding:24px;background:var(--bg);transition:border-color .15s,box-shadow .15s,transform .15s}
+.lv:hover{border-color:var(--accent);box-shadow:0 12px 32px -14px rgba(11,13,18,.18);transform:translateY(-2px)}
+.lv .top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.lv .badge{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:999px;background:var(--accent-wash);color:var(--accent-ink)}
+.lv .status{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:999px;margin-left:auto}
+.status.done{background:#e7f5ef;color:var(--pass)}.status.soon{background:var(--sunken);color:var(--faint)}
+.lv h3{margin-bottom:8px}
+.lv p{font-size:14px;color:var(--muted);margin:0 0 14px}
+.lv .cats{display:flex;flex-wrap:wrap;gap:6px}
+.lv .cat{font-family:var(--mono);font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--line);padding:2px 8px;border-radius:999px}
+.lv .go{font-family:var(--mono);font-size:13px;color:var(--accent);margin-top:14px;display:inline-block}
+.lv.soon{pointer-events:none;opacity:.75}
+.two{display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:start}
+@media(max-width:820px){.two{grid-template-columns:1fr;gap:24px}}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.card{background:var(--bg);padding:20px}
+.card h3{margin-bottom:6px;font-size:17px}
+.card p{font-size:14px;color:var(--muted);margin:0}
+.k{font-family:var(--mono);font-size:12px;color:var(--accent);display:block;margin-bottom:8px}
+footer{padding-block:40px;border-top:1px solid var(--line);color:var(--faint);font-size:13px}
+</style>
+</head>
+<body>
+
+<header class="wrap hero">
+  <div class="tag"><span class="dot"></span>FlytBase “The Tireless Hand” · agentic UI testing</div>
+  <h1 style="margin-top:20px">Argus Live</h1>
+  <p class="lead" style="margin-top:18px">A tester that drives the real drone‑ops cockpit like an operator and checks
+  every claim on screen against the drone simulator's actual state — catching wrong, stale or unreachable UI by
+  <em>meaning</em>, not by matching pixels or selectors, with near‑zero false positives.</p>
+  <div class="row">
+    <span class="tag">Playwright + Chrome DevTools</span>
+    <span class="tag">Ground‑truth oracles</span>
+    <span class="tag">Cesium map · real lat/lon</span>
+    <span class="tag">Narrated video evidence</span>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="n">12</div><div class="l">scenarios, each recorded</div></div>
+    <div class="stat"><div class="n bug">7</div><div class="l">genuine issues found</div></div>
+    <div class="stat"><div class="n pass">5</div><div class="l">precision passes</div></div>
+    <div class="stat"><div class="n truth">L1–L3</div><div class="l">levels covered</div></div>
+  </div>
+</header>
+
+<section class="wrap">
+  <div class="eyebrow">The submission</div>
+  <h2>Three levels of testing</h2>
+  <div class="levels">
+    <a class="lv" href="level1.html">
+      <div class="top"><span class="badge">LEVEL 1</span><span class="status done">submitted</span></div>
+      <h3>Static UI &amp; basic security</h3>
+      <p>Does each screen show what it should — and stay secure? Signed‑out drone commands, off‑screen actions,
+      overlapping map labels, a drone shown active while offline.</p>
+      <div class="cats"><span class="cat">4 bugs</span><span class="cat">1 pass</span><span class="cat">security</span><span class="cat">responsive</span></div>
+      <span class="go">View Level 1 →</span>
+    </a>
+    <a class="lv" href="level2.html">
+      <div class="top"><span class="badge">LEVEL 2</span><span class="status done">submitted</span></div>
+      <h3>Live data, map, video &amp; performance</h3>
+      <p>Is what the screen shows actually true, over a workflow? The map showing a position 110 m stale, frozen
+      video labelled live, movement‑trail accuracy, 16‑drone performance.</p>
+      <div class="cats"><span class="cat">2 bugs</span><span class="cat">3 passes</span><span class="cat">map</span><span class="cat">bonus</span></div>
+      <span class="go">View Level 2 →</span>
+    </a>
+    <span class="lv soon">
+      <div class="top"><span class="badge">LEVEL 3</span><span class="status soon">in progress</span></div>
+      <h3>Multi‑user, network &amp; long‑running</h3>
+      <p>The hardest category: two operators seeing the same event, clean recovery after a connection drop, and
+      correctness sustained over a long incident.</p>
+      <div class="cats"><span class="cat">real‑time</span><span class="cat">recovery</span><span class="cat">performance</span></div>
+    </span>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="eyebrow">How it works</div>
+  <h2>The LLM compiles, the runtime replays</h2>
+  <div class="two">
+    <div>
+      <p>Argus drives real Chrome (desktop, tablet, phone; several operators at once), injects changing conditions
+      through the cockpit's own control API, and reads what the user sees — UI text by meaning, the video's decoded
+      frame rate, the live Cesium map's real coordinates, layout geometry.</p>
+      <p>It then compares against independent ground truth from the simulator and backend. When the two disagree in a
+      way that harms the user, that's a bug — proven, grouped by root cause, and recorded in a video whose HUD
+      narrates the UI's claim next to the truth.</p>
+      <p style="margin-top:18px"><a href="architecture.html" style="font-family:var(--mono);font-size:14px">Read the full architecture →</a></p>
+    </div>
+    <div class="cards">
+      <div class="card"><span class="k">perception</span><h3>Reads by meaning</h3><p>Role, accessible name, context — small markup changes don't break the probes.</p></div>
+      <div class="card"><span class="k">map</span><h3>Real lat/lon</h3><p>Reaches the live Cesium viewer and reads exact coordinates.</p></div>
+      <div class="card"><span class="k">truth</span><h3>Simulator + API</h3><p>Ground truth from the control API and a socket feed, never the UI.</p></div>
+      <div class="card"><span class="k">precision</span><h3>Groups &amp; guards</h3><p>One root cause, one issue; correct behaviour passes cleanly.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer class="wrap">
+  Argus Live — ground‑truth UI testing for live drone‑ops products. Built for FlytBase “The Tireless Hand”, on the starter‑kit cockpit.
+</footer>
+
+</body>
+</html>

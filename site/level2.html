@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Argus Live · Level 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;600;700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#f7f8fa; --sunken:#f1f3f6; --line:#e6e8ec; --line-strong:#d5d9e0;
+  --ink:#0b0d12; --text:#262a33; --muted:#5c6370; --faint:#8a919e;
+  --accent:#1f4dff; --accent-ink:#1638cc; --accent-wash:#eef2ff;
+  --pass:#0e8a5f; --bug:#d63b3b; --truth:#0a7c86; --warn:#b7791f;
+  --mono:'Geist Mono',ui-monospace,SFMono-Regular,Consolas,monospace;
+  --disp:'Schibsted Grotesk',system-ui,sans-serif; --body:'Geist',system-ui,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--body);font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:24px}
+h1,h2,h3{font-family:var(--disp);color:var(--ink);text-wrap:balance;letter-spacing:-.02em;margin:0}
+h1{font-size:clamp(32px,5.5vw,54px);line-height:1.05;font-weight:700}
+h2{font-size:clamp(23px,3.2vw,32px);font-weight:600;margin-bottom:12px}
+h3{font-size:19px;font-weight:600}
+p{margin:0 0 14px;max-width:66ch}
+a{color:var(--accent);text-decoration:none}
+a:hover{color:var(--accent-ink)}
+code,.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+section{padding-block:60px;border-top:1px solid var(--line)}
+section:first-of-type{border-top:0}
+.lead{font-size:19px;color:var(--muted);max-width:62ch}
+.tag{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line-strong);background:var(--surface);color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:2px;background:var(--accent)}
+.hero{padding-top:70px;padding-bottom:44px}
+.hero .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:22px;margin-top:8px}
+.stat .n{font-family:var(--mono);font-size:32px;font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums}
+.stat .n.bug{color:var(--bug)} .stat .n.pass{color:var(--pass)} .stat .n.truth{color:var(--truth)}
+.stat .l{font-size:13px;color:var(--muted);margin-top:2px}
+.two{display:grid;grid-template-columns:1fr .9fr;gap:40px;align-items:start}
+@media(max-width:820px){.two{grid-template-columns:1fr;gap:26px}}
+pre{background:var(--sunken);border:1px solid var(--line);border-radius:10px;padding:15px 17px;overflow-x:auto;margin:0 0 12px}
+pre code{font-size:13px;color:var(--text);line-height:1.7}
+.cmt{color:var(--faint)} .cmd{color:var(--accent-ink);font-weight:500}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:8px}
+.card{background:var(--bg);padding:20px}
+.card h3{margin-bottom:6px}
+.card p{font-size:14px;color:var(--muted);margin:0}
+.k{font-family:var(--mono);font-size:12px;color:var(--accent);display:block;margin-bottom:8px}
+.sc{border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-top:18px;background:var(--bg)}
+.sc.buggy{border-left:3px solid var(--bug)} .sc.passy{border-left:3px solid var(--pass)}
+.sc-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+.sc-num{font-family:var(--mono);font-size:12px;color:var(--faint)}
+.pill{display:inline-block;font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:999px;font-weight:500}
+.pill.bug{background:#fcecec;color:var(--bug)} .pill.pass{background:#e7f5ef;color:var(--pass)}
+.chip{font-family:var(--mono);font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--line);padding:3px 9px;border-radius:999px}
+.sc h3{font-size:21px;margin:2px 0 12px}
+.field{display:grid;grid-template-columns:96px 1fr;gap:12px;font-size:14.5px;margin-bottom:7px}
+.field .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);padding-top:3px}
+.field .val{color:var(--text)} .field .val.res{color:var(--ink)}
+.ev{margin-top:10px;background:var(--sunken);border:1px solid var(--line);border-radius:8px;padding:10px 13px;font-family:var(--mono);font-size:12.5px;color:var(--text);overflow-x:auto}
+.ev .u{color:var(--warn)} .ev .t{color:var(--truth)} .ev .b{color:var(--bug);font-weight:500} .ev .g{color:var(--pass)}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:500}
+tr:last-child td{border-bottom:0}
+.note{font-size:13px;color:var(--faint);margin-top:12px}
+svg{max-width:100%;height:auto;display:block}
+footer{padding-block:38px;border-top:1px solid var(--line);color:var(--faint);font-size:13px}
+</style>
+</head>
+<body>
+<div style="max-width:1080px;margin:0 auto;padding:14px 24px 0"><a href="index.html" style="font-family:Geist Mono,monospace;font-size:13px;color:#5c6370;text-decoration:none">← Argus Live</a></div>
+
+<header class="wrap hero">
+  <div class="tag"><span class="dot"></span>FlytBase “The Tireless Hand” · Level 2</div>
+  <h1 style="margin-top:18px">Is what the screen shows actually <em>true</em> — across a whole workflow?</h1>
+  <p class="lead" style="margin-top:18px">Level 1 asked whether each screen <em>looks</em> right. Level 2 reads real
+  values out of the live product — a drone's latitude and longitude off the 3D map, the video's decoded frame rate,
+  the movement trail's geometry — and compares them against the simulator's ground truth. So it catches wrong or
+  stale live data with exact evidence, and passes cleanly when the product is correct.</p>
+  <div class="row">
+    <span class="tag">Cesium map · real lat/lon</span>
+    <span class="tag">Video frame counters</span>
+    <span class="tag">Chrome DevTools timing</span>
+    <span class="tag">Ground-truth oracles</span>
+  </div>
+  <div class="stats" style="margin-top:34px">
+    <div class="stat"><div class="n">5</div><div class="l">scenarios, each recorded</div></div>
+    <div class="stat"><div class="n bug">2</div><div class="l">genuine issues</div></div>
+    <div class="stat"><div class="n pass">3</div><div class="l">precision passes</div></div>
+    <div class="stat"><div class="n bug">110 m</div><div class="l">map position error caught</div></div>
+    <div class="stat"><div class="n truth">0 m</div><div class="l">trail deviation (bonus)</div></div>
+  </div>
+</header>
+
+<section class="wrap">
+  <div class="eyebrow">The core idea, on the map</div>
+  <h2>Read the drone's real coordinates off the live map — then compare to truth</h2>
+  <div class="two">
+    <div>
+      <p>The strongest Level‑2 check is geospatial. Argus reaches the running Cesium viewer through the page's React
+      fiber and reads each drone marker's actual position, converting it to latitude/longitude with the map's own
+      WGS‑84 ellipsoid. Ground truth is the simulator's true position; the gap is measured in metres.</p>
+      <p>In normal flight the marker matches the drone to within a metre. Delay the telemetry by 8 seconds and the
+      marker keeps showing where the drone <em>was</em> — up to <b>110 m</b> from where it <em>is</em> — with no stale
+      indicator. An operator directing ground crews to that spot would be 110 m off. That is a real, high‑impact bug,
+      proven with coordinates, not pixels.</p>
+    </div>
+    <div>
+      <svg viewBox="0 0 440 280" role="img" aria-label="Map marker 110 m behind the true drone position">
+        <rect x="8" y="8" width="424" height="264" rx="12" fill="#eef3ee" stroke="#d5d9e0"/>
+        <g stroke="#cfd8cf" stroke-width="1">
+          <path d="M8 70 H432 M8 140 H432 M8 210 H432 M110 8 V272 M230 8 V272 M340 8 V272" opacity=".7"/>
+        </g>
+        <!-- displayed marker (stale) -->
+        <g transform="translate(150,150)">
+          <path d="M0 0 l-11 -20 a12 12 0 1 1 22 0 z" fill="#b7791f"/>
+          <circle cx="0" cy="-20" r="4.5" fill="#fff"/>
+          <text x="-4" y="24" font-family="Geist Mono" font-size="11" fill="#7a5c18">shown on map</text>
+        </g>
+        <!-- true position -->
+        <g transform="translate(320,110)">
+          <path d="M0 -12 L10 8 L0 3 L-10 8 Z" fill="#0a7c86"/>
+          <text x="-8" y="26" font-family="Geist Mono" font-size="11" fill="#0a5b62">true position</text>
+        </g>
+        <!-- gap -->
+        <line x1="150" y1="150" x2="320" y2="110" stroke="#d63b3b" stroke-width="2" stroke-dasharray="6 5"/>
+        <rect x="205" y="112" width="70" height="24" rx="6" fill="#fff" stroke="#d63b3b"/>
+        <text x="214" y="129" font-family="Geist Mono" font-size="13" fill="#d63b3b" font-weight="600">110 m off</text>
+        <text x="20" y="256" font-family="Geist Mono" font-size="11" fill="#8a919e">under an 8 s telemetry delay · no stale indicator shown</text>
+      </svg>
+      <pre style="margin-top:14px"><code>UI marker   <span class="cmt">18.56179, 73.69496</span>
+ground truth <span class="cmt">18.56247, 73.69572</span>
+gap <span style="color:#d63b3b">110 m</span> · stale indicator: <span style="color:#d63b3b">none</span></code></pre>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="eyebrow">Architecture</div>
+  <h2>Three deeper probes, each read from the live product and checked against truth</h2>
+  <div class="cards">
+    <div class="card"><span class="k">geospatial</span><h3>Real lat/lon off the 3D map</h3><p>Reach the live Cesium viewer via React fiber; read marker and trail positions; convert with the map's WGS‑84 ellipsoid; compare to the simulator in metres.</p></div>
+    <div class="card"><span class="k">video</span><h3>Decoded frames + perceptual hash</h3><p>Liveness from the `&lt;video&gt;` element's frame counter and a frame hash, so a frozen or wrong‑source stream is caught even when the label says “live”.</p></div>
+    <div class="card"><span class="k">performance</span><h3>Chrome DevTools timing</h3><p>Long‑Tasks blocking, click‑to‑paint latency and JS‑heap size, measured at rest and under a sustained multi‑drone load.</p></div>
+  </div>
+  <p class="note">Ground truth (simulator state, backend health, active faults) always comes from the control API and a
+  socket feed subscribed like the cockpit — never from the UI under test. Verdicts are deterministic; symptoms of one
+  root cause are grouped; correct behaviour is reported as PASS.</p>
+</section>
+
+<section class="wrap">
+  <div class="eyebrow">Scenarios</div>
+  <h2>Two issues, three precision passes</h2>
+
+  <div class="sc buggy">
+    <div class="sc-head"><span class="sc-num">Scenario 1</span><span class="pill bug">BUG</span><span class="chip">Map &amp; geospatial</span><span class="chip">high impact</span></div>
+    <h3>The map shows an old drone position as current</h3>
+    <div class="field"><div class="lbl">Expects</div><div class="val">The map marker reflects where the drone actually is; if data is delayed, the UI says so.</div></div>
+    <div class="field"><div class="lbl">Approach</div><div class="val">Fly the drone; read the marker's real lat/lon off the live Cesium map and confirm it matches truth to a metre; delay telemetry 8 s and measure how far the marker falls behind, and whether the UI warns.</div></div>
+    <div class="field"><div class="lbl">Result</div><div class="val res">Marker drifted to <b>110 m</b> behind the true position, still shown as current, with no stale indicator. Maps to the brief's <em>“an old position looks current.”</em></div></div>
+    <div class="ev"><span class="u">UI marker 18.56179, 73.69496</span> · <span class="t">truth 18.56247, 73.69572</span> · <span class="b">gap 25→50→75→100→110 m</span> · baseline (live) <span class="g">within 1 m</span></div>
+  </div>
+
+  <div class="sc buggy">
+    <div class="sc-head"><span class="sc-num">Scenario 2</span><span class="pill bug">BUG</span><span class="chip">Video &amp; media</span></div>
+    <h3>Frozen drone video still labelled “live”</h3>
+    <div class="field"><div class="lbl">Expects</div><div class="val">If the stream freezes, the operator is not told the picture is live.</div></div>
+    <div class="field"><div class="lbl">Approach</div><div class="val">Measure decoded frames per second on the real video element and read the tile's label every second after freezing the stream.</div></div>
+    <div class="field"><div class="lbl">Result</div><div class="val res"><b>0 frames/second for 5 seconds while labelled “live.”</b> Maps to <em>“a dropped stream still looks live.”</em></div></div>
+    <div class="ev"><span class="u">label “live”</span> · <span class="b">0 fps decoded</span> · fault active: video‑freeze</div>
+  </div>
+
+  <div class="sc passy">
+    <div class="sc-head"><span class="sc-num">Scenario 3</span><span class="pill pass">PASS</span><span class="chip">Map</span><span class="chip">bonus: movement trails</span></div>
+    <h3>The drone movement trail matches the real flight path</h3>
+    <div class="field"><div class="lbl">Expects</div><div class="val">The drawn trail records where the drone actually flew.</div></div>
+    <div class="field"><div class="lbl">Approach</div><div class="val">Sample the drone's true positions through a flight; read the trail polyline from the live map; check every true position lies on the trail and the trail ends at the drone.</div></div>
+    <div class="field"><div class="lbl">Result</div><div class="val res">49 trail points, <b>0 m</b> worst deviation, endpoint 10 m from the drone — <b>PASS.</b> Verifies a bonus capability's correctness, not just faults.</div></div>
+  </div>
+
+  <div class="sc passy">
+    <div class="sc-head"><span class="sc-num">Scenario 4</span><span class="pill pass">PASS</span><span class="chip">Functional · cross-part</span></div>
+    <h3>Selecting a drone switches map, video and telemetry together</h3>
+    <div class="field"><div class="lbl">Expects</div><div class="val">Selecting a drone shows that drone's state everywhere at once.</div></div>
+    <div class="field"><div class="lbl">Approach</div><div class="val">Select Drone 2; check the video frame changes to a distinct feed (perceptual hash), the telemetry battery matches Drone 2's true battery, and the label follows the selection.</div></div>
+    <div class="field"><div class="lbl">Result</div><div class="val res">All three switched consistently — <b>PASS.</b> Connects behaviour across related parts of the product with no false positive.</div></div>
+  </div>
+
+  <div class="sc passy">
+    <div class="sc-head"><span class="sc-num">Scenario 5</span><span class="pill pass">PASS</span><span class="chip">Performance &amp; long-running</span></div>
+    <h3>Responsive with 16 flying drones over ~10 simulated minutes</h3>
+    <div class="field"><div class="lbl">Expects</div><div class="val">The cockpit stays usable when many drones fly and data streams for a long time.</div></div>
+    <div class="field"><div class="lbl">Approach</div><div class="val">Measure frame timing, Long‑Task blocking, click‑to‑paint latency and JS heap at rest, then add 12 drones, fly all 16 at 5× speed and re‑measure across the run.</div></div>
+    <div class="field"><div class="lbl">Result</div><div class="val res">Click‑to‑paint 28–123 ms (under 250 ms), no long‑task stalls, heap garbage‑collected (no leak) — <b>PASS.</b> Proves the product scales, measured not assumed.</div></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="eyebrow">Bonus-capability coverage</div>
+  <h2>The same ground-truth method extends to the bonus features</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>Bonus capability</th><th>How Argus tests it</th></tr>
+    <tr><td class="mono">Movement trails <span style="color:var(--pass)">· shown</span></td><td>Read the drawn trail polyline from the live map; verify it matches the drone's true flown path within tolerance.</td></tr>
+    <tr><td class="mono">Alerts &amp; notifications</td><td>Drive a real condition (low battery, disconnect) via the control API and assert the correct alert appears and clears — never spuriously.</td></tr>
+    <tr><td class="mono">Shared map drawings &amp; markers</td><td>Read placed markers/shapes from the Cesium viewer; verify coordinates and that they replicate to a second operator.</td></tr>
+    <tr><td class="mono">Synchronized replay</td><td>Compare the replay's positions and timeline against the recorded ground‑truth trajectory, frame for frame.</td></tr>
+    <tr><td class="mono">Multiple video layouts</td><td>Verify each tile shows a distinct, correctly‑labelled feed (perceptual hash per drone) across layouts.</td></tr>
+    <tr><td class="mono">Search &amp; filtering in history</td><td>Assert filtered results match the ground‑truth event log — nothing missing, duplicated or misattributed.</td></tr>
+  </table></div>
+</section>
+
+<section class="wrap">
+  <div class="eyebrow">Reproduce</div>
+  <h2>Every scenario runs from one command</h2>
+  <pre><code><span class="cmt"># start the product</span>
+<span class="cmd">docker compose up --build</span>            <span class="cmt"># cockpit :4010 · control API :4000/api</span>
+
+<span class="cmt"># run a Level-2 scenario (a real Chrome opens and records)</span>
+<span class="cmd">argus live run</span> --only S11         <span class="cmt"># map shows an old position as current</span>
+<span class="cmd">argus live run</span> --only S12         <span class="cmt"># movement-trail accuracy (bonus)</span>
+<span class="cmd">argus live run</span>                    <span class="cmt"># the whole suite</span></code></pre>
+  <p class="note">Each run writes <span class="mono">runs/live/&lt;id&gt;/</span> — an MP4 with a HUD narrating UI‑claim vs ground‑truth, screenshots, timed samples and a machine‑readable <span class="mono">result.json</span>.</p>
+</section>
+
+<footer class="wrap">
+  Argus Live · Level 2 — live data, map, video &amp; performance. Ground‑truth UI testing for the FlytBase cockpit.
+</footer>
+
+</body>
+</html>

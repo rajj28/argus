@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Argus Live Architecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;600;700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#f7f8fa; --sunken:#f1f3f6; --line:#e6e8ec; --line-strong:#d5d9e0;
+  --ink:#0b0d12; --text:#262a33; --muted:#5c6370; --faint:#8a919e;
+  --accent:#1f4dff; --accent-ink:#1638cc; --accent-wash:#eef2ff;
+  --pass:#0e8a5f; --bug:#d63b3b; --truth:#0a7c86; --warn:#b7791f;
+  --mono:'Geist Mono',ui-monospace,SFMono-Regular,Consolas,monospace;
+  --disp:'Schibsted Grotesk',system-ui,sans-serif; --body:'Geist',system-ui,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--body);font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:24px}
+h1,h2,h3{font-family:var(--disp);color:var(--ink);text-wrap:balance;letter-spacing:-.02em;margin:0}
+h1{font-size:clamp(34px,6vw,58px);line-height:1.04;font-weight:700}
+h2{font-size:clamp(24px,3.4vw,34px);font-weight:600;margin-bottom:14px}
+h3{font-size:19px;font-weight:600}
+p{margin:0 0 14px;max-width:66ch}
+a{color:var(--accent);text-decoration:none}
+a:hover{color:var(--accent-ink)}
+code,.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+section{padding-block:64px;border-top:1px solid var(--line)}
+section:first-of-type{border-top:0}
+.lead{font-size:19px;color:var(--muted);max-width:60ch}
+.hair{color:var(--faint)}
+.tag{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line-strong);background:var(--surface);color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:2px;background:var(--accent)}
+/* hero */
+.hero{padding-top:72px;padding-bottom:56px}
+.hero .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+/* grid cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:8px}
+.card{background:var(--bg);padding:22px}
+.card h3{margin-bottom:8px}
+.card p{font-size:14.5px;color:var(--muted);margin:0}
+.k{font-family:var(--mono);font-size:12px;color:var(--accent);display:block;margin-bottom:9px}
+/* stat row */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:24px;margin-top:6px}
+.stat .n{font-family:var(--mono);font-size:34px;font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums}
+.stat .l{font-size:13px;color:var(--muted);margin-top:2px}
+/* code block */
+pre{background:var(--sunken);border:1px solid var(--line);border-radius:10px;padding:16px 18px;overflow-x:auto;margin:0 0 12px}
+pre code{font-size:13.5px;color:var(--text);line-height:1.7}
+.cmt{color:var(--faint)}
+.cmd{color:var(--accent-ink);font-weight:500}
+/* table */
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:4px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+td .mono{font-size:13px}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+.pill{display:inline-block;font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500}
+.pill.bug{background:#fcecec;color:var(--bug)} .pill.pass{background:#e7f5ef;color:var(--pass)}
+.pill.l1{background:#eef2ff;color:var(--accent-ink)} .pill.l2{background:#e6f6f7;color:var(--truth)} .pill.l3{background:#f3eefc;color:#6d4bc0}
+.two{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:start}
+@media(max-width:760px){.two{grid-template-columns:1fr;gap:24px}}
+.note{font-size:13px;color:var(--faint);margin-top:10px}
+svg{max-width:100%;height:auto;display:block}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:14px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+footer{padding-block:40px;border-top:1px solid var(--line);color:var(--faint);font-size:13px}
+</style>
+</head>
+<body>
+<div style="max-width:1080px;margin:0 auto;padding:14px 24px 0"><a href="index.html" style="font-family:Geist Mono,monospace;font-size:13px;color:#5c6370;text-decoration:none">← Argus Live</a></div>
+
+<header class="wrap hero">
+  <div class="tag"><span class="dot"></span>Autonomous UI testing · FlytBase "The Tireless Hand"</div>
+  <h1 style="margin-top:20px">Argus Live tests the cockpit like an operator — and checks every claim against the drone's real state.</h1>
+  <p class="lead" style="margin-top:20px">A page can show a drone online while it is offline, keep a frozen video labelled “live”, or lose an operator's action after a reconnect. Argus drives the real product in a real browser, injects changing conditions, and decides bug‑vs‑noise by comparing what the screen says with the simulator's ground truth — so it finds real issues with almost no false positives.</p>
+  <div class="row">
+    <span class="tag">Playwright + Chrome DevTools</span>
+    <span class="tag">Ground‑truth oracles</span>
+    <span class="tag">Self‑healing semantic engine</span>
+    <span class="tag">Narrated video evidence</span>
+    <span class="tag">CLI · MCP</span>
+  </div>
+</header>
+
+<section class="wrap">
+  <div class="eyebrow">The core idea</div>
+  <h2>Don't ask a model “does this look right?”. Ask the source of truth.</h2>
+  <div class="two">
+    <div>
+      <p>Vision‑only testers guess, and guesses produce false positives. Argus does the opposite: it reads what the <b>operator sees</b> (labels, telemetry, the video element, map markers) and compares it against what the system <b>actually knows</b>.</p>
+      <p>Every product in this challenge sits on the same simulator and control API, so Argus can always obtain independent truth: the true drone status and position, the backend's health, the active faults, and a socket feed subscribed exactly like the cockpit. When the two disagree in a way that harms the user, that's a bug — proven, not guessed.</p>
+      <div class="legend">
+        <span><span class="sw" style="background:var(--warn)"></span>What the UI claims</span>
+        <span><span class="sw" style="background:var(--truth)"></span>Ground truth</span>
+        <span><span class="sw" style="background:var(--bug)"></span>Disagreement → bug</span>
+      </div>
+    </div>
+    <div>
+      <pre><code><span class="cmt"># the oracle, in one line</span>
+UI: <span style="color:var(--warn)">"live"</span>, distance <span style="color:var(--warn)">75 m</span>, badge <span style="color:var(--warn)">connected</span>
+TRUTH: stream frozen, drone at <span style="color:var(--truth)">180 m</span>,
+       simulator <span style="color:var(--truth)">disconnected</span>
+──────────────────────────────
+VERDICT: <span style="color:var(--bug)">BUG</span> — stale data shown as live
+GROUPED: 3 symptoms · 1 root cause</code></pre>
+      <p class="note">Freshness, video liveness, map position, multi‑user propagation and recovery are all checked this way.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="eyebrow">The pipeline</div>
+  <h2>Seven layers, from operator to evidence</h2>
+  <svg viewBox="0 0 960 470" role="img" aria-label="Argus Live architecture pipeline">
+    <defs>
+      <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#8a919e"/></marker>
+      <marker id="ar2" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#0a7c86"/></marker>
+    </defs>
+    <style>
+      .box{fill:#f7f8fa;stroke:#d5d9e0;stroke-width:1;rx:10}
+      .t{font-family:var(--disp);font-size:15px;font-weight:600;fill:#0b0d12}
+      .s{font-family:var(--mono);font-size:11px;fill:#5c6370}
+      .flow{stroke:#8a919e;stroke-width:1.5;fill:none}
+      .tflow{stroke:#0a7c86;stroke-width:1.5;fill:none;stroke-dasharray:5 4}
+      .lab{font-family:var(--mono);font-size:10px;fill:#8a919e}
+    </style>
+    <!-- Operators -->
+    <rect class="box" x="20" y="24" width="220" height="86" rx="10"/>
+    <text class="t" x="34" y="52">Operators</text>
+    <text class="s" x="34" y="72">real Chrome · desktop /</text>
+    <text class="s" x="34" y="87">tablet / phone · multi‑user</text>
+    <!-- Scenario engine -->
+    <rect class="box" x="20" y="150" width="220" height="96" rx="10"/>
+    <text class="t" x="34" y="178">Scenario engine</text>
+    <text class="s" x="34" y="198">starting state · steps ·</text>
+    <text class="s" x="34" y="213">changing conditions via the</text>
+    <text class="s" x="34" y="228">control API (fault injection)</text>
+    <!-- Probes -->
+    <rect class="box" x="370" y="120" width="250" height="120" rx="10"/>
+    <text class="t" x="386" y="148">Probes — what the user sees</text>
+    <text class="s" x="386" y="170">UI by meaning + test ids</text>
+    <text class="s" x="386" y="186">video frames + perceptual hash</text>
+    <text class="s" x="386" y="202">Cesium map via React fiber</text>
+    <text class="s" x="386" y="218">layout / occlusion geometry</text>
+    <!-- Ground truth -->
+    <rect class="box" x="370" y="290" width="250" height="104" rx="10" style="fill:#e6f6f7;stroke:#7ec8cf"/>
+    <text class="t" x="386" y="318" style="fill:#0a5b62">Ground truth</text>
+    <text class="s" x="386" y="339" style="fill:#0a5b62">simulator state · backend</text>
+    <text class="s" x="386" y="355" style="fill:#0a5b62">health · active faults ·</text>
+    <text class="s" x="386" y="371" style="fill:#0a5b62">socket feed (like the cockpit)</text>
+    <!-- Oracles -->
+    <rect class="box" x="700" y="120" width="240" height="120" rx="10"/>
+    <text class="t" x="716" y="148">Oracles</text>
+    <text class="s" x="716" y="170">UI vs truth · freshness honesty</text>
+    <text class="s" x="716" y="186">reachability · occlusion · overlap</text>
+    <text class="s" x="716" y="202">propagation lag · recovery</text>
+    <text class="s" x="716" y="222" style="fill:#8a919e">deterministic, per‑category</text>
+    <!-- Triage -->
+    <rect class="box" x="700" y="290" width="240" height="104" rx="10"/>
+    <text class="t" x="716" y="318">Triage</text>
+    <text class="s" x="716" y="339">deterministic verdicts</text>
+    <text class="s" x="716" y="355">root‑cause grouping</text>
+    <text class="s" x="716" y="371">precision guards</text>
+    <!-- Evidence -->
+    <rect class="box" x="20" y="290" width="220" height="104" rx="10" style="fill:#eef2ff;stroke:#b9c6ff"/>
+    <text class="t" x="34" y="318" style="fill:#1638cc">Evidence</text>
+    <text class="s" x="34" y="339" style="fill:#3550b8">HUD‑narrated recording</text>
+    <text class="s" x="34" y="355" style="fill:#3550b8">screenshots · samples</text>
+    <text class="s" x="34" y="371" style="fill:#3550b8">EVALUATION.md + result.json</text>
+    <!-- flows -->
+    <path class="flow" d="M130,110 L130,150" marker-end="url(#ar)"/>
+    <path class="flow" d="M240,198 L370,180" marker-end="url(#ar)"/>
+    <text class="lab" x="252" y="182">control API</text>
+    <path class="flow" d="M620,180 L700,180" marker-end="url(#ar)"/>
+    <path class="tflow" d="M495,290 L495,240" marker-end="url(#ar2)"/>
+    <text class="lab" x="502" y="268" style="fill:#0a7c86">truth</text>
+    <path class="tflow" d="M620,342 C670,342 690,300 700,260" marker-end="url(#ar2)"/>
+    <path class="flow" d="M820,240 L820,290" marker-end="url(#ar)"/>
+    <path class="flow" d="M700,352 C420,410 300,352 240,342" marker-end="url(#ar)"/>
+    <text class="lab" x="430" y="405">verdict + evidence</text>
+  </svg>
+</section>
+
+<section class="wrap">
+  <div class="eyebrow">The clever bits</div>
+  <h2>Five techniques that make it precise</h2>
+  <div class="cards">
+    <div class="card"><span class="k">01 · truth oracle</span><h3>UI vs simulator, not vision</h3><p>Bugs are decided by comparing the screen with the control API and socket feed. No model opinion in the verdict path → near‑zero false positives.</p></div>
+    <div class="card"><span class="k">02 · map</span><h3>Reads Cesium by walking the React fiber</h3><p>To check a marker's position, Argus finds the live Cesium viewer through the page's React fiber and reads each entity's real lat/lon and screen box — exact, no screenshot guessing.</p></div>
+    <div class="card"><span class="k">03 · video</span><h3>Frame counters + perceptual hash</h3><p>Liveness comes from the &lt;video&gt; element's decoded‑frame count and a 16×9 luminance hash — so a frozen stream still labelled “live”, or a label that switched while the picture didn't, is caught.</p></div>
+    <div class="card"><span class="k">04 · evidence</span><h3>The recording narrates itself</h3><p>A HUD overlay is burned into every video showing the step, the UI's claim, the ground truth and the verdict — the video <em>is</em> the reproducible evidence, produced automatically.</p></div>
+    <div class="card"><span class="k">05 · precision</span><h3>Group symptoms, guard against noise</h3><p>One fault's many symptoms merge into a single issue. Guards prevent false alarms — e.g. a control is scrolled into its own container before it can be called “unreachable”.</p></div>
+    <div class="card"><span class="k">06 · reuse</span><h3>Built on the Argus semantic engine</h3><p>The same self‑healing element matching used across the project reads the UI by meaning (role, accessible name, context), so small markup changes don't break the probes.</p></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="eyebrow">How you run it</div>
+  <h2>A real CLI</h2>
+  <div class="two">
+    <div>
+      <pre><code><span class="cmt"># run one scenario live (a real Chrome opens)</span>
+<span class="cmd">argus live run</span> --only S2
+
+<span class="cmt"># run the full suite, record every scenario</span>
+<span class="cmd">argus live run</span>
+
+<span class="cmt"># generate the submission document from the runs</span>
+<span class="cmd">argus live report</span></code></pre>
+      <p class="note">Each run writes <span class="mono">runs/live/&lt;id&gt;/</span> — an MP4, screenshots, timed samples and a machine‑readable <span class="mono">result.json</span> — then rolls them into <span class="mono">EVALUATION.md</span>.</p>
+    </div>
+    <div>
+      <p>The broader Argus CLI (used elsewhere in the project) also ships:</p>
+      <pre><code><span class="cmd">argus run</span>        <span class="cmt">replay + self-heal + triage</span>
+<span class="cmd">argus explore</span>    <span class="cmt">crawl an app into a map</span>
+<span class="cmd">argus generate</span>   <span class="cmt">write a suite (1 LLM call)</span>
+<span class="cmd">argus diff</span>       <span class="cmt">two builds, no changelog</span>
+<span class="cmd">argus gauntlet</span>   <span class="cmt">mutation benchmark</span>
+<span class="cmd">argus doctor</span>     <span class="cmt">preflight checks</span></code></pre>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="eyebrow">Inside a coding agent</div>
+  <h2>MCP — close the software‑factory loop</h2>
+  <div class="two">
+    <div>
+      <p>Argus is also an <b>MCP server</b>, so a coding agent (Claude Code, Cursor, opencode…) can test its own work in a real browser before opening a PR.</p>
+      <pre><code><span class="cmt"># register once</span>
+claude mcp add argus -- <span class="cmd">argus mcp</span></code></pre>
+      <p>The agent writes a feature, then calls <span class="mono">verify_change("what I intended")</span>. Argus runs the browser suite and answers <span class="pill bug">BUG</span> with repro steps or <span class="pill pass">INTENDED&nbsp;CHANGE</span> with the release‑note citation — the intent it was given is the oracle.</p>
+    </div>
+    <div>
+      <div class="tbl-wrap"><table>
+        <tr><th>MCP tool</th><th>what it does</th></tr>
+        <tr><td class="mono">run_tests</td><td>run the full suite, return verdicts</td></tr>
+        <tr><td class="mono">verify_change</td><td>test a change against your intent</td></tr>
+        <tr><td class="mono">explore_and_generate</td><td>build a suite for an app with none</td></tr>
+        <tr><td class="mono">last_report</td><td>verdicts of the most recent run</td></tr>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="eyebrow">Standing on</div>
+  <h2>Open‑source we built on</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th>Component</th><th>Role in Argus</th><th>From the brief's list</th></tr>
+    <tr><td class="mono">Playwright</td><td>Drives real Chrome — multi‑user contexts, device emulation, offline/throttle, video recording, traces</td><td>✓ recommended</td></tr>
+    <tr><td class="mono">Chrome DevTools Protocol</td><td>Performance, long‑tasks and JS‑heap metrics for the load / long‑running scenarios</td><td>✓ recommended</td></tr>
+    <tr><td class="mono">Cesium</td><td>The cockpit's map — Argus reads its live entities for exact marker positions (does not modify it)</td><td>starter kit</td></tr>
+    <tr><td class="mono">MCP (Model Context Protocol)</td><td>Exposes Argus to coding agents as tools</td><td>✓ recommended</td></tr>
+    <tr><td class="mono">python‑socketio</td><td>Subscribes to the backend feed exactly like the cockpit, for ground‑truth freshness</td><td>—</td></tr>
+    <tr><td class="mono">OpenCV · imagehash</td><td>Perceptual video/frame hashing and the vision tier for canvas surfaces</td><td>—</td></tr>
+    <tr><td class="mono">FastAPI · pydantic · rapidfuzz</td><td>Report/live console, typed contracts, self‑healing similarity scoring</td><td>—</td></tr>
+    <tr><td class="mono">imageio‑ffmpeg</td><td>Stitches multi‑operator recordings side‑by‑side into one evidence video</td><td>—</td></tr>
+    <tr><td class="mono">OpenRouter · Groq (free tiers)</td><td>LLM mesh for the rare reasoning calls (generation, ambiguous triage) — layered with fail‑fast fallback</td><td>✓ recommended</td></tr>
+  </table></div>
+  <p class="note">The runtime verdict path is deterministic. Models are used only where reasoning genuinely helps (writing a suite, judging a truly ambiguous change), never to decide a live bug.</p>
+</section>
+
+<section class="wrap">
+  <div class="eyebrow">Results on the FlytBase cockpit</div>
+  <h2>10 scenarios · 5 real bugs · 5 precision passes</h2>
+  <div class="stats" style="margin-bottom:34px">
+    <div class="stat"><div class="n">10</div><div class="l">scenarios, each recorded</div></div>
+    <div class="stat"><div class="n">5</div><div class="l">genuine bugs, grouped</div></div>
+    <div class="stat"><div class="n">5</div><div class="l">clean passes (precision)</div></div>
+    <div class="stat"><div class="n">L1–L3</div><div class="l">levels covered</div></div>
+  </div>
+  <div class="tbl-wrap"><table>
+    <tr><th>#</th><th>Scenario</th><th>Level</th><th>Category</th><th>Verdict</th></tr>
+    <tr><td class="mono">S1</td><td>Stale / delayed / offline data shown as live</td><td><span class="pill l2">L2</span></td><td>Telemetry / freshness</td><td><span class="pill bug">BUG</span></td></tr>
+    <tr><td class="mono">S2</td><td>Frozen drone video still labelled “live”</td><td><span class="pill l2">L2</span></td><td>Video &amp; media</td><td><span class="pill bug">BUG</span></td></tr>
+    <tr><td class="mono">S3</td><td>Battery / altitude on a phone</td><td><span class="pill l1">L1</span></td><td>Responsive UI</td><td><span class="pill pass">PASS</span></td></tr>
+    <tr><td class="mono">S4</td><td>Video tile covers the 2D/3D map switch on a phone</td><td><span class="pill l1">L1</span></td><td>Responsive UI</td><td><span class="pill bug">BUG</span></td></tr>
+    <tr><td class="mono">S5</td><td>Drone &amp; dock labels overlap on the map</td><td><span class="pill l1">L1</span></td><td>Map / visual</td><td><span class="pill bug">BUG</span></td></tr>
+    <tr><td class="mono">S6</td><td>Connection loss &amp; recovery</td><td><span class="pill l3">L3</span></td><td>Network &amp; recovery</td><td><span class="pill pass">PASS</span></td></tr>
+    <tr><td class="mono">S7</td><td>Two operators see the same take‑off</td><td><span class="pill l3">L3</span></td><td>Real‑time / multi‑user</td><td><span class="pill pass">PASS</span></td></tr>
+    <tr><td class="mono">S8</td><td>Selecting a drone switches telemetry &amp; video together</td><td><span class="pill l2">L2</span></td><td>Functional / video</td><td><span class="pill pass">PASS</span></td></tr>
+    <tr><td class="mono">S9</td><td>Flight commands need no sign‑in; open CORS</td><td><span class="pill l1">L1</span></td><td>Security &amp; permissions</td><td><span class="pill bug">BUG</span></td></tr>
+    <tr><td class="mono">S10</td><td>Responsiveness with 16 drones, ~10 sim‑minutes</td><td><span class="pill l3">L3</span></td><td>Performance / long‑running</td><td><span class="pill pass">PASS</span></td></tr>
+  </table></div>
+  <p class="note">A clean PASS is a result, not a miss: it shows the tester avoids false positives — a scored criterion.</p>
+</section>
+
+<footer class="wrap">
+  Argus Live — ground‑truth UI testing for live drone‑ops products. Built for FlytBase “The Tireless Hand”, on the starter‑kit cockpit.
+</footer>
+
+</body>
+</html>
