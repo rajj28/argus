@@ -502,6 +502,45 @@ async def load_and_long_run(c: Ctx) -> None:
 
 
 # --- map geospatial probes: read the live Cesium viewer ---
+
+MAP_GAP = r"""(a) => {
+  const host=document.querySelector('[data-testid="map-canvas"]'); if(!host) return false;
+  let viewer=null; for(const el of [host,...host.querySelectorAll('*')].slice(0,40)){
+    const k=Object.keys(el).find(k=>k.startsWith('__reactFiber')); let f=k?el[k]:null;
+    for(let i=0;f&&i<60&&!viewer;i++,f=f.return){let st=f.memoizedState;
+      for(let j=0;st&&j<40;j++,st=st.next){const v=st.memoizedState; if(v&&v.current&&v.current.scene&&v.current.entities){viewer=v.current;break;}}}
+    if(viewer)break;}
+  if(!viewer) return false;
+  const now=viewer.clock.currentTime, ell=viewer.scene.globe.ellipsoid;
+  const de=viewer.entities.getById('drone-1'); if(!de||!de.position) return false;
+  const dp=de.position.getValue(now); const dsc=viewer.scene.cartesianToCanvasCoordinates(dp);
+  const tc=ell.cartographicToCartesian({longitude:a.tlon*Math.PI/180, latitude:a.tlat*Math.PI/180, height:a.th||30});
+  const tsc=viewer.scene.cartesianToCanvasCoordinates(tc);
+  if(!dsc||!tsc) return false;
+  const r=viewer.canvas.getBoundingClientRect();
+  const mx=r.left+dsc.x, my=r.top+dsc.y, tx=r.left+tsc.x, ty=r.top+tsc.y, cx=(mx+tx)/2, cy=(my+ty)/2;
+  let ov=document.querySelector('[data-argus-hud="gap"]');
+  if(!ov){ ov=document.createElementNS('http://www.w3.org/2000/svg','svg'); ov.setAttribute('data-argus-hud','gap');
+    ov.style.cssText='position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:2147483646;pointer-events:none;overflow:visible';
+    document.documentElement.appendChild(ov); }
+  const pill = a.dist>0 ? `<rect x="${cx-38}" y="${cy-16}" width="76" height="26" rx="8" fill="#d63b3b"/>
+      <text x="${cx}" y="${cy+3}" text-anchor="middle" font-family="ui-monospace,monospace" font-size="15" font-weight="700" fill="#fff">${a.dist} m</text>` : '';
+  ov.innerHTML = `
+    <line x1="${mx}" y1="${my}" x2="${tx}" y2="${ty}" stroke="#ff5252" stroke-width="3" stroke-dasharray="9 6"/>
+    <circle cx="${tx}" cy="${ty}" r="10" fill="none" stroke="#3ddc97" stroke-width="3"/>
+    <circle cx="${tx}" cy="${ty}" r="3.5" fill="#3ddc97"/>
+    <g font-family="ui-monospace,monospace" font-size="12" font-weight="600">
+      <rect x="${tx+12}" y="${ty-11}" width="128" height="20" rx="5" fill="rgba(9,12,19,.9)"/>
+      <text x="${tx+18}" y="${ty+3}" fill="#3ddc97">ACTUAL position</text>
+      <rect x="${mx-150}" y="${my-11}" width="140" height="20" rx="5" fill="rgba(9,12,19,.9)"/>
+      <text x="${mx-144}" y="${my+3}" fill="#ffb020">shown on map</text>
+    </g>
+    ${pill}`;
+  return {gap_px: Math.round(Math.hypot(tx-mx, ty-my))};
+}"""
+
+CLEAR_OVERLAY = "() => { const o=document.querySelector('[data-argus-hud=\"gap\"]'); if(o) o.remove(); }"
+
 MAP_POS = r"""() => {
   const host=document.querySelector('[data-testid="map-canvas"]'); if(!host) return {error:'no map'};
   let viewer=null; for(const el of [host,...host.querySelectorAll('*')].slice(0,40)){
@@ -569,11 +608,21 @@ async def map_stale_position(c: Ctx) -> None:
         honest = honest or bool(NOT_LIVE.search(await _freshness_text(p)))
         c.sample(condition="socket-delay", marker_lat=round(m["drone-1"]["lat"], 5), true_lat=round(d["latitude"], 5),
                  gap_m=round(gap))
+        try:
+            await p.evaluate(MAP_GAP, {"tlat": d["latitude"], "tlon": d["longitude"], "th": d.get("height", 30), "dist": round(gap)})
+        except Exception:
+            pass
         await c.hud(p, compare=[["Map marker", f"{m['drone-1']['lat']:.5f}, {m['drone-1']['lon']:.5f}", f"{d['latitude']:.5f}, {d['longitude']:.5f}"],
                                 ["Displayed position is off by", f"{gap:.0f} m", "0 m if live"],
                                 ["Stale/delayed indicator", "none" if not honest else "shown", "should warn"]])
-    t.clear_faults()
     await c.shot(p, "1-map-stale")
+    await c.hud(p, verdict=f"BUG  ·  map shows the drone {peak:.0f} m from where it actually is")
+    await p.wait_for_timeout(3500)
+    t.clear_faults()
+    try:
+        await p.evaluate(CLEAR_OVERLAY)
+    except Exception:
+        pass
     if peak > 40 and not honest and samples >= 2:
         c.find(Finding(title="The map shows an old drone position as current",
                        category="Map & geospatial / live data", level="L2", severity="High",

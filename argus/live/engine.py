@@ -69,9 +69,9 @@ HUD_JS = r"""(s) => {
   let h = document.querySelector('[data-argus-hud]');
   if (!h) {
     h = document.createElement('div'); h.setAttribute('data-argus-hud', '1');
-    h.style.cssText = 'position:fixed;z-index:2147483647;pointer-events:none;font:12px/1.45 ui-monospace,Consolas,monospace;' +
-      'color:#e8ecf2;background:rgba(10,14,22,.90);border:1px solid rgba(255,255,255,.18);border-radius:10px;' +
-      'padding:10px 12px;box-shadow:0 10px 30px rgba(0,0,0,.45);';
+    h.style.cssText = 'position:fixed;z-index:2147483647;pointer-events:none;font:14px/1.5 ui-monospace,Consolas,monospace;' +
+      'color:#eef2f7;background:rgba(9,12,19,.94);border:1px solid rgba(255,255,255,.20);border-radius:14px;' +
+      'padding:15px 17px;box-shadow:0 18px 46px rgba(0,0,0,.55);backdrop-filter:blur(4px);';
     document.documentElement.appendChild(h);
   }
   const phone = innerWidth < 600;
@@ -80,14 +80,17 @@ HUD_JS = r"""(s) => {
                                : {right:'14px', bottom: top ? 'auto' : '14px', top: top ? '60px' : 'auto', left:'auto', width:'470px'});
   const esc = t => String(t).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
   const color = {bug:'#ff6b6b', pass:'#3ddc97', info:'#8ab4ff', warn:'#ffc861'};
-  const rows = (s.compare || []).map(r => `<tr><td style="color:#9aa4b2;padding-right:8px">${esc(r[0])}</td>` +
-      `<td style="color:#ffd48a;padding-right:8px">${esc(r[1])}</td><td style="color:#8ef0c0">${esc(r[2])}</td></tr>`).join('');
+  const rows = (s.compare || []).map(r => `<tr><td style="color:#9aa4b2;padding:2px 12px 2px 0">${esc(r[0])}</td>` +
+      `<td style="color:#ffd48a;padding:2px 12px 2px 0;font-weight:500">${esc(r[1])}</td>` +
+      `<td style="color:#8ef0c0;padding:2px 0;font-weight:500">${esc(r[2])}</td></tr>`).join('');
   const checks = (s.checks || []).map(c => `<div style="color:${color[c[0]]||'#e8ecf2'}">${c[0]==='bug'?'✗':c[0]==='pass'?'✓':'•'} ${esc(c[1])}</div>`).join('');
-  h.innerHTML = `<div style="font-weight:700;color:#fff;margin-bottom:4px">ARGUS · ${esc(s.title||'')}</div>` +
-    `<div style="color:#8ab4ff;margin-bottom:6px">▶ ${esc(s.step||'')}</div>` +
-    (rows ? `<table style="border-collapse:collapse;margin-bottom:6px"><tr><th style="text-align:left;color:#9aa4b2"></th>` +
-      `<th style="text-align:left;color:#ffd48a">UI shows</th><th style="text-align:left;color:#8ef0c0">Ground truth</th></tr>${rows}</table>` : '') +
-    checks + (s.verdict ? `<div style="margin-top:6px;padding:4px 8px;border-radius:6px;font-weight:700;` +
+  h.innerHTML = `<div style="font-weight:700;color:#fff;margin-bottom:6px;font-size:1.05em;letter-spacing:.01em">◈ ARGUS LIVE · ${esc(s.title||'')}</div>` +
+    `<div style="color:#8ab4ff;margin-bottom:9px;font-size:.95em">▶ ${esc(s.step||'')}</div>` +
+    (rows ? `<table style="border-collapse:collapse;margin-bottom:8px;width:100%"><tr>` +
+      `<th style="text-align:left;color:#9aa4b2;padding-bottom:4px;font-weight:500">measurement</th>` +
+      `<th style="text-align:left;color:#ffd48a;padding-bottom:4px">UI shows</th>` +
+      `<th style="text-align:left;color:#8ef0c0;padding-bottom:4px">ground truth</th></tr>${rows}</table>` : '') +
+    checks + (s.verdict ? `<div style="margin-top:9px;padding:8px 12px;border-radius:9px;font-weight:700;font-size:1.05em;text-align:center;` +
       `background:${s.verdict.startsWith('BUG')?'#5c1d24':'#15452f'};color:#fff">${esc(s.verdict)}</div>` : '');
 }"""
 
