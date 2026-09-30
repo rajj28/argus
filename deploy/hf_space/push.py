@@ -35,6 +35,9 @@ EXCLUDES: tuple[str, ...] = (
     "deploy/.env",
     "**/*.log",
     ".DS_Store", "Thumbs.db",
+    "*.pdf", "*.zip", ".qoder/*",
+    "runs/*", "argus/web/static/_review/*",        # recorded evidence; the console serves site_data/
+
 )
 
 IGNORE_PATTERNS: list[str] = [*EXCLUDES, "Dockerfile"]   # the root Dockerfile is uploaded separately

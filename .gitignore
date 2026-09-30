@@ -14,3 +14,14 @@ __pycache__/
 node_modules/
 .logs/
 .argus*/auth/
+# per-run scratch artefacts (evidence summaries live in site_data/ and runs/live/)
+.argus*/runs/
+sandbox/out/
+*.zip
+*.pdf
+.logs-*
+.qoder/
+argus/web/static/_review/
+runs/live/*/raw/
+runs/live/**/*.mp4
+runs/live/*.mp4

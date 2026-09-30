@@ -1,9 +1,68 @@
-# Argus — the tireless hand in the browser
+# Argus: the tireless hand in the browser
 
-**Autonomous end-to-end UI testing that heals itself, remembers your app, knows a bug from a feature,
-and costs almost nothing to run.**
+**Autonomous end-to-end UI testing that heals itself, remembers your app, can tell a bug from a feature,
+and costs almost nothing to run.** Built solo for the AHC SWE Hackathon, *"The Tireless Hand"* (FlytBase).
 
 > The LLM compiles. The runtime replays. Models are called only on *novelty*.
+
+| | |
+|---|---|
+| 🌐 **Showcase site** (write-ups, recorded evidence, videos) | https://rajj28.github.io/argus-live/ |
+| 🖥️ **Live console** (drive a real browser against the demo app) | Render free tier. One-click: [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/rajj28/argus) |
+| 🎬 **Scenario videos** | [Level 1](https://rajj28.github.io/argus-live/level1.html) · [Level 2](https://rajj28.github.io/argus-live/level2.html) |
+| 🧱 **Stack** | Python 3.11 · Playwright (Chromium, CDP) · FastAPI + SSE · Typer CLI · MCP server · OpenCV + imagehash · rapidfuzz · pydantic v2 · Docker / Caddy |
+
+### Headline results (all from recorded runs in `site_data/`)
+
+- **0 LLM calls in steady state.** Ten consecutive suite runs across three releases cost $0, against an
+  estimated ~19–23k tokens *per run* for an agent that calls a model on every action.
+- **100 % heal success, 0 % false alarms, 100 % bug recall (5/5)** on the offline gauntlet: 106 steps self-healed.
+- **All 5 hidden regressions** in release v1.3 flagged as `BUG`/`REGRESSION`. Intended changes were accepted
+  only with a release-note quote **verified verbatim**.
+- On the live **FlytBase drone cockpit** it found a stale map (**85 m** gap between the drone shown and the real
+  one), a frozen video still labelled "live", unauthenticated drone control and mobile layout occlusion. It also
+  returned **PASS** on healthy flows, which shows it doesn't raise false alarms.
+
+![Argus live console: a release replayed with 0 LLM calls](docs/images/console-live.png)
+
+## System architecture
+
+```mermaid
+flowchart TB
+    subgraph Author["Authoring (LLM, once)"]
+        EX["explore: deterministic crawl → app atlas"] --> GEN["generate: journeys + business-rule negative tests (1–3 LLM calls)"]
+        CTX[("product docs + release notes")] --> GEN
+        GEN --> INT[("immutable intent")]
+        GEN --> PLAN[("compiled plan per build")]
+    end
+    subgraph Run["Runtime (deterministic)"]
+        PW["Playwright / Chromium"] --> RES{"resolution cascade"}
+        RES -->|"T0 fingerprint replay"| ACT["act + capture step contract"]
+        RES -->|"T1 Similo multi-attribute score"| ACT
+        RES -->|"T2 out-of-order · T4a required field"| ACT
+        RES -->|"T3 pick-of-5 · T4 replan · T5 vision"| MESH
+        ACT --> EVD["evidence: API calls, navigation, screens, errors, trace"]
+    end
+    subgraph Judge["Triage"]
+        EVD --> RULES["deterministic rules + step contracts"]
+        RULES -->|"ambiguous only"| JUDGE["LLM judge"]
+        JUDGE --> CITE["changelog quote verified verbatim"]
+        RULES --> V["PASS · COSMETIC_DRIFT · INTENDED_CHANGE · FEATURE_REMOVED · BUG · NEEDS_REVIEW"]
+        CITE --> V
+    end
+    MESH["free-tier LLM mesh: OpenRouter → Gemini / Groq / Cerebras → Ollama; disk cache, per-run budget, cost ledger"]
+    GEN -.-> MESH
+    JUDGE -.-> MESH
+    PLAN --> PW
+    V --> MEM[("verified-only memory: stability weights, decisions, LLM cache")]
+    MEM --> RES
+    V --> OUT["dashboard · HTML report · Playwright .spec.ts export · MCP tools"]
+```
+
+**Deployment (one container):** FastAPI console + job runner (SSE stream, one job at a time, rate-limited,
+hourly LLM caps) → SkyOps A (the app under test) and SkyOps B (pinned to v1.3 for `diff`) on loopback.
+
+## Why it's built this way
 
 Most "AI testers" put a model in front of every click, so they're slow and expensive, and they drift on
 the 10th run. Argus uses the model the way a compiler is used: once, to understand the app and write the
@@ -88,6 +147,51 @@ deviating run.
 10 times across 1.0 → 1.2 with the LLM off (steady-state cost curve, 0 LLM calls). The dashboard shows
 the 10-run curve at `/tenruns` and any `argus diff` output at `/diff`.
 
+### 4. Cost over ten consecutive runs
+
+![Ten-run cost curve](docs/images/ten-runs.png)
+
+Run 3 is the v1.1 redesign: 14 steps self-heal at tier T1 with no model. Run 6 is the v1.2 release (reordered
+wizard, new required field, a retired page), handled by the reorder, field and retire tiers. Every other run is
+pure replay.
+
+### 5. A public site it has never seen: SauceDemo
+
+![SauceDemo verdicts by user](docs/images/saucedemo.png)
+
+The same eight journeys ran against saucedemo.com's built-in test users with 0 LLM calls. The suite flags the
+deliberately broken `problem_user` and `error_user` and passes `standard_user` and `performance_glitch_user`. It also
+passes `visual_user`, whose defects are purely cosmetic: DOM-level oracles don't catch pixel-only glitches
+(see Limits).
+
+## Argus Live: testing a real-time drone cockpit (hackathon Levels 1 & 2)
+
+The second half of the challenge was the **FlytBase cockpit**: a live drone-operations dashboard with a Cesium 3D
+map, telemetry and WebRTC video, driven by a simulator. Here Argus checks every claim on screen against
+**independent ground truth** from the simulator's control API. It reads the live Cesium entities through the React
+fiber, converts them to lat/lon and measures the gap in metres.
+
+| Stale map: UI shows an old position (85 m off) | Unauthenticated control: a stranger launches a drone |
+|---|---|
+| ![](docs/images/live-map-stale.png) | ![](docs/images/live-unauth-control.png) |
+| **Self-healing on a live UI refactor** | **Telemetry drop: is "live" still honest?** |
+| ![](docs/images/live-self-healed.png) | ![](docs/images/live-socket-drop.png) |
+
+| Scenario | Verdict | Area |
+|---|---|---|
+| Signed-out visitor can command drones | **BUG** | security |
+| Drone shown active while its data source is offline | **BUG** | telemetry freshness |
+| Map shows an old drone position as current (85 m gap under an 8 s delay) | **BUG** | geospatial |
+| Frozen video still labelled "live" (decoded-frame counter + perceptual hash) | **BUG** | video |
+| Drone and dock labels overlap on the map | **BUG** | visual |
+| Phone: video tile covers the map's 2D/3D switch | **BUG** | responsive |
+| Movement trail matches the real flight path | PASS | geospatial |
+| Selecting a drone switches map, video and telemetry together | PASS | functional |
+| 16 drones flying for ~10 simulated minutes stay responsive (Long Tasks, click-to-paint, heap) | PASS | performance |
+
+Full write-ups: [`LEVEL1_WRITEUP.md`](LEVEL1_WRITEUP.md) · [`LEVEL2_WRITEUP.md`](LEVEL2_WRITEUP.md) ·
+[`EVALUATION.md`](EVALUATION.md). Narrated videos are on the [showcase site](https://rajj28.github.io/argus-live/).
+
 ## Quick start
 
 ```bash
@@ -139,3 +243,37 @@ answers BUG / INTENDED_CHANGE with evidence. That closes the software-factory lo
 * FCPAgent: falsifiable commitment planning for web agents (2026), the basis for Argus's step contracts
 * Budget-constrained study of skill/memory modules for web agents (2026): why Argus keeps memory verified-only
 * AutoE2E: feature-driven E2E test generation (ICSE 2025)
+
+## Deploy
+
+| Where | How | Notes |
+|---|---|---|
+| **Render (free)** | Click *Deploy to Render* at the top (uses [`render.yaml`](render.yaml)) | One Docker web service. Tested locally under a **512 MB cap**, the free-tier limit: boot, bootstrap and a full real-Chromium run fit with no OOM. It sleeps when idle, so the first request takes ~1 min |
+| **Any VM** | `deploy/docker-compose.yml` + Caddy (auto-TLS) | See [`deploy/README.md`](deploy/README.md); `provision_azure.sh` for Azure |
+| **Local** | `docker build -f deploy/hf_space/Dockerfile -t argus . && docker run -p 7860:7860 argus` | Console on http://localhost:7860 |
+
+LLM keys (`JEV_API`, `JEV2_API`, `GROK_API`) are optional environment variables. Every scenario marked
+"0 LLM calls" works without them. Without keys, ambiguous behaviour changes are reported as `NEEDS_REVIEW`
+instead of being judged.
+
+## Limits
+
+- DOM and behaviour oracles don't see pixel-only regressions (SauceDemo `visual_user` passes).
+- Without an LLM, ambiguous behaviour changes go to a human (`NEEDS_REVIEW`) rather than being judged automatically.
+- The live-cockpit probes (Cesium via React fiber) are specific to that stack. The core cascade is app-agnostic.
+
+## Repository layout
+
+```
+argus/        browser/ healing/ runner/ triage/ memory/ llm/ vision/ live/ web/ · mcp_server.py · cli.py
+demo_app/     SkyOps, the drone-ops app under test (versions 1.0 → 1.3, chaos mode)
+exam_app/     a second app (clinic booking) for zero-knowledge generation tests
+benchmarks/   ten_runs · realworld_saucedemo · exam · llm_path
+site_data/    exported results behind the dashboard and the README charts
+site/         the GitHub Pages showcase (Level 1/2, architecture)
+deploy/       Docker, Caddy, compose, Azure, Render / HF variants
+docs/         SPEC, DESIGN, architecture page, README images
+tests/        pytest suite (no network, no LLM)
+```
+
+README charts and thumbnails: `python scripts/make_readme_assets.py` (reads `site_data/*.json`).

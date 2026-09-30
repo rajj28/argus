@@ -34,3 +34,10 @@ sandbox/out/
 Thumbs.db
 *.swp
 *.swo
+
+# heavy local artefacts
+*.pdf
+*.zip
+runs/
+.qoder/
+argus/web/static/_review/
