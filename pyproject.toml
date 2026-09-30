@@ -19,3 +19,9 @@ include = ["argus*", "demo_app*"]
 [tool.setuptools.package-data]
 argus = ["browser/*.js", "report/templates/*", "report/static/*"]
 demo_app = ["templates/*", "static/*", "context/*", "context/releases/*"]
+
+[tool.pytest.ini_options]
+# `pytest` runs the unit suite only. exam/test_smoke.py is an end-to-end smoke test (real server +
+# browser) that holds Playwright's event loop for its session, which breaks asyncio-based unit tests
+# collected after it. Run it on its own: `pytest exam/test_smoke.py`.
+testpaths = ["tests"]

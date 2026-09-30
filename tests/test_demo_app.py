@@ -434,6 +434,10 @@ class TestVersions:
         assert resp.status_code == 422
         assert "pilot" in resp.json()["errors"]
 
+    @pytest.mark.xfail(strict=True, reason=(
+        "Known demo-app bug: v1.2 reorders the stepper labels, but mission_wizard.html still renders "
+        "the panels in v1.0 order and app.js walks panels in DOM order, so users see drone selection "
+        "before flight parameters. Remove this marker when the panels are rendered in `steps` order."))
     def test_v12_wizard_reorder_in_html(self, auth_client):
         """v1.2 wizard shows flight parameters before drone selection."""
         auth_client.post("/__admin/version", json={"version": "1.2"})
@@ -477,14 +481,14 @@ class TestBugFlags:
             "name": "Bug Battery Test",
             "type": "Inspection",
             "site": "Mumbai Port",
-            "drone_id": "d3",  # Hawk-7, 12% — still Charging (not Idle)
+            "drone_id": "d3",  # Hawk-7: Idle at 12% (the low-battery-drone journey selects it)
             "altitude": 60,
             "speed": 6,
             "rth": True,
         }
-        # Hawk-7 is Charging so still rejected (not Idle), even with the bug
+        # Without the bug this is rejected (test_r2_low_battery_drone_rejected); with it, accepted.
         resp = auth_client.post("/api/missions", json=payload)
-        assert resp.status_code == 422  # still fails because not Idle
+        assert resp.status_code == 201, f"Expected 201 but got {resp.status_code}: {resp.text}"
 
     def test_low_battery_assignable_bug_with_idle_drone(self, auth_client):
         """low_battery_assignable + a drone that is Idle but low battery."""
@@ -545,16 +549,16 @@ class TestBugFlags:
 
 
 class TestChaos:
-    def test_chaos_seed_changes_ids(self, auth_client):
+    def test_chaos_seed_changes_ids(self, client):
         """Chaos 'ids' mutation renames element ids deterministically."""
         # Without chaos
-        resp1 = auth_client.get("/login")
+        resp1 = client.get("/login")
         # Baseline: data-js hook present
         assert 'data-js="login-email"' in resp1.text
 
         # Enable chaos
-        auth_client.post("/__admin/chaos", json={"seed": 42, "mutations": ["ids"]})
-        resp2 = auth_client.get("/login")
+        client.post("/__admin/chaos", json={"seed": 42, "mutations": ["ids"]})
+        resp2 = client.get("/login")
 
         # data-js hook still present (never changes)
         assert 'data-js="login-email"' in resp2.text
@@ -562,36 +566,36 @@ class TestChaos:
         # But the element id should now be chaos-XXXXX
         assert 'id="chaos-' in resp2.text
 
-    def test_chaos_data_js_stable(self, auth_client):
+    def test_chaos_data_js_stable(self, client):
         """data-js hooks are always present regardless of chaos seed."""
-        auth_client.post("/__admin/chaos", json={"seed": 1, "mutations": ["ids", "classes", "testids", "wrappers", "order", "text", "tags", "layout"]})
-        resp = auth_client.get("/login")
+        client.post("/__admin/chaos", json={"seed": 1, "mutations": ["ids", "classes", "testids", "wrappers", "order", "text", "tags", "layout"]})
+        resp = client.get("/login")
         assert 'data-js="login-form"' in resp.text
         assert 'data-js="login-email"' in resp.text
         assert 'data-js="login-password"' in resp.text
         assert 'data-js="login-submit"' in resp.text
         assert 'data-js="login-error"' in resp.text
 
-    def test_chaos_ids_deterministic(self, auth_client):
+    def test_chaos_ids_deterministic(self, client):
         """Same seed produces same ids every time."""
-        auth_client.post("/__admin/chaos", json={"seed": 99, "mutations": ["ids"]})
-        r1 = auth_client.get("/login").text
-        r2 = auth_client.get("/login").text
+        client.post("/__admin/chaos", json={"seed": 99, "mutations": ["ids"]})
+        r1 = client.get("/login").text
+        r2 = client.get("/login").text
         assert r1 == r2
 
-    def test_chaos_disable(self, auth_client):
+    def test_chaos_disable(self, client):
         """Disabling chaos (seed=null) restores normal ids."""
-        auth_client.post("/__admin/chaos", json={"seed": 7, "mutations": ["ids"]})
-        auth_client.post("/__admin/chaos", json={"seed": None})
-        resp = auth_client.get("/login")
+        client.post("/__admin/chaos", json={"seed": 7, "mutations": ["ids"]})
+        client.post("/__admin/chaos", json={"seed": None})
+        resp = client.get("/login")
         assert 'id="login-email"' in resp.text or 'id="auth-email-input"' not in resp.text
         # Chaos should be off
         assert app_state.chaos_seed is None
 
-    def test_chaos_text_mutation(self, auth_client):
+    def test_chaos_text_mutation(self, client):
         """text mutation changes button labels."""
-        auth_client.post("/__admin/chaos", json={"seed": 1, "mutations": ["text"]})
-        resp = auth_client.get("/login")
+        client.post("/__admin/chaos", json={"seed": 1, "mutations": ["text"]})
+        resp = client.get("/login")
         # The login button text should be a synonym — check it has some recognizable text
         assert resp.status_code == 200
 

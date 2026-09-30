@@ -14,6 +14,8 @@ from playwright.sync_api import Browser, Page, expect, sync_playwright
 
 ROOT = Path(__file__).resolve().parent.parent
 BASE_URL = "http://127.0.0.1:8010"
+# The server rewrites these as releases switch; the smoke run restores them so the tree stays clean.
+TRACKED_CONTEXT = (ROOT / "exam" / "context" / "CHANGELOG.md",)
 DEMO_EMAIL = "reception@mediqueue.io"
 DEMO_PASSWORD = "triage42"
 
@@ -23,6 +25,7 @@ def live_server() -> Generator[str, None, None]:
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as probe:
         if probe.connect_ex(("127.0.0.1", 8010)) == 0:
             raise RuntimeError("Port 8010 is already in use")
+    snapshot = {path: path.read_bytes() for path in TRACKED_CONTEXT if path.exists()}
     creation_flags = 0
     if sys.platform == "win32":
         creation_flags = subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.CREATE_NO_WINDOW
@@ -66,6 +69,8 @@ def live_server() -> Generator[str, None, None]:
         except subprocess.TimeoutExpired:
             process.kill()
             process.wait(timeout=5)
+        for path, content in snapshot.items():
+            path.write_bytes(content)
 
 
 @pytest.fixture(scope="session")
